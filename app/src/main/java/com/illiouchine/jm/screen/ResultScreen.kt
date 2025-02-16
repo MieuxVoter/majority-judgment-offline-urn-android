@@ -1,5 +1,6 @@
 package com.illiouchine.jm.screen
 
+import android.icu.text.CaseMap.Title
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,13 +11,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key.Companion.Ro
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.illiouchine.jm.model.PropsResult
+import com.illiouchine.jm.model.Grades
+import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.SurveyResult
-import com.illiouchine.jm.model.VoteResult
 import com.illiouchine.jm.ui.theme.JmTheme
+import fr.mieuxvoter.mj.CollectedTally
+import fr.mieuxvoter.mj.DeliberatorInterface
+import fr.mieuxvoter.mj.MajorityJudgmentDeliberator
+
 
 @Composable
 fun ResultScreen(
@@ -24,7 +28,24 @@ fun ResultScreen(
     surveyResult: SurveyResult,
     onFinish : () -> Unit = {}
 ) {
-    Column(modifier = modifier.fillMaxSize()
+
+    val amountOfProposals = surveyResult.proposals.size
+    val amountOfGrades = Grades.entries.size
+    val deliberation: DeliberatorInterface = MajorityJudgmentDeliberator()
+    val tally = CollectedTally(amountOfProposals, amountOfGrades)
+
+    surveyResult.proposals.forEachIndexed { i, prop ->
+        val voteResult = surveyResult.judgments.filter { it.proposal == prop }
+        voteResult.forEach { vote ->
+            tally.collect(i, vote.grade.ordinal)
+        }
+    }
+
+    val result = deliberation.deliberate(tally)
+
+
+    Column(modifier = modifier
+        .fillMaxSize()
         .background(Color.White)
         .padding(8.dp)
     ){
@@ -34,13 +55,17 @@ fun ResultScreen(
         )
         Text("Q : ${surveyResult.asking}")
 
-        surveyResult.props.forEach { prop ->
+        surveyResult.proposals.forEachIndexed { i, prop ->
             Row {
-                val voteResult = surveyResult.vote.filter { it.props == prop }
-                Text("$prop Vote : ")
-                voteResult.forEach { vote ->
-                    Text(" ${vote.propsResult.name} ")
+                val proposalJudgments = surveyResult.judgments.filter { it.proposal == prop }
+                val rank = result.proposalResults[i].rank
+
+                Text("#$rank  $prop ")
+                Text("(")
+                proposalJudgments.forEach { judgment ->
+                    Text(" ${judgment.grade.name} ")
                 }
+                Text(")")
             }
         }
         Button(
@@ -55,17 +80,17 @@ fun ResultScreen(
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
     val surveyResult = SurveyResult(
         asking = "Prezidan ?",
-        props = listOf("Toto", "Boby", "Mario"),
-        vote = listOf(
-            VoteResult("Toto", PropsResult.ARejeter),
-            VoteResult("Boby", PropsResult.TresBien),
-            VoteResult("Mario", PropsResult.Excellent),
-            VoteResult("Toto", PropsResult.Bien),
-            VoteResult("Boby", PropsResult.Insufficante),
-            VoteResult("Mario", PropsResult.Excellent),
-            VoteResult("Toto", PropsResult.TresBien),
-            VoteResult("Boby", PropsResult.TresBien),
-            VoteResult("Mario", PropsResult.Excellent),
+        proposals = listOf("Toto", "Boby", "Mario"),
+        judgments = listOf(
+            Judgment("Toto", Grades.ARejeter),
+            Judgment("Boby", Grades.TresBien),
+            Judgment("Mario", Grades.Excellent),
+            Judgment("Toto", Grades.Bien),
+            Judgment("Boby", Grades.Insuffisant),
+            Judgment("Mario", Grades.Excellent),
+            Judgment("Toto", Grades.TresBien),
+            Judgment("Boby", Grades.TresBien),
+            Judgment("Mario", Grades.Excellent),
         )
     )
     JmTheme {

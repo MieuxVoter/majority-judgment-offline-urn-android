@@ -18,10 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.illiouchine.jm.model.PropsResult
+import com.illiouchine.jm.model.Grades
 import com.illiouchine.jm.model.Survey
 import com.illiouchine.jm.model.SurveyResult
-import com.illiouchine.jm.model.VoteResult
+import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.ui.theme.JmTheme
 
 @Composable
@@ -42,9 +42,9 @@ fun VotingScreen(
         Spacer(modifier = Modifier.size(8.dp))
 
         var currentPropsIndex: Int by remember { mutableIntStateOf(0) }
-        var voteResults: List<VoteResult> by remember { mutableStateOf(emptyList()) }
+        var judgments: List<Judgment> by remember { mutableStateOf(emptyList()) }
 
-        val voteNumber = voteResults.size / survey.props.size
+        val voteNumber = judgments.size / survey.props.size
         Text("$voteNumber bulletins dans l'urne")
 
         if (currentPropsIndex >= survey.props.size){
@@ -59,8 +59,8 @@ fun VotingScreen(
                 onClick = {
                     val surveyResult = SurveyResult(
                         asking = survey.asking,
-                        props = survey.props,
-                        vote = voteResults
+                        proposals = survey.props,
+                        judgments = judgments
                     )
                     onFinish(surveyResult)
                 }
@@ -70,11 +70,11 @@ fun VotingScreen(
                 survey = survey,
                 currentPropsIndex = currentPropsIndex,
                 onResultSelected = { result ->
-                    val voteResult = VoteResult(
-                        props = survey.props.get(currentPropsIndex),
-                        propsResult = result
+                    val judgment = Judgment(
+                        proposal = survey.props.get(currentPropsIndex),
+                        grade = result
                     )
-                    voteResults = voteResults + voteResult
+                    judgments = judgments + judgment
                     currentPropsIndex++
                 }
             )
@@ -86,11 +86,11 @@ fun VotingScreen(
 private fun PropsSelection(
     survey: Survey,
     currentPropsIndex: Int,
-    onResultSelected: (PropsResult) -> Unit = {}
+    onResultSelected: (Grades) -> Unit = {}
 ) {
     Text("Props : ${survey.props.get(currentPropsIndex)}")
 
-    for (value in PropsResult.entries) {
+    for (value in Grades.entries) {
         Button(onClick = {
             onResultSelected(value)
         }) {
