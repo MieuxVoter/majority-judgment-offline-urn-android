@@ -57,15 +57,16 @@ fun ResultScreen(
 
         surveyResult.proposals.forEachIndexed { i, prop ->
             Row {
-                val proposalJudgments = surveyResult.judgments.filter { it.proposal == prop }
                 val rank = result.proposalResults[i].rank
+                Text("#$rank  $prop")
 
-                Text("#$rank  $prop ")
-                Text("(")
-                proposalJudgments.forEach { judgment ->
-                    Text(" ${judgment.grade.name} ")
-                }
-                Text(")")
+                // We can't show this as-is, it's not anonymous
+//                val proposalJudgments = surveyResult.judgments.filter { it.proposal == prop }
+//                Text(" (")
+//                proposalJudgments.forEach { judgment ->
+//                    Text(" ${judgment.grade.name} ")
+//                }
+//                Text(")")
             }
         }
         Button(
