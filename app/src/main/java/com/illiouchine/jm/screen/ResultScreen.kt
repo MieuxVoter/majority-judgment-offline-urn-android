@@ -1,6 +1,5 @@
 package com.illiouchine.jm.screen
 
-import android.icu.text.CaseMap.Title
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -51,7 +50,7 @@ fun ResultScreen(
     ){
         Text(
             modifier = Modifier,
-            text = "VotingScreen"
+            text = "Délibération"
         )
         Text("Q : ${surveyResult.asking}")
 
@@ -80,17 +79,17 @@ fun ResultScreen(
 @Composable
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
     val surveyResult = SurveyResult(
-        asking = "Prezidan ?",
-        proposals = listOf("Toto", "Boby", "Mario"),
+        asking = "Prézidan ?",
+        proposals = listOf("Tonio", "Bobby", "Mario"),
         judgments = listOf(
-            Judgment("Toto", Grades.ARejeter),
-            Judgment("Boby", Grades.TresBien),
+            Judgment("Tonio", Grades.ARejeter),
+            Judgment("Bobby", Grades.TresBien),
             Judgment("Mario", Grades.Excellent),
-            Judgment("Toto", Grades.Bien),
-            Judgment("Boby", Grades.Insuffisant),
+            Judgment("Tonio", Grades.Bien),
+            Judgment("Bobby", Grades.Insuffisant),
             Judgment("Mario", Grades.Excellent),
-            Judgment("Toto", Grades.TresBien),
-            Judgment("Boby", Grades.TresBien),
+            Judgment("Tonio", Grades.TresBien),
+            Judgment("Bobby", Grades.TresBien),
             Judgment("Mario", Grades.Excellent),
         )
     )
