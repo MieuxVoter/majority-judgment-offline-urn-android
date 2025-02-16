@@ -40,7 +40,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -49,6 +48,12 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
+    // Unpleasant way of including the lib, as it transitions via jitpack (see settings.gradle.kts)
+    // But it works, and that's good enough for now.  (thanks, jitpack !)
+    // Publication on Maven ought to be done in the lib itself, nothing we can do here.
+    implementation("com.github.MieuxVoter:majority-judgment-library-java:0.3.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
