@@ -16,6 +16,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+
+        // Needed for the MJ lib from MieuxVoter as it's not on Maven (yet|still)
         maven { url = uri("https://jitpack.io") }
     }
 }
