@@ -44,7 +44,6 @@ fun OnBoardingScreen(
 
     Box(modifier = modifier
         .fillMaxSize()
-//        .background(Color.White)
         .padding(36.dp)
     ){
         Text(
@@ -77,7 +76,6 @@ fun OnBoardingScreen(
     }
 }
 
-@Preview
 @Composable
 fun ViewPager(
     modifier: Modifier = Modifier,
@@ -85,7 +83,6 @@ fun ViewPager(
     currentPage: Int = 0,
 ) {
     Row(modifier = modifier
-//        .background(Color.White)
         .padding(16.dp)
     ){
         for (i in 0 until pageSize) {
@@ -101,7 +98,13 @@ fun ViewPager(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
+@Composable
+fun PreviewViewPager(){
+    JmTheme { ViewPager(pageSize = 4, currentPage = 2) }
+}
+
+@Preview(showSystemUi = true)
 @Composable
 fun PreviewOnBoarding(modifier: Modifier = Modifier) {
     JmTheme {
