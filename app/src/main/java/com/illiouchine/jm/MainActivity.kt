@@ -4,9 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,23 +21,28 @@ import com.illiouchine.jm.model.SurveyResult
 import com.illiouchine.jm.screen.ResultScreen
 import com.illiouchine.jm.screen.VotingScreen
 import com.illiouchine.jm.ui.theme.JmTheme
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
+
+    private val viewModel: MainViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
 
-            var showOnboarding:Boolean by remember { mutableStateOf(true) }
+            val viewState by viewModel.viewState.collectAsState()
+
             var currentSurvey: Survey? by remember { mutableStateOf(null) }
             var surveyResult: SurveyResult? by remember { mutableStateOf(null) }
 
             JmTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    if (showOnboarding) {
+                    if (viewState.showOnboarding) {
                         OnBoardingScreen(
                             modifier = Modifier.padding(innerPadding),
-                            onFinish = { showOnboarding = false }
+                            onFinish = { viewModel.onFinishOnBoarding() }
                         )
                     } else {
                         if (currentSurvey == null){
