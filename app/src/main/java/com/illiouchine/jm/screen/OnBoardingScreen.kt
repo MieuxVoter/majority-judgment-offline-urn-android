@@ -23,15 +23,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.ui.theme.JmTheme
 
-data class OnBoardingData(
+data class OnBoardingPage(
     val image: Int, // Todo use Resource
     val text : String,
 )
 
-val onBoardingDatas = listOf(
-    OnBoardingData(0, "Le JUGEMENT MAJORITAIRE te souhaite la bienvenu"),
-    OnBoardingData(1, "Ici ta vie sera jugée par un tribunal populaire"),
-    OnBoardingData(2, "Ready ?"),
+val onBoardingPages = listOf(
+    OnBoardingPage(0, "Le JUGEMENT MAJORITAIRE vous souhaite la bienvenue."),
+    OnBoardingPage(1, "Ici ta vie sera jugée par un tribunal populaire."),
+    OnBoardingPage(2, "Ready ?"),
 )
 
 @Composable
@@ -49,21 +49,21 @@ fun OnBoardingScreen(
     ){
         Text(
             modifier = Modifier.align(Alignment.TopStart),
-            text = "OnBoarding"
+            text = "Majority Judgment"
         )
 
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = onBoardingDatas[currentOnBoardingIndex].text
+            text = onBoardingPages[currentOnBoardingIndex].text
         )
 
         ViewPager(
             modifier = Modifier.align(Alignment.BottomCenter),
-            pageSize = onBoardingDatas.size,
+            pageSize = onBoardingPages.size,
             currentPage = currentOnBoardingIndex
         )
 
-        if (currentOnBoardingIndex == onBoardingDatas.size -1){
+        if (currentOnBoardingIndex == onBoardingPages.size -1){
             Button(
                 modifier = Modifier.align(Alignment.BottomEnd),
                 onClick = {onFinish()}
