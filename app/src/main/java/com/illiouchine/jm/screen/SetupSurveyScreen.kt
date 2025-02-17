@@ -43,7 +43,7 @@ fun SetupSurveyScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.White)
+//            .background(Color.White)
             .padding(16.dp)
             .verticalScroll(
                 state = ScrollState(initial = 0),

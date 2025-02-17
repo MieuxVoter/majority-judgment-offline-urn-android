@@ -29,9 +29,9 @@ data class OnBoardingPage(
 )
 
 val onBoardingPages = listOf(
-    OnBoardingPage(0, "Le JUGEMENT MAJORITAIRE vous souhaite la bienvenue."),
-    OnBoardingPage(1, "Ici ta vie sera jugée par un tribunal populaire."),
-    OnBoardingPage(2, "Ready ?"),
+    OnBoardingPage(0, "Le Jugement Majoritaire vous souhaite la bienvenue."),
+    OnBoardingPage(1, "Ici votre vie sera jugée par un tribunal populaire."),
+    OnBoardingPage(2, "Prêt⋅e ?"),
 )
 
 @Composable
@@ -44,7 +44,7 @@ fun OnBoardingScreen(
 
     Box(modifier = modifier
         .fillMaxSize()
-        .background(Color.White)
+//        .background(Color.White)
         .padding(36.dp)
     ){
         Text(
@@ -85,7 +85,7 @@ fun ViewPager(
     currentPage: Int = 0,
 ) {
     Row(modifier = modifier
-        .background(Color.White)
+//        .background(Color.White)
         .padding(16.dp)
     ){
         for (i in 0 until pageSize) {

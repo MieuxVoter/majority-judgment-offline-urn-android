@@ -53,7 +53,7 @@ fun ResultScreen(
 
     Column(modifier = modifier
         .fillMaxSize()
-        .background(Color.White)
+//        .background(Color.White)
         .padding(8.dp)
     ){
 
