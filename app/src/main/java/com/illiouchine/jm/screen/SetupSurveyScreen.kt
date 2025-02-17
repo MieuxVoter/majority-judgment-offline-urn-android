@@ -1,11 +1,14 @@
 package com.illiouchine.jm.screen
 
+import android.icu.util.Calendar
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -17,10 +20,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Survey
 import com.illiouchine.jm.ui.theme.JmTheme
+import java.text.DateFormat
+import java.util.Date
 
 
 @Composable
@@ -38,10 +45,13 @@ fun SetupSurveyScreen(
             .fillMaxSize()
             .background(Color.White)
             .padding(16.dp)
+            .verticalScroll(
+                state = ScrollState(initial = 0),
+            )
     ) {
 //        Text("SetupSurveyScreen")
 
-        Text("Sujet du Scrutin")
+        Text(stringResource(R.string.label_poll_subject))
         TextField(
             modifier = Modifier.fillMaxWidth(),
             maxLines = 5,
@@ -49,7 +59,7 @@ fun SetupSurveyScreen(
             onValueChange = { subject = it },
         )
 
-        Text("Propositions")
+        Text(stringResource(R.string.label_poll_proposals))
         Row {
             TextField(
 //                modifier = Modifier.fillMaxWidth(), // "Add" button disappears
@@ -66,8 +76,7 @@ fun SetupSurveyScreen(
                     if (proposition == "") {
                         proposition = "Proposition" + " " + (65+props.size).toChar()
                     }
-                    val newProps = proposition
-                    props = props + newProps
+                    props = props + proposition
                     proposition = ""
                 },
             ) { Text("Add") }
@@ -92,6 +101,10 @@ fun SetupSurveyScreen(
                 .align(Alignment.CenterHorizontally)
                 .padding(16.dp),
             onClick = {
+                // Rule: if the subject was not provided, use a default
+                if (subject == "") {
+                    subject = "Scrutin du" + " " + DateFormat.getDateInstance().format(Calendar.getInstance().time)
+                }
                 val survey = Survey(asking = subject, props = props)
                 setupFinished(survey)
             },
