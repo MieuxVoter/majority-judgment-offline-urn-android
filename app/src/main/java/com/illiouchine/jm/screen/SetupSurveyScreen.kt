@@ -36,22 +36,31 @@ fun SetupSurveyScreen(
     setupFinished: (Survey) -> Unit = {},
 ) {
 
+    val context = LocalContext.current
     var subject: String by remember { mutableStateOf("") }
     var proposal: String by remember { mutableStateOf("") }
     var proposals: List<String> by remember { mutableStateOf(emptyList()) }
+
+    fun generateProposalName(): String {
+        return "${context.getString(R.string.proposal)} ${(65 + proposals.size).toChar()}"
+    }
+
+    // TODO: Perhaps use the 'fun' def instead here ?
+    val addProposal: () -> Unit = {
+        // Rule: if the proposition name is not specified, use a default
+        if (proposal == "") {
+            proposal = generateProposalName()
+        }
+        proposals = proposals + proposal
+        proposal = ""
+    }
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
-            .verticalScroll(
-                state = ScrollState(initial = 0),
-            )
+            .verticalScroll(state = ScrollState(initial = 0))
     ) {
-
-        val context = LocalContext.current
-
-//        Text("SetupSurveyScreen")
 
         Text(stringResource(R.string.label_poll_subject))
         TextField(
@@ -68,29 +77,14 @@ fun SetupSurveyScreen(
                 singleLine = true,
                 value = proposal,
                 onValueChange = { proposal = it },
-                placeholder = { Text("Proposition placeholder") },
-                keyboardActions = KeyboardActions(onDone = {
-                    // Rule: if the proposition name is not specified, use a default
-                    if (proposal == "") {
-                        proposal = "Proposition" + " " + (65 + proposals.size).toChar()
-                    }
-                    proposals = proposals + proposal
-                    proposal = ""
-                })
+                placeholder = { Text(generateProposalName()) },
+                keyboardActions = KeyboardActions(onDone = { addProposal() }),
             )
             Button(
                 modifier = Modifier
                     .align(Alignment.CenterVertically),
-                onClick = {
-                    // FIXME: how to refactor this ?!?
-                    // Rule: if the proposition name is not specified, use a default
-                    if (proposal == "") {
-                        proposal = "Proposition" + " " + (65 + proposals.size).toChar()
-                    }
-                    proposals = proposals + proposal
-                    proposal = ""
-                },
-            ) { Text("Add") }
+                onClick = { addProposal() },
+            ) { Text(stringResource(R.string.button_add)) }
         }
 
         proposals.forEach {
