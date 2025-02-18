@@ -19,36 +19,40 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.theme.JmTheme
 
 data class OnBoardingPage(
     val image: Int, // Todo use Resource
-    val text : String,
+    val text: String,
 )
 
 val onBoardingPages = listOf(
-    OnBoardingPage(0, "Le Jugement Majoritaire vous souhaite la bienvenue."),
-    OnBoardingPage(1, "Ici votre vie sera jugée par un tribunal populaire."),
-    OnBoardingPage(2, "Prêt⋅e ?"),
+    OnBoardingPage(0, "Bienvenue dans votre urne mobile au Jugement Majoritaire."),
+    OnBoardingPage(1, "Organisez un scrutin, et faites tourner le téléphone aux participantes."),
+    OnBoardingPage(2, "Cette application n'a pas besoin d'un accès Internet."),
+    OnBoardingPage(3, "Prêt⋅e ?"),
 )
 
 @Composable
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
-    onFinish:() -> Unit= {}
+    onFinish: () -> Unit = {}
 ) {
 
     var currentOnBoardingIndex by remember { mutableIntStateOf(0) }
 
-    Box(modifier = modifier
-        .fillMaxSize()
-        .padding(36.dp)
-    ){
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(36.dp)
+    ) {
         Text(
             modifier = Modifier.align(Alignment.TopStart),
-            text = "Majority Judgment"
+            text = stringResource(R.string.majority_judgment)
         )
 
         Text(
@@ -62,16 +66,16 @@ fun OnBoardingScreen(
             currentPage = currentOnBoardingIndex
         )
 
-        if (currentOnBoardingIndex == onBoardingPages.size -1){
+        if (currentOnBoardingIndex == onBoardingPages.size - 1) {
             Button(
                 modifier = Modifier.align(Alignment.BottomEnd),
-                onClick = {onFinish()}
-            ) { Text("finish") }
+                onClick = { onFinish() }
+            ) { Text(stringResource(R.string.button_finish)) }
         } else {
             Button(
                 modifier = Modifier.align(Alignment.BottomEnd),
                 onClick = { currentOnBoardingIndex++ }
-            ) { Text("next") }
+            ) { Text(stringResource(R.string.button_next)) }
         }
     }
 }
@@ -82,16 +86,18 @@ fun ViewPager(
     pageSize: Int = 3,
     currentPage: Int = 0,
 ) {
-    Row(modifier = modifier
-        .padding(16.dp)
-    ){
+    Row(
+        modifier = modifier
+            .padding(16.dp)
+    ) {
         for (i in 0 until pageSize) {
             val color = if (i == currentPage) { Color.Gray } else { Color.LightGray }
             Spacer(modifier = Modifier.size(4.dp))
-            Box(modifier = Modifier
-                .size(16.dp)
-                .clip(shape = RoundedCornerShape(8.dp))
-                .background(color)
+            Box(
+                modifier = Modifier
+                    .size(16.dp)
+                    .clip(shape = RoundedCornerShape(8.dp))
+                    .background(color)
             )
             Spacer(modifier = Modifier.size(4.dp))
         }
@@ -100,7 +106,7 @@ fun ViewPager(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewViewPager(){
+fun PreviewViewPager() {
     JmTheme { ViewPager(pageSize = 4, currentPage = 2) }
 }
 

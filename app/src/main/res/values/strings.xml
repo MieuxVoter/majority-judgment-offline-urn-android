@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Urn</string>
-    <string name="label_poll_subject">Sujet du Scrutin</string>
-    <string name="label_poll_proposals">Propositions</string>
+    <string name="label_poll_proposals">Proposals</string>
+    <string name="majority_judgment">Majority Judgment</string>
+    <string name="button_finish">finish</string>
+    <string name="button_next">next</string>
+    <string name="label_poll_subject">Subject of the Poll</string>
 </resources>

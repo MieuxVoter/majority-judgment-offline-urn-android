@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Urne</string>
+    <string name="button_finish">terminer</string>
+    <string name="button_next">suivant</string>
+    <string name="label_poll_subject">Sujet du Scrutin</string>
+    <string name="label_poll_proposals">Candidats</string>
+    <string name="majority_judgment">Jugement Majoritaire</string>
+</resources>
