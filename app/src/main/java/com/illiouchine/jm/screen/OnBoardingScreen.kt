@@ -34,7 +34,8 @@ val onBoardingPages = listOf(
     OnBoardingPage(0, "Bienvenue dans votre urne mobile au Jugement Majoritaire."),
     OnBoardingPage(1, "Organisez un scrutin, et faites tourner le téléphone aux participantes."),
     OnBoardingPage(2, "Cette application n'a pas besoin d'un accès Internet."),
-    OnBoardingPage(3, "Prêt⋅e ?"),
+    OnBoardingPage(3, "C'est un logiciel libre, programmé par des bénévoles affamés.  Rejoignez-nous !"),
+    OnBoardingPage(4, "Prêt⋅e ?"),
 )
 
 @Composable

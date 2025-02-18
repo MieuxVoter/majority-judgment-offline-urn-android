@@ -1,5 +1,6 @@
 package com.illiouchine.jm
 
+import android.content.Context
 import android.icu.util.Calendar
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -12,7 +13,7 @@ import kotlinx.coroutines.flow.update
 import java.text.DateFormat
 
 class MainViewModel(
-    private val sharedPreferences: SharedPrefsHelper
+    private val sharedPreferences: SharedPrefsHelper,
 ): ViewModel() {
 
     data class MainViewState(
@@ -56,7 +57,7 @@ class MainViewModel(
      *          - finish Setup
      *          - add Proposals
      *
-     * Voting state : Subject, Proposals, judgement
+     * Voting state : Subject, Proposals, judgment
      *             - finish voting (survey result)
      *
      *  result State : surveyResult + result Interface
@@ -68,16 +69,17 @@ class MainViewModel(
             it.copy(setupSurvey = it.setupSurvey.copy(subject = subject))
         }
     }
+
     fun onAddProposals(proposal : String){
-        // Rule: If proposition already exist. do Nothing
+        // Rule: If proposal already exists, do nothing.
         if (_viewState.value.setupSurvey.props.any { it == proposal }){
             _viewState.update {
                 it.copy(
-                    feedback = "The proposition : $proposal already exist"
+                    feedback = "The proposal `${proposal}` already exists."
                 )
             }
         } else {
-            // Rule: if the proposition name is not specified, use a default
+            // Rule: if the proposal name is not specified, use a default
             val newProposals = _viewState.value.setupSurvey.props + proposal
 
             _viewState.update {
@@ -94,11 +96,12 @@ class MainViewModel(
     }
 
     fun onFinishSetupSurvey(){
-        // Rule: if the poll's subject was not provided, use a default.
         val setupSurvey = viewState.value.setupSurvey
+        // Rule: if the poll's subject was not provided, use a default.
         val subject = setupSurvey.subject.ifEmpty {
-            "Scrutin du" + " " + DateFormat.getDateInstance()
-                .format(Calendar.getInstance().time)
+            // FIXME: manage to get the context, or the translated string any other way
+//            context.getString(R.string.poll_of) + " " + DateFormat.getDateInstance().format(Calendar.getInstance().time)
+            "Poll of" + " " + DateFormat.getDateInstance().format(Calendar.getInstance().time)
         }
         // Rule: if no proposals were added, abort and complain.
         // Note: since the button is now disabled in that case, this never happens anymore.
