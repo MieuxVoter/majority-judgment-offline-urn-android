@@ -1,7 +1,6 @@
 package com.illiouchine.jm.screen
 
 import android.icu.util.Calendar
-import android.widget.EditText
 import android.widget.Toast
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
@@ -38,8 +37,8 @@ fun SetupSurveyScreen(
 ) {
 
     var subject: String by remember { mutableStateOf("") }
-    var proposition: String by remember { mutableStateOf("") }
-    var props: List<String> by remember { mutableStateOf(emptyList()) }
+    var proposal: String by remember { mutableStateOf("") }
+    var proposals: List<String> by remember { mutableStateOf(emptyList()) }
 
     Column(
         modifier = modifier
@@ -67,16 +66,16 @@ fun SetupSurveyScreen(
             TextField(
 //                modifier = Modifier.fillMaxWidth(), // "Add" button disappears
                 singleLine = true,
-                value = proposition,
-                onValueChange = { proposition = it },
+                value = proposal,
+                onValueChange = { proposal = it },
                 placeholder = { Text("Proposition placeholder") },
                 keyboardActions = KeyboardActions(onDone = {
                     // Rule: if the proposition name is not specified, use a default
-                    if (proposition == "") {
-                        proposition = "Proposition" + " " + (65 + props.size).toChar()
+                    if (proposal == "") {
+                        proposal = "Proposition" + " " + (65 + proposals.size).toChar()
                     }
-                    props = props + proposition
-                    proposition = ""
+                    proposals = proposals + proposal
+                    proposal = ""
                 })
             )
             Button(
@@ -85,16 +84,16 @@ fun SetupSurveyScreen(
                 onClick = {
                     // FIXME: how to refactor this ?!?
                     // Rule: if the proposition name is not specified, use a default
-                    if (proposition == "") {
-                        proposition = "Proposition" + " " + (65 + props.size).toChar()
+                    if (proposal == "") {
+                        proposal = "Proposition" + " " + (65 + proposals.size).toChar()
                     }
-                    props = props + proposition
-                    proposition = ""
+                    proposals = proposals + proposal
+                    proposal = ""
                 },
             ) { Text("Add") }
         }
 
-        props.forEach {
+        proposals.forEach {
             Row {
                 Text(
                     modifier = Modifier
@@ -103,7 +102,7 @@ fun SetupSurveyScreen(
                     text = it,
                 )
                 Button(
-                    onClick = { props = props - it },
+                    onClick = { proposals = proposals - it },
                 ) { Text("x") }
             }
         }
@@ -112,7 +111,7 @@ fun SetupSurveyScreen(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(16.dp),
-            enabled = props.size > 1,
+            enabled = proposals.size > 1,
             onClick = {
                 // Rule: if the poll's subject was not provided, use a default.
                 if (subject == "") {
@@ -121,7 +120,7 @@ fun SetupSurveyScreen(
                 }
                 // Rule: if no proposals were added, abort and complain.
                 // Note: since the button is now disabled in that case, this never happens anymore.
-                if (props.size < 2) {
+                if (proposals.size < 2) {
                     Toast.makeText(
                         context,
                         "A poll needs at least two proposals.",
@@ -129,7 +128,7 @@ fun SetupSurveyScreen(
                     ).show()
                     return@Button
                 }
-                val survey = Survey(subject = subject, props = props)
+                val survey = Survey(subject = subject, props = proposals)
                 setupFinished(survey)
             },
         ) {
