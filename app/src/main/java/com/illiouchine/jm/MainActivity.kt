@@ -45,13 +45,13 @@ class MainActivity : ComponentActivity() {
                             onFinish = { viewModel.onFinishOnBoarding() }
                         )
                     } else {
-                        if (currentSurvey == null){
+                        if (currentSurvey == null) {
                             SetupSurveyScreen(
                                 modifier = Modifier.padding(innerPadding),
                                 setupFinished = { currentSurvey = it }
                             )
                         } else {
-                            if (surveyResult == null){
+                            if (surveyResult == null) {
                                 VotingScreen(
                                     modifier = Modifier.padding(innerPadding),
                                     survey = currentSurvey!!,
