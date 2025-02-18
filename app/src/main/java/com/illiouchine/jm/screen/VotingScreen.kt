@@ -17,21 +17,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.model.Grades
+import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Survey
 import com.illiouchine.jm.model.SurveyResult
-import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.ui.theme.JmTheme
 
 @Composable
 fun VotingScreen(
     modifier: Modifier = Modifier,
     survey: Survey,
-    onFinish : (SurveyResult) -> Unit = {}
+    onFinish: (SurveyResult) -> Unit = {}
 ) {
-    Column(modifier = modifier
-        .fillMaxSize()
-//        .background(Color.White)
-        .padding(8.dp)
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(8.dp)
     ) {
         Text("VotingScreen")
         Text("Let's vote")
@@ -45,7 +45,7 @@ fun VotingScreen(
         val voteNumber = judgments.size / survey.props.size
         Text("$voteNumber bulletins dans l'urne")
 
-        if (currentPropsIndex >= survey.props.size){
+        if (currentPropsIndex >= survey.props.size) {
             Text("A Voté !")
             Text("Votre participation a bien été prise en compte. Vous pouvez maintenant passer cet appareil au prochain participant")
             Button(

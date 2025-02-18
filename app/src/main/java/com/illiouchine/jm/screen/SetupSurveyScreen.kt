@@ -1,7 +1,5 @@
 package com.illiouchine.jm.screen
 
-import android.icu.util.Calendar
-import android.widget.Toast
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,24 +23,26 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.R
-import com.illiouchine.jm.model.Survey
+import com.illiouchine.jm.model.SetupSurvey
 import com.illiouchine.jm.ui.theme.JmTheme
-import java.text.DateFormat
 
 
 @Composable
 fun SetupSurveyScreen(
     modifier: Modifier = Modifier,
-    setupFinished: (Survey) -> Unit = {},
+    setupSurvey: SetupSurvey = SetupSurvey(),
+    onAddSubject: (String) -> Unit = {},
+    onAddProposal: (String) -> Unit = {},
+    onRemoveProposal: (String) -> Unit = {},
+    setupFinished: () -> Unit = {},
 ) {
 
     val context = LocalContext.current
-    var subject: String by remember { mutableStateOf("") }
     var proposal: String by remember { mutableStateOf("") }
-    var proposals: List<String> by remember { mutableStateOf(emptyList()) }
+    var subject: String by remember { mutableStateOf(setupSurvey.subject) }
 
     fun generateProposalName(): String {
-        return "${context.getString(R.string.proposal)} ${(65 + proposals.size).toChar()}"
+        return "${context.getString(R.string.proposal)} ${(65 + setupSurvey.props.size).toChar()}"
     }
 
     // TODO: Perhaps use the 'fun' def instead here ?
@@ -51,7 +51,7 @@ fun SetupSurveyScreen(
         if (proposal == "") {
             proposal = generateProposalName()
         }
-        proposals = proposals + proposal
+        onAddProposal(proposal)
         proposal = ""
     }
 
@@ -67,13 +67,15 @@ fun SetupSurveyScreen(
             modifier = Modifier.fillMaxWidth(),
             maxLines = 5,
             value = subject,
-            onValueChange = { subject = it },
+            onValueChange = {
+                subject = it
+                onAddSubject(subject)
+                            },
         )
 
         Text(stringResource(R.string.label_poll_proposals))
         Row {
             TextField(
-//                modifier = Modifier.fillMaxWidth(), // "Add" button disappears
                 singleLine = true,
                 value = proposal,
                 onValueChange = { proposal = it },
@@ -87,7 +89,7 @@ fun SetupSurveyScreen(
             ) { Text(stringResource(R.string.button_add)) }
         }
 
-        proposals.forEach {
+        setupSurvey.props.forEach {
             Row {
                 Text(
                     modifier = Modifier
@@ -96,7 +98,7 @@ fun SetupSurveyScreen(
                     text = it,
                 )
                 Button(
-                    onClick = { proposals = proposals - it },
+                    onClick = { onRemoveProposal(it) },
                 ) { Text("x") }
             }
         }
@@ -105,25 +107,9 @@ fun SetupSurveyScreen(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(16.dp),
-            enabled = proposals.size > 1,
+            enabled = setupSurvey.props.size > 1,
             onClick = {
-                // Rule: if the poll's subject was not provided, use a default.
-                if (subject == "") {
-                    subject = "Scrutin du" + " " + DateFormat.getDateInstance()
-                        .format(Calendar.getInstance().time)
-                }
-                // Rule: if no proposals were added, abort and complain.
-                // Note: since the button is now disabled in that case, this never happens anymore.
-                if (proposals.size < 2) {
-                    Toast.makeText(
-                        context,
-                        "A poll needs at least two proposals.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@Button
-                }
-                val survey = Survey(subject = subject, props = proposals)
-                setupFinished(survey)
+                setupFinished()
             },
         ) {
             Text(stringResource(R.string.button_let_s_go))
@@ -136,6 +122,9 @@ fun SetupSurveyScreen(
 @Composable
 fun PreviewSetupSurveyScreen(modifier: Modifier = Modifier) {
     JmTheme {
-        SetupSurveyScreen()
+        SetupSurveyScreen(
+            modifier = Modifier,
+            setupSurvey = SetupSurvey(),
+        )
     }
 }

@@ -1,26 +1,22 @@
 package com.illiouchine.jm.screen
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.drawscope.DrawStyle
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import com.illiouchine.jm.model.Grades
@@ -30,6 +26,7 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import fr.mieuxvoter.mj.CollectedTally
 import fr.mieuxvoter.mj.DeliberatorInterface
 import fr.mieuxvoter.mj.MajorityJudgmentDeliberator
+import fr.mieuxvoter.mj.ResultInterface
 
 
 @Composable
@@ -51,15 +48,13 @@ fun ResultScreen(
         }
     }
 
-    val result = deliberation.deliberate(tally)
+    val result: ResultInterface = deliberation.deliberate(tally)
 
 
     Column(modifier = modifier
         .fillMaxSize()
-//        .background(Color.White)
         .padding(8.dp)
     ){
-
         Row(
             modifier = Modifier.align(Alignment.CenterHorizontally),
         ) {
@@ -77,6 +72,28 @@ fun ResultScreen(
                 Text("#$rank  $proposalName")
             }
         }
+
+        Row {
+            // TODO : Use Canvas to add custom drawing
+            Canvas(modifier = Modifier.size(200.dp)) {
+                val canvasQuadrantSize = size.minDimension / 2F
+                drawRect(
+                    color = Color.Magenta,
+                    size = Size(canvasQuadrantSize, canvasQuadrantSize)
+                )
+                drawCircle(
+                    color = Color.Cyan,
+                    radius = size.minDimension /2,
+                    center = this.center,
+                    alpha = 0.2f,
+                    style = Fill,
+                    colorFilter = null,
+                    blendMode = BlendMode.Color,
+                )
+            }
+
+        }
+
 
         Button(
             modifier = Modifier.align(Alignment.CenterHorizontally),
