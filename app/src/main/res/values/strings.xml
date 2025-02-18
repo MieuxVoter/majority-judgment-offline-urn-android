@@ -5,4 +5,5 @@
     <string name="button_finish">finish</string>
     <string name="button_next">next</string>
     <string name="label_poll_subject">Subject of the Poll</string>
+    <string name="button_let_s_go">Let\'s go !</string>
 </resources>

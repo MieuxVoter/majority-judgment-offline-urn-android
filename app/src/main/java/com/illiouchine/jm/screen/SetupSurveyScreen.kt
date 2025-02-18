@@ -1,6 +1,8 @@
 package com.illiouchine.jm.screen
 
 import android.icu.util.Calendar
+import android.widget.EditText
+import android.widget.Toast
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,6 +49,9 @@ fun SetupSurveyScreen(
                 state = ScrollState(initial = 0),
             )
     ) {
+
+        val context = LocalContext.current
+
 //        Text("SetupSurveyScreen")
 
         Text(stringResource(R.string.label_poll_subject))
@@ -77,6 +83,7 @@ fun SetupSurveyScreen(
                 modifier = Modifier
                     .align(Alignment.CenterVertically),
                 onClick = {
+                    // FIXME: how to refactor this ?!?
                     // Rule: if the proposition name is not specified, use a default
                     if (proposition == "") {
                         proposition = "Proposition" + " " + (65 + props.size).toChar()
@@ -105,17 +112,28 @@ fun SetupSurveyScreen(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(16.dp),
+            enabled = props.size > 1,
             onClick = {
                 // Rule: if the poll's subject was not provided, use a default.
                 if (subject == "") {
                     subject = "Scrutin du" + " " + DateFormat.getDateInstance()
                         .format(Calendar.getInstance().time)
                 }
+                // Rule: if no proposals were added, abort and complain.
+                // Note: since the button is now disabled in that case, this never happens anymore.
+                if (props.size < 2) {
+                    Toast.makeText(
+                        context,
+                        "A poll needs at least two proposals.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@Button
+                }
                 val survey = Survey(subject = subject, props = props)
                 setupFinished(survey)
             },
         ) {
-            Text("C'est parti !")
+            Text(stringResource(R.string.button_let_s_go))
         }
     }
 }

@@ -6,4 +6,5 @@
     <string name="label_poll_subject">Sujet du Scrutin</string>
     <string name="label_poll_proposals">Candidats</string>
     <string name="majority_judgment">Jugement Majoritaire</string>
+    <string name="button_let_s_go">C\'est parti !</string>
 </resources>
