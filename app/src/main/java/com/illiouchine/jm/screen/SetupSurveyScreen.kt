@@ -1,5 +1,7 @@
 package com.illiouchine.jm.screen
 
+import android.icu.util.Calendar
+import android.widget.Toast
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,6 +40,7 @@ fun SetupSurveyScreen(
 ) {
 
     val context = LocalContext.current
+//    var subject: String by remember { mutableStateOf("") }
     var proposal: String by remember { mutableStateOf("") }
     var subject: String by remember { mutableStateOf(setupSurvey.subject) }
 
@@ -47,12 +50,22 @@ fun SetupSurveyScreen(
 
     // TODO: Perhaps use the 'fun' def instead here ?
     val addProposal: () -> Unit = {
-        // Rule: if the proposition name is not specified, use a default
+        // Rule: if the proposal name is not specified, use a default
         if (proposal == "") {
             proposal = generateProposalName()
         }
-        onAddProposal(proposal)
-        proposal = ""
+        // Rule: proposals must have unique names
+        if (proposals.contains(proposal)) {
+            Toast.makeText(
+                context,
+                "A proposal with this name already exists.",
+                Toast.LENGTH_SHORT,
+            ).show()
+        } else {
+//            proposals = proposals + proposal
+            onAddProposal(proposal)
+            proposal = ""
+        }
     }
 
     Column(
@@ -109,6 +122,23 @@ fun SetupSurveyScreen(
                 .padding(16.dp),
             enabled = setupSurvey.props.size > 1,
             onClick = {
+//                // Rule: if the poll's subject was not provided, use a default.
+//                if (subject == "") {
+//                    subject = context.getString(R.string.poll_of) + " " + DateFormat.getDateInstance()
+//                        .format(Calendar.getInstance().time)
+//                }
+//                // Rule: if no proposals were added, abort and complain.
+//                // Note: since the button is now disabled in that case, this never happens anymore.
+//                if (proposals.size < 2) {
+//                    Toast.makeText(
+//                        context,
+//                        "A poll needs at least two proposals.",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                    return@Button
+//                }
+//                val survey = Survey(subject = subject, props = proposals)
+//                setupFinished(survey)
                 setupFinished()
             },
         ) {
