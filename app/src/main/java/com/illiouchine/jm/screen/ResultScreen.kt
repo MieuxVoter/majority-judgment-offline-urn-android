@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Shapes
@@ -19,7 +20,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import com.illiouchine.jm.model.Grades
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.SurveyResult
@@ -61,9 +64,9 @@ fun ResultScreen(
             modifier = Modifier.align(Alignment.CenterHorizontally),
         ) {
             Text(
-                modifier = modifier
-                    .padding(32.dp),
-                text = "❝ ${surveyResult.asking} ❞"
+                modifier = modifier.padding(32.dp),
+                text = "❝ ${surveyResult.asking} ❞",
+                fontSize = 6.em,
             )
         }
 
@@ -83,7 +86,7 @@ fun ResultScreen(
 }
 
 
-@Preview
+@Preview(showSystemUi = true)
 @Composable
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
     val surveyResult = SurveyResult(
