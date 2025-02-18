@@ -40,7 +40,6 @@ fun SetupSurveyScreen(
 ) {
 
     val context = LocalContext.current
-//    var subject: String by remember { mutableStateOf("") }
     var proposal: String by remember { mutableStateOf("") }
     var subject: String by remember { mutableStateOf(setupSurvey.subject) }
 
@@ -55,14 +54,13 @@ fun SetupSurveyScreen(
             proposal = generateProposalName()
         }
         // Rule: proposals must have unique names
-        if (proposals.contains(proposal)) {
+        if (setupSurvey.props.contains(proposal)) {
             Toast.makeText(
                 context,
                 "A proposal with this name already exists.",
                 Toast.LENGTH_SHORT,
             ).show()
         } else {
-//            proposals = proposals + proposal
             onAddProposal(proposal)
             proposal = ""
         }
@@ -83,7 +81,7 @@ fun SetupSurveyScreen(
             onValueChange = {
                 subject = it
                 onAddSubject(subject)
-                            },
+            },
         )
 
         Text(stringResource(R.string.label_poll_proposals))
