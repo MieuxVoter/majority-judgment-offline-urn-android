@@ -9,4 +9,11 @@
     <string name="proposal">Proposal</string>
     <string name="button_add">Add</string>
     <string name="poll_of">Poll of</string>
+    <string name="grade_to_reject">à rejeter</string>
+    <string name="grade_insufficient">insufficient</string>
+    <string name="grade_passable">passable</string>
+    <string name="grade_somewhat_good">somewhat good</string>
+    <string name="grade_good">good</string>
+    <string name="grade_very_good">very good</string>
+    <string name="grade_excellent">excellent</string>
 </resources>
