@@ -20,25 +20,39 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.theme.JmTheme
 
 enum class BottomBarItem(
+    val id: String,
     val resId: Int,
     val icon: ImageVector
 ) {
-    Home(resId = R.string.bottombar_home, icon = Icons.Default.Home),
-    Settings(resId = R.string.bottombar_settings, icon = Icons.Default.Settings)
+    Home(id = "home", resId = R.string.bottombar_home, icon = Icons.Default.Home),
+    Settings(id = "settings", resId = R.string.bottombar_settings, icon = Icons.Default.Settings);
+
+    companion object{
+        fun fromId(id: String): BottomBarItem {
+            return when(id){
+                "home" -> Home
+                "settings" -> Settings
+                else -> Home
+            }
+        }
+    }
 }
 
 
 @Composable
 fun MUBottomBar(
     modifier: Modifier = Modifier,
-    selected: BottomBarItem = BottomBarItem.Home
+    selected: String = "home",
+    onItemSelected: (BottomBarItem) -> Unit = {}
 ) {
     NavigationBar {
         BottomBarItem.entries.forEach {
             NavigationBarItem(
                 modifier = Modifier,
-                selected = it == selected,
-                onClick = {},
+                selected = it == BottomBarItem.fromId(selected),
+                onClick = {
+                    onItemSelected(it)
+                },
                 icon = {
                     Icon(
                         imageVector = it.icon,
