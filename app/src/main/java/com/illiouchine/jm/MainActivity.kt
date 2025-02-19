@@ -13,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -22,6 +23,7 @@ import com.illiouchine.jm.screen.ResultScreen
 import com.illiouchine.jm.screen.SetupSurveyScreen
 import com.illiouchine.jm.screen.VotingScreen
 import com.illiouchine.jm.ui.theme.JmTheme
+import kotlinx.coroutines.delay
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
@@ -40,6 +42,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     snackbarHost = {
                         if(!viewState.feedback.isNullOrEmpty()){
+                            LaunchedEffect(viewState.feedback) {
+                                delay(5*1000)
+                                viewModel.onDismissFeedback()
+                            }
                             Snackbar(
                                 modifier = Modifier.padding(16.dp)
                                     .padding(WindowInsets.ime.asPaddingValues()),
@@ -49,7 +55,8 @@ class MainActivity : ComponentActivity() {
                                     ) {
                                         Text("Dismiss")
                                     }
-                                }
+                                },
+
                             ) {
                                 Text("${viewState.feedback}")
                             }
