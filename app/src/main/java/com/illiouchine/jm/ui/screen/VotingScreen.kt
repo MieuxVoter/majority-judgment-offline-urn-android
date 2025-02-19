@@ -1,4 +1,4 @@
-package com.illiouchine.jm.screen
+package com.illiouchine.jm.ui.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

@@ -4,26 +4,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.Text
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.illiouchine.jm.screen.OnBoardingScreen
-import com.illiouchine.jm.screen.ResultScreen
-import com.illiouchine.jm.screen.SetupSurveyScreen
-import com.illiouchine.jm.screen.VotingScreen
+import com.illiouchine.jm.ui.composable.MUSnackbar
+import com.illiouchine.jm.ui.screen.OnBoardingScreen
+import com.illiouchine.jm.ui.screen.ResultScreen
+import com.illiouchine.jm.ui.screen.SetupSurveyScreen
+import com.illiouchine.jm.ui.screen.VotingScreen
 import com.illiouchine.jm.ui.theme.JmTheme
-import kotlinx.coroutines.delay
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
@@ -41,26 +33,13 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     snackbarHost = {
-                        if(!viewState.feedback.isNullOrEmpty()){
-                            LaunchedEffect(viewState.feedback) {
-                                delay(5*1000)
+                        MUSnackbar(
+                            modifier = Modifier,
+                            text = viewState.feedback,
+                            onDismiss = {
                                 viewModel.onDismissFeedback()
                             }
-                            Snackbar(
-                                modifier = Modifier.padding(16.dp)
-                                    .padding(WindowInsets.ime.asPaddingValues()),
-                                dismissAction = {
-                                    Button(
-                                        onClick = { viewModel.onDismissFeedback() },
-                                    ) {
-                                        Text("Dismiss")
-                                    }
-                                },
-
-                            ) {
-                                Text("${viewState.feedback}")
-                            }
-                        }
+                        )
                     }
                 ) { innerPadding ->
                     if (viewState.showOnboarding) {

@@ -1,4 +1,4 @@
-package com.illiouchine.jm.screen
+package com.illiouchine.jm.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
