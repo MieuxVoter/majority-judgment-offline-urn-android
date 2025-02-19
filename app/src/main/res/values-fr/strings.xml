@@ -17,4 +17,6 @@
     <string name="grade_good">bien</string>
     <string name="grade_very_good">très bien</string>
     <string name="grade_excellent">excellent</string>
+    <string name="bottombar_home">Accueil</string>
+    <string name="bottombar_settings">Paramètres</string>
 </resources>
