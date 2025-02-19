@@ -1,9 +1,8 @@
 package com.illiouchine.jm
 
-import android.content.Context
 import android.icu.util.Calendar
-import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.illiouchine.jm.model.Quality7Grading
 import com.illiouchine.jm.model.SetupSurvey
 import com.illiouchine.jm.model.Survey
 import com.illiouchine.jm.model.SurveyResult
@@ -103,14 +102,18 @@ class MainViewModel(
 //            context.getString(R.string.poll_of) + " " + DateFormat.getDateInstance().format(Calendar.getInstance().time)
             "Poll of" + " " + DateFormat.getDateInstance().format(Calendar.getInstance().time)
         }
-        // Rule: if no proposals were added, abort and complain.
+        // Rule: if less than 2 proposals were added, abort and complain.
         // Note: since the button is now disabled in that case, this never happens anymore.
         if (setupSurvey.props.size < 2) {
             _viewState.update {
                 it.copy(feedback = "A poll needs at least two proposals.")
             }
         } else {
-            val survey = Survey(subject = subject, props = setupSurvey.props)
+            val survey = Survey(
+                subject = subject,
+                proposals = setupSurvey.props,
+                grading = Quality7Grading(),
+            )
             _viewState.update {
                 it.copy(
                     currentSurvey = survey,

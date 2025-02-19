@@ -2,7 +2,8 @@ package com.illiouchine.jm.model
 
 data class Survey(
     val subject: String,
-    val props: List<String>
+    val proposals: List<String>,
+    val grading: Grading,
 )
 
 data class SetupSurvey(

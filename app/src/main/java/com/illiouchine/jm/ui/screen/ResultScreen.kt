@@ -43,8 +43,8 @@ fun ResultScreen(
 
     surveyResult.proposals.forEachIndexed { i, prop ->
         val voteResult = surveyResult.judgments.filter { it.proposal == prop }
-        voteResult.forEach { vote ->
-            tally.collect(i, vote.grade.ordinal)
+        voteResult.forEach { judgment ->
+            tally.collect(i, judgment.grade)
         }
     }
 
@@ -130,15 +130,15 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
         asking = "Prézidan ?",
         proposals = listOf("Tonio", "Bobby", "Mario"),
         judgments = listOf(
-            Judgment("Tonio", Grades.ARejeter),
-            Judgment("Bobby", Grades.TresBien),
-            Judgment("Mario", Grades.Excellent),
-            Judgment("Tonio", Grades.Bien),
-            Judgment("Bobby", Grades.Insuffisant),
-            Judgment("Mario", Grades.Excellent),
-            Judgment("Tonio", Grades.TresBien),
-            Judgment("Bobby", Grades.TresBien),
-            Judgment("Mario", Grades.Excellent),
+            Judgment("Tonio", 0),
+            Judgment("Bobby", 5),
+            Judgment("Mario", 6),
+            Judgment("Tonio", 4),
+            Judgment("Bobby", 1),
+            Judgment("Mario", 6),
+            Judgment("Tonio", 5),
+            Judgment("Bobby", 5),
+            Judgment("Mario", 6),
         )
     )
     JmTheme {
