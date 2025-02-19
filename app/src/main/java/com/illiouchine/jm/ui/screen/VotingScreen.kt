@@ -3,8 +3,10 @@ package com.illiouchine.jm.ui.screen
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -14,13 +16,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import com.illiouchine.jm.R
-import com.illiouchine.jm.model.Grades
+import androidx.core.graphics.ColorUtils
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Quality7Grading
 import com.illiouchine.jm.model.Survey
@@ -82,7 +84,7 @@ fun VotingScreen(
         } else {
             PropsSelection(
                 survey = survey,
-                currentPropsIndex = currentPropsIndex,
+                currentProposalIndex = currentPropsIndex,
                 onResultSelected = { result ->
                     val judgment = Judgment(
                         proposal = survey.proposals.get(currentPropsIndex),
@@ -99,17 +101,32 @@ fun VotingScreen(
 @Composable
 private fun PropsSelection(
     survey: Survey,
-    currentPropsIndex: Int,
+    currentProposalIndex: Int,
     onResultSelected: (Int) -> Unit = {}
 ) {
-    Text("Props : ${survey.proposals.get(currentPropsIndex)}")
+    Text("Proposal : ${survey.proposals.get(currentProposalIndex)}")
     val context = LocalContext.current
 
-    for (value in 0..<survey.grading.getAmountOfGrades()) {
-        Button(onClick = {
-            onResultSelected(value)
-        }) {
-            Text(context.getString(survey.grading.getGradeName(value)))
+    for (gradeIndex in 0..<survey.grading.getAmountOfGrades()) {
+        val bgColor = survey.grading.getGradeColor(gradeIndex)
+        // FIXME: I tried this, but it sucks, so I will use predetermined colors instead
+        val contrastWithBlack = ColorUtils.calculateContrast(Color.Black.toArgb(), bgColor.toArgb())
+        val contrastWithWhite = ColorUtils.calculateContrast(Color.White.toArgb(), bgColor.toArgb())
+        val fgColor = if (contrastWithWhite > contrastWithBlack) Color.White else Color.Black
+
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {
+                onResultSelected(gradeIndex)
+            },
+            colors = ButtonColors(
+                containerColor = bgColor,
+                contentColor = fgColor,
+                disabledContainerColor = Color.Gray,
+                disabledContentColor = Color.White,
+            ),
+        ) {
+            Text(context.getString(survey.grading.getGradeName(gradeIndex)).uppercase())
         }
     }
 }

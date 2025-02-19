@@ -10,4 +10,11 @@
     <string name="proposal">Candidat</string>
     <string name="button_add">Ajouter</string>
     <string name="poll_of">Scrutin du</string>
+    <string name="grade_to_reject">à rejeter</string>
+    <string name="grade_insufficient">insuffisant</string>
+    <string name="grade_passable">passable</string>
+    <string name="grade_somewhat_good">assez bien</string>
+    <string name="grade_good">bien</string>
+    <string name="grade_very_good">très bien</string>
+    <string name="grade_excellent">excellent</string>
 </resources>
