@@ -47,13 +47,14 @@ class MainActivity : ComponentActivity() {
                             },
                         )
                     },
-                    bottomBar = {
-                        MUBottomBar(
-                            modifier = Modifier,
-                            selected = navController.currentDestination?.route ?: "home",
-                            onItemSelected = { destination -> navController.navigate(destination.id) }
-                        )
-                    }
+                    // TODO: figure out the weird gap "bug" that this generates
+//                    bottomBar = {
+//                        MUBottomBar(
+//                            modifier = Modifier,
+//                            selected = navController.currentDestination?.route ?: "home",
+//                            onItemSelected = { destination -> navController.navigate(destination.id) }
+//                        )
+//                    },
                 ) { innerPadding ->
                     NavHost(navController = navController, startDestination = "home") {
                         composable("home") {
