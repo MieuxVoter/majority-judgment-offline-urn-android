@@ -32,13 +32,14 @@ import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Quality7Grading
 import com.illiouchine.jm.model.Survey
 import com.illiouchine.jm.model.SurveyResult
+import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
 
 @Composable
 fun VotingScreen(
     modifier: Modifier = Modifier,
     survey: Survey,
-    onFinish: (SurveyResult) -> Unit = {}
+    onFinish: (SurveyResult) -> Unit = {},
 ) {
 
     var currentProposalIndex: Int by remember { mutableIntStateOf(0) }
@@ -50,17 +51,10 @@ fun VotingScreen(
             .verticalScroll(state = ScrollState(initial = 0))
             .padding(8.dp),
     ) {
-//        Text("VotingScreen")
 
-        Row(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-        ) {
-            Text(
-                modifier = modifier.padding(24.dp),
-                text = "❝ ${survey.subject} ❞",
-                fontSize = 6.em,
-            )
-        }
+        PollSubject(
+            poll = survey,
+        )
 
 //        Spacer(modifier = Modifier.size(8.dp))
 //        Text(" ${survey.subject}")
