@@ -1,0 +1,5 @@
+* Initial release
+* Setup a local MJ poll in seconds
+* Support for Dark/Light themes
+* Added English translation
+* Added French translation

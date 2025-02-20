@@ -17,6 +17,9 @@
     <string name="grade_good">bien</string>
     <string name="grade_very_good">très bien</string>
     <string name="grade_excellent">excellent</string>
-    <string name="bottombar_home">Accueil</string>
-    <string name="bottombar_settings">Paramètres</string>
+    <string name="menu_home">Accueil</string>
+    <string name="menu_settings">Paramètres</string>
+    <string name="ballots">bulletins</string>
+    <string name="in_the_urn">dans l\'urne</string>
+    <string name="ballot">bulletin</string>
 </resources>

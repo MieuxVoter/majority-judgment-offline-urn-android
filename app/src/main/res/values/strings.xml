@@ -9,6 +9,9 @@
     <string name="button_let_s_go">Let\'s go !</string>
     <string name="proposal">Proposal</string>
     <string name="poll_of">Poll of</string>
+    <string name="ballots">ballots</string>
+    <string name="ballot">ballot</string>
+    <string name="in_the_urn">in the urn</string>
     <string name="grade_to_reject">to reject</string>
     <string name="grade_insufficient">insufficient</string>
     <string name="grade_passable">passable</string>
@@ -16,6 +19,6 @@
     <string name="grade_good">good</string>
     <string name="grade_very_good">very good</string>
     <string name="grade_excellent">excellent</string>
-    <string name="bottombar_home">Home</string>
-    <string name="bottombar_settings">Settings</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_settings">Settings</string>
 </resources>

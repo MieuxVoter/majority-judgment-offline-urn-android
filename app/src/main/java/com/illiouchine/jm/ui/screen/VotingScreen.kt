@@ -2,6 +2,7 @@ package com.illiouchine.jm.ui.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,12 +18,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import androidx.core.graphics.ColorUtils
+import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Quality7Grading
 import com.illiouchine.jm.model.Survey
@@ -41,7 +42,6 @@ fun VotingScreen(
             .padding(8.dp)
     ) {
 //        Text("VotingScreen")
-//        Text("Let's vote")
 
         Row(
             modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -59,9 +59,6 @@ fun VotingScreen(
 
         var currentPropsIndex: Int by remember { mutableIntStateOf(0) }
         var judgments: List<Judgment> by remember { mutableStateOf(emptyList()) }
-
-        val voteNumber = judgments.size / survey.proposals.size
-        Text("$voteNumber bulletins dans l'urne")
 
         if (currentPropsIndex >= survey.proposals.size) {
             Text("A Voté !")
@@ -96,6 +93,24 @@ fun VotingScreen(
                 }
             )
         }
+
+
+        val amountOfBallots = judgments.size / survey.proposals.size
+        Spacer(
+            modifier = Modifier.padding(12.dp),
+        )
+        Row(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        ) {
+            val ballotsString = if (amountOfBallots <= 1)
+                stringResource(R.string.ballot)
+            else
+                stringResource(R.string.ballots)
+            Text(
+                "${amountOfBallots} " + ballotsString + " " + stringResource(R.string.in_the_urn)
+            )
+        }
+
     }
 }
 
@@ -105,7 +120,22 @@ private fun PropsSelection(
     currentProposalIndex: Int,
     onResultSelected: (Int) -> Unit = {}
 ) {
-    Text("Proposal : ${survey.proposals.get(currentProposalIndex)}")
+    Row(
+        // FIXME: WTF IS HAPPENING HERE
+//        modifier = Modifier.align(Alignment.CenterHorizontally),
+    ) {
+        Text(
+            text = "All things considered, I think",
+        )
+    }
+    Text(
+        text = survey.proposals.get(currentProposalIndex),
+        fontSize = 6.em,
+    )
+    Text(
+        text = "is"
+    )
+
     val context = LocalContext.current
 
     for (gradeIndex in 0..<survey.grading.getAmountOfGrades()) {

@@ -24,8 +24,8 @@ enum class BottomBarItem(
     val resId: Int,
     val icon: ImageVector
 ) {
-    Home(id = "home", resId = R.string.bottombar_home, icon = Icons.Default.Home),
-    Settings(id = "settings", resId = R.string.bottombar_settings, icon = Icons.Default.Settings);
+    Home(id = "home", resId = R.string.menu_home, icon = Icons.Default.Home),
+    Settings(id = "settings", resId = R.string.menu_settings, icon = Icons.Default.Settings);
 
     companion object{
         fun fromId(id: String): BottomBarItem {
