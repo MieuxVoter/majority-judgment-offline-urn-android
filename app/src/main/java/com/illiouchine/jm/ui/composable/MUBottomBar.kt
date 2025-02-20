@@ -27,9 +27,9 @@ enum class BottomBarItem(
     Home(id = "home", resId = R.string.menu_home, icon = Icons.Default.Home),
     Settings(id = "settings", resId = R.string.menu_settings, icon = Icons.Default.Settings);
 
-    companion object{
+    companion object {
         fun fromId(id: String): BottomBarItem {
-            return when(id){
+            return when (id) {
                 "home" -> Home
                 "settings" -> Settings
                 else -> Home
@@ -58,12 +58,12 @@ fun MUBottomBar(
                         imageVector = it.icon,
                         contentDescription = stringResource(it.resId),
                         modifier = Modifier,
-                        tint = LocalContentColor.current
+                        tint = LocalContentColor.current,
                     )
                 },
                 enabled = true,
                 label = { Text(stringResource(it.resId)) },
-                alwaysShowLabel = true
+                alwaysShowLabel = true,
             )
         }
     }
