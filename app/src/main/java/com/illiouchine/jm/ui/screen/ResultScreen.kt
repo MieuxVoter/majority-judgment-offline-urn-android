@@ -17,7 +17,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import com.illiouchine.jm.model.Grades
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Quality7Grading
 import com.illiouchine.jm.model.SurveyResult
@@ -26,6 +25,7 @@ import fr.mieuxvoter.mj.CollectedTally
 import fr.mieuxvoter.mj.DeliberatorInterface
 import fr.mieuxvoter.mj.MajorityJudgmentDeliberator
 import fr.mieuxvoter.mj.ResultInterface
+import java.math.BigInteger
 
 
 @Composable
@@ -35,9 +35,9 @@ fun ResultScreen(
     onFinish: () -> Unit = {}
 ) {
 
-    val grading = Quality7Grading() // FIXME: this should be in the poll's parameters
+    val grading = surveyResult.grading
     val amountOfProposals = surveyResult.proposals.size
-    val amountOfGrades = Grades.entries.size
+    val amountOfGrades = surveyResult.grading.getAmountOfGrades()
     val deliberation: DeliberatorInterface = MajorityJudgmentDeliberator()
     val tally = CollectedTally(amountOfProposals, amountOfGrades)
 
@@ -61,7 +61,7 @@ fun ResultScreen(
         ) {
             Text(
                 modifier = modifier.padding(32.dp),
-                text = "❝ ${surveyResult.asking} ❞",
+                text = "❝ ${surveyResult.subject} ❞",
                 fontSize = 6.em,
             )
         }
@@ -75,33 +75,36 @@ fun ResultScreen(
 
 
             Row {
+                // Draw the linear merit profile of the proposal.
                 Canvas(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(24.dp)
                 ) {
                     val proposalTally = tally.proposalsTallies[proposalResult.index]
+                    val bigSizeWidth = BigInteger.valueOf(size.width.toLong())
                     var offsetX = 0F
 
-                    grading.getGradesNames().forEachIndexed() { gradeIndex, gradeName ->
-
-                        val w = (size.width
-                                *
-                                proposalTally.tally[gradeIndex].toFloat()
-                                /
-                                proposalTally.amountOfJudgments.toFloat()
-                                )
+                    for (gradeIndex in 0..<grading.getAmountOfGrades()) {
+                        val sizeW = bigSizeWidth.multiply(
+                            proposalTally.tally[gradeIndex]
+                        ).divide(
+                            proposalTally.amountOfJudgments
+                        )
+//                        val w = (size.width
+//                                *
+//                                proposalTally.tally[gradeIndex].toFloat()
+//                                /
+//                                proposalTally.amountOfJudgments.toFloat()
+//                                )
 
                         drawRect(
                             color = grading.getGradeColor(gradeIndex),
-                            size = Size(
-                                w,
-                                size.height
-                            ),
+                            size = Size(sizeW.toFloat(), size.height),
                             topLeft = Offset(offsetX, 0F)
                         )
 
-                        offsetX += w
+                        offsetX += sizeW.toFloat()
                     }
 
                 }
@@ -127,8 +130,9 @@ fun ResultScreen(
 @Composable
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
     val surveyResult = SurveyResult(
-        asking = "Prézidan ?",
+        subject = "Prézidan ?",
         proposals = listOf("Tonio", "Bobby", "Mario"),
+        grading = Quality7Grading(),
         judgments = listOf(
             Judgment("Tonio", 0),
             Judgment("Bobby", 5),

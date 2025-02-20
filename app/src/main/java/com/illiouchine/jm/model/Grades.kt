@@ -3,21 +3,14 @@ package com.illiouchine.jm.model
 import androidx.compose.ui.graphics.Color
 import com.illiouchine.jm.R
 
-// DEPRECATED
-enum class Grades {
-    ARejeter,
-    Insuffisant,
-    Passable,
-    AssezBien,
-    Bien,
-    TresBien,
-    Excellent,
-}
-
+/**
+ * The grades must be unambiguously sorted for MJ to work.
+ */
 abstract class Grading {
     abstract fun getAmountOfGrades(): Int
     abstract fun getGradeName(gradeIndex: Int): Int
     abstract fun getGradeColor(gradeIndex: Int): Color
+    abstract fun getGradeTextColor(gradeIndex: Int): Color
 }
 
 /**
@@ -26,6 +19,7 @@ abstract class Grading {
 abstract class ListGrading : Grading() {
     abstract fun getGradesNames(): List<Int>
     abstract fun getGradesColors(): List<Color>
+    abstract fun getGradesTextColors(): List<Color>
 
     override fun getAmountOfGrades(): Int {
         assert(getGradesNames().size == getGradesColors().size)
@@ -40,6 +34,11 @@ abstract class ListGrading : Grading() {
     override fun getGradeColor(gradeIndex: Int): Color {
         assert(gradeIndex < getGradesColors().size)
         return getGradesColors()[gradeIndex]
+    }
+
+    override fun getGradeTextColor(gradeIndex: Int): Color {
+        assert(gradeIndex < getGradesTextColors().size)
+        return getGradesTextColors()[gradeIndex]
     }
 }
 
@@ -65,11 +64,25 @@ class Quality7Grading : ListGrading() {
         Color(0xff017a36),
     )
 
+    protected var _gradesTextColors = listOf(
+        Color.White,
+        Color.White,
+        Color.Black,
+        Color.Black,
+        Color.Black,
+        Color.White,
+        Color.White,
+    )
+
     override fun getGradesNames(): List<Int> {
         return _gradesNames
     }
 
     override fun getGradesColors(): List<Color> {
         return _gradesColors
+    }
+
+    override fun getGradesTextColors(): List<Color> {
+        return _gradesTextColors
     }
 }

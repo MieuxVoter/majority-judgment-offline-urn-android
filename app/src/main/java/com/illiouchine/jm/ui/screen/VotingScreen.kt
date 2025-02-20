@@ -74,8 +74,9 @@ fun VotingScreen(
             Button(
                 onClick = {
                     val surveyResult = SurveyResult(
-                        asking = survey.subject,
+                        subject = survey.subject,
                         proposals = survey.proposals,
+                        grading = survey.grading,
                         judgments = judgments,
                     )
                     onFinish(surveyResult)
@@ -109,10 +110,11 @@ private fun PropsSelection(
 
     for (gradeIndex in 0..<survey.grading.getAmountOfGrades()) {
         val bgColor = survey.grading.getGradeColor(gradeIndex)
-        // FIXME: I tried this, but it sucks, so I will use predetermined colors instead
-        val contrastWithBlack = ColorUtils.calculateContrast(Color.Black.toArgb(), bgColor.toArgb())
-        val contrastWithWhite = ColorUtils.calculateContrast(Color.White.toArgb(), bgColor.toArgb())
-        val fgColor = if (contrastWithWhite > contrastWithBlack) Color.White else Color.Black
+        val fgColor = survey.grading.getGradeTextColor(gradeIndex)
+        // Computing contrast like this sucks balls, sadly.
+//        val contrastWithBlack = ColorUtils.calculateContrast(Color.Black.toArgb(), bgColor.toArgb())
+//        val contrastWithWhite = ColorUtils.calculateContrast(Color.White.toArgb(), bgColor.toArgb())
+//        val fgColor = if (contrastWithWhite > contrastWithBlack) Color.White else Color.Black
 
         Button(
             modifier = Modifier.fillMaxWidth(),
