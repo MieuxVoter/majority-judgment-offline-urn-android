@@ -1,5 +1,7 @@
 package com.illiouchine.jm.ui.screen
 
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,6 +38,10 @@ fun VotingScreen(
     survey: Survey,
     onFinish: (SurveyResult) -> Unit = {}
 ) {
+
+    var currentPropsIndex: Int by remember { mutableIntStateOf(0) }
+    var judgments: List<Judgment> by remember { mutableStateOf(emptyList()) }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -57,8 +63,7 @@ fun VotingScreen(
 //        Text(" ${survey.subject}")
 //        Spacer(modifier = Modifier.size(8.dp))
 
-        var currentPropsIndex: Int by remember { mutableIntStateOf(0) }
-        var judgments: List<Judgment> by remember { mutableStateOf(emptyList()) }
+
 
         if (currentPropsIndex >= survey.proposals.size) {
             Text("A Voté !")
@@ -111,6 +116,15 @@ fun VotingScreen(
             )
         }
 
+    }
+
+    BackHandler(
+        enabled = (currentPropsIndex > 0),
+    ) {
+        if (currentPropsIndex > 0) {
+            currentPropsIndex--
+            judgments = judgments.subList(0, judgments.size - 1)
+        }
     }
 }
 
