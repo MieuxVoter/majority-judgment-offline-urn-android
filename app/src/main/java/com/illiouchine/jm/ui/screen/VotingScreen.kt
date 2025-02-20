@@ -1,13 +1,15 @@
 package com.illiouchine.jm.ui.screen
 
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
@@ -39,13 +41,14 @@ fun VotingScreen(
     onFinish: (SurveyResult) -> Unit = {}
 ) {
 
-    var currentPropsIndex: Int by remember { mutableIntStateOf(0) }
+    var currentProposalIndex: Int by remember { mutableIntStateOf(0) }
     var judgments: List<Judgment> by remember { mutableStateOf(emptyList()) }
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(8.dp)
+            .verticalScroll(state = ScrollState(initial = 0))
+            .padding(8.dp),
     ) {
 //        Text("VotingScreen")
 
@@ -53,7 +56,7 @@ fun VotingScreen(
             modifier = Modifier.align(Alignment.CenterHorizontally),
         ) {
             Text(
-                modifier = modifier.padding(32.dp),
+                modifier = modifier.padding(24.dp),
                 text = "❝ ${survey.subject} ❞",
                 fontSize = 6.em,
             )
@@ -63,16 +66,14 @@ fun VotingScreen(
 //        Text(" ${survey.subject}")
 //        Spacer(modifier = Modifier.size(8.dp))
 
-
-
-        if (currentPropsIndex >= survey.proposals.size) {
+        if (currentProposalIndex >= survey.proposals.size) {
             Text("A Voté !")
             Text("Votre participation a bien été prise en compte. Vous pouvez maintenant passer cet appareil au prochain participant")
             Button(
                 onClick = {
-                    currentPropsIndex = 0
+                    currentProposalIndex = 0
                 }
-            ) { Text("Next votant") }
+            ) { Text(stringResource(R.string.button_next_participant)) }
             Button(
                 onClick = {
                     val surveyResult = SurveyResult(
@@ -83,18 +84,18 @@ fun VotingScreen(
                     )
                     onFinish(surveyResult)
                 }
-            ) { Text("Finish Voting") }
+            ) { Text(stringResource(R.string.button_end_the_poll)) }
         } else {
             PropsSelection(
                 survey = survey,
-                currentProposalIndex = currentPropsIndex,
+                currentProposalIndex = currentProposalIndex,
                 onResultSelected = { result ->
                     val judgment = Judgment(
-                        proposal = survey.proposals.get(currentPropsIndex),
+                        proposal = survey.proposals.get(currentProposalIndex),
                         grade = result,
                     )
                     judgments = judgments + judgment
-                    currentPropsIndex++
+                    currentProposalIndex++
                 }
             )
         }
@@ -119,10 +120,10 @@ fun VotingScreen(
     }
 
     BackHandler(
-        enabled = (currentPropsIndex > 0),
+        enabled = (currentProposalIndex > 0),
     ) {
-        if (currentPropsIndex > 0) {
-            currentPropsIndex--
+        if (currentProposalIndex > 0) {
+            currentProposalIndex--
             judgments = judgments.subList(0, judgments.size - 1)
         }
     }
@@ -155,13 +156,12 @@ private fun PropsSelection(
     for (gradeIndex in 0..<survey.grading.getAmountOfGrades()) {
         val bgColor = survey.grading.getGradeColor(gradeIndex)
         val fgColor = survey.grading.getGradeTextColor(gradeIndex)
-        // Computing contrast like this sucks balls, sadly.
-//        val contrastWithBlack = ColorUtils.calculateContrast(Color.Black.toArgb(), bgColor.toArgb())
-//        val contrastWithWhite = ColorUtils.calculateContrast(Color.White.toArgb(), bgColor.toArgb())
-//        val fgColor = if (contrastWithWhite > contrastWithBlack) Color.White else Color.Black
 
         Button(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(64.dp)
+                .padding(top = 12.dp),
             onClick = {
                 onResultSelected(gradeIndex)
             },
