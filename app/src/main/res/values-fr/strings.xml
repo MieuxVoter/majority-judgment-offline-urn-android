@@ -22,4 +22,6 @@
     <string name="ballots">bulletins</string>
     <string name="in_the_urn">dans l\'urne</string>
     <string name="ballot">bulletin</string>
+    <string name="button_next_participant">Prochain⋅e participant⋅e</string>
+    <string name="button_end_the_poll">Terminer le Scrutin</string>
 </resources>
