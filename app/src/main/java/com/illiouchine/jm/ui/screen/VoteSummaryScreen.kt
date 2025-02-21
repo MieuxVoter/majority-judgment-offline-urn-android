@@ -35,12 +35,12 @@ fun VoteSummaryScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(state = ScrollState(initial = 0))
+//            .verticalScroll(state = ScrollState(initial = 0))
             .padding(8.dp),
     ) {
-        PollSubject(
-            poll = surveyResult.survey,
-        )
+//        PollSubject(
+//            poll = surveyResult.survey,
+//        )
 
         Text(
             text = "You're almost done !"
@@ -52,10 +52,12 @@ fun VoteSummaryScreen(
         Spacer(Modifier.height(32.dp))
 
         surveyResult.survey.proposals.forEachIndexed { proposalIndex, proposal ->
+            // OMG ; this works, but at what cost ?  …  (my sanity)
+            val grade = surveyResult.judgments[surveyResult.judgments.size - surveyResult.survey.proposals.size + proposalIndex].grade
             Row {
                 Text(proposal)
                 Text(" is ")
-                Text(stringResource(surveyResult.survey.grading.getGradeName(0)))
+                Text(stringResource(surveyResult.survey.grading.getGradeName(grade)))
             }
             Spacer(Modifier.height(8.dp))
         }

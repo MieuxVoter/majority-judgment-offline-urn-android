@@ -48,6 +48,7 @@ fun VotingScreen(
 
     var currentProposalIndex: Int by remember { mutableIntStateOf(0) }
     var judgments: List<Judgment> by remember { mutableStateOf(emptyList()) }
+    var confirmed: Boolean by remember { mutableStateOf(false) }
 
     Column(
         modifier = modifier
@@ -66,26 +67,37 @@ fun VotingScreen(
 
         if (currentProposalIndex >= survey.proposals.size) {
 
-//            VoteSummaryScreen(
-//                surveyResult = survey,
-//            )
+            val surveyResult = SurveyResult(
+                survey = survey,
+                judgments = judgments,
+            )
 
-            Text("A Voté !")
-            Text("Votre participation a bien été prise en compte. Vous pouvez maintenant passer cet appareil au prochain participant")
-            Button(
-                onClick = {
-                    currentProposalIndex = 0
-                }
-            ) { Text(stringResource(R.string.button_next_participant)) }
-            Button(
-                onClick = {
-                    val surveyResult = SurveyResult(
-                        survey = survey,
-                        judgments = judgments,
-                    )
-                    onFinish(surveyResult)
-                }
-            ) { Text(stringResource(R.string.button_end_the_poll)) }
+            if (!confirmed) {
+
+                VoteSummaryScreen(
+                    surveyResult = surveyResult,
+                    onConfirm = {
+                        confirmed = true
+                    },
+                )
+
+            } else {
+
+                Text("A Voté !")
+                Text("Votre participation a bien été prise en compte. Vous pouvez maintenant passer cet appareil au prochain participant")
+                Button(
+                    onClick = {
+                        currentProposalIndex = 0
+                        confirmed = false
+                    }
+                ) { Text(stringResource(R.string.button_next_participant)) }
+                Button(
+                    onClick = {
+                        onFinish(surveyResult)
+                    }
+                ) { Text(stringResource(R.string.button_end_the_poll)) }
+
+            }
         } else {
             PropsSelection(
                 survey = survey,
