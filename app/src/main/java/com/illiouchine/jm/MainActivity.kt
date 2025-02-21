@@ -1,6 +1,7 @@
 package com.illiouchine.jm
 
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -35,6 +36,9 @@ class MainActivity : ComponentActivity() {
             val viewState by viewModel.viewState.collectAsState()
             val navController = rememberNavController()
 
+            // Rule: the screen should never lock during the poll
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
             JmTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
@@ -62,7 +66,7 @@ class MainActivity : ComponentActivity() {
                             if (viewState.showOnboarding) {
                                 OnBoardingScreen(
                                     modifier = Modifier.padding(innerPadding),
-                                    onFinish = { viewModel.onFinishOnBoarding() }
+                                    onFinish = { viewModel.onFinishOnBoarding() },
                                 )
                             } else {
                                 if (viewState.currentSurvey == null) {
@@ -72,14 +76,14 @@ class MainActivity : ComponentActivity() {
                                         onAddSubject = { viewModel.onAddSubject(it) },
                                         onAddProposal = { viewModel.onAddProposals(it) },
                                         onRemoveProposal = { viewModel.onRemoveProposal(it) },
-                                        setupFinished = { viewModel.onFinishSetupSurvey() }
+                                        setupFinished = { viewModel.onFinishSetupSurvey() },
                                     )
                                 } else {
                                     if (viewState.surveyResult == null) {
                                         VotingScreen(
                                             modifier = Modifier.padding(innerPadding),
                                             survey = viewState.currentSurvey!!,
-                                            onFinish = { viewModel.onFinishVoting(it) }
+                                            onFinish = { viewModel.onFinishVoting(it) },
                                         )
                                     } else {
                                         ResultScreen(
@@ -87,7 +91,7 @@ class MainActivity : ComponentActivity() {
                                             surveyResult = viewState.surveyResult!!,
                                             onFinish = {
                                                 viewModel.onResetState()
-                                            }
+                                            },
                                         )
                                     }
                                 }
@@ -96,7 +100,7 @@ class MainActivity : ComponentActivity() {
                         composable("settings") {
                             Text(
                                 modifier = Modifier.padding(innerPadding),
-                                text = "Settings"
+                                text = "Settings",
                             )
                         }
                     }
