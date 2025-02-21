@@ -13,7 +13,7 @@ import java.text.DateFormat
 
 class MainViewModel(
     private val sharedPreferences: SharedPrefsHelper,
-): ViewModel() {
+) : ViewModel() {
 
     data class MainViewState(
         val feedback: String? = null,
@@ -30,7 +30,7 @@ class MainViewModel(
         loadShowOnboarding()
     }
 
-    fun onDismissFeedback(){
+    fun onDismissFeedback() {
         _viewState.update {
             it.copy(feedback = null)
         }
@@ -43,7 +43,7 @@ class MainViewModel(
         }
     }
 
-    fun onFinishOnBoarding(){
+    fun onFinishOnBoarding() {
         sharedPreferences.editShowOnboarding(false)
         _viewState.update {
             it.copy(showOnboarding = false)
@@ -63,15 +63,15 @@ class MainViewModel(
      *              -finish
      */
 
-    fun onAddSubject(subject: String){
+    fun onAddSubject(subject: String) {
         _viewState.update {
             it.copy(setupSurvey = it.setupSurvey.copy(subject = subject))
         }
     }
 
-    fun onAddProposals(proposal : String){
+    fun onAddProposals(proposal: String) {
         // Rule: If proposal already exists, do nothing.
-        if (_viewState.value.setupSurvey.props.any { it == proposal }){
+        if (_viewState.value.setupSurvey.props.any { it == proposal }) {
             _viewState.update {
                 it.copy(
                     feedback = "The proposal `${proposal}` already exists."
@@ -86,14 +86,14 @@ class MainViewModel(
         }
     }
 
-    fun onRemoveProposal(proposal: String){
+    fun onRemoveProposal(proposal: String) {
         val newProposals = _viewState.value.setupSurvey.props - proposal
         _viewState.update {
             it.copy(setupSurvey = it.setupSurvey.copy(props = newProposals))
         }
     }
 
-    fun onFinishSetupSurvey(){
+    fun onFinishSetupSurvey() {
         val setupSurvey = viewState.value.setupSurvey
         // Rule: if the poll's subject was not provided, use a default.
         val subject = setupSurvey.subject.ifEmpty {
@@ -122,13 +122,13 @@ class MainViewModel(
         }
     }
 
-    fun onFinishVoting(result: SurveyResult){
+    fun onFinishVoting(result: SurveyResult) {
         _viewState.update {
             it.copy(surveyResult = result)
         }
     }
 
-    fun onResetState(){
+    fun onResetState() {
         _viewState.update {
             it.copy(
                 feedback = null,
