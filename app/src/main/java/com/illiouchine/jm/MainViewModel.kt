@@ -78,7 +78,6 @@ class MainViewModel(
                 )
             }
         } else {
-            // Rule: if the proposal name is not specified, use a default
             val newProposals = _viewState.value.setupSurvey.props + proposal
 
             _viewState.update {
