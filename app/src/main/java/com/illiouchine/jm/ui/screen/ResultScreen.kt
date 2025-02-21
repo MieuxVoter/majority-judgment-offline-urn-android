@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Quality7Grading
+import com.illiouchine.jm.model.Survey
 import com.illiouchine.jm.model.SurveyResult
 import com.illiouchine.jm.ui.theme.JmTheme
 import fr.mieuxvoter.mj.CollectedTally
@@ -133,6 +134,11 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
         subject = "Prézidan ?",
         proposals = listOf("Tonio", "Bobby", "Mario"),
         grading = Quality7Grading(),
+        survey = Survey(
+            subject = "Prézidaaanh ?",
+            proposals = listOf("Tonio", "Bobby", "Mario"),
+            grading = Quality7Grading(),
+        ),
         judgments = listOf(
             Judgment("Tonio", 0),
             Judgment("Bobby", 5),

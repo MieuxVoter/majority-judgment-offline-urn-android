@@ -24,4 +24,6 @@
     <string name="ballot">bulletin</string>
     <string name="button_next_participant">Prochain⋅e participant⋅e</string>
     <string name="button_end_the_poll">Terminer le Scrutin</string>
+    <string name="all_things_considered_i_think">Ayant pris en compte les divers éléments, je pense que</string>
+    <string name="verb_is">est</string>
 </resources>

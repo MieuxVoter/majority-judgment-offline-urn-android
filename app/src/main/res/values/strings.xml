@@ -23,4 +23,6 @@
     <string name="menu_settings">Settings</string>
     <string name="button_next_participant">Next participant</string>
     <string name="button_end_the_poll">End the Poll</string>
+    <string name="all_things_considered_i_think">All things considered, I think</string>
+    <string name="verb_is">is</string>
 </resources>

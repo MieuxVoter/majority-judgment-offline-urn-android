@@ -2,6 +2,8 @@ package com.illiouchine.jm.ui.screen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,6 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -74,6 +78,7 @@ fun VotingScreen(
                         subject = survey.subject,
                         proposals = survey.proposals,
                         grading = survey.grading,
+                        survey = survey,
                         judgments = judgments,
                     )
                     onFinish(surveyResult)
@@ -102,17 +107,19 @@ fun VotingScreen(
         Row(
             modifier = Modifier.align(Alignment.CenterHorizontally),
         ) {
+            // FIXME: this syntax feels weird…  Is there a better way ?
             val ballotsString = if (amountOfBallots <= 1)
                 stringResource(R.string.ballot)
             else
                 stringResource(R.string.ballots)
+
             Text(
-                "${amountOfBallots} " + ballotsString + " " + stringResource(R.string.in_the_urn)
+                "${amountOfBallots} ${ballotsString} " + stringResource(R.string.in_the_urn)
             )
         }
-
     }
 
+    // Rule: going BACK cancels the last cast judgment, if any.
     BackHandler(
         enabled = (currentProposalIndex > 0),
     ) {
@@ -127,23 +134,37 @@ fun VotingScreen(
 private fun PropsSelection(
     survey: Survey,
     currentProposalIndex: Int,
-    onResultSelected: (Int) -> Unit = {}
+    onResultSelected: (Int) -> Unit = {},
 ) {
     Row(
-        // FIXME: WTF IS HAPPENING HERE
-//        modifier = Modifier.align(Alignment.CenterHorizontally),
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = "All things considered, I think",
+            text = stringResource(R.string.all_things_considered_i_think),
+            fontStyle = FontStyle.Italic,
         )
     }
-    Text(
-        text = survey.proposals.get(currentProposalIndex),
-        fontSize = 6.em,
-    )
-    Text(
-        text = "is"
-    )
+    // Using Row here instead won't center the text on the phone, even though it does in the preview
+    Box(
+        modifier = Modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = survey.proposals[currentProposalIndex],
+            textAlign = TextAlign.Center,
+            fontSize = 8.em,
+        )
+    }
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+    ) {
+        Text(
+            text = stringResource(R.string.verb_is),
+            fontStyle = FontStyle.Italic,
+        )
+    }
 
     val context = LocalContext.current
 
@@ -166,7 +187,10 @@ private fun PropsSelection(
                 disabledContentColor = Color.White,
             ),
         ) {
-            Text(context.getString(survey.grading.getGradeName(gradeIndex)).uppercase())
+            Text(
+                text = context.getString(survey.grading.getGradeName(gradeIndex)).uppercase(),
+                fontSize = 5.em,
+            )
         }
     }
 }
@@ -178,7 +202,7 @@ fun PreviewVotingScreen(modifier: Modifier = Modifier) {
         VotingScreen(
             survey = Survey(
                 subject = "Best Prezidan ?",
-                proposals = listOf("toto", "Mario", "JanBob"),
+                proposals = listOf("That candidate with a long name-san", "Mario", "JanBob"),
                 grading = Quality7Grading(),
             )
         )
