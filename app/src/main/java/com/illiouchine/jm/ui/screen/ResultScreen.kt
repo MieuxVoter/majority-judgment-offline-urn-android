@@ -36,13 +36,13 @@ fun ResultScreen(
     onFinish: () -> Unit = {}
 ) {
 
-    val grading = surveyResult.grading
-    val amountOfProposals = surveyResult.proposals.size
-    val amountOfGrades = surveyResult.grading.getAmountOfGrades()
+    val grading = surveyResult.survey.grading
+    val amountOfProposals = surveyResult.survey.proposals.size
+    val amountOfGrades = surveyResult.survey.grading.getAmountOfGrades()
     val deliberation: DeliberatorInterface = MajorityJudgmentDeliberator()
     val tally = CollectedTally(amountOfProposals, amountOfGrades)
 
-    surveyResult.proposals.forEachIndexed { i, prop ->
+    surveyResult.survey.proposals.forEachIndexed { i, prop ->
         val voteResult = surveyResult.judgments.filter { it.proposal == prop }
         voteResult.forEach { judgment ->
             tally.collect(i, judgment.grade)
@@ -62,7 +62,7 @@ fun ResultScreen(
         ) {
             Text(
                 modifier = modifier.padding(32.dp),
-                text = "❝ ${surveyResult.subject} ❞",
+                text = "❝ ${surveyResult.survey.subject} ❞",
                 fontSize = 6.em,
             )
         }
@@ -70,7 +70,7 @@ fun ResultScreen(
         result.proposalResultsRanked.forEach { proposalResult ->
             Row {
                 val rank = proposalResult.rank
-                val proposalName = surveyResult.proposals[proposalResult.index]
+                val proposalName = surveyResult.survey.proposals[proposalResult.index]
                 Text("#$rank  $proposalName")
             }
 
@@ -131,9 +131,6 @@ fun ResultScreen(
 @Composable
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
     val surveyResult = SurveyResult(
-        subject = "Prézidan ?",
-        proposals = listOf("Tonio", "Bobby", "Mario"),
-        grading = Quality7Grading(),
         survey = Survey(
             subject = "Prézidaaanh ?",
             proposals = listOf("Tonio", "Bobby", "Mario"),

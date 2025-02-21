@@ -75,9 +75,6 @@ fun VotingScreen(
             Button(
                 onClick = {
                     val surveyResult = SurveyResult(
-                        subject = survey.subject,
-                        proposals = survey.proposals,
-                        grading = survey.grading,
                         survey = survey,
                         judgments = judgments,
                     )
