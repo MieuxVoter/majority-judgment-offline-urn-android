@@ -129,17 +129,14 @@ class MainViewModel(
         }
     }
 
-    fun onJudgmentsConfirmed() {
-        _viewState.update {
-            it.copy(judgmentsWereConfirmed = true)
-        }
-    }
-
-    fun onJudgmentsCancelled() {
+//    fun onJudgmentsConfirmed() {
 //        _viewState.update {
 //            it.copy(judgmentsWereConfirmed = true)
 //        }
-    }
+//    }
+
+//    fun onJudgmentsCancelled() {
+//    }
 
     fun onResetState() {
         _viewState.update {

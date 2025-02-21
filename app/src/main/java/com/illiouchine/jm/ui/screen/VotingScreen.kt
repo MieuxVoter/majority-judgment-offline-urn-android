@@ -79,6 +79,10 @@ fun VotingScreen(
                     onConfirm = {
                         confirmed = true
                     },
+                    onCancel = {
+                        judgments = judgments.subList(0, judgments.size - survey.proposals.size)
+                        currentProposalIndex = 0
+                    },
                 )
 
             } else {
