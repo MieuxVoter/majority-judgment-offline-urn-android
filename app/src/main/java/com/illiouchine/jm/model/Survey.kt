@@ -6,6 +6,7 @@ data class Survey(
     val grading: Grading,
 )
 
+// TODO: figure out the point of having both this and Survey above
 data class SetupSurvey(
     val subject: String = "",
     val props: List<String> = emptyList()

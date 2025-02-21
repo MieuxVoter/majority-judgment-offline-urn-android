@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.illiouchine.jm.ui.composable.MUBottomBar
 import com.illiouchine.jm.ui.composable.MUSnackbar
 import com.illiouchine.jm.ui.screen.OnBoardingScreen
 import com.illiouchine.jm.ui.screen.ResultScreen
@@ -74,7 +73,7 @@ class MainActivity : ComponentActivity() {
                                         modifier = Modifier.padding(innerPadding),
                                         setupSurvey = viewState.setupSurvey,
                                         onAddSubject = { viewModel.onAddSubject(it) },
-                                        onAddProposal = { viewModel.onAddProposals(it) },
+                                        onAddProposal = { viewModel.onAddProposal(it) },
                                         onRemoveProposal = { viewModel.onRemoveProposal(it) },
                                         setupFinished = { viewModel.onFinishSetupSurvey() },
                                     )

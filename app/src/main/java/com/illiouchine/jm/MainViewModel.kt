@@ -20,7 +20,8 @@ class MainViewModel(
         val showOnboarding: Boolean = true,
         val setupSurvey: SetupSurvey = SetupSurvey(),
         val currentSurvey: Survey? = null,
-        val surveyResult: SurveyResult? = null
+        val surveyResult: SurveyResult? = null,
+        val judgmentsWereConfirmed: Boolean = false,
     )
 
     private val _viewState = MutableStateFlow<MainViewState>(MainViewState())
@@ -69,8 +70,8 @@ class MainViewModel(
         }
     }
 
-    fun onAddProposals(proposal: String) {
-        // Rule: If proposal already exists, do nothing.
+    fun onAddProposal(proposal: String) {
+        // Rule: If the proposal already exists, do not add it and show a warning.
         if (_viewState.value.setupSurvey.props.any { it == proposal }) {
             _viewState.update {
                 it.copy(
@@ -126,6 +127,18 @@ class MainViewModel(
         _viewState.update {
             it.copy(surveyResult = result)
         }
+    }
+
+    fun onJudgmentsConfirmed() {
+        _viewState.update {
+            it.copy(judgmentsWereConfirmed = true)
+        }
+    }
+
+    fun onJudgmentsCancelled() {
+//        _viewState.update {
+//            it.copy(judgmentsWereConfirmed = true)
+//        }
     }
 
     fun onResetState() {

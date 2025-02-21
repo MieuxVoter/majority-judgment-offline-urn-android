@@ -65,6 +65,11 @@ fun VotingScreen(
 //        Spacer(modifier = Modifier.size(8.dp))
 
         if (currentProposalIndex >= survey.proposals.size) {
+
+//            VoteSummaryScreen(
+//                surveyResult = survey,
+//            )
+
             Text("A Voté !")
             Text("Votre participation a bien été prise en compte. Vous pouvez maintenant passer cet appareil au prochain participant")
             Button(
