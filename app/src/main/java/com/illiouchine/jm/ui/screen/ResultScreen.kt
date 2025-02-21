@@ -33,7 +33,7 @@ import java.math.BigInteger
 fun ResultScreen(
     modifier: Modifier = Modifier,
     surveyResult: SurveyResult,
-    onFinish: () -> Unit = {}
+    onFinish: () -> Unit = {},
 ) {
 
     val grading = surveyResult.survey.grading
@@ -121,7 +121,7 @@ fun ResultScreen(
 
         Button(
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            onClick = { onFinish() },
+            onClick = onFinish,
         ) { Text("Finish") }
     }
 }
@@ -146,11 +146,11 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
             Judgment("Tonio", 5),
             Judgment("Bobby", 5),
             Judgment("Mario", 6),
-        )
+        ),
     )
     JmTheme {
         ResultScreen(
-            surveyResult = surveyResult
+            surveyResult = surveyResult,
         )
     }
 }
