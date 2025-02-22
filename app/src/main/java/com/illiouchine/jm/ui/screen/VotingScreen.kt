@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,6 +40,7 @@ import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollResult
 import com.illiouchine.jm.model.Quality7Grading
+import com.illiouchine.jm.ui.composable.MUSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
 import kotlinx.coroutines.delay
@@ -49,95 +51,122 @@ fun VotingScreen(
     modifier: Modifier = Modifier,
     poll: Poll,
     onFinish: (PollResult) -> Unit = {},
+    feedback: String? = "",
+    onDismissFeedback: () -> Unit = {},
 ) {
 
     var currentProposalIndex: Int by remember { mutableIntStateOf(0) }
     var judgments: List<Judgment> by remember { mutableStateOf(emptyList()) }
     var confirmed: Boolean by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(state = ScrollState(initial = 0))
-            .padding(8.dp),
-    ) {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        snackbarHost = {
+            MUSnackbar(
+                modifier = Modifier,
+                text = feedback,
+                onDismiss = {
+                    onDismissFeedback()
+                },
+            )
+        },
+        // TODO: figure out the weird gap "bug" that this generates
+//                    bottomBar = {
+//                        MUBottomBar(
+//                            modifier = Modifier,
+//                            selected = navController.currentDestination?.route ?: "home",
+//                            onItemSelected = { destination -> navController.navigate(destination.id) }
+//                        )
+//                    },
+    ) { innerPadding ->
 
-        PollSubject(
-            poll = poll,
-        )
+        Column(
+            modifier = modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+                .verticalScroll(state = ScrollState(initial = 0))
+                .padding(8.dp),
+        ) {
 
-        if (currentProposalIndex >= poll.proposals.size) {
-
-            val pollResult = PollResult(
+            PollSubject(
                 poll = poll,
-                judgments = judgments,
             )
 
-            if (!confirmed) {
+            if (currentProposalIndex >= poll.proposals.size) {
 
-                VoteSummaryScreen(
-                    pollResult = pollResult,
-                    onConfirm = {
-                        confirmed = true
-                    },
-                    onCancel = {
-                        judgments = judgments.subList(0, judgments.size - poll.proposals.size)
-                        currentProposalIndex = 0
-                    },
+                val pollResult = PollResult(
+                    poll = poll,
+                    judgments = judgments,
                 )
 
-            } else {
+                if (!confirmed) {
 
-                Text("A Voté !")
-                Text("Votre participation a bien été prise en compte. Vous pouvez maintenant passer cet appareil au prochain participant")
-                Button(
-                    onClick = {
-                        currentProposalIndex = 0
-                        confirmed = false
-                    }
-                ) { Text(stringResource(R.string.button_next_participant)) }
-                Button(
-                    onClick = {
-                        onFinish(pollResult)
-                    }
-                ) { Text(stringResource(R.string.button_end_the_poll)) }
-
-            }
-        } else {
-            PropsSelection(
-                poll = poll,
-                currentProposalIndex = currentProposalIndex,
-                // TODO: hoist this in the view model
-                onResultSelected = { result ->
-                    val judgment = Judgment(
-                        proposal = poll.proposals.get(currentProposalIndex),
-                        grade = result,
+                    VoteSummaryScreen(
+                        pollResult = pollResult,
+                        onConfirm = {
+                            confirmed = true
+                        },
+                        onCancel = {
+                            judgments = judgments.subList(0, judgments.size - poll.proposals.size)
+                            currentProposalIndex = 0
+                        },
                     )
-                    judgments = judgments + judgment
-                    currentProposalIndex++
+
+                } else {
+
+                    Text("A Voté !")
+                    Text("Votre participation a bien été prise en compte. Vous pouvez maintenant passer cet appareil au prochain participant")
+                    Button(
+                        onClick = {
+                            currentProposalIndex = 0
+                            confirmed = false
+                        }
+                    ) { Text(stringResource(R.string.button_next_participant)) }
+                    Button(
+                        onClick = {
+                            onFinish(pollResult)
+                        }
+                    ) { Text(stringResource(R.string.button_end_the_poll)) }
+
                 }
+            } else {
+                PropsSelection(
+                    poll = poll,
+                    currentProposalIndex = currentProposalIndex,
+                    // TODO: hoist this in the view model
+                    onResultSelected = { result ->
+                        val judgment = Judgment(
+                            proposal = poll.proposals.get(currentProposalIndex),
+                            grade = result,
+                        )
+                        judgments = judgments + judgment
+                        currentProposalIndex++
+                    }
+                )
+            }
+
+
+            val amountOfBallots = judgments.size / poll.proposals.size
+            Spacer(
+                modifier = Modifier.padding(12.dp),
             )
-        }
+            Row(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            ) {
+                // FIXME: this syntax feels weird…  Is there a better way ?
+                val ballotsString = if (amountOfBallots <= 1)
+                    stringResource(R.string.ballot)
+                else
+                    stringResource(R.string.ballots)
 
-
-        val amountOfBallots = judgments.size / poll.proposals.size
-        Spacer(
-            modifier = Modifier.padding(12.dp),
-        )
-        Row(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-        ) {
-            // FIXME: this syntax feels weird…  Is there a better way ?
-            val ballotsString = if (amountOfBallots <= 1)
-                stringResource(R.string.ballot)
-            else
-                stringResource(R.string.ballots)
-
-            Text(
-                "${amountOfBallots} ${ballotsString} " + stringResource(R.string.in_the_urn)
-            )
+                Text(
+                    "${amountOfBallots} ${ballotsString} " + stringResource(R.string.in_the_urn)
+                )
+            }
         }
     }
+
+
 
     // Rule: going BACK cancels the last cast judgment, if any.
     BackHandler(
@@ -227,7 +256,7 @@ private fun PropsSelection(
                 }
                 selectedGradeIndex = gradeIndex
                 coroutine.launch {
-                    delay(500)
+                    delay(150)
                     onResultSelected(gradeIndex)
                     selectedGradeIndex = null
                 }

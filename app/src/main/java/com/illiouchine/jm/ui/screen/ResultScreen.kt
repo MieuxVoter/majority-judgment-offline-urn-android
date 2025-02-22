@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,9 +21,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import com.illiouchine.jm.model.Judgment
-import com.illiouchine.jm.model.Quality7Grading
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollResult
+import com.illiouchine.jm.model.Quality7Grading
+import com.illiouchine.jm.ui.composable.MUSnackbar
 import com.illiouchine.jm.ui.theme.JmTheme
 import fr.mieuxvoter.mj.CollectedTally
 import fr.mieuxvoter.mj.DeliberatorInterface
@@ -37,8 +38,9 @@ fun ResultScreen(
     modifier: Modifier = Modifier,
     pollResult: PollResult,
     onFinish: () -> Unit = {},
+    feedback: String? = "",
+    onDismissFeedback: () -> Unit = {},
 ) {
-
     val grading = pollResult.poll.grading
     val amountOfProposals = pollResult.poll.proposals.size
     val amountOfGrades = pollResult.poll.grading.getAmountOfGrades()
@@ -54,73 +56,95 @@ fun ResultScreen(
 
     val result: ResultInterface = deliberation.deliberate(tally)
 
-
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(state = ScrollState(initial = 0))
-            .padding(8.dp),
-    ) {
-        Row(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-        ) {
-            Text(
-                modifier = modifier.padding(32.dp),
-                text = "❝ ${pollResult.poll.subject} ❞",
-                fontSize = 6.em,
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        snackbarHost = {
+            MUSnackbar(
+                modifier = Modifier,
+                text = feedback,
+                onDismiss = {
+                    onDismissFeedback()
+                },
             )
-        }
+        },
+        // TODO: figure out the weird gap "bug" that this generates
+//                    bottomBar = {
+//                        MUBottomBar(
+//                            modifier = Modifier,
+//                            selected = navController.currentDestination?.route ?: "home",
+//                            onItemSelected = { destination -> navController.navigate(destination.id) }
+//                        )
+//                    },
+    ) { innerPadding ->
 
-        result.proposalResultsRanked.forEach { proposalResult ->
-            Row {
-                val rank = proposalResult.rank
-                val proposalName = pollResult.poll.proposals[proposalResult.index]
-                Text("#$rank  $proposalName")
+        Column(
+            modifier = modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+                .verticalScroll(state = ScrollState(initial = 0))
+                .padding(8.dp),
+        ) {
+            Row(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            ) {
+                Text(
+                    modifier = modifier.padding(32.dp),
+                    text = "❝ ${pollResult.poll.subject} ❞",
+                    fontSize = 6.em,
+                )
             }
 
+            result.proposalResultsRanked.forEach { proposalResult ->
+                Row {
+                    val rank = proposalResult.rank
+                    val proposalName = pollResult.poll.proposals[proposalResult.index]
+                    Text("#$rank  $proposalName")
+                }
 
-            Row {
-                // Draw the linear merit profile of the proposal.
-                Canvas(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(24.dp)
-                ) {
-                    val proposalTally = tally.proposalsTallies[proposalResult.index]
-                    val bigSizeWidth = BigInteger.valueOf(size.width.toLong())
-                    var offsetX = 0F
 
-                    for (gradeIndex in 0..<grading.getAmountOfGrades()) {
-                        val sizeW = bigSizeWidth.multiply(
-                            proposalTally.tally[gradeIndex]
-                        ).divide(
-                            proposalTally.amountOfJudgments
-                        )
+                Row {
+                    // Draw the linear merit profile of the proposal.
+                    Canvas(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(24.dp)
+                    ) {
+                        val proposalTally = tally.proposalsTallies[proposalResult.index]
+                        val bigSizeWidth = BigInteger.valueOf(size.width.toLong())
+                        var offsetX = 0F
 
-                        drawRect(
-                            color = grading.getGradeColor(gradeIndex),
-                            size = Size(sizeW.toFloat(), size.height),
-                            topLeft = Offset(offsetX, 0F)
-                        )
+                        for (gradeIndex in 0..<grading.getAmountOfGrades()) {
+                            val sizeW = bigSizeWidth.multiply(
+                                proposalTally.tally[gradeIndex]
+                            ).divide(
+                                proposalTally.amountOfJudgments
+                            )
 
-                        offsetX += sizeW.toFloat()
+                            drawRect(
+                                color = grading.getGradeColor(gradeIndex),
+                                size = Size(sizeW.toFloat(), size.height),
+                                topLeft = Offset(offsetX, 0F)
+                            )
+
+                            offsetX += sizeW.toFloat()
+                        }
+
                     }
 
                 }
 
+                Row(modifier = Modifier.padding(8.dp)) {
+                    // cheap gap between proposals
+                }
+
             }
 
-            Row(modifier = Modifier.padding(8.dp)) {
-                // cheap gap between proposals
-            }
 
+            Button(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                onClick = onFinish,
+            ) { Text("Finish") }
         }
-
-
-        Button(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            onClick = onFinish,
-        ) { Text("Finish") }
     }
 }
 

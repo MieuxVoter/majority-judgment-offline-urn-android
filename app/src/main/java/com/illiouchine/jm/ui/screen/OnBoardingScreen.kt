@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,7 +35,10 @@ val onBoardingPages = listOf(
     OnBoardingPage(0, "Bienvenue dans votre urne mobile au Jugement Majoritaire."),
     OnBoardingPage(1, "Organisez un scrutin, et faites tourner le téléphone aux participantes."),
     OnBoardingPage(2, "Cette application n'a pas besoin d'un accès Internet."),
-    OnBoardingPage(3, "C'est un logiciel libre, programmé par des bénévoles affamés.  Rejoignez-nous !"),
+    OnBoardingPage(
+        3,
+        "C'est un logiciel libre, programmé par des bénévoles affamés.  Rejoignez-nous !"
+    ),
     OnBoardingPage(4, "Prêt⋅e ?"),
 )
 
@@ -43,40 +47,43 @@ fun OnBoardingScreen(
     modifier: Modifier = Modifier,
     onFinish: () -> Unit = {}
 ) {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+    ) { innerPadding ->
+        var currentOnBoardingIndex by remember { mutableIntStateOf(0) }
+        Box(
+            modifier = modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+                .padding(36.dp)
+        ) {
+            Text(
+                modifier = Modifier.align(Alignment.TopStart),
+                text = stringResource(R.string.majority_judgment)
+            )
 
-    var currentOnBoardingIndex by remember { mutableIntStateOf(0) }
+            Text(
+                modifier = Modifier.align(Alignment.Center),
+                text = onBoardingPages[currentOnBoardingIndex].text
+            )
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(36.dp)
-    ) {
-        Text(
-            modifier = Modifier.align(Alignment.TopStart),
-            text = stringResource(R.string.majority_judgment)
-        )
+            ViewPager(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                pageSize = onBoardingPages.size,
+                currentPage = currentOnBoardingIndex
+            )
 
-        Text(
-            modifier = Modifier.align(Alignment.Center),
-            text = onBoardingPages[currentOnBoardingIndex].text
-        )
-
-        ViewPager(
-            modifier = Modifier.align(Alignment.BottomCenter),
-            pageSize = onBoardingPages.size,
-            currentPage = currentOnBoardingIndex
-        )
-
-        if (currentOnBoardingIndex == onBoardingPages.size - 1) {
-            Button(
-                modifier = Modifier.align(Alignment.BottomEnd),
-                onClick = { onFinish() }
-            ) { Text(stringResource(R.string.button_finish)) }
-        } else {
-            Button(
-                modifier = Modifier.align(Alignment.BottomEnd),
-                onClick = { currentOnBoardingIndex++ }
-            ) { Text(stringResource(R.string.button_next)) }
+            if (currentOnBoardingIndex == onBoardingPages.size - 1) {
+                Button(
+                    modifier = Modifier.align(Alignment.BottomEnd),
+                    onClick = { onFinish() }
+                ) { Text(stringResource(R.string.button_finish)) }
+            } else {
+                Button(
+                    modifier = Modifier.align(Alignment.BottomEnd),
+                    onClick = { currentOnBoardingIndex++ }
+                ) { Text(stringResource(R.string.button_next)) }
+            }
         }
     }
 }
@@ -92,7 +99,11 @@ fun ViewPager(
             .padding(16.dp)
     ) {
         for (i in 0 until pageSize) {
-            val color = if (i == currentPage) { Color.Gray } else { Color.LightGray }
+            val color = if (i == currentPage) {
+                Color.Gray
+            } else {
+                Color.LightGray
+            }
             Spacer(modifier = Modifier.size(4.dp))
             Box(
                 modifier = Modifier
