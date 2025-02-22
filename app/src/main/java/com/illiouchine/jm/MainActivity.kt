@@ -15,7 +15,7 @@ import com.illiouchine.jm.ui.screen.OnBoardingScreen
 import com.illiouchine.jm.ui.screen.ResultScreen
 import com.illiouchine.jm.ui.screen.SettingsScreen
 import com.illiouchine.jm.ui.screen.SettingsScreenState
-import com.illiouchine.jm.ui.screen.SetupSurveyScreen
+import com.illiouchine.jm.ui.screen.PollSetupScreen
 import com.illiouchine.jm.ui.screen.VotingScreen
 import com.illiouchine.jm.ui.theme.JmTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
                             )
                         } else {
                             if (viewState.currentPoll == null) {
-                                SetupSurveyScreen(
+                                PollSetupScreen(
                                     modifier = Modifier,
                                     navController = navController,
                                     pollSetup = viewState.pollSetup,
@@ -75,7 +75,18 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                     composable("setup") {
-
+                        // TODO: use this, or something
+//                        PollSetupScreen(
+//                            modifier = Modifier,
+//                            navController = navController,
+//                            pollSetup = viewState.pollSetup,
+//                            onAddSubject = { viewModel.onAddSubject(it) },
+//                            onAddProposal = { viewModel.onAddProposal(it) },
+//                            onRemoveProposal = { viewModel.onRemoveProposal(it) },
+//                            setupFinished = { viewModel.onFinishSetupSurvey() },
+//                            feedback = viewState.feedback,
+//                            onDismissFeedback = { viewModel.onDismissFeedback() },
+//                        )
                     }
                     composable("vote") {
 

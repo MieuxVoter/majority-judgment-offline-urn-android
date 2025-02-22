@@ -39,7 +39,7 @@ import com.illiouchine.jm.ui.theme.JmTheme
 
 
 @Composable
-fun SetupSurveyScreen(
+fun PollSetupScreen(
     modifier: Modifier = Modifier,
     navController: NavController = rememberNavController(),
     pollSetup: Poll = Poll(),
@@ -187,7 +187,7 @@ fun SetupSurveyScreen(
 @Composable
 fun PreviewSetupSurveyScreen(modifier: Modifier = Modifier) {
     JmTheme {
-        SetupSurveyScreen(
+        PollSetupScreen(
             modifier = Modifier,
             pollSetup = Poll(),
         )
@@ -198,7 +198,7 @@ fun PreviewSetupSurveyScreen(modifier: Modifier = Modifier) {
 @Composable
 fun PreviewSetupSurveyScreenWithHugeNames(modifier: Modifier = Modifier) {
     JmTheme {
-        SetupSurveyScreen(
+        PollSetupScreen(
             modifier = Modifier,
             pollSetup = Poll(
                 subject = "Repas de ce soir, le Banquet Républicain de l'avènement du Jugement Majoritaire",
