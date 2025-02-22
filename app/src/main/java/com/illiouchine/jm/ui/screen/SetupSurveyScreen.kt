@@ -82,7 +82,7 @@ fun SetupSurveyScreen(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
-            .verticalScroll(state = ScrollState(initial = 0))
+            .verticalScroll(state = ScrollState(initial = 0)),
     ) {
 
         Text(stringResource(R.string.label_poll_subject))

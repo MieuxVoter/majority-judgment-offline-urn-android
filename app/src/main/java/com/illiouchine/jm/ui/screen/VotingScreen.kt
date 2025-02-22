@@ -2,6 +2,8 @@ package com.illiouchine.jm.ui.screen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,9 +35,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Judgment
-import com.illiouchine.jm.model.Quality7Grading
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollResult
+import com.illiouchine.jm.model.Quality7Grading
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
 
@@ -60,10 +62,6 @@ fun VotingScreen(
         PollSubject(
             poll = poll,
         )
-
-//        Spacer(modifier = Modifier.size(8.dp))
-//        Text(" ${survey.subject}")
-//        Spacer(modifier = Modifier.size(8.dp))
 
         if (currentProposalIndex >= poll.proposals.size) {
 
@@ -106,6 +104,7 @@ fun VotingScreen(
             PropsSelection(
                 poll = poll,
                 currentProposalIndex = currentProposalIndex,
+                // TODO: hoist this in the view model
                 onResultSelected = { result ->
                     val judgment = Judgment(
                         proposal = poll.proposals.get(currentProposalIndex),
@@ -190,20 +189,41 @@ private fun PropsSelection(
         val bgColor = poll.grading.getGradeColor(gradeIndex)
         val fgColor = poll.grading.getGradeTextColor(gradeIndex)
 
+        val interactionSource = remember { MutableInteractionSource() }
+        val interactionSourceIsPressed by interactionSource.collectIsFocusedAsState()
         Button(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(64.dp)
+                .height(if (interactionSourceIsPressed) 80.dp else 64.dp)
+//                .clickable(
+//                    interactionSource = interactionSource,
+//                    indication = createRippleModifierNode(
+//                        interactionSource = interactionSource,
+//                        bounded = false,
+//                        radius = 64.dp,
+//                        color = { Color.Magenta },
+//                        rippleAlpha = { RippleAlpha(
+//                            // FIXME
+//                            draggedAlpha = 0.1f,
+//                            focusedAlpha = 0.9f,
+//                            hoveredAlpha = 1.0f,
+//                            pressedAlpha = 0.62f,
+//                        ) },
+//                    ),
+//                ) {}
                 .padding(top = 12.dp),
             onClick = {
                 onResultSelected(gradeIndex)
             },
+
             colors = ButtonColors(
                 containerColor = bgColor,
                 contentColor = fgColor,
                 disabledContainerColor = Color.Gray,
                 disabledContentColor = Color.White,
             ),
+
+            interactionSource = interactionSource,
         ) {
             Text(
                 text = context.getString(poll.grading.getGradeName(gradeIndex)).uppercase(),
