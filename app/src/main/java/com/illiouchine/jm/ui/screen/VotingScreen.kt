@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,6 +41,8 @@ import com.illiouchine.jm.model.PollResult
 import com.illiouchine.jm.model.Quality7Grading
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun VotingScreen(
@@ -184,6 +187,7 @@ private fun PropsSelection(
     }
 
     val context = LocalContext.current
+    var selectedGradeIndex: Int? by remember { mutableStateOf(null) }
 
     for (gradeIndex in 0..<poll.grading.getAmountOfGrades()) {
         val bgColor = poll.grading.getGradeColor(gradeIndex)
@@ -191,6 +195,8 @@ private fun PropsSelection(
 
         val interactionSource = remember { MutableInteractionSource() }
         val interactionSourceIsPressed by interactionSource.collectIsFocusedAsState()
+        val coroutine = rememberCoroutineScope()
+
         Button(
             modifier = Modifier
                 .fillMaxWidth()
@@ -212,8 +218,19 @@ private fun PropsSelection(
 //                    ),
 //                ) {}
                 .padding(top = 12.dp),
+
+            enabled = (selectedGradeIndex == null) || (selectedGradeIndex == gradeIndex),
+
             onClick = {
-                onResultSelected(gradeIndex)
+                if (selectedGradeIndex != null) {
+                    return@Button
+                }
+                selectedGradeIndex = gradeIndex
+                coroutine.launch {
+                    delay(500)
+                    onResultSelected(gradeIndex)
+                    selectedGradeIndex = null
+                }
             },
 
             colors = ButtonColors(
@@ -223,7 +240,7 @@ private fun PropsSelection(
                 disabledContentColor = Color.White,
             ),
 
-            interactionSource = interactionSource,
+//            interactionSource = interactionSource,
         ) {
             Text(
                 text = context.getString(poll.grading.getGradeName(gradeIndex)).uppercase(),
