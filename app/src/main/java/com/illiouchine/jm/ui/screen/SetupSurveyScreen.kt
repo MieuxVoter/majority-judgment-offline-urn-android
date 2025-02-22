@@ -2,16 +2,24 @@ package com.illiouchine.jm.ui.screen
 
 import android.widget.Toast
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -21,6 +29,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,7 +69,7 @@ fun SetupSurveyScreen(
         if (setupSurvey.props.contains(proposal)) {
             Toast.makeText(
                 context,
-                "A proposal with this name already exists.",
+                context.getString(R.string.toast_proposal_name_already_exists),
                 Toast.LENGTH_SHORT,
             ).show()
         } else {
@@ -106,16 +116,32 @@ fun SetupSurveyScreen(
             }
         }
 
-        setupSurvey.props.forEach {
-            Row {
+        setupSurvey.props.forEachIndexed { propIndex, propName ->
+
+            if (propIndex > 0) {
+                HorizontalDivider (
+                    // FIXME: Dark/Light/Theme support, using lightgray is a crutch
+                    color = Color.LightGray,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .padding(vertical = 6.dp),
+            ) {
                 Text(
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
+                        .weight(1f)
                         .padding(8.dp),
-                    text = it,
+                    text = propName,
                 )
-                Button(
-                    onClick = { onRemoveProposal(it) },
+                Spacer(Modifier.size(16.dp))
+                OutlinedButton(
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically),
+                    onClick = { onRemoveProposal(propName) },
                 ) { Text("x") }
             }
         }
@@ -123,6 +149,7 @@ fun SetupSurveyScreen(
         Button(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
+                .fillMaxWidth(0.62f)
                 .padding(16.dp),
             enabled = setupSurvey.props.size > 1,
             onClick = { setupFinished() },
@@ -140,6 +167,24 @@ fun PreviewSetupSurveyScreen(modifier: Modifier = Modifier) {
         SetupSurveyScreen(
             modifier = Modifier,
             setupSurvey = SetupSurvey(),
+        )
+    }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun PreviewSetupSurveyScreenWithHugeNames(modifier: Modifier = Modifier) {
+    JmTheme {
+        SetupSurveyScreen(
+            modifier = Modifier,
+            setupSurvey = SetupSurvey(
+                subject = "Repas de ce soir, le Banquet Républicain de l'avènement du Jugement Majoritaire",
+                props = listOf(
+                    "Des nouilles aux champignons forestiers sur leur lit de purée de carottes urticantes",
+                    "Du riz",
+                    "Du riche",
+                ),
+            ),
         )
     }
 }

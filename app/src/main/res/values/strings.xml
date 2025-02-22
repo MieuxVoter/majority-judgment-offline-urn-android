@@ -25,4 +25,5 @@
     <string name="button_end_the_poll">End the Poll</string>
     <string name="all_things_considered_i_think">All things considered, I think</string>
     <string name="verb_is">is</string>
+    <string name="toast_proposal_name_already_exists">A proposal with this name already exists.</string>
 </resources>

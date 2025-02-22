@@ -9,12 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import com.illiouchine.jm.model.Survey
+import com.illiouchine.jm.model.Poll
 
 @Composable
 fun PollSubject(
     modifier: Modifier = Modifier,
-    poll: Survey,
+    poll: Poll,
 ) {
     Row(
         horizontalArrangement = Arrangement.Center,

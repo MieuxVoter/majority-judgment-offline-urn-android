@@ -4,8 +4,8 @@ import android.icu.util.Calendar
 import androidx.lifecycle.ViewModel
 import com.illiouchine.jm.model.Quality7Grading
 import com.illiouchine.jm.model.SetupSurvey
-import com.illiouchine.jm.model.Survey
-import com.illiouchine.jm.model.SurveyResult
+import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.model.PollResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -19,8 +19,8 @@ class MainViewModel(
         val feedback: String? = null,
         val showOnboarding: Boolean = true,
         val setupSurvey: SetupSurvey = SetupSurvey(),
-        val currentSurvey: Survey? = null,
-        val surveyResult: SurveyResult? = null,
+        val currentPoll: Poll? = null,
+        val pollResult: PollResult? = null,
         val judgmentsWereConfirmed: Boolean = false,
     )
 
@@ -109,23 +109,23 @@ class MainViewModel(
                 it.copy(feedback = "A poll needs at least two proposals.")
             }
         } else {
-            val survey = Survey(
+            val poll = Poll(
                 subject = subject,
                 proposals = setupSurvey.props,
                 grading = Quality7Grading(),
             )
             _viewState.update {
                 it.copy(
-                    currentSurvey = survey,
+                    currentPoll = poll,
                     feedback = "New Survey Created, start voting"
                 )
             }
         }
     }
 
-    fun onFinishVoting(result: SurveyResult) {
+    fun onFinishVoting(result: PollResult) {
         _viewState.update {
-            it.copy(surveyResult = result)
+            it.copy(pollResult = result)
         }
     }
 
@@ -143,8 +143,8 @@ class MainViewModel(
             it.copy(
                 feedback = null,
                 setupSurvey = SetupSurvey(),
-                surveyResult = null,
-                currentSurvey = null
+                pollResult = null,
+                currentPoll = null
             )
         }
     }

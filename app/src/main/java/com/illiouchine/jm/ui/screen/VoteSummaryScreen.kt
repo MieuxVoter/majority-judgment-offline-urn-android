@@ -1,6 +1,5 @@
 package com.illiouchine.jm.ui.screen
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -19,16 +17,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Quality7Grading
-import com.illiouchine.jm.model.Survey
-import com.illiouchine.jm.model.SurveyResult
-import com.illiouchine.jm.ui.composable.PollSubject
+import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.model.PollResult
 import com.illiouchine.jm.ui.theme.JmTheme
 
 
 @Composable
 fun VoteSummaryScreen(
     modifier: Modifier = Modifier,
-    surveyResult: SurveyResult,
+    pollResult: PollResult,
     onCancel: () -> Unit = {},
     onConfirm: () -> Unit = {},
 ) {
@@ -43,7 +40,7 @@ fun VoteSummaryScreen(
 //        )
 
         Text(
-            text = "You're almost done !"
+            text = "You're almost done !",
         )
         Text(
             text = "Here's a summary of your judgments :",
@@ -51,13 +48,13 @@ fun VoteSummaryScreen(
 
         Spacer(Modifier.height(32.dp))
 
-        surveyResult.survey.proposals.forEachIndexed { proposalIndex, proposal ->
+        pollResult.poll.proposals.forEachIndexed { proposalIndex, proposal ->
             // OMG ; this works, but at what cost ?  …  (my sanity)
-            val grade = surveyResult.judgments[surveyResult.judgments.size - surveyResult.survey.proposals.size + proposalIndex].grade
+            val grade = pollResult.judgments[pollResult.judgments.size - pollResult.poll.proposals.size + proposalIndex].grade
             Row {
                 Text(proposal)
                 Text(" is ")
-                Text(stringResource(surveyResult.survey.grading.getGradeName(grade)))
+                Text(stringResource(pollResult.poll.grading.getGradeName(grade)))
             }
             Spacer(Modifier.height(8.dp))
         }
@@ -101,8 +98,8 @@ fun VoteSummaryScreen(
 fun PreviewVoteSummaryScreen(modifier: Modifier = Modifier) {
     // FIXME: figure out how to reuse this across previews
     // I looked into data providers, but WOW it's complicated >.<
-    val surveyResult = SurveyResult(
-        survey = Survey(
+    val pollResult = PollResult(
+        poll = Poll(
             subject = "Prézidaaanh ?",
             proposals = listOf("Tonio", "Bobby", "Mario"),
             grading = Quality7Grading(),
@@ -121,7 +118,7 @@ fun PreviewVoteSummaryScreen(modifier: Modifier = Modifier) {
     )
     JmTheme {
         VoteSummaryScreen(
-            surveyResult = surveyResult,
+            pollResult = pollResult,
         )
     }
 }

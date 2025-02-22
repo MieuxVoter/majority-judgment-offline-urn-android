@@ -34,16 +34,16 @@ import androidx.compose.ui.unit.em
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Quality7Grading
-import com.illiouchine.jm.model.Survey
-import com.illiouchine.jm.model.SurveyResult
+import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.model.PollResult
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
 
 @Composable
 fun VotingScreen(
     modifier: Modifier = Modifier,
-    survey: Survey,
-    onFinish: (SurveyResult) -> Unit = {},
+    poll: Poll,
+    onFinish: (PollResult) -> Unit = {},
 ) {
 
     var currentProposalIndex: Int by remember { mutableIntStateOf(0) }
@@ -58,29 +58,29 @@ fun VotingScreen(
     ) {
 
         PollSubject(
-            poll = survey,
+            poll = poll,
         )
 
 //        Spacer(modifier = Modifier.size(8.dp))
 //        Text(" ${survey.subject}")
 //        Spacer(modifier = Modifier.size(8.dp))
 
-        if (currentProposalIndex >= survey.proposals.size) {
+        if (currentProposalIndex >= poll.proposals.size) {
 
-            val surveyResult = SurveyResult(
-                survey = survey,
+            val pollResult = PollResult(
+                poll = poll,
                 judgments = judgments,
             )
 
             if (!confirmed) {
 
                 VoteSummaryScreen(
-                    surveyResult = surveyResult,
+                    pollResult = pollResult,
                     onConfirm = {
                         confirmed = true
                     },
                     onCancel = {
-                        judgments = judgments.subList(0, judgments.size - survey.proposals.size)
+                        judgments = judgments.subList(0, judgments.size - poll.proposals.size)
                         currentProposalIndex = 0
                     },
                 )
@@ -97,18 +97,18 @@ fun VotingScreen(
                 ) { Text(stringResource(R.string.button_next_participant)) }
                 Button(
                     onClick = {
-                        onFinish(surveyResult)
+                        onFinish(pollResult)
                     }
                 ) { Text(stringResource(R.string.button_end_the_poll)) }
 
             }
         } else {
             PropsSelection(
-                survey = survey,
+                poll = poll,
                 currentProposalIndex = currentProposalIndex,
                 onResultSelected = { result ->
                     val judgment = Judgment(
-                        proposal = survey.proposals.get(currentProposalIndex),
+                        proposal = poll.proposals.get(currentProposalIndex),
                         grade = result,
                     )
                     judgments = judgments + judgment
@@ -118,7 +118,7 @@ fun VotingScreen(
         }
 
 
-        val amountOfBallots = judgments.size / survey.proposals.size
+        val amountOfBallots = judgments.size / poll.proposals.size
         Spacer(
             modifier = Modifier.padding(12.dp),
         )
@@ -150,7 +150,7 @@ fun VotingScreen(
 
 @Composable
 private fun PropsSelection(
-    survey: Survey,
+    poll: Poll,
     currentProposalIndex: Int,
     onResultSelected: (Int) -> Unit = {},
 ) {
@@ -169,7 +169,7 @@ private fun PropsSelection(
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = survey.proposals[currentProposalIndex],
+            text = poll.proposals[currentProposalIndex],
             textAlign = TextAlign.Center,
             fontSize = 8.em,
         )
@@ -186,9 +186,9 @@ private fun PropsSelection(
 
     val context = LocalContext.current
 
-    for (gradeIndex in 0..<survey.grading.getAmountOfGrades()) {
-        val bgColor = survey.grading.getGradeColor(gradeIndex)
-        val fgColor = survey.grading.getGradeTextColor(gradeIndex)
+    for (gradeIndex in 0..<poll.grading.getAmountOfGrades()) {
+        val bgColor = poll.grading.getGradeColor(gradeIndex)
+        val fgColor = poll.grading.getGradeTextColor(gradeIndex)
 
         Button(
             modifier = Modifier
@@ -206,7 +206,7 @@ private fun PropsSelection(
             ),
         ) {
             Text(
-                text = context.getString(survey.grading.getGradeName(gradeIndex)).uppercase(),
+                text = context.getString(poll.grading.getGradeName(gradeIndex)).uppercase(),
                 fontSize = 5.em,
             )
         }
@@ -218,7 +218,7 @@ private fun PropsSelection(
 fun PreviewVotingScreen(modifier: Modifier = Modifier) {
     JmTheme {
         VotingScreen(
-            survey = Survey(
+            poll = Poll(
                 subject = "Best Prezidan ?",
                 proposals = listOf("That candidate with a long name-san", "Mario", "JanBob"),
                 grading = Quality7Grading(),

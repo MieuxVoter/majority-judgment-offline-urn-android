@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
                                     onFinish = { viewModel.onFinishOnBoarding() },
                                 )
                             } else {
-                                if (viewState.currentSurvey == null) {
+                                if (viewState.currentPoll == null) {
                                     SetupSurveyScreen(
                                         modifier = Modifier.padding(innerPadding),
                                         setupSurvey = viewState.setupSurvey,
@@ -78,16 +78,16 @@ class MainActivity : ComponentActivity() {
                                         setupFinished = { viewModel.onFinishSetupSurvey() },
                                     )
                                 } else {
-                                    if (viewState.surveyResult == null) {
+                                    if (viewState.pollResult == null) {
                                         VotingScreen(
                                             modifier = Modifier.padding(innerPadding),
-                                            survey = viewState.currentSurvey!!,
+                                            poll = viewState.currentPoll!!,
                                             onFinish = { viewModel.onFinishVoting(it) },
                                         )
                                     } else {
                                         ResultScreen(
                                             modifier = Modifier.padding(innerPadding),
-                                            surveyResult = viewState.surveyResult!!,
+                                            pollResult = viewState.pollResult!!,
                                             onFinish = {
                                                 viewModel.onResetState()
                                             },
@@ -95,6 +95,15 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                             }
+                        }
+                        composable("setup") {
+
+                        }
+                        composable("vote") {
+
+                        }
+                        composable("result") {
+
                         }
                         composable("settings") {
                             Text(

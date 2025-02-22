@@ -1,6 +1,6 @@
 package com.illiouchine.jm.model
 
-data class Survey(
+data class Poll(
     val subject: String,
     val proposals: List<String>,
     val grading: Grading,

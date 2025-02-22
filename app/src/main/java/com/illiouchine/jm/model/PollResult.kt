@@ -1,6 +1,6 @@
 package com.illiouchine.jm.model
 
-data class SurveyResult(
-    val survey: Survey,
+data class PollResult(
+    val poll: Poll,
     val judgments: List<Judgment>,
 )

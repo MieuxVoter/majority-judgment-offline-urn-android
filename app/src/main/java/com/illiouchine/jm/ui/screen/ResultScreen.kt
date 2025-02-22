@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Quality7Grading
-import com.illiouchine.jm.model.Survey
-import com.illiouchine.jm.model.SurveyResult
+import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.model.PollResult
 import com.illiouchine.jm.ui.theme.JmTheme
 import fr.mieuxvoter.mj.CollectedTally
 import fr.mieuxvoter.mj.DeliberatorInterface
@@ -32,18 +32,18 @@ import java.math.BigInteger
 @Composable
 fun ResultScreen(
     modifier: Modifier = Modifier,
-    surveyResult: SurveyResult,
+    pollResult: PollResult,
     onFinish: () -> Unit = {},
 ) {
 
-    val grading = surveyResult.survey.grading
-    val amountOfProposals = surveyResult.survey.proposals.size
-    val amountOfGrades = surveyResult.survey.grading.getAmountOfGrades()
+    val grading = pollResult.poll.grading
+    val amountOfProposals = pollResult.poll.proposals.size
+    val amountOfGrades = pollResult.poll.grading.getAmountOfGrades()
     val deliberation: DeliberatorInterface = MajorityJudgmentDeliberator()
     val tally = CollectedTally(amountOfProposals, amountOfGrades)
 
-    surveyResult.survey.proposals.forEachIndexed { i, prop ->
-        val voteResult = surveyResult.judgments.filter { it.proposal == prop }
+    pollResult.poll.proposals.forEachIndexed { i, prop ->
+        val voteResult = pollResult.judgments.filter { it.proposal == prop }
         voteResult.forEach { judgment ->
             tally.collect(i, judgment.grade)
         }
@@ -62,7 +62,7 @@ fun ResultScreen(
         ) {
             Text(
                 modifier = modifier.padding(32.dp),
-                text = "❝ ${surveyResult.survey.subject} ❞",
+                text = "❝ ${pollResult.poll.subject} ❞",
                 fontSize = 6.em,
             )
         }
@@ -70,7 +70,7 @@ fun ResultScreen(
         result.proposalResultsRanked.forEach { proposalResult ->
             Row {
                 val rank = proposalResult.rank
-                val proposalName = surveyResult.survey.proposals[proposalResult.index]
+                val proposalName = pollResult.poll.proposals[proposalResult.index]
                 Text("#$rank  $proposalName")
             }
 
@@ -130,8 +130,8 @@ fun ResultScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
-    val surveyResult = SurveyResult(
-        survey = Survey(
+    val pollResult = PollResult(
+        poll = Poll(
             subject = "Prézidaaanh ?",
             proposals = listOf("Tonio", "Bobby", "Mario"),
             grading = Quality7Grading(),
@@ -150,7 +150,7 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
     )
     JmTheme {
         ResultScreen(
-            surveyResult = surveyResult,
+            pollResult = pollResult,
         )
     }
 }
