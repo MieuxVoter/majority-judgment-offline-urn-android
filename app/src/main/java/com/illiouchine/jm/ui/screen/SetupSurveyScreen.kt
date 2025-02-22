@@ -4,9 +4,11 @@ import android.widget.Toast
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -46,7 +48,8 @@ fun SetupSurveyScreen(
         return "${context.getString(R.string.proposal)} ${(65 + setupSurvey.props.size).toChar()}"
     }
 
-    // TODO: Perhaps use the 'fun' def instead here ?
+    // TODO: Perhaps use the 'fun' def syntax instead here ?
+    // And move the logic in the ViewModel ?
     val addProposal: () -> Unit = {
         // Rule: if the proposal name is not specified, use a default
         if (proposal == "") {
@@ -86,17 +89,21 @@ fun SetupSurveyScreen(
         Text(stringResource(R.string.label_poll_proposals))
         Row {
             TextField(
+                modifier = Modifier.weight(1f),
                 singleLine = true,
                 value = proposal,
                 onValueChange = { proposal = it },
                 placeholder = { Text(generateProposalName()) },
                 keyboardActions = KeyboardActions(onDone = { addProposal() }),
             )
+            Spacer(Modifier.size(16.dp))
             Button(
                 modifier = Modifier
                     .align(Alignment.CenterVertically),
                 onClick = { addProposal() },
-            ) { Text(stringResource(R.string.button_add)) }
+            ) {
+                Text(stringResource(R.string.button_add))
+            }
         }
 
         setupSurvey.props.forEach {
@@ -118,26 +125,7 @@ fun SetupSurveyScreen(
                 .align(Alignment.CenterHorizontally)
                 .padding(16.dp),
             enabled = setupSurvey.props.size > 1,
-            onClick = {
-//                // Rule: if the poll's subject was not provided, use a default.
-//                if (subject == "") {
-//                    subject = context.getString(R.string.poll_of) + " " + DateFormat.getDateInstance()
-//                        .format(Calendar.getInstance().time)
-//                }
-//                // Rule: if no proposals were added, abort and complain.
-//                // Note: since the button is now disabled in that case, this never happens anymore.
-//                if (proposals.size < 2) {
-//                    Toast.makeText(
-//                        context,
-//                        "A poll needs at least two proposals.",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                    return@Button
-//                }
-//                val survey = Survey(subject = subject, props = proposals)
-//                setupFinished(survey)
-                setupFinished()
-            },
+            onClick = { setupFinished() },
         ) {
             Text(stringResource(R.string.button_let_s_go))
         }
