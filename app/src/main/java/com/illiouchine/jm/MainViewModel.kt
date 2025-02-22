@@ -3,7 +3,6 @@ package com.illiouchine.jm
 import android.icu.util.Calendar
 import androidx.lifecycle.ViewModel
 import com.illiouchine.jm.model.Quality7Grading
-import com.illiouchine.jm.model.SetupSurvey
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollResult
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +17,7 @@ class MainViewModel(
     data class MainViewState(
         val feedback: String? = null,
         val showOnboarding: Boolean = true,
-        val setupSurvey: SetupSurvey = SetupSurvey(),
+        val pollSetup: Poll = Poll(),
         val currentPoll: Poll? = null,
         val pollResult: PollResult? = null,
         val judgmentsWereConfirmed: Boolean = false,
@@ -66,36 +65,36 @@ class MainViewModel(
 
     fun onAddSubject(subject: String) {
         _viewState.update {
-            it.copy(setupSurvey = it.setupSurvey.copy(subject = subject))
+            it.copy(pollSetup = it.pollSetup.copy(subject = subject))
         }
     }
 
     fun onAddProposal(proposal: String) {
         // Rule: If the proposal already exists, do not add it and show a warning.
-        if (_viewState.value.setupSurvey.props.any { it == proposal }) {
+        if (_viewState.value.pollSetup.proposals.any { it == proposal }) {
             _viewState.update {
                 it.copy(
                     feedback = "The proposal `${proposal}` already exists."
                 )
             }
         } else {
-            val newProposals = _viewState.value.setupSurvey.props + proposal
+            val newProposals = _viewState.value.pollSetup.proposals + proposal
 
             _viewState.update {
-                it.copy(setupSurvey = it.setupSurvey.copy(props = newProposals))
+                it.copy(pollSetup = it.pollSetup.copy(proposals = newProposals))
             }
         }
     }
 
     fun onRemoveProposal(proposal: String) {
-        val newProposals = _viewState.value.setupSurvey.props - proposal
+        val newProposals = _viewState.value.pollSetup.proposals - proposal
         _viewState.update {
-            it.copy(setupSurvey = it.setupSurvey.copy(props = newProposals))
+            it.copy(pollSetup = it.pollSetup.copy(proposals = newProposals))
         }
     }
 
     fun onFinishSetupSurvey() {
-        val setupSurvey = viewState.value.setupSurvey
+        val setupSurvey = viewState.value.pollSetup
         // Rule: if the poll's subject was not provided, use a default.
         val subject = setupSurvey.subject.ifEmpty {
             // FIXME: manage to get the context, or the translated string any other way
@@ -104,14 +103,14 @@ class MainViewModel(
         }
         // Rule: if less than 2 proposals were added, abort and complain.
         // Note: since the button is now disabled in that case, this never happens anymore.
-        if (setupSurvey.props.size < 2) {
+        if (setupSurvey.proposals.size < 2) {
             _viewState.update {
                 it.copy(feedback = "A poll needs at least two proposals.")
             }
         } else {
             val poll = Poll(
                 subject = subject,
-                proposals = setupSurvey.props,
+                proposals = setupSurvey.proposals,
                 grading = Quality7Grading(),
             )
             _viewState.update {
@@ -142,7 +141,7 @@ class MainViewModel(
         _viewState.update {
             it.copy(
                 feedback = null,
-                setupSurvey = SetupSurvey(),
+                pollSetup = Poll(),
                 pollResult = null,
                 currentPoll = null
             )

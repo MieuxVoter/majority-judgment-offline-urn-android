@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity() {
                                 if (viewState.currentPoll == null) {
                                     SetupSurveyScreen(
                                         modifier = Modifier.padding(innerPadding),
-                                        setupSurvey = viewState.setupSurvey,
+                                        pollSetup = viewState.pollSetup,
                                         onAddSubject = { viewModel.onAddSubject(it) },
                                         onAddProposal = { viewModel.onAddProposal(it) },
                                         onRemoveProposal = { viewModel.onRemoveProposal(it) },

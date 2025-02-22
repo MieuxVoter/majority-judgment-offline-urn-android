@@ -2,22 +2,16 @@ package com.illiouchine.jm.ui.screen
 
 import android.widget.Toast
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -29,21 +23,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.R
-import com.illiouchine.jm.model.SetupSurvey
+import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.ui.theme.JmTheme
 
 
 @Composable
 fun SetupSurveyScreen(
     modifier: Modifier = Modifier,
-    setupSurvey: SetupSurvey = SetupSurvey(),
+    pollSetup: Poll = Poll(),
     onAddSubject: (String) -> Unit = {},
     onAddProposal: (String) -> Unit = {},
     onRemoveProposal: (String) -> Unit = {},
@@ -52,10 +45,10 @@ fun SetupSurveyScreen(
 
     val context = LocalContext.current
     var proposal: String by remember { mutableStateOf("") }
-    var subject: String by remember { mutableStateOf(setupSurvey.subject) }
+    var subject: String by remember { mutableStateOf(pollSetup.subject) }
 
     fun generateProposalName(): String {
-        return "${context.getString(R.string.proposal)} ${(65 + setupSurvey.props.size).toChar()}"
+        return "${context.getString(R.string.proposal)} ${(65 + pollSetup.proposals.size).toChar()}"
     }
 
     // TODO: Perhaps use the 'fun' def syntax instead here ?
@@ -66,7 +59,7 @@ fun SetupSurveyScreen(
             proposal = generateProposalName()
         }
         // Rule: proposals must have unique names
-        if (setupSurvey.props.contains(proposal)) {
+        if (pollSetup.proposals.contains(proposal)) {
             Toast.makeText(
                 context,
                 context.getString(R.string.toast_proposal_name_already_exists),
@@ -116,7 +109,7 @@ fun SetupSurveyScreen(
             }
         }
 
-        setupSurvey.props.forEachIndexed { propIndex, propName ->
+        pollSetup.proposals.forEachIndexed { propIndex, propName ->
 
             if (propIndex > 0) {
                 HorizontalDivider (
@@ -151,7 +144,7 @@ fun SetupSurveyScreen(
                 .align(Alignment.CenterHorizontally)
                 .fillMaxWidth(0.62f)
                 .padding(16.dp),
-            enabled = setupSurvey.props.size > 1,
+            enabled = pollSetup.proposals.size > 1,
             onClick = { setupFinished() },
         ) {
             Text(stringResource(R.string.button_let_s_go))
@@ -166,7 +159,7 @@ fun PreviewSetupSurveyScreen(modifier: Modifier = Modifier) {
     JmTheme {
         SetupSurveyScreen(
             modifier = Modifier,
-            setupSurvey = SetupSurvey(),
+            pollSetup = Poll(),
         )
     }
 }
@@ -177,9 +170,9 @@ fun PreviewSetupSurveyScreenWithHugeNames(modifier: Modifier = Modifier) {
     JmTheme {
         SetupSurveyScreen(
             modifier = Modifier,
-            setupSurvey = SetupSurvey(
+            pollSetup = Poll(
                 subject = "Repas de ce soir, le Banquet Républicain de l'avènement du Jugement Majoritaire",
-                props = listOf(
+                proposals = listOf(
                     "Des nouilles aux champignons forestiers sur leur lit de purée de carottes urticantes",
                     "Du riz",
                     "Du riche",
