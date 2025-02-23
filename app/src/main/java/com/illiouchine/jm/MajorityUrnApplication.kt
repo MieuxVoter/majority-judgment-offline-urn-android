@@ -19,6 +19,7 @@ class MajorityUrnApplication : Application() {
 }
 
 val module = module {
-    viewModel { MainViewModel(get()) }
+    viewModel { MainViewModel() }
+    viewModel { SettingsViewModel(sharedPreferences = get()) }
     singleOf(::SharedPrefsHelper)
 }

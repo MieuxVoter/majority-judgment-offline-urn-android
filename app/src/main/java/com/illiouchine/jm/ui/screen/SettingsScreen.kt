@@ -19,6 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.illiouchine.jm.Screens
+import com.illiouchine.jm.SettingsViewModel
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.theme.JmTheme
@@ -28,7 +30,8 @@ import com.illiouchine.jm.ui.theme.JmTheme
 fun SettingsScreen(
     modifier: Modifier = Modifier,
     navController: NavController = rememberNavController(),
-    settingsScreenState: SettingsScreenState = SettingsScreenState(),
+    settingsState: SettingsViewModel.SettingsViewState = SettingsViewModel.SettingsViewState(),
+    feedback: String? = "",
     onShowOnboardingChange: (Boolean) -> Unit = {},
     onDismissFeedback: () -> Unit = {}
 ) {
@@ -37,7 +40,7 @@ fun SettingsScreen(
         snackbarHost = {
             MjuSnackbar(
                 modifier = Modifier,
-                text = settingsScreenState.feedback,
+                text = feedback,
                 onDismiss = {
                     onDismissFeedback()
                 },
@@ -46,27 +49,32 @@ fun SettingsScreen(
         bottomBar = {
             MjuBottomBar(
                 modifier = Modifier,
-                selected = navController.currentDestination?.route ?: "settings",
+                selected = navController.currentDestination?.route ?: Screens.Settings.name,
                 onItemSelected = { destination -> navController.navigate(destination.id) }
             )
         },
     ) { innerPadding ->
-        Column(modifier = modifier
-            .padding(innerPadding)
-            .padding(16.dp)
+        Column(
+            modifier = modifier
+                .padding(innerPadding)
+                .padding(16.dp)
         ) {
             Text("Settings")
-            var showOnBoardingCheck by remember { mutableStateOf(settingsScreenState.showOnBoarding) }
+            var showOnBoardingCheck by remember { mutableStateOf(settingsState.showOnboarding) }
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text("Show on boarding")
-                Switch(checked = showOnBoardingCheck,
-                    // TODO : Move behavior to settingsVM
-                    onCheckedChange = { showOnBoardingCheck = it },
-                    modifier = Modifier
+                Switch(
+                    modifier = Modifier,
+                    checked = showOnBoardingCheck,
+                    onCheckedChange = {
+                        showOnBoardingCheck = it
+                        onShowOnboardingChange(it)
+                    },
                 )
             }
         }
@@ -80,8 +88,3 @@ private fun PreviewSettingsScreen() {
         SettingsScreen()
     }
 }
-
-data class SettingsScreenState(
-    val showOnBoarding: Boolean = false,
-    val feedback: String? = null,
-)

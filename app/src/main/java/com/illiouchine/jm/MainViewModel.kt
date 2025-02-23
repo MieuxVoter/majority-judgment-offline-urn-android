@@ -2,21 +2,18 @@ package com.illiouchine.jm
 
 import android.icu.util.Calendar
 import androidx.lifecycle.ViewModel
-import com.illiouchine.jm.model.Quality7Grading
-import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.model.Quality7Grading
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import java.text.DateFormat
 
-class MainViewModel(
-    private val sharedPreferences: SharedPrefsHelper,
-) : ViewModel() {
+class MainViewModel : ViewModel() {
 
     data class MainViewState(
         val feedback: String? = null,
-        val showOnboarding: Boolean = true,
         val pollSetup: PollConfig = PollConfig(),
         val currentPollConfig: PollConfig? = null,
         val pollResult: Poll? = null,
@@ -26,26 +23,7 @@ class MainViewModel(
     private val _viewState = MutableStateFlow<MainViewState>(MainViewState())
     val viewState: StateFlow<MainViewState> = _viewState
 
-    init {
-        loadShowOnboarding()
-    }
-
-    private fun loadShowOnboarding() {
-        val showOnboarding = sharedPreferences.getShowOnboarding()
-        _viewState.update {
-            it.copy(showOnboarding = showOnboarding)
-        }
-    }
-
-    fun onFinishOnBoarding() {
-        sharedPreferences.editShowOnboarding(false)
-        _viewState.update {
-            it.copy(showOnboarding = false)
-        }
-    }
-
     /**
-     * show onboarding
      * Setup survey State : Subject, Proposals,
      *          - finish Setup
      *          - add Proposals

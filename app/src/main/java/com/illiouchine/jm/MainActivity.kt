@@ -15,22 +15,25 @@ import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.screen.HomeScreen
 import com.illiouchine.jm.ui.screen.OnBoardingScreen
 import com.illiouchine.jm.ui.screen.PollSetupScreen
+import com.illiouchine.jm.ui.screen.PollVotingScreen
 import com.illiouchine.jm.ui.screen.ResultScreen
 import com.illiouchine.jm.ui.screen.SettingsScreen
-import com.illiouchine.jm.ui.screen.SettingsScreenState
-import com.illiouchine.jm.ui.screen.PollVotingScreen
 import com.illiouchine.jm.ui.theme.JmTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModel()
+    private val settingsViewModel: SettingsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
             val viewState by viewModel.viewState.collectAsState()
+            val settingsState by settingsViewModel.settingsViewState.collectAsState()
+
             val navController = rememberNavController()
 
             // TODO: don't prevent lock at all times ; only during vote (and perhaps results)
@@ -43,10 +46,10 @@ class MainActivity : ComponentActivity() {
                     startDestination = Screens.Home.name,
                 ) {
                     composable(Screens.Home.name) {
-                        if (viewState.showOnboarding) {
+                        if (settingsState.showOnboarding) {
                             OnBoardingScreen(
                                 modifier = Modifier,
-                                onFinish = { viewModel.onFinishOnBoarding() },
+                                onFinish = { settingsViewModel.updateShowOnBoarding(false) },
                             )
                         } else {
                             HomeScreen(
@@ -106,9 +109,13 @@ class MainActivity : ComponentActivity() {
                         SettingsScreen(
                             modifier = Modifier,
                             navController = navController,
-                            settingsScreenState = SettingsScreenState(),
-                            onShowOnboardingChange = {},
-                            onDismissFeedback = {},
+                            settingsState = settingsState,
+                            onShowOnboardingChange = {
+                                settingsViewModel.updateShowOnBoarding(it)
+                            },
+                            onDismissFeedback = {
+                                viewModel.onDismissFeedback()
+                            },
                         )
                     }
                 }
