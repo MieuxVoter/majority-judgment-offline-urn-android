@@ -1,5 +1,6 @@
 package com.illiouchine.jm.ui.screen
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -15,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Quality7Grading
@@ -35,14 +38,13 @@ fun VoteSummaryScreen(
         modifier = modifier
             .fillMaxSize()
 //            .verticalScroll(state = ScrollState(initial = 0))
-            .padding(8.dp),
+//            .padding(8.dp)
+        ,
     ) {
-//        PollSubject(
-//            poll = surveyResult.survey,
-//        )
 
         Text(
-            text = "You're almost done !",
+            text = "Are you sure ?",
+            fontSize = 8.em,
         )
         Text(
             text = "Here's a summary of your judgments :",
@@ -51,14 +53,8 @@ fun VoteSummaryScreen(
         Spacer(Modifier.height(32.dp))
 
         poll.pollConfig.proposals.forEachIndexed { proposalIndex, proposal ->
-            // OMG ; this works, but at what cost ?  …  (my sanity)
-//            val grade =
-//                poll.judgments[poll.judgments.size - poll.pollConfig.proposals.size + proposalIndex].grade
-            val grade = (
-                    ballot.judgments[
-                            proposalIndex
-                    ].grade
-                    )
+            val grade = ballot.judgments[proposalIndex].grade
+
             Row {
                 Text(proposal)
                 Text(" is ")
@@ -81,7 +77,7 @@ fun VoteSummaryScreen(
                 onClick = onCancel,
             ) {
                 Text(
-                    text = "No, do over",
+                    text = "No, rescind",
                 )
             }
 
@@ -91,7 +87,7 @@ fun VoteSummaryScreen(
                 onClick = onConfirm,
             ) {
                 Text(
-                    text = "Yes, proceed",
+                    text = "Yes, confirm",
                 )
             }
 

@@ -66,8 +66,6 @@ fun PollVotingScreen(
     }
 
     var currentBallot: Ballot? by remember { mutableStateOf(null) }
-//    var currentProposalIndex: Int by remember { mutableIntStateOf(0) }
-    var ballotConfirmed: Boolean by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -128,7 +126,6 @@ fun PollVotingScreen(
                                 grade = result,
                             )
                             currentBallot = currentBallot!!.withJudgment(judgment)
-//                            currentProposalIndex++
                         }
                     )
 
@@ -139,7 +136,6 @@ fun PollVotingScreen(
                         poll = currentPoll!!,
                         ballot = currentBallot!!,
                         onConfirm = {
-//                                ballotConfirmed = true
                             currentPoll = currentPoll!!.withBallot(currentBallot!!)
                             currentBallot = null
                         },
@@ -158,7 +154,6 @@ fun PollVotingScreen(
             Row(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             ) {
-                // FIXME: this syntax feels weird…  Is there a better way ?
                 val ballotsString = if (amountOfBallots <= 1)
                     stringResource(R.string.ballot)
                 else
@@ -182,9 +177,6 @@ fun PollVotingScreen(
     }
 
 }
-
-
-
 
 
 @Composable
@@ -238,22 +230,6 @@ private fun PropsSelection(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(if (interactionSourceIsPressed) 80.dp else 64.dp)
-//                .clickable(
-//                    interactionSource = interactionSource,
-//                    indication = createRippleModifierNode(
-//                        interactionSource = interactionSource,
-//                        bounded = false,
-//                        radius = 64.dp,
-//                        color = { Color.Magenta },
-//                        rippleAlpha = { RippleAlpha(
-//                            // FIXME
-//                            draggedAlpha = 0.1f,
-//                            focusedAlpha = 0.9f,
-//                            hoveredAlpha = 1.0f,
-//                            pressedAlpha = 0.62f,
-//                        ) },
-//                    ),
-//                ) {}
                 .padding(top = 12.dp),
 
             enabled = (selectedGradeIndex == null) || (selectedGradeIndex == gradeIndex),
@@ -276,8 +252,6 @@ private fun PropsSelection(
                 disabledContainerColor = Color.Gray,
                 disabledContentColor = Color.White,
             ),
-
-//            interactionSource = interactionSource,
         ) {
             Text(
                 text = context.getString(pollConfig.grading.getGradeName(gradeIndex)).uppercase(),
