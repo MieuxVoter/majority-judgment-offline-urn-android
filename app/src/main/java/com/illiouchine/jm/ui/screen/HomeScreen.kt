@@ -43,25 +43,18 @@ fun HomeScreen(
                 onItemSelected = { destination -> navController.navigate(destination.id) },
             )
         },
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                modifier = Modifier.padding(24.dp),
+                onClick = { onSetupBlankPoll() },
+                icon = { Icon(Icons.Filled.Add, "+") },
+                text = { Text(text = "New Poll") },
+            )
+        }
     ) { innerPadding ->
 
-        Box(
-            modifier = modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-        ) {
-            Row(modifier = Modifier.align(Alignment.BottomEnd)) {
-                ExtendedFloatingActionButton(
-                    modifier = Modifier.padding(24.dp),
-                    onClick = { onSetupBlankPoll() },
-                    icon = { Icon(Icons.Filled.Add, "Extended floating action button.") },
-                    text = { Text(text = "New Poll") },
-                )
-            }
-        }
-
         Column(
-            modifier = Modifier.padding(top = 64.dp),
+            modifier = Modifier.padding(innerPadding),
         ) {
             Text(
                 modifier = Modifier
