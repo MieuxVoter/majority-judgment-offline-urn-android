@@ -55,16 +55,7 @@ fun PollVotingScreen(
     onDismissFeedback: () -> Unit = {},
 ) {
 
-    var currentPoll: Poll? by remember { mutableStateOf(null) }
-
-    // WIP, obviously
-    if (currentPoll == null) {
-        currentPoll = Poll(
-            pollConfig = pollConfig,
-            ballots = mutableListOf(),
-        )
-    }
-
+    var currentPoll: Poll by remember { mutableStateOf(Poll(pollConfig = pollConfig, ballots = emptyList())) }
     var currentBallot: Ballot? by remember { mutableStateOf(null) }
 
     Scaffold(
@@ -92,7 +83,7 @@ fun PollVotingScreen(
 
             if (null == currentBallot) {
 
-                if (currentPoll!!.ballots.isNotEmpty()) {
+                if (currentPoll.ballots.isNotEmpty()) {
                     Text("Votre participation a bien été prise en compte.\nVous pouvez maintenant passer cet appareil au prochain participant.")
                 }
 
@@ -100,13 +91,13 @@ fun PollVotingScreen(
                 Button(
                     onClick = { currentBallot = Ballot() },
                     content = {
-                        Text("À MOI DE VOTER")
+                        Text(stringResource(R.string.button_next_participant))
                     }
                 )
 
                 Button(
                     onClick = {
-                        onFinish(currentPoll!!)
+                        onFinish(currentPoll)
                     }
                 ) { Text(stringResource(R.string.button_end_the_poll)) }
 
@@ -133,10 +124,10 @@ fun PollVotingScreen(
 
                     // State: SUMMARY, awaiting confirmation, back or redo.
                     VoteSummaryScreen(
-                        poll = currentPoll!!,
+                        poll = currentPoll,
                         ballot = currentBallot!!,
                         onConfirm = {
-                            currentPoll = currentPoll!!.withBallot(currentBallot!!)
+                            currentPoll = currentPoll.withBallot(currentBallot!!)
                             currentBallot = null
                         },
                         onCancel = {
@@ -147,7 +138,7 @@ fun PollVotingScreen(
             }
 
 
-            val amountOfBallots = currentPoll!!.ballots.size
+            val amountOfBallots = currentPoll.ballots.size
             Spacer(
                 modifier = Modifier.padding(12.dp),
             )
@@ -169,13 +160,14 @@ fun PollVotingScreen(
     // Rule: going BACK cancels the last cast judgment, if any.
     // Rule: going BACK from the summary cancels the last cast judgment too.
     BackHandler(
-        enabled = (currentBallot != null && currentBallot!!.judgments.size > 0),
+        enabled = true,
     ) {
         if (currentBallot != null) {
-            currentBallot = currentBallot!!.withoutLastJudgment()
+            if (currentBallot!!.judgments.isNotEmpty()) {
+                currentBallot = currentBallot!!.withoutLastJudgment()
+            }
         }
     }
-
 }
 
 
