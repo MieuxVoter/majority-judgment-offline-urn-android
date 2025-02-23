@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.ui.screen.HomeScreen
 import com.illiouchine.jm.ui.screen.OnBoardingScreen
 import com.illiouchine.jm.ui.screen.PollSetupScreen
 import com.illiouchine.jm.ui.screen.ResultScreen
@@ -52,18 +53,13 @@ class MainActivity : ComponentActivity() {
                                 onFinish = { viewModel.onFinishOnBoarding() },
                             )
                         } else {
-                            // TODO: home screen layout
-                            // TODO: position this FAB
-                            FloatingActionButton(
-                                modifier = Modifier.padding(64.dp),
-                                onClick = {
+                            HomeScreen(
+                                modifier = Modifier,
+                                onSetupBlankPoll = {
                                     viewModel.onStartPollSetup(Poll())
                                     navController.navigate(Screens.PollSetup.name)
                                 },
-                            ) {
-                                // FIXME: icon of an urn and a plus sign ?
-                                Text("Go")
-                            }
+                            )
                         }
                     }
                     composable(Screens.PollSetup.name) {
