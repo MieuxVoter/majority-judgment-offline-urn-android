@@ -21,17 +21,28 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.illiouchine.jm.Screens
+import com.illiouchine.jm.ui.composable.MUBottomBar
 import com.illiouchine.jm.ui.theme.JmTheme
 
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier, // TODO: why is this applied on the Box and not Scaffold ?  (purpose?)
+    navController: NavController = rememberNavController(),
     onSetupBlankPoll: () -> Unit = {},
 //    onSetupClonePoll: (poll: Poll) -> Unit = {}, // probably
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        bottomBar = {
+            MUBottomBar(
+                selected = navController.currentDestination?.route ?: Screens.Home.name,
+                onItemSelected = { destination -> navController.navigate(destination.id) },
+            )
+        },
     ) { innerPadding ->
 
         Box(
@@ -50,10 +61,12 @@ fun HomeScreen(
         }
 
         Column(
-            modifier = Modifier.padding(top=64.dp),
+            modifier = Modifier.padding(top = 64.dp),
         ) {
             Text(
-                modifier = Modifier.fillMaxWidth().padding(bottom=64.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 64.dp),
                 fontSize = 8.em,
                 textAlign = TextAlign.Center,
                 lineHeight = 1.3.em,
@@ -61,7 +74,9 @@ fun HomeScreen(
             )
 
             Text(
-                modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
                 textAlign = TextAlign.Center,
                 text = "Try making a new poll, it's free !",
                 fontStyle = FontStyle.Italic,
