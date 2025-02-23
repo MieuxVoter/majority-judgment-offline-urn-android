@@ -27,6 +27,7 @@ class MainActivity : ComponentActivity() {
     private val settingsViewModel: SettingsViewModel by viewModel()
     private val pollSetupViewModel: PollSetupViewModel by viewModel()
     private val pollVotingViewModel: PollVotingViewModel by viewModel()
+    private val pollResultViewModel: PollResultViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +38,8 @@ class MainActivity : ComponentActivity() {
             val settingsState by settingsViewModel.settingsViewState.collectAsState()
             val pollSetupState by pollSetupViewModel.pollSetupViewState.collectAsState()
             val pollVotingViewState by pollVotingViewModel.pollVotingViewState.collectAsState()
+            val pollResultViewState by pollResultViewModel.pollResultViewState.collectAsState()
+
 
             val navController = rememberNavController()
 
@@ -91,18 +94,18 @@ class MainActivity : ComponentActivity() {
                             onBallotCanceled = { pollVotingViewModel.onBallotCanceled() },
                             onCancelLastJudgment = { pollVotingViewModel.onCancelLastJudgment() },
                             onFinish = {
-                                viewModel.onFinishVoting(it)
+                                pollResultViewModel.finalizePoll(it)
                                 navController.navigate(Screens.PollResult.name)
                             },
                         )
                     }
                     composable(Screens.PollResult.name) {
-                        if (viewState.pollResult != null) {
+                        if (pollResultViewState.poll != null) {
                             ResultScreen(
                                 modifier = Modifier,
-                                poll = viewState.pollResult!!,
+                                poll = pollResultViewState.poll!!,
                                 onFinish = {
-                                    viewModel.onResetState()
+                                    //viewModel.onResetState()
                                     navController.navigate(Screens.Home.name)
                                 },
                             )

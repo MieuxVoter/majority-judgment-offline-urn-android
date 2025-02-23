@@ -95,6 +95,7 @@ fun PollVotingScreen(
                     horizontalArrangement = Arrangement.SpaceEvenly,
                 ) {
                     Button(
+                        enabled = pollVotingState.ballots.isNotEmpty(),
                         onClick = {
                             val poll = Poll(
                                 pollConfig = pollVotingState.pollConfig,
