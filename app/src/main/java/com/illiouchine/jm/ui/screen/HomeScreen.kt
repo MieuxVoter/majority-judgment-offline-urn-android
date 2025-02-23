@@ -1,8 +1,6 @@
 package com.illiouchine.jm.ui.screen
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,7 +12,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -24,7 +21,7 @@ import androidx.compose.ui.unit.em
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.illiouchine.jm.Screens
-import com.illiouchine.jm.ui.composable.MUBottomBar
+import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.theme.JmTheme
 
 
@@ -38,7 +35,7 @@ fun HomeScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            MUBottomBar(
+            MjuBottomBar(
                 selected = navController.currentDestination?.route ?: Screens.Home.name,
                 onItemSelected = { destination -> navController.navigate(destination.id) },
             )

@@ -19,7 +19,7 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import kotlinx.coroutines.delay
 
 @Composable
-fun MUSnackbar(
+fun MjuSnackbar(
     modifier: Modifier = Modifier,
     text: String? = "",
     onDismiss: () -> Unit = {},
@@ -54,7 +54,7 @@ private fun PreviewSnackBar() {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             snackbarHost = {
-                MUSnackbar(
+                MjuSnackbar(
                     modifier = Modifier,
                     text = "J'aime les snackbars !"
                 )

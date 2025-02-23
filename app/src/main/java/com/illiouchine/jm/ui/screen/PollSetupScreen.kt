@@ -34,8 +34,8 @@ import androidx.navigation.compose.rememberNavController
 import com.illiouchine.jm.R
 import com.illiouchine.jm.Screens
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.composable.MUBottomBar
-import com.illiouchine.jm.ui.composable.MUSnackbar
+import com.illiouchine.jm.ui.composable.MjuBottomBar
+import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.theme.JmTheme
 
 
@@ -55,7 +55,7 @@ fun PollSetupScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = {
-            MUSnackbar(
+            MjuSnackbar(
                 modifier = Modifier,
                 text = feedback,
                 onDismiss = {
@@ -64,7 +64,7 @@ fun PollSetupScreen(
             )
         },
         bottomBar = {
-            MUBottomBar(
+            MjuBottomBar(
                 modifier = Modifier,
                 selected = navController.currentDestination?.route ?: Screens.Home.name,
                 onItemSelected = { destination -> navController.navigate(destination.id) }

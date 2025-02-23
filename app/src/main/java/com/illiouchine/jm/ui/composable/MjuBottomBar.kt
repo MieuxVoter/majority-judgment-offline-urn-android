@@ -17,21 +17,22 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.illiouchine.jm.R
+import com.illiouchine.jm.Screens
 import com.illiouchine.jm.ui.theme.JmTheme
 
 enum class BottomBarItem(
     val id: String,
     val resId: Int,
-    val icon: ImageVector
+    val icon: ImageVector,
 ) {
-    Home(id = "home", resId = R.string.menu_home, icon = Icons.Default.Home),
-    Settings(id = "settings", resId = R.string.menu_settings, icon = Icons.Default.Settings);
+    Home(id = Screens.Home.name, resId = R.string.menu_home, icon = Icons.Default.Home),
+    Settings(id = Screens.Settings.name, resId = R.string.menu_settings, icon = Icons.Default.Settings);
 
     companion object {
         fun fromId(id: String): BottomBarItem {
             return when (id) {
-                "home" -> Home
-                "settings" -> Settings
+                Screens.Home.name -> Home
+                Screens.Settings.name -> Settings
                 else -> Home
             }
         }
@@ -40,12 +41,12 @@ enum class BottomBarItem(
 
 
 @Composable
-fun MUBottomBar(
+fun MjuBottomBar(
     modifier: Modifier = Modifier,
-    selected: String = "home",
+    selected: String = Screens.Home.name,
     onItemSelected: (BottomBarItem) -> Unit = {}
 ) {
-    NavigationBar {
+    NavigationBar (modifier) {
         BottomBarItem.entries.forEach {
             NavigationBarItem(
                 modifier = Modifier,
@@ -75,7 +76,7 @@ private fun PreviewBottomBar() {
     JmTheme {
         Scaffold(
             bottomBar = {
-                MUBottomBar()
+                MjuBottomBar()
             }
         ) {
             Box(modifier = Modifier.padding(it))

@@ -19,8 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.illiouchine.jm.ui.composable.MUBottomBar
-import com.illiouchine.jm.ui.composable.MUSnackbar
+import com.illiouchine.jm.ui.composable.MjuBottomBar
+import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.theme.JmTheme
 
 
@@ -35,7 +35,7 @@ fun SettingsScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = {
-            MUSnackbar(
+            MjuSnackbar(
                 modifier = Modifier,
                 text = settingsScreenState.feedback,
                 onDismiss = {
@@ -44,7 +44,7 @@ fun SettingsScreen(
             )
         },
         bottomBar = {
-            MUBottomBar(
+            MjuBottomBar(
                 modifier = Modifier,
                 selected = navController.currentDestination?.route ?: "settings",
                 onItemSelected = { destination -> navController.navigate(destination.id) }

@@ -40,7 +40,7 @@ import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.model.Quality7Grading
-import com.illiouchine.jm.ui.composable.MUSnackbar
+import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
 import kotlinx.coroutines.delay
@@ -70,7 +70,7 @@ fun PollVotingScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = {
-            MUSnackbar(
+            MjuSnackbar(
                 modifier = Modifier,
                 text = feedback,
                 onDismiss = { onDismissFeedback() },
