@@ -14,7 +14,6 @@ class MainViewModel : ViewModel() {
 
     data class MainViewState(
         val feedback: String? = null,
-        val pollSetup: PollConfig = PollConfig(),
         val currentPollConfig: PollConfig? = null,
         val pollResult: Poll? = null,
         val judgmentsWereConfirmed: Boolean = false,
@@ -35,48 +34,8 @@ class MainViewModel : ViewModel() {
      *              -finish
      */
 
-    fun onAddSubject(subject: String) {
-        _viewState.update {
-            it.copy(pollSetup = it.pollSetup.copy(subject = subject))
-        }
-    }
-
-    fun onAddProposal(proposal: String) {
-        // Rule: If the proposal already exists, do not add it and show a warning.
-        if (_viewState.value.pollSetup.proposals.any { it == proposal }) {
-            _viewState.update {
-                it.copy(
-                    feedback = "The proposal `${proposal}` already exists."
-                )
-            }
-        } else {
-            val newProposals = _viewState.value.pollSetup.proposals + proposal
-
-            _viewState.update {
-                it.copy(pollSetup = it.pollSetup.copy(proposals = newProposals))
-            }
-        }
-    }
-
-    fun onRemoveProposal(proposal: String) {
-        val newProposals = _viewState.value.pollSetup.proposals - proposal
-        _viewState.update {
-            it.copy(pollSetup = it.pollSetup.copy(proposals = newProposals))
-        }
-    }
-
-    fun onStartPollSetup(pollConfig: PollConfig) {
-        // FIXME: for now the navigation is done in the lambda in the Activity -- is it correct ?
-        // Navigate to the PollSetup screen
-
-        // TODO
-        // Give it the poll so it can prefill its fields, if any
-        // ???
-        // Profit!
-    }
-
-    fun onFinishPollSetup() {
-        val setupSurvey = viewState.value.pollSetup
+    fun onFinishPollSetup(pollSetup: PollConfig) {
+        val setupSurvey = pollSetup
         // Rule: if the poll's subject was not provided, use a default.
         val subject = setupSurvey.subject.ifEmpty {
             // FIXME: manage to get the context, or the translated string any other way
@@ -120,7 +79,6 @@ class MainViewModel : ViewModel() {
         _viewState.update {
             it.copy(
                 feedback = null,
-                pollSetup = PollConfig(),
                 pollResult = null,
                 currentPollConfig = null
             )

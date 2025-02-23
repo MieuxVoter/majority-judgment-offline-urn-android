@@ -25,6 +25,7 @@ class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModel()
     private val settingsViewModel: SettingsViewModel by viewModel()
+    private val pollSetupViewModel: PollSetupViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +34,7 @@ class MainActivity : ComponentActivity() {
 
             val viewState by viewModel.viewState.collectAsState()
             val settingsState by settingsViewModel.settingsViewState.collectAsState()
+            val pollSetupState by pollSetupViewModel.pollSetupViewState.collectAsState()
 
             val navController = rememberNavController()
 
@@ -56,7 +58,7 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier,
                                 navController = navController,
                                 onSetupBlankPoll = {
-                                    viewModel.onStartPollSetup(PollConfig())
+                                    pollSetupViewModel.startPollSetup(PollConfig())
                                     navController.navigate(Screens.PollSetup.name)
                                 },
                             )
@@ -66,16 +68,15 @@ class MainActivity : ComponentActivity() {
                         PollSetupScreen(
                             modifier = Modifier,
                             navController = navController,
-                            pollSetup = viewState.pollSetup,
-                            onAddSubject = { viewModel.onAddSubject(it) },
-                            onAddProposal = { viewModel.onAddProposal(it) },
-                            onRemoveProposal = { viewModel.onRemoveProposal(it) },
+                            pollSetupState = pollSetupState,
+                            onAddSubject = { pollSetupViewModel.onAddSubject(it) },
+                            onAddProposal = { pollSetupViewModel.onAddProposal(it) },
+                            onRemoveProposal = { pollSetupViewModel.onRemoveProposal(it) },
                             setupFinished = {
-                                viewModel.onFinishPollSetup()
+                                viewModel.onFinishPollSetup(pollSetupState.pollSetup)
                                 navController.navigate(Screens.PollVote.name)
                             },
-                            feedback = viewState.feedback,
-                            onDismissFeedback = { viewModel.onDismissFeedback() },
+                            onDismissFeedback = { pollSetupViewModel.onDismissFeedback() },
                         )
                     }
                     composable(Screens.PollVote.name) {

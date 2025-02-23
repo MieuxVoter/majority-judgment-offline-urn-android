@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.illiouchine.jm.PollSetupViewModel
 import com.illiouchine.jm.R
 import com.illiouchine.jm.Screens
 import com.illiouchine.jm.model.PollConfig
@@ -43,12 +44,11 @@ import com.illiouchine.jm.ui.theme.JmTheme
 fun PollSetupScreen(
     modifier: Modifier = Modifier,
     navController: NavController = rememberNavController(),
-    pollSetup: PollConfig = PollConfig(),
+    pollSetupState: PollSetupViewModel.PollSetupViewState = PollSetupViewModel.PollSetupViewState(),
     onAddSubject: (String) -> Unit = {},
     onAddProposal: (String) -> Unit = {},
     onRemoveProposal: (String) -> Unit = {},
     setupFinished: () -> Unit = {},
-    feedback: String? = "",
     onDismissFeedback: () -> Unit = {},
 ) {
 
@@ -57,7 +57,7 @@ fun PollSetupScreen(
         snackbarHost = {
             MjuSnackbar(
                 modifier = Modifier,
-                text = feedback,
+                text = pollSetupState.feedback,
                 onDismiss = {
                     onDismissFeedback()
                 },
@@ -74,10 +74,10 @@ fun PollSetupScreen(
 
         val context = LocalContext.current
         var proposal: String by remember { mutableStateOf("") }
-        var subject: String by remember { mutableStateOf(pollSetup.subject) }
+        var subject: String by remember { mutableStateOf(pollSetupState.pollSetup.subject) }
 
         fun generateProposalName(): String {
-            return "${context.getString(R.string.proposal)} ${(65 + pollSetup.proposals.size).toChar()}"
+            return "${context.getString(R.string.proposal)} ${(65 + pollSetupState.pollSetup.proposals.size).toChar()}"
         }
 
         // TODO: Perhaps use the 'fun' def syntax instead here ?
@@ -88,7 +88,7 @@ fun PollSetupScreen(
                 proposal = generateProposalName()
             }
             // Rule: proposals must have unique names
-            if (pollSetup.proposals.contains(proposal)) {
+            if (pollSetupState.pollSetup.proposals.contains(proposal)) {
                 Toast.makeText(
                     context,
                     context.getString(R.string.toast_proposal_name_already_exists),
@@ -139,7 +139,7 @@ fun PollSetupScreen(
                 }
             }
 
-            pollSetup.proposals.forEachIndexed { propIndex, propName ->
+            pollSetupState.pollSetup.proposals.forEachIndexed { propIndex, propName ->
 
                 if (propIndex > 0) {
                     HorizontalDivider(
@@ -174,7 +174,7 @@ fun PollSetupScreen(
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(0.62f)
                     .padding(16.dp),
-                enabled = pollSetup.proposals.size > 1,
+                enabled = pollSetupState.pollSetup.proposals.size > 1,
                 onClick = { setupFinished() },
             ) {
                 Text(stringResource(R.string.button_let_s_go))
@@ -190,7 +190,6 @@ fun PreviewSetupSurveyScreen(modifier: Modifier = Modifier) {
     JmTheme {
         PollSetupScreen(
             modifier = Modifier,
-            pollSetup = PollConfig(),
         )
     }
 }
@@ -201,12 +200,14 @@ fun PreviewSetupSurveyScreenWithHugeNames(modifier: Modifier = Modifier) {
     JmTheme {
         PollSetupScreen(
             modifier = Modifier,
-            pollSetup = PollConfig(
-                subject = "Repas de ce soir, le Banquet Républicain de l'avènement du Jugement Majoritaire",
-                proposals = listOf(
-                    "Des nouilles aux champignons forestiers sur leur lit de purée de carottes urticantes",
-                    "Du riz",
-                    "Du riche",
+            pollSetupState = PollSetupViewModel.PollSetupViewState(
+                pollSetup = PollConfig(
+                    subject = "Repas de ce soir, le Banquet Républicain de l'avènement du Jugement Majoritaire",
+                    proposals = listOf(
+                        "Des nouilles aux champignons forestiers sur leur lit de purée de carottes urticantes",
+                        "Du riz",
+                        "Du riche",
+                    ),
                 ),
             ),
         )

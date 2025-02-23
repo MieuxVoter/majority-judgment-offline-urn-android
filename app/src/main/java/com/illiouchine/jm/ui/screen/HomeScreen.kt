@@ -27,13 +27,13 @@ import com.illiouchine.jm.ui.theme.JmTheme
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier, // TODO: why is this applied on the Box and not Scaffold ?  (purpose?)
+    modifier: Modifier = Modifier,
     navController: NavController = rememberNavController(),
     onSetupBlankPoll: () -> Unit = {},
 //    onSetupClonePoll: (poll: Poll) -> Unit = {}, // probably
 ) {
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         bottomBar = {
             MjuBottomBar(
                 selected = navController.currentDestination?.route ?: Screens.Home.name,
@@ -51,7 +51,7 @@ fun HomeScreen(
     ) { innerPadding ->
 
         Column(
-            modifier = modifier.padding(innerPadding),
+            modifier = Modifier.padding(innerPadding),
         ) {
             Text(
                 modifier = Modifier
