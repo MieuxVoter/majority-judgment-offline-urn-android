@@ -30,12 +30,6 @@ class MainViewModel(
         loadShowOnboarding()
     }
 
-    fun onDismissFeedback() {
-        _viewState.update {
-            it.copy(feedback = null)
-        }
-    }
-
     private fun loadShowOnboarding() {
         val showOnboarding = sharedPreferences.getShowOnboarding()
         _viewState.update {
@@ -93,7 +87,17 @@ class MainViewModel(
         }
     }
 
-    fun onFinishSetupSurvey() {
+    fun onStartPollSetup(poll: Poll) {
+        // FIXME: for now the navigation is done in the lambda in the Activity -- is it correct ?
+        // Navigate to the PollSetup screen
+
+        // TODO
+        // Give it the poll so it can prefill its fields, if any
+        // ???
+        // Profit!
+    }
+
+    fun onFinishPollSetup() {
         val setupSurvey = viewState.value.pollSetup
         // Rule: if the poll's subject was not provided, use a default.
         val subject = setupSurvey.subject.ifEmpty {
@@ -128,14 +132,11 @@ class MainViewModel(
         }
     }
 
-//    fun onJudgmentsConfirmed() {
-//        _viewState.update {
-//            it.copy(judgmentsWereConfirmed = true)
-//        }
-//    }
-
-//    fun onJudgmentsCancelled() {
-//    }
+    fun onDismissFeedback() {
+        _viewState.update {
+            it.copy(feedback = null)
+        }
+    }
 
     fun onResetState() {
         _viewState.update {
