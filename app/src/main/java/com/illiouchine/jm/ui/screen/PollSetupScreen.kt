@@ -169,6 +169,7 @@ fun PollSetupScreen(
                 }
             }
 
+            // Rule: Poll should have more than 1 proposals.
             Button(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)

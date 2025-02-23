@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModel()
     private val settingsViewModel: SettingsViewModel by viewModel()
     private val pollSetupViewModel: PollSetupViewModel by viewModel()
+    private val pollVotingViewModel: PollVotingViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +36,7 @@ class MainActivity : ComponentActivity() {
             val viewState by viewModel.viewState.collectAsState()
             val settingsState by settingsViewModel.settingsViewState.collectAsState()
             val pollSetupState by pollSetupViewModel.pollSetupViewState.collectAsState()
+            val pollVotingViewState by pollVotingViewModel.pollVotingViewState.collectAsState()
 
             val navController = rememberNavController()
 
@@ -73,7 +75,7 @@ class MainActivity : ComponentActivity() {
                             onAddProposal = { pollSetupViewModel.onAddProposal(it) },
                             onRemoveProposal = { pollSetupViewModel.onRemoveProposal(it) },
                             setupFinished = {
-                                viewModel.onFinishPollSetup(pollSetupState.pollSetup)
+                                pollVotingViewModel.initNewVotingSession(pollSetupState.pollSetup)
                                 navController.navigate(Screens.PollVote.name)
                             },
                             onDismissFeedback = { pollSetupViewModel.onDismissFeedback() },
@@ -82,7 +84,12 @@ class MainActivity : ComponentActivity() {
                     composable(Screens.PollVote.name) {
                         PollVotingScreen(
                             modifier = Modifier,
-                            pollConfig = viewState.currentPollConfig!!,
+                            pollVotingState = pollVotingViewState,
+                            onStartVoting = { pollVotingViewModel.initParticipantVotingSession() },
+                            onProposalSelected = { pollVotingViewModel.onProposalSelected(it) },
+                            onBallotConfirmed = { pollVotingViewModel.onBallotConfirmed(it) },
+                            onBallotCanceled = { pollVotingViewModel.onBallotCanceled() },
+                            onCancelLastJudgment = { pollVotingViewModel.onCancelLastJudgment() },
                             onFinish = {
                                 viewModel.onFinishVoting(it)
                                 navController.navigate(Screens.PollResult.name)

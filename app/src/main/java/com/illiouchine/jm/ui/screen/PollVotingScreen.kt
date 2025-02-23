@@ -34,6 +34,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
+import com.illiouchine.jm.PollVotingViewModel
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
@@ -49,15 +51,16 @@ import kotlinx.coroutines.launch
 @Composable
 fun PollVotingScreen(
     modifier: Modifier = Modifier,
-    pollConfig: PollConfig,
+    pollVotingState: PollVotingViewModel.PollVotingViewState = PollVotingViewModel.PollVotingViewState(),
+    onStartVoting: () -> Unit = {},
+    onProposalSelected: (Judgment) -> Unit = {},
+    onBallotConfirmed: (Ballot) -> Unit = {},
+    onBallotCanceled: () -> Unit = {},
+    onCancelLastJudgment: () -> Unit = {},
     onFinish: (Poll) -> Unit = {},
     feedback: String? = "",
     onDismissFeedback: () -> Unit = {},
 ) {
-
-    var currentPoll: Poll by remember { mutableStateOf(Poll(pollConfig = pollConfig, ballots = emptyList())) }
-    var currentBallot: Ballot? by remember { mutableStateOf(null) }
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = {
@@ -74,49 +77,64 @@ fun PollVotingScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
                 .verticalScroll(state = ScrollState(initial = 0))
-                .padding(8.dp),
+                .padding(16.dp),
         ) {
 
             PollSubject(
-                pollConfig = pollConfig,
+                subject = pollVotingState.pollConfig.subject,
             )
 
-            if (null == currentBallot) {
+            if (null == pollVotingState.currentBallot) {
 
-                if (currentPoll.ballots.isNotEmpty()) {
+                if (pollVotingState.ballots.isNotEmpty()) {
                     Text("Votre participation a bien été prise en compte.\nVous pouvez maintenant passer cet appareil au prochain participant.")
                 }
 
-                // State: READY, waiting for new participant.
-                Button(
-                    onClick = { currentBallot = Ballot() },
-                    content = {
-                        Text(stringResource(R.string.button_next_participant))
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                ) {
+                    Button(
+                        onClick = {
+                            val poll = Poll(
+                                pollConfig = pollVotingState.pollConfig,
+                                ballots = pollVotingState.ballots
+                            )
+                            onFinish(poll)
+                        }
+                    ) { Text(stringResource(R.string.button_end_the_poll)) }
+                    // State: READY, waiting for new participant.
+                    if (pollVotingState.ballots.isEmpty()){
+                        Button(
+                            onClick = { onStartVoting() },
+                            content = {
+                                Text("Be the first to vote")
+                            }
+                        )
+                    } else {
+                        Button(
+                            onClick = { onStartVoting() },
+                            content = {
+                                Text(stringResource(R.string.button_next_participant))
+                            }
+                        )
                     }
-                )
-
-                Button(
-                    onClick = {
-                        onFinish(currentPoll)
-                    }
-                ) { Text(stringResource(R.string.button_end_the_poll)) }
-
+                }
             } else {
 
-                val currentProposalIndex = currentBallot!!.judgments.size
-                if (currentProposalIndex < pollConfig.proposals.size) {
+                val currentProposalIndex = pollVotingState.currentBallot.judgments.size
+                if (currentProposalIndex < pollVotingState.pollConfig.proposals.size) {
 
                     // State: VOTING, filling the ballot with judgments.
                     PropsSelection(
-                        pollConfig = pollConfig,
+                        pollConfig = pollVotingState.pollConfig,
                         currentProposalIndex = currentProposalIndex,
-                        // TODO: hoist this in the view model
                         onResultSelected = { result ->
                             val judgment = Judgment(
-                                proposal = pollConfig.proposals[currentProposalIndex],
+                                proposal = pollVotingState.pollConfig.proposals[currentProposalIndex],
                                 grade = result,
                             )
-                            currentBallot = currentBallot!!.withJudgment(judgment)
+                            onProposalSelected(judgment)
                         }
                     )
 
@@ -124,21 +142,20 @@ fun PollVotingScreen(
 
                     // State: SUMMARY, awaiting confirmation, back or redo.
                     VoteSummaryScreen(
-                        poll = currentPoll,
-                        ballot = currentBallot!!,
+                        pollConfig = pollVotingState.pollConfig,
+                        ballot = pollVotingState.currentBallot,
                         onConfirm = {
-                            currentPoll = currentPoll.withBallot(currentBallot!!)
-                            currentBallot = null
+                            onBallotConfirmed(pollVotingState.currentBallot)
                         },
                         onCancel = {
-                            currentBallot = null
+                            onBallotCanceled()
                         },
                     )
                 }
             }
 
 
-            val amountOfBallots = currentPoll.ballots.size
+            val amountOfBallots = pollVotingState.ballots.size
             Spacer(
                 modifier = Modifier.padding(12.dp),
             )
@@ -162,9 +179,9 @@ fun PollVotingScreen(
     BackHandler(
         enabled = true,
     ) {
-        if (currentBallot != null) {
-            if (currentBallot!!.judgments.isNotEmpty()) {
-                currentBallot = currentBallot!!.withoutLastJudgment()
+        if (pollVotingState.currentBallot != null) {
+            if (pollVotingState.currentBallot.judgments.isNotEmpty()) {
+                onCancelLastJudgment()
             }
         }
     }
@@ -194,6 +211,7 @@ private fun PropsSelection(
         Text(
             text = pollConfig.proposals[currentProposalIndex],
             textAlign = TextAlign.Center,
+            lineHeight = 32.sp,
             fontSize = 8.em,
         )
     }
@@ -258,11 +276,66 @@ private fun PropsSelection(
 fun PreviewVotingScreen(modifier: Modifier = Modifier) {
     JmTheme {
         PollVotingScreen(
-            pollConfig = PollConfig(
-                subject = "Best Prezidan ?",
-                proposals = listOf("That candidate with a long name-san", "Mario", "JanBob"),
-                grading = Quality7Grading(),
-            )
+            modifier = Modifier,
+            pollVotingState = PollVotingViewModel.PollVotingViewState(
+                pollConfig = PollConfig(
+                    subject = "Best Prezidan ?",
+                    proposals = listOf("That candidate with a long name-san", "Mario", "JanBob"),
+                    grading = Quality7Grading(),
+                ),
+                ballots = emptyList(),
+                currentBallot = null,
+            ),
+        )
+    }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun PreviewVotingScreenWithBallots(modifier: Modifier = Modifier) {
+    JmTheme {
+        PollVotingScreen(
+            modifier = Modifier,
+            pollVotingState = PollVotingViewModel.PollVotingViewState(
+                pollConfig = PollConfig(
+                    subject = "Best Prezidan ?",
+                    proposals = listOf("That candidate with a long name-san", "Mario", "JanBob"),
+                    grading = Quality7Grading(),
+                ),
+                ballots = listOf(
+                    Ballot(judgments = listOf(Judgment("Mario", grade = 3)))
+                ),
+                currentBallot = null,
+            ),
+        )
+    }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun PreviewVotingScreenWithCurrentBallots(modifier: Modifier = Modifier) {
+    JmTheme {
+        PollVotingScreen(
+            modifier = Modifier,
+            pollVotingState = PollVotingViewModel.PollVotingViewState(
+                pollConfig = PollConfig(
+                    subject = "Best Prezidan ?",
+                    proposals = listOf("That candidate with a long name-san", "Mario", "JanBob"),
+                    grading = Quality7Grading(),
+                ),
+                ballots = listOf(
+                    Ballot(
+                        judgments = listOf(
+                            Judgment("That candidate with a long name-san", grade = 2),
+                            Judgment("Mario", grade = 6),
+                            Judgment("JanBob", grade = 3),
+                        )
+                    )
+                ),
+                currentBallot = Ballot(
+                    judgments = emptyList(),
+                ),
+            ),
         )
     }
 }

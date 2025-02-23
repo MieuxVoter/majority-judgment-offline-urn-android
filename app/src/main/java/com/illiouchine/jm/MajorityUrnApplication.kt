@@ -22,5 +22,6 @@ val module = module {
     viewModel { MainViewModel() }
     viewModel { SettingsViewModel(sharedPreferences = get()) }
     viewModel { PollSetupViewModel() }
+    viewModel { PollVotingViewModel() }
     singleOf(::SharedPrefsHelper)
 }
