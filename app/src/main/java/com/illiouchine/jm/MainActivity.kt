@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
                                 onClick = {
                                     viewModel.onStartPollSetup(Poll())
                                     navController.navigate(Screens.PollSetup.name)
-                                }
+                                },
                             ) {
                                 // FIXME: icon of an urn and a plus sign ?
                                 Text("Go")
@@ -115,7 +115,7 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             settingsScreenState = SettingsScreenState(),
                             onShowOnboardingChange = {},
-                            onDismissFeedback = {}
+                            onDismissFeedback = {},
                         )
                     }
                 }

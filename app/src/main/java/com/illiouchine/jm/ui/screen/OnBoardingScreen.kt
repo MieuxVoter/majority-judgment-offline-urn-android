@@ -45,43 +45,43 @@ val onBoardingPages = listOf(
 @Composable
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
-    onFinish: () -> Unit = {}
+    onFinish: () -> Unit = {},
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
     ) { innerPadding ->
-        var currentOnBoardingIndex by remember { mutableIntStateOf(0) }
+        var currentPageIndex by remember { mutableIntStateOf(0) }
         Box(
             modifier = modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .padding(36.dp)
+                .padding(36.dp),
         ) {
             Text(
                 modifier = Modifier.align(Alignment.TopStart),
-                text = stringResource(R.string.majority_judgment)
+                text = stringResource(R.string.majority_judgment),
             )
 
             Text(
                 modifier = Modifier.align(Alignment.Center),
-                text = onBoardingPages[currentOnBoardingIndex].text
+                text = onBoardingPages[currentPageIndex].text,
             )
 
             ViewPager(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 pageSize = onBoardingPages.size,
-                currentPage = currentOnBoardingIndex
+                currentPage = currentPageIndex,
             )
 
-            if (currentOnBoardingIndex == onBoardingPages.size - 1) {
+            if (currentPageIndex == onBoardingPages.size - 1) {
                 Button(
                     modifier = Modifier.align(Alignment.BottomEnd),
-                    onClick = { onFinish() }
+                    onClick = { onFinish() },
                 ) { Text(stringResource(R.string.button_finish)) }
             } else {
                 Button(
                     modifier = Modifier.align(Alignment.BottomEnd),
-                    onClick = { currentOnBoardingIndex++ }
+                    onClick = { currentPageIndex++ },
                 ) { Text(stringResource(R.string.button_next)) }
             }
         }
@@ -125,7 +125,5 @@ fun PreviewViewPager() {
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewOnBoarding(modifier: Modifier = Modifier) {
-    JmTheme {
-        OnBoardingScreen()
-    }
+    JmTheme { OnBoardingScreen() }
 }
