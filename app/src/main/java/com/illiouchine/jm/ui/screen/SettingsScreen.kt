@@ -51,7 +51,7 @@ fun SettingsScreen(
             )
         },
     ) { innerPadding ->
-        Column(modifier = Modifier
+        Column(modifier = modifier
             .padding(innerPadding)
             .padding(16.dp)
         ) {

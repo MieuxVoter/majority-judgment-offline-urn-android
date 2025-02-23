@@ -1,14 +1,11 @@
 package com.illiouchine.jm.ui.screen
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -20,9 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
-import com.illiouchine.jm.model.Quality7Grading
-import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.model.Quality7Grading
 import com.illiouchine.jm.ui.theme.JmTheme
 
 
