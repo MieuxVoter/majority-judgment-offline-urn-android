@@ -1,5 +1,6 @@
 package com.illiouchine.jm.ui.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
@@ -169,18 +170,21 @@ fun PollVotingScreen(
             }
         }
     }
+
+    // Rule: going BACK cancels the last cast judgment, if any.
+    // Rule: going BACK from the summary cancels the last cast judgment too.
+    BackHandler(
+        enabled = (currentBallot != null && currentBallot!!.judgments.size > 0),
+    ) {
+        if (currentBallot != null) {
+            currentBallot = currentBallot!!.withoutLastJudgment()
+        }
+    }
+
 }
 
 
-// Rule: going BACK cancels the last cast judgment, if any. FIXME
-//    BackHandler(
-//        enabled = (currentProposalIndex > 0),
-//    ) {
-//        if (currentProposalIndex > 0) {
-//            currentProposalIndex--
-//            judgments = judgments.subList(0, judgments.size - 1)
-//        }
-//    }
+
 
 
 @Composable

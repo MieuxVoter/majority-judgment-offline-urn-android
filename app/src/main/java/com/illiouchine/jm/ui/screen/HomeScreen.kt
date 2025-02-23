@@ -54,7 +54,7 @@ fun HomeScreen(
     ) { innerPadding ->
 
         Column(
-            modifier = Modifier.padding(innerPadding),
+            modifier = modifier.padding(innerPadding),
         ) {
             Text(
                 modifier = Modifier
@@ -74,7 +74,6 @@ fun HomeScreen(
                 text = "Try making a new poll, it's free !",
                 fontStyle = FontStyle.Italic,
             )
-
         }
     }
 }
