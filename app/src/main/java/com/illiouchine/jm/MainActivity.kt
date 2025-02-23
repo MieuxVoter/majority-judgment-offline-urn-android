@@ -51,6 +51,7 @@ class MainActivity : ComponentActivity() {
                         } else {
                             HomeScreen(
                                 modifier = Modifier,
+                                navController = navController,
                                 onSetupBlankPoll = {
                                     viewModel.onStartPollSetup(PollConfig())
                                     navController.navigate(Screens.PollSetup.name)
