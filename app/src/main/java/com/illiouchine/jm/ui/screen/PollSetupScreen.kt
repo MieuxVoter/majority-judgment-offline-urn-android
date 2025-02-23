@@ -33,7 +33,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.illiouchine.jm.R
 import com.illiouchine.jm.Screens
-import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.MUBottomBar
 import com.illiouchine.jm.ui.composable.MUSnackbar
 import com.illiouchine.jm.ui.theme.JmTheme
@@ -43,7 +43,7 @@ import com.illiouchine.jm.ui.theme.JmTheme
 fun PollSetupScreen(
     modifier: Modifier = Modifier,
     navController: NavController = rememberNavController(),
-    pollSetup: Poll = Poll(),
+    pollSetup: PollConfig = PollConfig(),
     onAddSubject: (String) -> Unit = {},
     onAddProposal: (String) -> Unit = {},
     onRemoveProposal: (String) -> Unit = {},
@@ -190,7 +190,7 @@ fun PreviewSetupSurveyScreen(modifier: Modifier = Modifier) {
     JmTheme {
         PollSetupScreen(
             modifier = Modifier,
-            pollSetup = Poll(),
+            pollSetup = PollConfig(),
         )
     }
 }
@@ -201,7 +201,7 @@ fun PreviewSetupSurveyScreenWithHugeNames(modifier: Modifier = Modifier) {
     JmTheme {
         PollSetupScreen(
             modifier = Modifier,
-            pollSetup = Poll(
+            pollSetup = PollConfig(
                 subject = "Repas de ce soir, le Banquet Républicain de l'avènement du Jugement Majoritaire",
                 proposals = listOf(
                     "Des nouilles aux champignons forestiers sur leur lit de purée de carottes urticantes",

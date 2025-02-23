@@ -1,10 +1,10 @@
 package com.illiouchine.jm.ui.screen
 
 import androidx.lifecycle.ViewModel
-import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.model.PollConfig
 
 class PollSetupViewModel : ViewModel() {
     data class PollSetupViewState(
-        val poll: Poll,
+        val pollConfig: PollConfig,
     )
 }

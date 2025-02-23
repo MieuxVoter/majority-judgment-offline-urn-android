@@ -15,17 +15,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Quality7Grading
+import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.model.Poll
-import com.illiouchine.jm.model.PollResult
 import com.illiouchine.jm.ui.theme.JmTheme
 
 
 @Composable
 fun VoteSummaryScreen(
     modifier: Modifier = Modifier,
-    pollResult: PollResult,
+    poll: Poll,
+    ballot: Ballot,
     onCancel: () -> Unit = {},
     onConfirm: () -> Unit = {},
 ) {
@@ -48,13 +50,19 @@ fun VoteSummaryScreen(
 
         Spacer(Modifier.height(32.dp))
 
-        pollResult.poll.proposals.forEachIndexed { proposalIndex, proposal ->
+        poll.pollConfig.proposals.forEachIndexed { proposalIndex, proposal ->
             // OMG ; this works, but at what cost ?  …  (my sanity)
-            val grade = pollResult.judgments[pollResult.judgments.size - pollResult.poll.proposals.size + proposalIndex].grade
+//            val grade =
+//                poll.judgments[poll.judgments.size - poll.pollConfig.proposals.size + proposalIndex].grade
+            val grade = (
+                    ballot.judgments[
+                            proposalIndex
+                    ].grade
+                    )
             Row {
                 Text(proposal)
                 Text(" is ")
-                Text(stringResource(pollResult.poll.grading.getGradeName(grade)))
+                Text(stringResource(poll.pollConfig.grading.getGradeName(grade)))
             }
             Spacer(Modifier.height(8.dp))
         }
@@ -98,27 +106,46 @@ fun VoteSummaryScreen(
 fun PreviewVoteSummaryScreen(modifier: Modifier = Modifier) {
     // FIXME: figure out how to reuse this across previews
     // I looked into data providers, but WOW it's complicated >.<
-    val pollResult = PollResult(
-        poll = Poll(
+    val poll = Poll(
+        pollConfig = PollConfig(
             subject = "Prézidaaanh ?",
             proposals = listOf("Tonio", "Bobby", "Mario"),
             grading = Quality7Grading(),
         ),
-        judgments = listOf(
-            Judgment("Tonio", 0),
-            Judgment("Bobby", 5),
-            Judgment("Mario", 6),
-            Judgment("Tonio", 4),
-            Judgment("Bobby", 1),
-            Judgment("Mario", 6),
-            Judgment("Tonio", 5),
-            Judgment("Bobby", 5),
-            Judgment("Mario", 6),
+        ballots = listOf(
+            Ballot(
+                judgments = listOf(
+                    Judgment("Tonio", 0),
+                    Judgment("Bobby", 5),
+                    Judgment("Mario", 6),
+                )
+            ),
+            Ballot(
+                judgments = listOf(
+                    Judgment("Tonio", 4),
+                    Judgment("Bobby", 1),
+                    Judgment("Mario", 6),
+                )
+            ),
+            Ballot(
+                judgments = listOf(
+                    Judgment("Tonio", 5),
+                    Judgment("Bobby", 5),
+                    Judgment("Mario", 6),
+                )
+            ),
         ),
     )
     JmTheme {
         VoteSummaryScreen(
-            pollResult = pollResult,
+            poll = poll,
+            ballot = Ballot(
+                judgments = listOf(
+                    Judgment("Tonio", 6),
+                    Judgment("Bobby", 1),
+                    Judgment("Mario", 5),
+                )
+            ),
         )
     }
 }

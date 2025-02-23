@@ -3,8 +3,8 @@ package com.illiouchine.jm
 import android.icu.util.Calendar
 import androidx.lifecycle.ViewModel
 import com.illiouchine.jm.model.Quality7Grading
+import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.model.Poll
-import com.illiouchine.jm.model.PollResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -17,9 +17,9 @@ class MainViewModel(
     data class MainViewState(
         val feedback: String? = null,
         val showOnboarding: Boolean = true,
-        val pollSetup: Poll = Poll(),
-        val currentPoll: Poll? = null,
-        val pollResult: PollResult? = null,
+        val pollSetup: PollConfig = PollConfig(),
+        val currentPollConfig: PollConfig? = null,
+        val pollResult: Poll? = null,
         val judgmentsWereConfirmed: Boolean = false,
     )
 
@@ -87,7 +87,7 @@ class MainViewModel(
         }
     }
 
-    fun onStartPollSetup(poll: Poll) {
+    fun onStartPollSetup(pollConfig: PollConfig) {
         // FIXME: for now the navigation is done in the lambda in the Activity -- is it correct ?
         // Navigate to the PollSetup screen
 
@@ -112,21 +112,21 @@ class MainViewModel(
                 it.copy(feedback = "A poll needs at least two proposals.")
             }
         } else {
-            val poll = Poll(
+            val pollConfig = PollConfig(
                 subject = subject,
                 proposals = setupSurvey.proposals,
                 grading = Quality7Grading(),
             )
             _viewState.update {
                 it.copy(
-                    currentPoll = poll,
+                    currentPollConfig = pollConfig,
                     feedback = "New Survey Created, start voting"
                 )
             }
         }
     }
 
-    fun onFinishVoting(result: PollResult) {
+    fun onFinishVoting(result: Poll) {
         _viewState.update {
             it.copy(pollResult = result)
         }
@@ -142,9 +142,9 @@ class MainViewModel(
         _viewState.update {
             it.copy(
                 feedback = null,
-                pollSetup = Poll(),
+                pollSetup = PollConfig(),
                 pollResult = null,
-                currentPoll = null
+                currentPollConfig = null
             )
         }
     }

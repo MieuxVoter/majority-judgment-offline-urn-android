@@ -11,14 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.screen.HomeScreen
 import com.illiouchine.jm.ui.screen.OnBoardingScreen
 import com.illiouchine.jm.ui.screen.PollSetupScreen
 import com.illiouchine.jm.ui.screen.ResultScreen
 import com.illiouchine.jm.ui.screen.SettingsScreen
 import com.illiouchine.jm.ui.screen.SettingsScreenState
-import com.illiouchine.jm.ui.screen.VotingScreen
+import com.illiouchine.jm.ui.screen.PollVotingScreen
 import com.illiouchine.jm.ui.theme.JmTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
                             HomeScreen(
                                 modifier = Modifier,
                                 onSetupBlankPoll = {
-                                    viewModel.onStartPollSetup(Poll())
+                                    viewModel.onStartPollSetup(PollConfig())
                                     navController.navigate(Screens.PollSetup.name)
                                 },
                             )
@@ -75,9 +75,9 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(Screens.PollVote.name) {
-                        VotingScreen(
+                        PollVotingScreen(
                             modifier = Modifier,
-                            poll = viewState.currentPoll!!,
+                            pollConfig = viewState.currentPollConfig!!,
                             onFinish = {
                                 viewModel.onFinishVoting(it)
                                 navController.navigate(Screens.PollResult.name)
@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity() {
                         if (viewState.pollResult != null) {
                             ResultScreen(
                                 modifier = Modifier,
-                                pollResult = viewState.pollResult!!,
+                                poll = viewState.pollResult!!,
                                 onFinish = {
                                     viewModel.onResetState()
                                     navController.navigate(Screens.Home.name)

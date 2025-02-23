@@ -1,6 +1,5 @@
 package com.illiouchine.jm.ui.screen
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
@@ -20,7 +19,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -36,9 +34,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import com.illiouchine.jm.R
+import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
-import com.illiouchine.jm.model.PollResult
+import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.model.Quality7Grading
 import com.illiouchine.jm.ui.composable.MUSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
@@ -47,17 +46,27 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun VotingScreen(
+fun PollVotingScreen(
     modifier: Modifier = Modifier,
-    poll: Poll,
-    onFinish: (PollResult) -> Unit = {},
+    pollConfig: PollConfig,
+    onFinish: (Poll) -> Unit = {},
     feedback: String? = "",
     onDismissFeedback: () -> Unit = {},
 ) {
 
-    var currentProposalIndex: Int by remember { mutableIntStateOf(0) }
-    var judgments: List<Judgment> by remember { mutableStateOf(emptyList()) }
-    var confirmed: Boolean by remember { mutableStateOf(false) }
+    var currentPoll: Poll? by remember { mutableStateOf(null) }
+
+    // WIP, obviously
+    if (currentPoll == null) {
+        currentPoll = Poll(
+            pollConfig = pollConfig,
+            ballots = mutableListOf(),
+        )
+    }
+
+    var currentBallot: Ballot? by remember { mutableStateOf(null) }
+//    var currentProposalIndex: Int by remember { mutableIntStateOf(0) }
+    var ballotConfirmed: Boolean by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -65,19 +74,9 @@ fun VotingScreen(
             MUSnackbar(
                 modifier = Modifier,
                 text = feedback,
-                onDismiss = {
-                    onDismissFeedback()
-                },
+                onDismiss = { onDismissFeedback() },
             )
         },
-        // TODO: figure out the weird gap "bug" that this generates
-//                    bottomBar = {
-//                        MUBottomBar(
-//                            modifier = Modifier,
-//                            selected = navController.currentDestination?.route ?: "home",
-//                            onItemSelected = { destination -> navController.navigate(destination.id) }
-//                        )
-//                    },
     ) { innerPadding ->
 
         Column(
@@ -89,64 +88,69 @@ fun VotingScreen(
         ) {
 
             PollSubject(
-                poll = poll,
+                pollConfig = pollConfig,
             )
 
-            if (currentProposalIndex >= poll.proposals.size) {
+            if (null == currentBallot) {
 
-                val pollResult = PollResult(
-                    poll = poll,
-                    judgments = judgments,
+                if (currentPoll!!.ballots.isNotEmpty()) {
+                    Text("Votre participation a bien été prise en compte.\nVous pouvez maintenant passer cet appareil au prochain participant.")
+                }
+
+                // State: READY, waiting for new participant.
+                Button(
+                    onClick = { currentBallot = Ballot() },
+                    content = {
+                        Text("À MOI DE VOTER")
+                    }
                 )
 
-                if (!confirmed) {
+                Button(
+                    onClick = {
+                        onFinish(currentPoll!!)
+                    }
+                ) { Text(stringResource(R.string.button_end_the_poll)) }
 
-                    VoteSummaryScreen(
-                        pollResult = pollResult,
-                        onConfirm = {
-                            confirmed = true
-                        },
-                        onCancel = {
-                            judgments = judgments.subList(0, judgments.size - poll.proposals.size)
-                            currentProposalIndex = 0
-                        },
+            } else {
+
+                val currentProposalIndex = currentBallot!!.judgments.size
+                if (currentProposalIndex < pollConfig.proposals.size) {
+
+                    // State: VOTING, filling the ballot with judgments.
+                    PropsSelection(
+                        pollConfig = pollConfig,
+                        currentProposalIndex = currentProposalIndex,
+                        // TODO: hoist this in the view model
+                        onResultSelected = { result ->
+                            val judgment = Judgment(
+                                proposal = pollConfig.proposals[currentProposalIndex],
+                                grade = result,
+                            )
+                            currentBallot = currentBallot!!.withJudgment(judgment)
+//                            currentProposalIndex++
+                        }
                     )
 
                 } else {
 
-                    Text("A Voté !")
-                    Text("Votre participation a bien été prise en compte. Vous pouvez maintenant passer cet appareil au prochain participant")
-                    Button(
-                        onClick = {
-                            currentProposalIndex = 0
-                            confirmed = false
-                        }
-                    ) { Text(stringResource(R.string.button_next_participant)) }
-                    Button(
-                        onClick = {
-                            onFinish(pollResult)
-                        }
-                    ) { Text(stringResource(R.string.button_end_the_poll)) }
-
+                    // State: SUMMARY, awaiting confirmation, back or redo.
+                    VoteSummaryScreen(
+                        poll = currentPoll!!,
+                        ballot = currentBallot!!,
+                        onConfirm = {
+//                                ballotConfirmed = true
+                            currentPoll = currentPoll!!.withBallot(currentBallot!!)
+                            currentBallot = null
+                        },
+                        onCancel = {
+                            currentBallot = null
+                        },
+                    )
                 }
-            } else {
-                PropsSelection(
-                    poll = poll,
-                    currentProposalIndex = currentProposalIndex,
-                    // TODO: hoist this in the view model
-                    onResultSelected = { result ->
-                        val judgment = Judgment(
-                            proposal = poll.proposals.get(currentProposalIndex),
-                            grade = result,
-                        )
-                        judgments = judgments + judgment
-                        currentProposalIndex++
-                    }
-                )
             }
 
 
-            val amountOfBallots = judgments.size / poll.proposals.size
+            val amountOfBallots = currentPoll!!.ballots.size
             Spacer(
                 modifier = Modifier.padding(12.dp),
             )
@@ -165,23 +169,23 @@ fun VotingScreen(
             }
         }
     }
-
-
-
-    // Rule: going BACK cancels the last cast judgment, if any.
-    BackHandler(
-        enabled = (currentProposalIndex > 0),
-    ) {
-        if (currentProposalIndex > 0) {
-            currentProposalIndex--
-            judgments = judgments.subList(0, judgments.size - 1)
-        }
-    }
 }
+
+
+// Rule: going BACK cancels the last cast judgment, if any. FIXME
+//    BackHandler(
+//        enabled = (currentProposalIndex > 0),
+//    ) {
+//        if (currentProposalIndex > 0) {
+//            currentProposalIndex--
+//            judgments = judgments.subList(0, judgments.size - 1)
+//        }
+//    }
+
 
 @Composable
 private fun PropsSelection(
-    poll: Poll,
+    pollConfig: PollConfig,
     currentProposalIndex: Int,
     onResultSelected: (Int) -> Unit = {},
 ) {
@@ -200,7 +204,7 @@ private fun PropsSelection(
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = poll.proposals[currentProposalIndex],
+            text = pollConfig.proposals[currentProposalIndex],
             textAlign = TextAlign.Center,
             fontSize = 8.em,
         )
@@ -218,9 +222,9 @@ private fun PropsSelection(
     val context = LocalContext.current
     var selectedGradeIndex: Int? by remember { mutableStateOf(null) }
 
-    for (gradeIndex in 0..<poll.grading.getAmountOfGrades()) {
-        val bgColor = poll.grading.getGradeColor(gradeIndex)
-        val fgColor = poll.grading.getGradeTextColor(gradeIndex)
+    for (gradeIndex in 0..<pollConfig.grading.getAmountOfGrades()) {
+        val bgColor = pollConfig.grading.getGradeColor(gradeIndex)
+        val fgColor = pollConfig.grading.getGradeTextColor(gradeIndex)
 
         val interactionSource = remember { MutableInteractionSource() }
         val interactionSourceIsPressed by interactionSource.collectIsFocusedAsState()
@@ -272,7 +276,7 @@ private fun PropsSelection(
 //            interactionSource = interactionSource,
         ) {
             Text(
-                text = context.getString(poll.grading.getGradeName(gradeIndex)).uppercase(),
+                text = context.getString(pollConfig.grading.getGradeName(gradeIndex)).uppercase(),
                 fontSize = 5.em,
             )
         }
@@ -283,8 +287,8 @@ private fun PropsSelection(
 @Composable
 fun PreviewVotingScreen(modifier: Modifier = Modifier) {
     JmTheme {
-        VotingScreen(
-            poll = Poll(
+        PollVotingScreen(
+            pollConfig = PollConfig(
                 subject = "Best Prezidan ?",
                 proposals = listOf("That candidate with a long name-san", "Mario", "JanBob"),
                 grading = Quality7Grading(),

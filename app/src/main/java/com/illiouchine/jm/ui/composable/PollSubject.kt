@@ -9,12 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.model.PollConfig
 
 @Composable
 fun PollSubject(
     modifier: Modifier = Modifier,
-    poll: Poll,
+    pollConfig: PollConfig,
 ) {
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -22,7 +22,7 @@ fun PollSubject(
     ) {
         Text(
             modifier = modifier.padding(24.dp),
-            text = "❝ ${poll.subject} ❞",
+            text = "❝ ${pollConfig.subject} ❞",
             fontSize = 6.em,
         )
     }
