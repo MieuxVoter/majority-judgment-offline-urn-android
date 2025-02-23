@@ -6,17 +6,17 @@ import com.illiouchine.jm.R
 /**
  * The grades must be unambiguously sorted for MJ to work.
  */
-abstract class Grading {
-    abstract fun getAmountOfGrades(): Int
-    abstract fun getGradeName(gradeIndex: Int): Int
-    abstract fun getGradeColor(gradeIndex: Int): Color
-    abstract fun getGradeTextColor(gradeIndex: Int): Color
+interface Grading {
+    fun getAmountOfGrades(): Int
+    fun getGradeName(gradeIndex: Int): Int
+    fun getGradeColor(gradeIndex: Int): Color
+    fun getGradeTextColor(gradeIndex: Int): Color
 }
 
 /**
  * Intermediary class that helps defining grading using lists.
  */
-abstract class ListGrading : Grading() {
+abstract class ListGrading : Grading {
     abstract fun getGradesNames(): List<Int>
     abstract fun getGradesColors(): List<Color>
     abstract fun getGradesTextColors(): List<Color>
