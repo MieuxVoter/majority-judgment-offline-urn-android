@@ -84,7 +84,7 @@ fun PollVotingScreen(
                 subject = pollVotingState.pollConfig.subject,
             )
 
-            if (null == pollVotingState.currentBallot) {
+            if (pollVotingState.isInStateReady()) {
 
                 // State: READY, waiting for new participant.
                 if (pollVotingState.ballots.isNotEmpty()) {
@@ -92,7 +92,9 @@ fun PollVotingScreen(
                 }
 
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
                     horizontalArrangement = Arrangement.SpaceEvenly,
                 ) {
                     Button(
@@ -105,7 +107,7 @@ fun PollVotingScreen(
                             onFinish(poll)
                         }
                     ) { Text(stringResource(R.string.button_end_the_poll)) }
-                    if (pollVotingState.ballots.isEmpty()){
+                    if (pollVotingState.ballots.isEmpty()) {
                         Button(
                             onClick = { onStartVoting() },
                             content = {
@@ -123,8 +125,9 @@ fun PollVotingScreen(
                 }
             } else {
 
-                val currentProposalIndex = pollVotingState.currentBallot.judgments.size
-                if (currentProposalIndex < pollVotingState.pollConfig.proposals.size) {
+                val currentProposalIndex = pollVotingState.currentBallot!!.judgments.size
+
+                if (pollVotingState.isInStateVoting()) {
 
                     // State: VOTING, filling the ballot with judgments.
                     GradeSelection(

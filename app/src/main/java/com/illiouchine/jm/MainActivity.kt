@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             // TODO: don't prevent lock at all times ; only during vote (and perhaps results)
-            // Rule: the screen should never lock during the poll
+            // Rule: the screen should never lock during the voting/result phase of the poll
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
             JmTheme {
