@@ -23,7 +23,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: MainViewModel by viewModel()
+    private val homeViewModel: HomeViewModel by viewModel()
     private val settingsViewModel: SettingsViewModel by viewModel()
     private val pollSetupViewModel: PollSetupViewModel by viewModel()
     private val pollVotingViewModel: PollVotingViewModel by viewModel()
@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
-            val viewState by viewModel.viewState.collectAsState()
+            val homeViewState by homeViewModel.homeViewState.collectAsState()
             val settingsState by settingsViewModel.settingsViewState.collectAsState()
             val pollSetupState by pollSetupViewModel.pollSetupViewState.collectAsState()
             val pollVotingViewState by pollVotingViewModel.pollVotingViewState.collectAsState()
@@ -62,10 +62,26 @@ class MainActivity : ComponentActivity() {
                             HomeScreen(
                                 modifier = Modifier,
                                 navController = navController,
+                                homeViewState = homeViewState,
                                 onSetupBlankPoll = {
                                     pollSetupViewModel.startPollSetup(PollConfig())
                                     navController.navigate(Screens.PollSetup.name)
                                 },
+                                onDeletePoll = {
+                                    homeViewModel.deletePoll(it)
+                                },
+                                onSetupClonePoll = {
+                                    pollSetupViewModel.startPollSetup(it.pollConfig)
+                                    navController.navigate(Screens.PollSetup.name)
+                                },
+                                onVoteClonePoll = {
+                                    pollVotingViewModel.initNewVotingSession(it.pollConfig)
+                                    navController.navigate(Screens.PollVote.name)
+                                },
+                                onShowResult = {
+                                    pollResultViewModel.finalizePoll(poll = it)
+                                    navController.navigate(Screens.PollResult.name)
+                                }
                             )
                         }
                     }
@@ -95,6 +111,7 @@ class MainActivity : ComponentActivity() {
                             onCancelLastJudgment = { pollVotingViewModel.onCancelLastJudgment() },
                             onFinish = {
                                 pollResultViewModel.finalizePoll(it)
+                                homeViewModel.savePolls(it)
                                 navController.navigate(Screens.PollResult.name)
                             },
                         )
@@ -105,7 +122,6 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier,
                                 poll = pollResultViewState.poll!!,
                                 onFinish = {
-                                    //viewModel.onResetState()
                                     navController.navigate(Screens.Home.name)
                                 },
                             )
@@ -125,7 +141,7 @@ class MainActivity : ComponentActivity() {
                                 settingsViewModel.updateShowOnBoarding(it)
                             },
                             onDismissFeedback = {
-                                viewModel.onDismissFeedback()
+                                //homeViewModel.onDismissFeedback()
                             },
                         )
                     }

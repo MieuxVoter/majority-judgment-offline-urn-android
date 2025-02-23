@@ -1,6 +1,8 @@
 package com.illiouchine.jm
 
 import android.app.Application
+import com.illiouchine.jm.data.InMemoryPollDataSource
+import com.illiouchine.jm.data.SharedPrefsHelper
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.singleOf
@@ -19,10 +21,14 @@ class MajorityUrnApplication : Application() {
 }
 
 val module = module {
-    viewModel { MainViewModel() }
+    // Data
+    singleOf( ::SharedPrefsHelper )
+    singleOf( ::InMemoryPollDataSource )
+
+    // ViewModel
+    viewModel { HomeViewModel(pollDataSource = get()) }
     viewModel { SettingsViewModel(sharedPreferences = get()) }
     viewModel { PollSetupViewModel() }
     viewModel { PollVotingViewModel() }
     viewModel { PollResultViewModel() }
-    singleOf(::SharedPrefsHelper)
 }

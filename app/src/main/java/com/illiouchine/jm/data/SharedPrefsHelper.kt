@@ -1,11 +1,11 @@
-package com.illiouchine.jm
+package com.illiouchine.jm.data
 
 import android.content.Context
 import android.content.SharedPreferences
 
 class SharedPrefsHelper(
     context: Context
-){
+) {
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences(ONBOARDING_PREF_KEY, Context.MODE_PRIVATE)
 
@@ -13,7 +13,7 @@ class SharedPrefsHelper(
         return sharedPreferences.getBoolean(SHOW_ONBOARDING_PREF_KEY, true)
     }
 
-    fun editShowOnboarding(value: Boolean = false){
+    fun editShowOnboarding(value: Boolean = false) {
         sharedPreferences.edit()
             .putBoolean(SHOW_ONBOARDING_PREF_KEY, value)
             .apply()
