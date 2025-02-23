@@ -13,7 +13,7 @@ data class Ballot(
     // HMMM………
     fun withoutLastJudgment(): Ballot {
         return Ballot(
-            judgments = judgments.subList(0, judgments.size - 1)
+            judgments = judgments.subList(0, judgments.size - 1),
         )
     }
 }

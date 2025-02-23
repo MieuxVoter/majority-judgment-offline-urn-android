@@ -50,7 +50,7 @@ class PollVotingViewModel : ViewModel() {
         }
     }
 
-    fun onProposalSelected(judgment: Judgment) {
+    fun onJudgmentCast(judgment: Judgment) {
         // Add judgment to current ballot
         _pollVotingViewState.update {
             it.copy(

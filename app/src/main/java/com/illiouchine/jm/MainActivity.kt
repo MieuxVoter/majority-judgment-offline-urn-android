@@ -105,7 +105,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier,
                             pollVotingState = pollVotingViewState,
                             onStartVoting = { pollVotingViewModel.initParticipantVotingSession() },
-                            onProposalSelected = { pollVotingViewModel.onProposalSelected(it) },
+                            onJudgmentCast = { pollVotingViewModel.onJudgmentCast(it) },
                             onBallotConfirmed = { pollVotingViewModel.onBallotConfirmed(it) },
                             onBallotCanceled = { pollVotingViewModel.onBallotCanceled() },
                             onCancelLastJudgment = { pollVotingViewModel.onCancelLastJudgment() },

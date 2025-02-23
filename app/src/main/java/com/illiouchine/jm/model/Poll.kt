@@ -7,20 +7,17 @@ data class Poll(
     val judgments: List<Judgment>
         get() = getAllJudgments()
 
-    // TODO: memoize and invalidate on ballots change
+    // make this lazy instead, perhaps ?
+    val _judgments: List<Judgment> = collectAllJudgments()
+
     private fun getAllJudgments(): List<Judgment> {
+        return _judgments
+    }
+
+    private fun collectAllJudgments(): List<Judgment> {
         val judgments: MutableList<Judgment> = mutableListOf()
         ballots.forEach { ballot -> judgments.addAll(ballot.judgments) }
 
         return judgments
     }
-
-    fun withBallot(ballot: Ballot): Poll {
-        return Poll(
-            pollConfig = pollConfig,
-            ballots = ballots + ballot,
-        )
-//        ballots = ballots + ballot
-    }
-
 }

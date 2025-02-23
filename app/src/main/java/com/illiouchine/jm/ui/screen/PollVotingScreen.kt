@@ -53,7 +53,7 @@ fun PollVotingScreen(
     modifier: Modifier = Modifier,
     pollVotingState: PollVotingViewModel.PollVotingViewState = PollVotingViewModel.PollVotingViewState(),
     onStartVoting: () -> Unit = {},
-    onProposalSelected: (Judgment) -> Unit = {},
+    onJudgmentCast: (Judgment) -> Unit = {},
     onBallotConfirmed: (Ballot) -> Unit = {},
     onBallotCanceled: () -> Unit = {},
     onCancelLastJudgment: () -> Unit = {},
@@ -86,6 +86,7 @@ fun PollVotingScreen(
 
             if (null == pollVotingState.currentBallot) {
 
+                // State: READY, waiting for new participant.
                 if (pollVotingState.ballots.isNotEmpty()) {
                     Text("Votre participation a bien été prise en compte.\nVous pouvez maintenant passer cet appareil au prochain participant.")
                 }
@@ -104,7 +105,6 @@ fun PollVotingScreen(
                             onFinish(poll)
                         }
                     ) { Text(stringResource(R.string.button_end_the_poll)) }
-                    // State: READY, waiting for new participant.
                     if (pollVotingState.ballots.isEmpty()){
                         Button(
                             onClick = { onStartVoting() },
@@ -127,15 +127,15 @@ fun PollVotingScreen(
                 if (currentProposalIndex < pollVotingState.pollConfig.proposals.size) {
 
                     // State: VOTING, filling the ballot with judgments.
-                    PropsSelection(
+                    GradeSelection(
                         pollConfig = pollVotingState.pollConfig,
-                        currentProposalIndex = currentProposalIndex,
-                        onResultSelected = { result ->
+                        forProposalIndex = currentProposalIndex,
+                        onGradeSelected = { result ->
                             val judgment = Judgment(
                                 proposal = pollVotingState.pollConfig.proposals[currentProposalIndex],
                                 grade = result,
                             )
-                            onProposalSelected(judgment)
+                            onJudgmentCast(judgment)
                         }
                     )
 
@@ -190,10 +190,10 @@ fun PollVotingScreen(
 
 
 @Composable
-private fun PropsSelection(
+private fun GradeSelection(
     pollConfig: PollConfig,
-    currentProposalIndex: Int,
-    onResultSelected: (Int) -> Unit = {},
+    forProposalIndex: Int,
+    onGradeSelected: (Int) -> Unit = {},
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -210,7 +210,7 @@ private fun PropsSelection(
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = pollConfig.proposals[currentProposalIndex],
+            text = pollConfig.proposals[forProposalIndex],
             textAlign = TextAlign.Center,
             lineHeight = 32.sp,
             fontSize = 8.em,
@@ -252,7 +252,7 @@ private fun PropsSelection(
                 selectedGradeIndex = gradeIndex
                 coroutine.launch {
                     delay(150)
-                    onResultSelected(gradeIndex)
+                    onGradeSelected(gradeIndex)
                     selectedGradeIndex = null
                 }
             },
