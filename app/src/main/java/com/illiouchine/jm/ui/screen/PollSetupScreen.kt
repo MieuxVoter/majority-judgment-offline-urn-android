@@ -31,7 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.illiouchine.jm.PollSetupViewModel
+import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.R
 import com.illiouchine.jm.Screens
 import com.illiouchine.jm.model.PollConfig

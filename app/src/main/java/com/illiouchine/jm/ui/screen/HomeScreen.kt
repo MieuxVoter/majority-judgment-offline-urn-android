@@ -1,7 +1,6 @@
 package com.illiouchine.jm.ui.screen
 
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.illiouchine.jm.HomeViewModel
+import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.Screens
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment

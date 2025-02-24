@@ -3,6 +3,11 @@ package com.illiouchine.jm
 import android.app.Application
 import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.data.SharedPrefsHelper
+import com.illiouchine.jm.logic.HomeViewModel
+import com.illiouchine.jm.logic.PollResultViewModel
+import com.illiouchine.jm.logic.PollSetupViewModel
+import com.illiouchine.jm.logic.PollVotingViewModel
+import com.illiouchine.jm.logic.SettingsViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.singleOf

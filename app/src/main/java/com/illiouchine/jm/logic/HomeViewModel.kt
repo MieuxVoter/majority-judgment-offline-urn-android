@@ -1,4 +1,4 @@
-package com.illiouchine.jm
+package com.illiouchine.jm.logic
 
 import androidx.lifecycle.ViewModel
 import com.illiouchine.jm.data.InMemoryPollDataSource

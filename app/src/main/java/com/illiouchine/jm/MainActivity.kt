@@ -11,6 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.illiouchine.jm.logic.HomeViewModel
+import com.illiouchine.jm.logic.PollResultViewModel
+import com.illiouchine.jm.logic.PollSetupViewModel
+import com.illiouchine.jm.logic.PollVotingViewModel
+import com.illiouchine.jm.logic.SettingsViewModel
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.screen.HomeScreen
 import com.illiouchine.jm.ui.screen.OnBoardingScreen
@@ -128,7 +133,6 @@ class MainActivity : ComponentActivity() {
                         } else {
                             // During the screen navigation transition to home (in onFinish above),
                             // we end up here very briefly, 'cause concurrency.
-                            // FIXME: How should we handle this ?  A Loading Spinner Composable ?
                             // For now, a blank slate is OK-ish I guess ?
                         }
                     }

@@ -1,4 +1,4 @@
-package com.illiouchine.jm
+package com.illiouchine.jm.logic
 
 import android.icu.util.Calendar
 import androidx.lifecycle.ViewModel
