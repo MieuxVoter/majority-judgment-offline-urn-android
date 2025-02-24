@@ -17,6 +17,7 @@ import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.logic.PollVotingViewModel
 import com.illiouchine.jm.logic.SettingsViewModel
 import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.ui.screen.AboutScreen
 import com.illiouchine.jm.ui.screen.HomeScreen
 import com.illiouchine.jm.ui.screen.OnBoardingScreen
 import com.illiouchine.jm.ui.screen.PollSetupScreen
@@ -132,8 +133,8 @@ class MainActivity : ComponentActivity() {
                             )
                         } else {
                             // During the screen navigation transition to home (in onFinish above),
-                            // we end up here very briefly, 'cause concurrency.
-                            // For now, a blank slate is OK-ish I guess ?
+                            // we end up here very briefly, 'cause concurrency probably.
+                            // For now, nothing is cool I guess ?
                         }
                     }
                     composable(Screens.Settings.name) {
@@ -147,6 +148,12 @@ class MainActivity : ComponentActivity() {
                             onDismissFeedback = {
                                 //homeViewModel.onDismissFeedback()
                             },
+                        )
+                    }
+                    composable(Screens.About.name) {
+                        AboutScreen(
+                            modifier = Modifier,
+                            navController = navController,
                         )
                     }
                 }

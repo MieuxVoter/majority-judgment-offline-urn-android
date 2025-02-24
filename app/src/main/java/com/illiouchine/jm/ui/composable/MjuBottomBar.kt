@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -26,13 +27,15 @@ enum class BottomBarItem(
     val icon: ImageVector,
 ) {
     Home(id = Screens.Home.name, resId = R.string.menu_home, icon = Icons.Default.Home),
-    Settings(id = Screens.Settings.name, resId = R.string.menu_settings, icon = Icons.Default.Settings);
+    Settings(id = Screens.Settings.name, resId = R.string.menu_settings, icon = Icons.Default.Settings),
+    Info(id = Screens.About.name, resId = R.string.menu_about, icon = Icons.Default.Info);
 
     companion object {
         fun fromId(id: String): BottomBarItem {
             return when (id) {
                 Screens.Home.name -> Home
                 Screens.Settings.name -> Settings
+                Screens.About.name -> Info
                 else -> Home
             }
         }
