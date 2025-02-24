@@ -1,5 +1,7 @@
 * Initial release
-* Setup a local MJ poll in seconds
+* Setup a local Majority Judgment poll in seconds
+* Reuse a previous poll
+* Rank proposals and show their merit profile
 * Support for Dark/Light themes
 * Added English translation
 * Added French translation
