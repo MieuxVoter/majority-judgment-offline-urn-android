@@ -8,18 +8,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -104,24 +105,35 @@ fun HomeScreen(
                         Text(
                             modifier = Modifier,
                             text = poll.pollConfig.subject,
+                            fontWeight = FontWeight.Bold,
                         )
-                        Row() {
-                            Text(
-                                modifier = Modifier.wrapContentSize(),
-                                text = "Proposals : ${poll.pollConfig.proposals.size}"
-                            )
+                        Row {
+                            val sequenceOfProposals = StringBuilder()
+                            poll.pollConfig.proposals.forEachIndexed { proposalIndex, proposal ->
+                                if (proposalIndex > 0) {
+                                    sequenceOfProposals.append(", ")
+                                }
+                                sequenceOfProposals.append(proposal)
+                            }
+
                             Text(
                                 modifier = Modifier,
-                                text = "Ballots : ${poll.ballots.size}"
+                                text = sequenceOfProposals.toString(),
+                            )
+
+                            Spacer(modifier = Modifier.weight(1f))
+
+                            Text(
+                                modifier = Modifier,
+                                text = "(${poll.ballots.size} votes)",
                             )
                         }
                         Row {
-
-                            Button(onClick = { onDeletePoll(poll) }) {
+                            OutlinedButton(onClick = { onDeletePoll(poll) }) {
                                 Text("Delete")
                             }
                             Spacer(modifier = Modifier.weight(1f))
-                            Button(onClick = { onSetupClonePoll(poll) }) {
+                            OutlinedButton(onClick = { onSetupClonePoll(poll) }) {
                                 Text("Clone")
                             }
                             Spacer(modifier = Modifier.weight(1f))
