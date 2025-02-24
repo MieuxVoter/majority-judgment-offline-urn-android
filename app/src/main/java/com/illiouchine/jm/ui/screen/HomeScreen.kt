@@ -18,6 +18,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -117,14 +118,13 @@ fun HomeScreen(
                             }
 
                             Text(
-                                modifier = Modifier,
+                                modifier = Modifier.weight(1f),
                                 text = sequenceOfProposals.toString(),
                             )
 
-                            Spacer(modifier = Modifier.weight(1f))
-
                             Text(
-                                modifier = Modifier,
+                                modifier = Modifier.align(Alignment.Bottom),
+                                fontStyle = FontStyle.Italic,
                                 text = "(${poll.ballots.size} votes)",
                             )
                         }
@@ -180,9 +180,9 @@ fun PreviewHomeScreen(modifier: Modifier = Modifier) {
                     ),
                     Poll(
                         pollConfig = PollConfig(
-                            subject = "Ouiiiiiii ?",
-                            proposals = listOf("Oui", "Non"),
-                            grading = Quality7Grading()
+                            subject = "De combien de megawatts la couleur bleu est-elle plus poilue que sous la mer ?",
+                            proposals = listOf("42", "Rose", "Un sac de rats", "Presque", "Mercure", "Un Sayan", "Merde !"),
+                            grading = Quality7Grading(),
                         ),
                         ballots = listOf(
                             Ballot(
