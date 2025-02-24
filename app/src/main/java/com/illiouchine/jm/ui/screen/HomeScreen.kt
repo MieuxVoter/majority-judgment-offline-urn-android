@@ -46,7 +46,7 @@ fun HomeScreen(
     navController: NavController = rememberNavController(),
     onSetupBlankPoll: () -> Unit = {},
     onSetupClonePoll: (poll: Poll) -> Unit = {},
-    onVoteClonePoll: (poll: Poll) -> Unit = {},
+    onResumePoll: (poll: Poll) -> Unit = {},
     onShowResult: (poll: Poll) -> Unit = {},
     onDeletePoll: (poll: Poll) -> Unit = {},
 ) {
@@ -98,7 +98,7 @@ fun HomeScreen(
 
             Spacer(Modifier.size(16.dp))
 
-            homeViewState.polls.forEach { poll ->
+            homeViewState.polls.reversed().forEach { poll ->
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)
                 ) {
@@ -137,11 +137,10 @@ fun HomeScreen(
                                 Text("Clone")
                             }
                             Spacer(modifier = Modifier.weight(1f))
-                            // FIXME: resume voting on a Poll (can this be done ?)
-//                            Button(onClick = { onVoteClonePoll(poll) }) {
-//                                Text("Resume")
-//                            }
-//                            Spacer(modifier = Modifier.weight(1f))
+                            Button(onClick = { onResumePoll(poll) }) {
+                                Text("Resume")
+                            }
+                            Spacer(modifier = Modifier.weight(1f))
                             Button(onClick = { onShowResult(poll) }) {
                                 Text("Inspect")
                             }

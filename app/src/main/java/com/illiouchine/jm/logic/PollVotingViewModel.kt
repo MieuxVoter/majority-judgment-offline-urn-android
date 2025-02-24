@@ -4,6 +4,7 @@ import android.icu.util.Calendar
 import androidx.lifecycle.ViewModel
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
+import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -44,7 +45,17 @@ class PollVotingViewModel : ViewModel() {
             it.copy(
                 pollConfig = pollConfig,
                 ballots = emptyList(),
-                currentBallot = null
+                currentBallot = null,
+            )
+        }
+    }
+
+    fun resumeVotingSession(poll: Poll) {
+        _pollVotingViewState.update {
+            it.copy(
+                pollConfig = poll.pollConfig,
+                ballots = poll.ballots,
+                currentBallot = null,
             )
         }
     }

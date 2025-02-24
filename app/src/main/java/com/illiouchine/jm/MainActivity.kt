@@ -79,8 +79,8 @@ class MainActivity : ComponentActivity() {
                                     pollSetupViewModel.startPollSetup(it.pollConfig)
                                     navController.navigate(Screens.PollSetup.name)
                                 },
-                                onVoteClonePoll = {
-                                    pollVotingViewModel.initNewVotingSession(it.pollConfig)
+                                onResumePoll = {
+                                    pollVotingViewModel.resumeVotingSession(it)
                                     navController.navigate(Screens.PollVote.name)
                                 },
                                 onShowResult = {
