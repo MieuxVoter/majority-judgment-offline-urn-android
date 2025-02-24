@@ -46,12 +46,11 @@ class MainActivity : ComponentActivity() {
             val pollVotingViewState by pollVotingViewModel.pollVotingViewState.collectAsState()
             val pollResultViewState by pollResultViewModel.pollResultViewState.collectAsState()
 
-
             val navController = rememberNavController()
 
-            // TODO: don't prevent lock at all times ; only during vote (and perhaps results)
             // Rule: the screen should never lock during the voting/result phase of the poll
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            // Therefore, we clear the flag here and set it on in the appropriate screens.
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
             JmTheme {
                 NavHost(
@@ -107,6 +106,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(Screens.PollVote.name) {
+                        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                         PollVotingScreen(
                             modifier = Modifier,
                             pollVotingState = pollVotingViewState,
@@ -123,6 +123,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(Screens.PollResult.name) {
+                        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                         if (pollResultViewState.poll != null) {
                             ResultScreen(
                                 modifier = Modifier,
