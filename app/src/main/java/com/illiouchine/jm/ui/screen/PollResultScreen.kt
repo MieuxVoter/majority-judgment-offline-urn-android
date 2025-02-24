@@ -4,6 +4,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -48,10 +49,10 @@ fun ResultScreen(
     val deliberation: DeliberatorInterface = MajorityJudgmentDeliberator()
     val tally = CollectedTally(amountOfProposals, amountOfGrades)
 
-    poll.pollConfig.proposals.forEachIndexed { i, prop ->
-        val voteResult = poll.judgments.filter { it.proposal == prop }
+    poll.pollConfig.proposals.forEachIndexed { proposalIndex, _ ->
+        val voteResult = poll.judgments.filter { it.proposal == proposalIndex }
         voteResult.forEach { judgment ->
-            tally.collect(i, judgment.grade)
+            tally.collect(proposalIndex, judgment.grade)
         }
     }
 
@@ -68,14 +69,6 @@ fun ResultScreen(
                 },
             )
         },
-        // TODO: figure out the weird gap "bug" that this generates
-//                    bottomBar = {
-//                        MUBottomBar(
-//                            modifier = Modifier,
-//                            selected = navController.currentDestination?.route ?: "home",
-//                            onItemSelected = { destination -> navController.navigate(destination.id) }
-//                        )
-//                    },
     ) { innerPadding ->
 
         Column(
@@ -101,7 +94,6 @@ fun ResultScreen(
                     val proposalName = poll.pollConfig.proposals[proposalResult.index]
                     Text("#$rank  $proposalName")
                 }
-
 
                 Row {
                     // Draw the linear merit profile of the proposal.
@@ -134,12 +126,8 @@ fun ResultScreen(
 
                 }
 
-                Row(modifier = Modifier.padding(8.dp)) {
-                    // cheap gap between proposals
-                }
-
+                Spacer(modifier = Modifier.padding(8.dp))
             }
-
 
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -162,23 +150,23 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
         ballots = listOf(
             Ballot(
                 judgments = listOf(
-                    Judgment("Tonio", 0),
-                    Judgment("Bobby", 5),
-                    Judgment("Mario", 6),
+                    Judgment(0, 0),
+                    Judgment(1, 5),
+                    Judgment(2, 6),
                 )
             ),
             Ballot(
                 judgments = listOf(
-                    Judgment("Tonio", 4),
-                    Judgment("Bobby", 1),
-                    Judgment("Mario", 6),
+                    Judgment(0, 4),
+                    Judgment(1, 1),
+                    Judgment(2, 6),
                 )
             ),
             Ballot(
                 judgments = listOf(
-                    Judgment("Tonio", 5),
-                    Judgment("Bobby", 5),
-                    Judgment("Mario", 6),
+                    Judgment(0, 5),
+                    Judgment(1, 5),
+                    Judgment(2, 6),
                 )
             ),
         ),

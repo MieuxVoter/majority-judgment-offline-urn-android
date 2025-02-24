@@ -135,7 +135,7 @@ fun PollVotingScreen(
                         forProposalIndex = currentProposalIndex,
                         onGradeSelected = { result ->
                             val judgment = Judgment(
-                                proposal = pollVotingState.pollConfig.proposals[currentProposalIndex],
+                                proposal = currentProposalIndex,
                                 grade = result,
                             )
                             onJudgmentCast(judgment)
@@ -307,7 +307,7 @@ fun PreviewVotingScreenWithBallots(modifier: Modifier = Modifier) {
                     grading = Quality7Grading(),
                 ),
                 ballots = listOf(
-                    Ballot(judgments = listOf(Judgment("Mario", grade = 3)))
+                    Ballot(judgments = listOf(Judgment(1, grade = 3)))
                 ),
                 currentBallot = null,
             ),
@@ -330,9 +330,9 @@ fun PreviewVotingScreenWithCurrentBallots(modifier: Modifier = Modifier) {
                 ballots = listOf(
                     Ballot(
                         judgments = listOf(
-                            Judgment("That candidate with a long name-san", grade = 2),
-                            Judgment("Mario", grade = 6),
-                            Judgment("JanBob", grade = 3),
+                            Judgment(proposal = 0, grade = 2),
+                            Judgment(proposal = 1, grade = 6),
+                            Judgment(proposal = 2, grade = 3),
                         )
                     )
                 ),

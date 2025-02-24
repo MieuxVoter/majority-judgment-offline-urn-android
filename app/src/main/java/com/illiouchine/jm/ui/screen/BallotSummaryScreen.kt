@@ -106,9 +106,9 @@ fun PreviewVoteSummaryScreen(modifier: Modifier = Modifier) {
             ),
             ballot = Ballot(
                 judgments = listOf(
-                    Judgment("Tonio", 6),
-                    Judgment("Bobby", 1),
-                    Judgment("Mario", 5),
+                    Judgment(0, 6),
+                    Judgment(1, 1),
+                    Judgment(2, 5),
                 )
             ),
         )

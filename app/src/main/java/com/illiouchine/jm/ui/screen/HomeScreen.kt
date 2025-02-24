@@ -171,9 +171,9 @@ fun PreviewHomeScreen(modifier: Modifier = Modifier) {
                         ballots = listOf(
                             Ballot(
                                 judgments = listOf(
-                                    Judgment(proposal = "Mario", 2),
-                                    Judgment(proposal = "Bob", 7),
-                                    Judgment(proposal = "JLM", 1),
+                                    Judgment(proposal = 0, 2),
+                                    Judgment(proposal = 1, 7),
+                                    Judgment(proposal = 2, 1),
                                 )
                             )
                         )
@@ -187,14 +187,14 @@ fun PreviewHomeScreen(modifier: Modifier = Modifier) {
                         ballots = listOf(
                             Ballot(
                                 judgments = listOf(
-                                    Judgment(proposal = "Oui", 2),
-                                    Judgment(proposal = "Non", 7),
+                                    Judgment(proposal = 0, 2),
+                                    Judgment(proposal = 1, 7),
                                 ),
                             ),
                             Ballot(
                                 judgments = listOf(
-                                    Judgment(proposal = "Oui", 1),
-                                    Judgment(proposal = "Non", 6),
+                                    Judgment(proposal = 0, 1),
+                                    Judgment(proposal = 1, 6),
                                 ),
                             ),
                         )
@@ -212,7 +212,7 @@ fun PreviewHomeScreenWithEmptyPoll(modifier: Modifier = Modifier) {
     JmTheme {
         HomeScreen(
             homeViewState = HomeViewModel.HomeViewState(
-                polls = emptyList()
+                polls = emptyList(),
             )
         )
     }
