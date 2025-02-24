@@ -83,28 +83,22 @@ fun HomeScreen(
                 text = "Majority\nJudgment\nUrn",
             )
 
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                text = "Try making a new poll, it's free !",
-                fontStyle = FontStyle.Italic,
-            )
-
-            Spacer(Modifier.size(36.dp))
-
-            if (homeViewState.polls.isNotEmpty()){
+            if (homeViewState.polls.isEmpty()) {
+                Spacer(Modifier.size(36.dp))
                 Text(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    text = "Polls history",
+                    textAlign = TextAlign.Center,
+                    text = "Try making a new poll, it's free !",
+                    fontStyle = FontStyle.Italic,
                 )
             }
+
             Spacer(Modifier.size(16.dp))
 
             homeViewState.polls.forEach { poll ->
                 Row(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)
                 ) {
                     Column {
                         Text(
@@ -120,19 +114,24 @@ fun HomeScreen(
                                 modifier = Modifier,
                                 text = "Ballots : ${poll.ballots.size}"
                             )
+                        }
+                        Row {
+
                             Button(onClick = { onDeletePoll(poll) }) {
                                 Text("Delete")
                             }
-                        }
-                        Row {
+                            Spacer(modifier = Modifier.weight(1f))
                             Button(onClick = { onSetupClonePoll(poll) }) {
-                                Text("Setup again")
+                                Text("Clone")
                             }
-                            Button(onClick = { onVoteClonePoll(poll) }) {
-                                Text("Vote Again")
-                            }
+                            Spacer(modifier = Modifier.weight(1f))
+                            // FIXME: resume voting on a Poll (can this be done ?)
+//                            Button(onClick = { onVoteClonePoll(poll) }) {
+//                                Text("Resume")
+//                            }
+//                            Spacer(modifier = Modifier.weight(1f))
                             Button(onClick = { onShowResult(poll) }) {
-                                Text("Show Result")
+                                Text("Inspect")
                             }
                         }
                     }
