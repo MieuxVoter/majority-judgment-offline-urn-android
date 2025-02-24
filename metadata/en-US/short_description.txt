@@ -1,1 +1,1 @@
-A mobile, local urn for a majority judgment poll
+A mobile, offline urn for majority judgment polls
