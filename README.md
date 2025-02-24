@@ -1,9 +1,9 @@
-# Majority Judgment Mobile Urn
+# Majority Judgment Offline Mobile Urn
 
 ## Features
 
+- Mobile Urn: Set up a local, offline poll on your phone.
 - Majority Judgment: One of the most elegant ranking systems out there.
-- Mobile Urn: Set up a local poll on your phone.
 - Libre Software: We accept merge requests.
 - No permissions required.
 - No anti-features.

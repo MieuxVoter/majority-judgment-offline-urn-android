@@ -68,12 +68,12 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier,
                                 navController = navController,
                                 homeViewState = homeViewState,
+                                onDeletePoll = {
+                                    homeViewModel.deletePoll(it)
+                                },
                                 onSetupBlankPoll = {
                                     pollSetupViewModel.startPollSetup(PollConfig())
                                     navController.navigate(Screens.PollSetup.name)
-                                },
-                                onDeletePoll = {
-                                    homeViewModel.deletePoll(it)
                                 },
                                 onSetupClonePoll = {
                                     pollSetupViewModel.startPollSetup(it.pollConfig)
