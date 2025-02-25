@@ -1,11 +1,14 @@
 package com.illiouchine.jm.logic
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.model.Poll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 
 class HomeViewModel(
     private val pollDataSource: PollDataSource
@@ -23,19 +26,26 @@ class HomeViewModel(
     }
 
     private fun loadPolls() {
-        _homeViewState.update {
-            it.copy(polls = pollDataSource.getAllPoll())
+        viewModelScope.launch {
+            val polls  = pollDataSource.getAllPoll()
+            _homeViewState.update {
+                it.copy(polls = polls)
+            }
         }
     }
 
     fun savePolls(poll: Poll) {
-        pollDataSource.savePolls(poll)
-        loadPolls()
+        viewModelScope.launch {
+            pollDataSource.savePolls(poll)
+            loadPolls()
+        }
     }
 
     fun deletePoll(poll: Poll) {
-        pollDataSource.deletePoll(poll)
-        loadPolls()
+        viewModelScope.launch {
+            pollDataSource.deletePoll(poll)
+            loadPolls()
+        }
     }
 }
 

@@ -4,9 +4,9 @@ import com.illiouchine.jm.model.Poll
 
 interface PollDataSource {
 
-    fun savePolls(poll: Poll)
+    suspend fun savePolls(poll: Poll)
 
-    fun getAllPoll(): List<Poll>
+    suspend fun getAllPoll(): List<Poll>
 
-    fun deletePoll(poll: Poll)
+    suspend fun deletePoll(poll: Poll)
 }

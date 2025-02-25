@@ -9,15 +9,15 @@ import com.illiouchine.jm.model.Poll
 class InMemoryPollDataSource : PollDataSource {
     private val polls: MutableList<Poll> = mutableListOf()
 
-    override fun savePolls(poll: Poll) {
+    override suspend fun savePolls(poll: Poll) {
         polls.add(poll)
     }
 
-    override fun getAllPoll(): List<Poll> {
+    override suspend fun getAllPoll(): List<Poll> {
         return polls.toList()
     }
 
-    override fun deletePoll(poll: Poll) {
+    override suspend fun deletePoll(poll: Poll) {
         polls.remove(poll)
     }
 }

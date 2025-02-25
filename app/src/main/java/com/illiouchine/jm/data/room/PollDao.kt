@@ -1,64 +1,70 @@
 package com.illiouchine.jm.data.room
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.illiouchine.jm.data.room.entity.BallotEntity
+import com.illiouchine.jm.data.room.entity.BallotWithJudgment
 import com.illiouchine.jm.data.room.entity.JudgmentEntity
-import com.illiouchine.jm.data.room.entity.PollConfigEntity
 import com.illiouchine.jm.data.room.entity.PollEntity
-import com.illiouchine.jm.data.room.entity.PollWithConfigAndBallots
+import com.illiouchine.jm.data.room.entity.PollWithProposals
 import com.illiouchine.jm.data.room.entity.ProposalEntity
 
 @Dao
 interface PollDao {
-/*
-    @Transaction
-    @Query("SELECT * FROM poll")
-    fun loadPolls(): List<PollWithConfigAndBallots>
 
     @Transaction
-    fun insertPollFull(
-        pollFull: PollWithConfigAndBallots
+    @Query("SELECT * FROM poll")
+    suspend fun loadPolls(): List<PollWithProposals>
+
+    @Transaction
+    @Query("SELECT * FROM poll WHERE uid = :id LIMIT 1")
+    suspend fun loadPoll(id: Int): PollWithProposals
+
+    @Transaction
+    @Query("SELECT * FROM ballot WHERE pollId = :pollId")
+    suspend fun loadBallots(pollId: Int): List<BallotWithJudgment>
+
+    @Transaction
+    suspend fun insertPoll(
+        poll: PollEntity,
+        proposals: List<ProposalEntity>,
+        ballots: List<List<JudgmentEntity>>
     ){
-        val pollId = insertPoll(pollFull.poll)
-        val configId = insertConfig(
-            pollFull.pollConfigEntity.copy(pollId = pollId)
-        )
+
+        val pollId = _insertPoll(poll).toInt()
         insertProposals(
-            pollFull.pollConfigWithProposals.proposals.map { proposal ->
-                proposal.copy(pollConfigId = configId)
+            proposals.map { proposal ->
+                proposal.copy(pollId = pollId)
             }
         )
-        pollFull.ballotsWithJudgment.forEach { ballotWithJudgment ->
+        ballots.forEach { judgments ->
             val ballotId = insertBallot(
-                ballotWithJudgment.ballot.copy(pollId = pollId)
-            )
+                BallotEntity(pollId = pollId)
+            ).toInt()
             insertJudgment(
-                ballotWithJudgment.judgments.map { judgment ->
+                judgments.map { judgment ->
                     judgment.copy(ballotId = ballotId)
                 }
             )
-
         }
     }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertPoll(poll: PollEntity) : Int
+    suspend fun _insertPoll(poll: PollEntity) : Long
 
     @Insert
-    fun insertConfig(config: PollConfigEntity): Int
+    suspend fun insertProposals(proposals: List<ProposalEntity>): List<Long>
 
     @Insert
-    fun insertProposals(proposals: List<ProposalEntity>): Int
+    suspend fun insertBallot(ballot: BallotEntity) : Long
 
     @Insert
-    fun insertBallot(ballot: BallotEntity) : Int
+    suspend fun insertJudgment(judgments: List<JudgmentEntity>): List<Long>
 
-    @Insert
-    fun insertJudgment(judgments: List<JudgmentEntity>): Int
-
- */
+    @Delete(entity = PollEntity::class)
+    suspend fun deletePoll(poll: PollEntity)
 }

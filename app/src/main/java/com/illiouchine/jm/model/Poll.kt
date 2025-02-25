@@ -1,6 +1,7 @@
 package com.illiouchine.jm.model
 
 data class Poll(
+    val id: Int = 0,
     val pollConfig: PollConfig,
     val ballots: List<Ballot>,
 ) {

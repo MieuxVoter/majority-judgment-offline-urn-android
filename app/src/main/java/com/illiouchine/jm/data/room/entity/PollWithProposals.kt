@@ -3,11 +3,11 @@ package com.illiouchine.jm.data.room.entity
 import androidx.room.Embedded
 import androidx.room.Relation
 
-data class PollConfigWithProposals(
-    @Embedded val pollConfig: PollConfigEntity,
+data class PollWithProposals(
+    @Embedded val poll: PollEntity,
     @Relation(
         parentColumn = "uid",
-        entityColumn = "pollConfigId"
+        entityColumn = "pollId"
     )
     val proposals: List<ProposalEntity>
 )

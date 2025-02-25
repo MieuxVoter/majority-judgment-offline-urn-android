@@ -2,6 +2,7 @@ package com.illiouchine.jm.data.room.entity
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
@@ -14,7 +15,8 @@ import androidx.room.PrimaryKey
             onUpdate = ForeignKey.CASCADE,
             onDelete = ForeignKey.CASCADE
         )
-    ]
+    ],
+    indices = [Index(value = ["pollId"])]
 )
 data class BallotEntity(
     @PrimaryKey(autoGenerate = true) val uid: Int = 0,
