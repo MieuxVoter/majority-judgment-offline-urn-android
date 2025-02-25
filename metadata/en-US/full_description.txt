@@ -1,6 +1,6 @@
-Transform your phone into a mobile urn for a local majority judgment poll.
+Transform your phone into a mobile, offline urn for a local majority judgment poll.
 
-Setup a poll, and share the phone amongst participants.
+Setup a poll in seconds, and share the phone amongst participants.
 
 This application does not need any permission.
 
