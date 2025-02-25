@@ -35,8 +35,8 @@ This is a standard Android project, made with Jetpack Compose.
 
 ### Design
 
-The position of _Design Lead_ is *open* for volunteers.
+:sparks:
 
 ### Translations
 
-The translation XMLs are in `app/src/main/res/values-<language>`.
+The translation files are in `app/src/main/res/values-<language>`.

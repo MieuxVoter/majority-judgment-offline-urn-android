@@ -43,6 +43,19 @@ fun GradeSelectionButton(
             text = text,
             fontSize = 5.em,
         )
+        // Example with outline
+//        Text(
+//            text = text,
+//            fontSize = 5.em,
+//            style = TextStyle.Default.copy(
+//                fontSize = 64.sp,
+//                drawStyle = Stroke(
+//                    miter = 10f,
+//                    width = 5f,
+//                    join = StrokeJoin.Round,
+//                )
+//            )
+//        )
     }
 }
 
