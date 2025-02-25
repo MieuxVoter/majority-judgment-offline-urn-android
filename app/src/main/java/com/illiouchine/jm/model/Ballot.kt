@@ -16,4 +16,8 @@ data class Ballot(
             judgments = judgments.subList(0, judgments.size - 1),
         )
     }
+
+    fun isAlreadyCast(judgment: Judgment): Boolean {
+        return judgments.any { it.proposal == judgment.proposal }
+    }
 }

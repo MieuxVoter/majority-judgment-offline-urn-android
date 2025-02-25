@@ -69,6 +69,10 @@ class PollVotingViewModel : ViewModel() {
     }
 
     fun onJudgmentCast(judgment: Judgment) {
+        // Rule : Prevent voting for the same proposal two time
+        if (_pollVotingViewState.value.currentBallot?.isAlreadyCast(judgment) == true){
+            return
+        }
         // Add judgment to current ballot
         _pollVotingViewState.update {
             it.copy(
