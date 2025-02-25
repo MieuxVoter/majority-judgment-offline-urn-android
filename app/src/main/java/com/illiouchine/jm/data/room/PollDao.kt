@@ -2,42 +2,63 @@ package com.illiouchine.jm.data.room
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import com.illiouchine.jm.data.room.entity.BallotEntity
+import com.illiouchine.jm.data.room.entity.JudgmentEntity
+import com.illiouchine.jm.data.room.entity.PollConfigEntity
+import com.illiouchine.jm.data.room.entity.PollEntity
+import com.illiouchine.jm.data.room.entity.PollWithConfigAndBallots
+import com.illiouchine.jm.data.room.entity.ProposalEntity
 
 @Dao
 interface PollDao {
-
+/*
     @Transaction
     @Query("SELECT * FROM poll")
-    fun loadPolls(): List<PoolWithConfigAndBallots>
+    fun loadPolls(): List<PollWithConfigAndBallots>
 
-    fun insertPoll(
-        poll: PollEntity,
-        config: PollConfigEntity,
-        proposals: List<ProposalEntity>,
-        ballots: List<BallotEntity>,
-        judgments: List<JudgmentEntity>
+    @Transaction
+    fun insertPollFull(
+        pollFull: PollWithConfigAndBallots
     ){
-        insertPoll(poll)
-        insertConfig(config)
-        insertProposals(proposals)
-        insertBallots(ballots)
-        insertJudgment(judgments)
+        val pollId = insertPoll(pollFull.poll)
+        val configId = insertConfig(
+            pollFull.pollConfigEntity.copy(pollId = pollId)
+        )
+        insertProposals(
+            pollFull.pollConfigWithProposals.proposals.map { proposal ->
+                proposal.copy(pollConfigId = configId)
+            }
+        )
+        pollFull.ballotsWithJudgment.forEach { ballotWithJudgment ->
+            val ballotId = insertBallot(
+                ballotWithJudgment.ballot.copy(pollId = pollId)
+            )
+            insertJudgment(
+                ballotWithJudgment.judgments.map { judgment ->
+                    judgment.copy(ballotId = ballotId)
+                }
+            )
+
+        }
     }
 
-    @Insert
-    fun insertPoll(poll: PollEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertPoll(poll: PollEntity) : Int
 
     @Insert
-    fun insertConfig(config: PollConfigEntity)
+    fun insertConfig(config: PollConfigEntity): Int
 
     @Insert
-    fun insertProposals(proposals: List<ProposalEntity>)
+    fun insertProposals(proposals: List<ProposalEntity>): Int
 
     @Insert
-    fun insertBallots(ballots: List<BallotEntity>)
+    fun insertBallot(ballot: BallotEntity) : Int
 
     @Insert
-    fun insertJudgment(judgments: List<JudgmentEntity>)
+    fun insertJudgment(judgments: List<JudgmentEntity>): Int
+
+ */
 }

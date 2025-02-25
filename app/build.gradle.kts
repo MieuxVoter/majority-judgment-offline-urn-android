@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.room)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -64,7 +65,9 @@ dependencies {
     implementation(libs.koin.android)
 
     // Room
-    implementation(libs.androidx.room)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

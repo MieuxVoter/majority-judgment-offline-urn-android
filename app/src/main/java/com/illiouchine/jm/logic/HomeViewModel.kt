@@ -1,14 +1,14 @@
 package com.illiouchine.jm.logic
 
 import androidx.lifecycle.ViewModel
-import com.illiouchine.jm.data.InMemoryPollDataSource
+import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.model.Poll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
 class HomeViewModel(
-    private val pollDataSource: InMemoryPollDataSource
+    private val pollDataSource: PollDataSource
 ) : ViewModel() {
 
     data class HomeViewState(
