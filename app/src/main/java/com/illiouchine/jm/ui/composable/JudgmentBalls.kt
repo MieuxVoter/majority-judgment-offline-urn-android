@@ -1,5 +1,7 @@
 package com.illiouchine.jm.ui.composable
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,11 +11,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
@@ -34,27 +38,45 @@ fun JudgmentBalls(
         horizontalArrangement = Arrangement.Center
     ) {
         for (i in 0 until pollConfig.proposals.size) {
-            val color = when {
-                i < currentBalls -> pollConfig.grading.getGradeColor(ballot.judgments[i].grade)
-                i == currentBalls -> Color.LightGray
-                i > currentBalls -> Color.DarkGray
-                else -> Color.Blue
-            }
-            val size = if (i == currentBalls) {
-                24.dp
-            } else {
-                16.dp
-            }
+            val animatedColor by animateColorAsState(
+                targetValue = when {
+                    i < currentBalls -> pollConfig.grading.getGradeColor(ballot.judgments[i].grade)
+                    i == currentBalls -> Color.LightGray
+                    i > currentBalls -> Color.DarkGray
+                    else -> Color.Blue
+                }
+            )
+            val animatedSize by animateDpAsState(
+                targetValue = if (i == currentBalls) {
+                    24.dp
+                } else {
+                    16.dp
+                }
+            )
             Spacer(modifier = Modifier.size(4.dp))
-            Box(
-                modifier = Modifier
-                    .size(size)
-                    .clip(shape = RoundedCornerShape(14.dp))
-                    .background(color)
+            JudgmentBall(
+                modifier = Modifier,
+                color = animatedColor,
+                size = animatedSize
+
             )
             Spacer(modifier = Modifier.size(4.dp))
         }
     }
+}
+
+@Composable
+fun JudgmentBall(
+    modifier: Modifier = Modifier,
+    color: Color = Color.Blue,
+    size: Dp = 14.dp
+) {
+    Box(
+        modifier = modifier
+            .size(size)
+            .clip(shape = RoundedCornerShape(14.dp))
+            .background(color)
+    )
 }
 
 @Preview
