@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,6 +21,7 @@ import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.model.Quality7Grading
+import com.illiouchine.jm.ui.composable.JudgmentSummary
 import com.illiouchine.jm.ui.theme.JmTheme
 
 
@@ -38,10 +40,12 @@ fun VoteSummaryScreen(
     ) {
 
         Text(
+            modifier = Modifier.fillMaxWidth(),
             text = "Are you sure ?",
             fontSize = 8.em,
         )
         Text(
+            modifier = Modifier.fillMaxWidth(),
             text = "Here's a summary of your judgments :",
         )
 
@@ -49,12 +53,12 @@ fun VoteSummaryScreen(
 
         pollConfig.proposals.forEachIndexed { proposalIndex, proposal ->
             val grade = ballot.judgments[proposalIndex].grade
-
-            Row {
-                Text(proposal)
-                Text(" is ")
-                Text(stringResource(pollConfig.grading.getGradeName(grade)))
-            }
+            JudgmentSummary(
+                modifier = Modifier.fillMaxWidth().padding(4.dp),
+                proposal = proposal,
+                gradeString = stringResource(pollConfig.grading.getGradeName(grade)),
+                color = pollConfig.grading.getGradeColor(grade)
+            )
             Spacer(Modifier.height(8.dp))
         }
 
@@ -69,7 +73,7 @@ fun VoteSummaryScreen(
                 .padding(16.dp),
         ) {
 
-            OutlinedButton(
+            TextButton(
                 onClick = onCancel,
             ) {
                 Text(
