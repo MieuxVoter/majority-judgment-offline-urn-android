@@ -55,23 +55,23 @@ class Quality7Grading : ListGrading() {
     )
 
     protected var _gradesColors = listOf(
-        Color(0xffdf3222),
-        Color(0xffed6f01),
-        Color(0xfffab001),
-        Color(0xffc5d300),
-        Color(0xff7bbd3e),
-        Color(0xff00a249),
-        Color(0xff017a36),
+        Color(0xff870714),
+        Color(0xffce202c),
+        Color(0xffe5542c),
+        Color(0xffde9524),
+        Color(0xff7aa032),
+        Color(0xff12894b),
+        Color(0xff0a6043),
     )
 
     protected var _gradesTextColors = listOf(
-        Color.White,
-        Color.White,
-        Color.Black,
-        Color.Black,
-        Color.Black,
-        Color.White,
-        Color.White,
+        Color(0xffffb4a1),
+        Color(0xffffc394),
+        Color(0xffffedb7),
+        Color(0xfffbe9a6),
+        Color(0xffd9f28c),
+        Color(0xff90f8b2),
+        Color(0xffadf8d7),
     )
 
     override fun getGradesNames(): List<Int> {
