@@ -42,6 +42,7 @@ import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.model.Quality7Grading
+import com.illiouchine.jm.ui.composable.JudgmentBalls
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
@@ -128,7 +129,6 @@ fun PollVotingScreen(
                 val currentProposalIndex = pollVotingState.currentBallot!!.judgments.size
 
                 if (pollVotingState.isInStateVoting()) {
-
                     // State: VOTING, filling the ballot with judgments.
                     GradeSelection(
                         pollConfig = pollVotingState.pollConfig,
@@ -141,7 +141,11 @@ fun PollVotingScreen(
                             onJudgmentCast(judgment)
                         }
                     )
-
+                    JudgmentBalls(
+                        modifier = Modifier.fillMaxWidth(),
+                        pollConfig = pollVotingState.pollConfig,
+                        ballot = pollVotingState.currentBallot
+                    )
                 } else {
 
                     // State: SUMMARY, awaiting confirmation, back or redo.
