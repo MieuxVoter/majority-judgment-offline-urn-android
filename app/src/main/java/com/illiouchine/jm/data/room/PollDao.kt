@@ -33,7 +33,7 @@ interface PollDao {
         poll: PollEntity,
         proposals: List<ProposalEntity>,
         ballots: List<List<JudgmentEntity>>
-    ){
+    ) {
 
         val pollId = _insertPoll(poll).toInt()
         insertProposals(
@@ -54,13 +54,13 @@ interface PollDao {
     }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun _insertPoll(poll: PollEntity) : Long
+    suspend fun _insertPoll(poll: PollEntity): Long
 
     @Insert
     suspend fun insertProposals(proposals: List<ProposalEntity>): List<Long>
 
     @Insert
-    suspend fun insertBallot(ballot: BallotEntity) : Long
+    suspend fun insertBallot(ballot: BallotEntity): Long
 
     @Insert
     suspend fun insertJudgment(judgments: List<JudgmentEntity>): List<Long>

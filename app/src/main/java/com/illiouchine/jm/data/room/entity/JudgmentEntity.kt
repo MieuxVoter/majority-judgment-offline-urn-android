@@ -22,5 +22,5 @@ data class JudgmentEntity(
     @PrimaryKey(autoGenerate = true) val uid: Int = 0,
     val ballotId: Int = 0,
     val proposalIndex: Int,
-    val gradeIndex : Int
+    val gradeIndex: Int
 )
