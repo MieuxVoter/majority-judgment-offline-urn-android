@@ -1,13 +1,17 @@
 package com.illiouchine.jm.ui.screen
 
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -17,9 +21,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -36,6 +42,7 @@ import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.model.Quality7Grading
 import com.illiouchine.jm.ui.composable.MjuBottomBar
+import com.illiouchine.jm.ui.composable.PollSummary
 import com.illiouchine.jm.ui.theme.JmTheme
 
 
@@ -60,7 +67,7 @@ fun HomeScreen(
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                modifier = Modifier.padding(24.dp),
+                modifier = Modifier.padding(16.dp),
                 onClick = { onSetupBlankPoll() },
                 icon = { Icon(Icons.Filled.Add, "+") },
                 text = { Text(text = "New Poll") },
@@ -96,60 +103,26 @@ fun HomeScreen(
                 )
             }
 
-            Spacer(Modifier.size(16.dp))
+            Spacer(Modifier.height(16.dp))
 
             homeViewState.polls.reversed().forEach { poll ->
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)
-                ) {
-                    Column {
-                        Text(
-                            modifier = Modifier,
-                            text = poll.pollConfig.subject,
-                            fontWeight = FontWeight.Bold,
-                        )
-                        Row {
-                            val sequenceOfProposals = StringBuilder()
-                            poll.pollConfig.proposals.forEachIndexed { proposalIndex, proposal ->
-                                if (proposalIndex > 0) {
-                                    sequenceOfProposals.append(", ")
-                                }
-                                sequenceOfProposals.append(proposal)
-                            }
-
-                            Text(
-                                modifier = Modifier.weight(1f),
-                                text = sequenceOfProposals.toString(),
-                            )
-
-                            Text(
-                                modifier = Modifier.align(Alignment.Bottom),
-                                fontStyle = FontStyle.Italic,
-                                text = "(${poll.ballots.size} votes)",
-                            )
-                        }
-                        Row {
-                            OutlinedButton(onClick = { onDeletePoll(poll) }) {
-                                Text("Delete")
-                            }
-                            Spacer(modifier = Modifier.weight(1f))
-                            OutlinedButton(onClick = { onSetupClonePoll(poll) }) {
-                                Text("Clone")
-                            }
-                            Spacer(modifier = Modifier.weight(1f))
-                            Button(onClick = { onResumePoll(poll) }) {
-                                Text("Resume")
-                            }
-                            Spacer(modifier = Modifier.weight(1f))
-                            Button(onClick = { onShowResult(poll) }) {
-                                Text("Inspect")
-                            }
-                        }
-                    }
-                }
+                PollSummary(
+                    modifier = Modifier.fillMaxWidth(),
+                    poll = poll,
+                    onSetupClonePoll = { onSetupClonePoll(it) },
+                    onResumePoll = { onResumePoll(it) },
+                    onShowResult = { onShowResult(it) },
+                    onDeletePoll = { onDeletePoll(it) },
+                )
+                Spacer(
+                    Modifier.height(1.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .background(Color.LightGray)
+                )
             }
             // Safe area : cause fab button
-            Spacer(Modifier.size(72.dp))
+            Spacer(Modifier.height(72.dp))
         }
     }
 }
