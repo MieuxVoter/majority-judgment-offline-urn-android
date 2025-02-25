@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -152,9 +153,16 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(Screens.About.name) {
+                        val uriHandler = LocalUriHandler.current
                         AboutScreen(
                             modifier = Modifier,
                             navController = navController,
+                            onBrowseSource = {
+                                uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android")
+                            },
+                            onReportBug = {
+                                uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android/issues")
+                            }
                         )
                     }
                 }

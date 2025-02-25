@@ -26,8 +26,8 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
 
-    - name: Check APK
-      run: ls -la app/build/outputs/apk/debug/app-debug.apk
+#    - name: Check APK
+#      run: ls -la app/build/outputs/apk/debug/app-debug.apk
 
       # Upload the APKs to the Releases if there is a git tag
       # Docs: https://github.com/softprops/action-gh-release

@@ -27,4 +27,5 @@
     <string name="all_things_considered_i_think">All things considered, I think</string>
     <string name="verb_is">is</string>
     <string name="toast_proposal_name_already_exists">A proposal with this name already exists.</string>
+    <string name="button_report_bug">Report a Bug</string>
 </resources>

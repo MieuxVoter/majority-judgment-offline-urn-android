@@ -13,6 +13,9 @@ import com.illiouchine.jm.data.room.entity.PollEntity
 import com.illiouchine.jm.data.room.entity.PollWithProposals
 import com.illiouchine.jm.data.room.entity.ProposalEntity
 
+/**
+ * Data Access Object
+ */
 @Dao
 interface PollDao {
 

@@ -18,12 +18,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.illiouchine.jm.R
 import com.illiouchine.jm.Screens
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.theme.JmTheme
@@ -49,7 +51,7 @@ fun AboutScreen(
                 modifier = Modifier.padding(8.dp),
                 onClick = { onReportBug() },
                 icon = { Icon(Icons.Filled.Build, "Report") },
-                text = { Text(text = "Report a Bug") },
+                text = { Text(text = stringResource(R.string.button_report_bug)) },
             )
         }
     ) { innerPadding ->
