@@ -28,4 +28,5 @@
     <string name="all_things_considered_i_think">Ayant pris en compte les divers éléments, je pense que</string>
     <string name="verb_is">est</string>
     <string name="toast_proposal_name_already_exists">Une autre proposition existe déjà avec ce nom.</string>
+    <string name="button_report_bug">Rapport de Bogue</string>
 </resources>
