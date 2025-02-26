@@ -8,11 +8,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +35,7 @@ import com.illiouchine.jm.ui.composable.JudgmentBalls
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
+import com.illiouchine.jm.ui.theme.deleteColor
 
 @Composable
 fun PollVotingScreen(
@@ -70,43 +75,44 @@ fun PollVotingScreen(
 
             if (pollVotingState.isInStateReady()) {
 
+                Spacer(modifier = Modifier.height(32.dp))
+
                 // State: READY, waiting for new participant.
                 if (pollVotingState.ballots.isNotEmpty()) {
                     Text("Votre participation a bien été prise en compte.\nVous pouvez maintenant passer cet appareil au prochain participant.")
                 }
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                ) {
+                Spacer(modifier = Modifier.height(32.dp))
+
+                if (pollVotingState.ballots.isEmpty()) {
                     Button(
-                        enabled = pollVotingState.ballots.isNotEmpty(),
-                        onClick = {
-                            val poll = Poll(
-                                pollConfig = pollVotingState.pollConfig,
-                                ballots = pollVotingState.ballots
-                            )
-                            onFinish(poll)
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        onClick = { onStartVoting() },
+                        content = {
+                            Text("Be the first to vote")
                         }
-                    ) { Text(stringResource(R.string.button_end_the_poll)) }
-                    if (pollVotingState.ballots.isEmpty()) {
-                        Button(
-                            onClick = { onStartVoting() },
-                            content = {
-                                Text("Be the first to vote")
-                            }
-                        )
-                    } else {
-                        Button(
-                            onClick = { onStartVoting() },
-                            content = {
-                                Text(stringResource(R.string.button_next_participant))
-                            }
-                        )
-                    }
+                    )
+                } else {
+                    Button(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        onClick = { onStartVoting() },
+                        content = {
+                            Text(stringResource(R.string.button_next_participant))
+                        }
+                    )
                 }
+                Spacer(modifier = Modifier.height(32.dp))
+                OutlinedButton(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    enabled = pollVotingState.ballots.isNotEmpty(),
+                    onClick = {
+                        val poll = Poll(
+                            pollConfig = pollVotingState.pollConfig,
+                            ballots = pollVotingState.ballots
+                        )
+                        onFinish(poll)
+                    },
+                ) { Text(stringResource(R.string.button_end_the_poll)) }
             } else {
 
                 val currentProposalIndex = pollVotingState.currentBallot!!.judgments.size
