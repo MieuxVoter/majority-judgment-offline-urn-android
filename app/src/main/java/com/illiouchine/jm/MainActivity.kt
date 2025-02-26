@@ -87,7 +87,7 @@ class MainActivity : ComponentActivity() {
                                 onShowResult = {
                                     pollResultViewModel.finalizePoll(poll = it)
                                     navController.navigate(Screens.PollResult.name)
-                                }
+                                },
                             )
                         }
                     }
@@ -162,7 +162,7 @@ class MainActivity : ComponentActivity() {
                             },
                             onReportBug = {
                                 uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android/issues")
-                            }
+                            },
                         )
                     }
                 }
