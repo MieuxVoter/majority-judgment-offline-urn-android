@@ -17,8 +17,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.illiouchine.jm.R
@@ -65,7 +67,15 @@ fun SettingsScreen(
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
-            Text(text = "Settings")
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 64.dp),
+                fontSize = 8.em,
+                textAlign = TextAlign.Center,
+                lineHeight = 1.3.em,
+                text = stringResource(R.string.settings_screen_title)
+            )
 
             var showOnBoardingCheck by remember { mutableStateOf(settingsState.showOnboarding) }
             Row(
@@ -94,7 +104,7 @@ fun SettingsScreen(
     }
 }
 
-@Preview
+@Preview(showSystemUi = true)
 @Composable
 private fun PreviewSettingsScreen() {
     JmTheme {

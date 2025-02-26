@@ -32,4 +32,5 @@
     <string name="five_grading">Five grading list</string>
     <string name="three_grading">Three grading list</string>
     <string name="show_on_boarding">Show on boarding</string>
+    <string name="settings_screen_title">Settings</string>
 </resources>
