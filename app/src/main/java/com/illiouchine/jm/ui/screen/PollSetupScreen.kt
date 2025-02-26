@@ -7,13 +7,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -31,15 +36,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.R
 import com.illiouchine.jm.Screens
+import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.theme.JmTheme
+import com.illiouchine.jm.ui.theme.deleteColor
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PollSetupScreen(
     modifier: Modifier = Modifier,
@@ -118,7 +125,7 @@ fun PollSetupScreen(
                     onAddSubject(subject)
                 },
             )
-
+            Spacer(modifier = Modifier.height(16.dp))
             Text(stringResource(R.string.label_poll_proposals))
             Row {
                 TextField(
@@ -128,16 +135,21 @@ fun PollSetupScreen(
                     onValueChange = { proposal = it },
                     placeholder = { Text(generateProposalName()) },
                     keyboardActions = KeyboardActions(onDone = { addProposal() }),
+                    trailingIcon = {
+                        IconButton(
+                            onClick = { addProposal() }
+                        ) {
+                            Icon(
+                                modifier = Modifier,
+                                imageVector = Icons.Outlined.Add,
+                                contentDescription = stringResource(R.string.button_add),
+                            )
+                        }
+                    }
                 )
-                Spacer(Modifier.size(16.dp))
-                Button(
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically),
-                    onClick = { addProposal() },
-                ) {
-                    Text(stringResource(R.string.button_add))
-                }
             }
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             pollSetupState.pollSetup.proposals.forEachIndexed { propIndex, propName ->
 
@@ -150,22 +162,28 @@ fun PollSetupScreen(
                 }
 
                 Row(
-                    modifier = Modifier
-                        .padding(vertical = 6.dp),
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
-                            .weight(1f)
-                            .padding(8.dp),
+                            .weight(1f),
                         text = propName,
                     )
-                    Spacer(Modifier.size(16.dp))
-                    OutlinedButton(
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically),
-                        onClick = { onRemoveProposal(propName) },
-                    ) { Text("x") }
+                    Spacer(Modifier
+                        .height(16.dp)
+                        .padding(8.dp))
+                    IconButton(
+                        onClick = { onRemoveProposal(propName) }
+                    ) {
+                        Icon(
+                            modifier = Modifier,
+                            imageVector = Icons.Outlined.Delete,
+                            contentDescription = "",
+                            tint = deleteColor
+                        )
+                    }
                 }
             }
 
