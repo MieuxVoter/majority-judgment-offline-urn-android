@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,22 +26,20 @@ data class OnBoardingPage(
     val text: String,
 )
 
-val onBoardingPages = listOf(
-    OnBoardingPage(0, "Bienvenue dans votre urne mobile au Jugement Majoritaire."),
-    OnBoardingPage(1, "Organisez un scrutin, et faites tourner le téléphone aux participantes."),
-    OnBoardingPage(2, "Cette application n'a pas besoin d'un accès Internet."),
-    OnBoardingPage(
-        3,
-        "C'est un logiciel libre, programmé par des bénévoles affamés.  Rejoignez-nous !"
-    ),
-    OnBoardingPage(4, "Prêt⋅e ?"),
-)
 
 @Composable
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
     onFinish: () -> Unit = {},
 ) {
+
+    val onBoardingPages = listOf(
+        OnBoardingPage(0, stringResource(R.string.onboarding_welcome_to_your_offline_poll_app)),
+        OnBoardingPage(1, stringResource(R.string.onboarding_setup_a_poll_and_share_the_phone)),
+        OnBoardingPage(2, stringResource(R.string.onboarding_this_is_free_software)),
+        OnBoardingPage(3, stringResource(R.string.onboarding_ready)),
+    )
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
     ) { innerPadding ->

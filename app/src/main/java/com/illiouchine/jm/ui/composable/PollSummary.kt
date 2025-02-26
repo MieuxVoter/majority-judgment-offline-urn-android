@@ -11,10 +11,12 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.theme.JmTheme
@@ -52,10 +54,16 @@ fun PollSummary(
                     text = sequenceOfProposals.toString(),
                 )
 
+                // homemade pluralStringResource ; NIH
+                val votesString = if (poll.ballots.size > 1) {
+                    stringResource(R.string.votes)
+                } else {
+                    stringResource(R.string.vote)
+                }
                 Text(
                     modifier = Modifier.align(Alignment.Bottom),
                     fontStyle = FontStyle.Italic,
-                    text = "(${poll.ballots.size} votes)",
+                    text = "(${poll.ballots.size} " + votesString + ")",
                 )
             }
             Row(
@@ -68,16 +76,16 @@ fun PollSummary(
                         contentColor = deleteColor
                     )
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.action_delete))
                 }
                 TextButton(onClick = { onSetupClonePoll(poll) }) {
-                    Text("Clone")
+                    Text(stringResource(R.string.action_clone))
                 }
                 TextButton(onClick = { onResumePoll(poll) }) {
-                    Text("Resume")
+                    Text(stringResource(R.string.action_resume))
                 }
                 TextButton(onClick = { onShowResult(poll) }) {
-                    Text("Inspect")
+                    Text(stringResource(R.string.action_inspect))
                 }
             }
         }

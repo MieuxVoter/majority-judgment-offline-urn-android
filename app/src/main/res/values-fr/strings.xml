@@ -29,12 +29,22 @@
     <string name="verb_is">est</string>
     <string name="toast_proposal_name_already_exists">Une autre proposition existe déjà avec ce nom.</string>
     <string name="button_report_bug">Rapport de Bogue</string>
-    <string name="seven_grading">Spt mentions</string>
+    <string name="seven_grading">Sept mentions</string>
     <string name="five_grading">Cinq mentions</string>
     <string name="three_grading">Trois mentions</string>
-    <string name="show_on_boarding">Montrer l\'intro de nouveau</string>
+    <string name="show_on_boarding">Montrer l\'intro à nouveau</string>
     <string name="settings_screen_title">Options</string>
     <string name="incitation_making_new_poll">Créez un nouveau scrutin, c\'est gratis !</string>
-    <string name="title_multiline_majority_judgment_urn">Urne Jugement Majoritaire</string>
+    <string name="title_multiline_majority_judgment_urn">Urne\nJugement\nMajoritaire</string>
     <string name="button_new_poll">Nouveau Scrutin</string>
+    <string name="onboarding_welcome_to_your_offline_poll_app">Bienvenue dans votre urne mobile au Jugement Majoritaire.</string>
+    <string name="onboarding_setup_a_poll_and_share_the_phone">Organisez un scrutin, et faites tourner le téléphone aux participantes.</string>
+    <string name="onboarding_this_is_free_software">C\'est un logiciel libre, et vous pouvez le rendre meilleur.</string>
+    <string name="onboarding_ready">C\'est parti !</string>
+    <string name="votes">votes</string>
+    <string name="vote">vote</string>
+    <string name="action_delete">Supprimer</string>
+    <string name="action_clone">Cloner</string>
+    <string name="action_resume">Reprendre</string>
+    <string name="action_inspect">Voir</string>
 </resources>

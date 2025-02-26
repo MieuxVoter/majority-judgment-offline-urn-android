@@ -88,8 +88,6 @@ fun PollSetupScreen(
             return "${context.getString(R.string.proposal)} ${(65 + pollSetupState.pollSetup.proposals.size).toChar()}"
         }
 
-        // TODO: Perhaps use the 'fun' def syntax instead here ?
-        // And move the logic in the ViewModel ?
         val addProposal: () -> Unit = {
             // Rule: if the proposal name is not specified, use a default
             if (proposal == "") {
@@ -164,7 +162,7 @@ fun PollSetupScreen(
 
                 Row(
                     modifier = Modifier.padding(vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         modifier = Modifier
@@ -182,7 +180,7 @@ fun PollSetupScreen(
                             modifier = Modifier,
                             imageVector = Icons.Outlined.Delete,
                             contentDescription = "",
-                            tint = deleteColor
+                            tint = deleteColor,
                         )
                     }
                 }
@@ -193,7 +191,7 @@ fun PollSetupScreen(
                 grading = pollSetupState.pollSetup.grading,
                 onGradingSelected = {
                     onGradingSelected(it)
-                }
+                },
             )
 
             // Rule: Poll should have more than 1 proposals.

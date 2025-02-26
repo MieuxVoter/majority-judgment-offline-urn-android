@@ -36,4 +36,14 @@
     <string name="incitation_making_new_poll">Try making a new poll, it\'s free !</string>
     <string name="title_multiline_majority_judgment_urn">Majority\nJudgment\nUrn</string>
     <string name="button_new_poll">New Poll</string>
+    <string name="onboarding_welcome_to_your_offline_poll_app">Welcome to your offline poll app using Majority Judgment.</string>
+    <string name="onboarding_setup_a_poll_and_share_the_phone">Setup a poll and share the phone amongst participants.</string>
+    <string name="onboarding_this_is_free_software">This is free software, and you can help make it better.</string>
+    <string name="onboarding_ready">Ready ?</string>
+    <string name="votes">votes</string>
+    <string name="vote">vote</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_clone">Clone</string>
+    <string name="action_resume">Resume</string>
+    <string name="action_inspect">Inspect</string>
 </resources>
