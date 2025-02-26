@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
-import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Poll
-import com.illiouchine.jm.model.Quality7Grading
+import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.theme.JmTheme
 import fr.mieuxvoter.mj.CollectedTally
@@ -148,7 +148,7 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
         pollConfig = PollConfig(
             subject = "Prézidaaanh ?",
             proposals = listOf("Tonio", "Bobby", "Mario"),
-            grading = Quality7Grading(),
+            grading = Grading.Quality7Grading,
         ),
         ballots = listOf(
             Ballot(

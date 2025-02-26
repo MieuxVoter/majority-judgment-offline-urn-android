@@ -2,45 +2,37 @@ package com.illiouchine.jm.ui.screen
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.Screens
+import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
+import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.model.Quality7Grading
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.PollSummary
 import com.illiouchine.jm.ui.theme.JmTheme
@@ -138,7 +130,7 @@ fun PreviewHomeScreen(modifier: Modifier = Modifier) {
                         pollConfig = PollConfig(
                             subject = "Prezidan ?",
                             proposals = listOf("Mario", "Bob", "JLM"),
-                            grading = Quality7Grading()
+                            grading = Grading.Quality7Grading
                         ),
                         ballots = listOf(
                             Ballot(
@@ -154,7 +146,7 @@ fun PreviewHomeScreen(modifier: Modifier = Modifier) {
                         pollConfig = PollConfig(
                             subject = "De combien de megawatts la couleur bleu est-elle plus poilue que sous la mer ?",
                             proposals = listOf("42", "Rose", "Un sac de rats", "Presque", "Mercure", "Un Sayan", "Merde !"),
-                            grading = Quality7Grading(),
+                            grading = Grading.Quality7Grading,
                         ),
                         ballots = listOf(
                             Ballot(

@@ -2,7 +2,6 @@ package com.illiouchine.jm.ui.screen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,11 +11,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,15 +24,14 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.PollVotingViewModel
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
+import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.model.Quality7Grading
 import com.illiouchine.jm.ui.composable.GradeSelectionList
 import com.illiouchine.jm.ui.composable.JudgmentBalls
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
-import com.illiouchine.jm.ui.theme.deleteColor
 
 @Composable
 fun PollVotingScreen(
@@ -194,7 +190,7 @@ fun PreviewVotingScreen(modifier: Modifier = Modifier) {
                 pollConfig = PollConfig(
                     subject = "Best Prezidan ?",
                     proposals = listOf("That candidate with a long name-san", "Mario", "JanBob"),
-                    grading = Quality7Grading(),
+                    grading = Grading.Quality7Grading,
                 ),
                 ballots = emptyList(),
                 currentBallot = null,
@@ -213,7 +209,7 @@ fun PreviewVotingScreenWithBallots(modifier: Modifier = Modifier) {
                 pollConfig = PollConfig(
                     subject = "Best Prezidan ?",
                     proposals = listOf("That candidate with a long name-san", "Mario", "JanBob"),
-                    grading = Quality7Grading(),
+                    grading = Grading.Quality7Grading,
                 ),
                 ballots = listOf(
                     Ballot(judgments = listOf(Judgment(1, grade = 3)))
@@ -234,7 +230,7 @@ fun PreviewVotingScreenWithCurrentBallots(modifier: Modifier = Modifier) {
                 pollConfig = PollConfig(
                     subject = "Best Prezidan ?",
                     proposals = listOf("That candidate with a long name-san", "Mario", "JanBob"),
-                    grading = Quality7Grading(),
+                    grading = Grading.Quality7Grading,
                 ),
                 ballots = listOf(
                     Ballot(
