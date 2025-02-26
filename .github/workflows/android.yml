@@ -26,8 +26,47 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
 
-#    - name: Check APK
-#      run: ls -la app/build/outputs/apk/debug/app-debug.apk
+    - name: Write the encoded store key file from secrets
+      env:
+        STORE_KEY_FILE_BASE64: ${{ secrets.STORE_KEY_FILE_BASE64 }}
+      run: echo "$STORE_KEY_FILE_BASE64" > /tmp/skf64
+
+    - name: Decode the store key file
+      run: base64 --decode /tmp/skf64 > /tmp/skf.jks
+
+    - name: Sign the Release APK
+      env:
+        STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
+        STORE_KEY_PASSWORD: ${{ secrets.STORE_KEY_PASSWORD }}
+        STORE_KEY_FILE_PATH: /tmp/skf.jks
+        STORE_KEY_ALIAS: ${{ secrets.STORE_KEY_ALIAS }}
+      run: |
+        ./gradlew assembleRelease \
+        -Pandroid.injected.signing.store.file=$STORE_KEY_FILE_PATH \
+        -Pandroid.injected.signing.store.password=$STORE_PASSWORD \
+        -Pandroid.injected.signing.key.alias=$STORE_KEY_ALIAS \
+        -Pandroid.injected.signing.key.password=$STORE_KEY_PASSWORD
+
+    - name: Delete the store key files
+      run: rm /tmp/skf64 && rm /tmp/skf.jks
+
+#    - uses: Tlaster/android-sign@v1
+#      name: Sign app APK
+#      with:
+#        releaseDirectory: |
+#          app/build/outputs/apk/release
+#          app/build/outputs/bundle/release
+#        signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+#        output: build/release/signed
+#        alias: ${{ secrets.KEY_ALIAS }}
+#        keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+#        keyPassword: ${{ secrets.KEY_PASSWORD }}
+#      env:
+#        BUILD_TOOLS_VERSION: "30.0.2"
+
+
+    - name: Check APK
+      run: ls -laR app/build/outputs/apk/
 
       # Upload the APKs to the Releases if there is a git tag
       # Docs: https://github.com/softprops/action-gh-release
@@ -37,4 +76,5 @@ jobs:
       with:
         files: |
           app/build/outputs/apk/debug/app-debug.apk
+          app/build/outputs/apk/release/app-release.apk
           app/build/outputs/apk/release/app-release-unsigned.apk
