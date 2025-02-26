@@ -1,9 +1,10 @@
 package com.illiouchine.jm.model
 
+import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.Color
 
 data class Grade(
-    val name: Int,
+    @StringRes val name: Int,
     val color: Color,
     val textColor: Color
 )

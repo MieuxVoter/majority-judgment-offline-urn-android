@@ -17,7 +17,6 @@ import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.logic.PollVotingViewModel
 import com.illiouchine.jm.logic.SettingsViewModel
-import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.screen.AboutScreen
 import com.illiouchine.jm.ui.screen.HomeScreen
 import com.illiouchine.jm.ui.screen.OnBoardingScreen
@@ -73,7 +72,7 @@ class MainActivity : ComponentActivity() {
                                     homeViewModel.deletePoll(it)
                                 },
                                 onSetupBlankPoll = {
-                                    pollSetupViewModel.startPollSetup(PollConfig())
+                                    pollSetupViewModel.startPollSetup()
                                     navController.navigate(Screens.PollSetup.name)
                                 },
                                 onSetupClonePoll = {
@@ -99,6 +98,7 @@ class MainActivity : ComponentActivity() {
                             onAddSubject = { pollSetupViewModel.onAddSubject(it) },
                             onAddProposal = { pollSetupViewModel.onAddProposal(it) },
                             onRemoveProposal = { pollSetupViewModel.onRemoveProposal(it) },
+                            onGradingSelected = { pollSetupViewModel.onGradingSelected(it) },
                             setupFinished = {
                                 pollVotingViewModel.initNewVotingSession(pollSetupState.pollSetup)
                                 navController.navigate(Screens.PollVote.name)
@@ -146,6 +146,9 @@ class MainActivity : ComponentActivity() {
                             settingsState = settingsState,
                             onShowOnboardingChange = {
                                 settingsViewModel.updateShowOnBoarding(it)
+                            },
+                            onDefaultGradingSelected = {
+                                settingsViewModel.updateDefaultGrading(it)
                             },
                             onDismissFeedback = {
                                 //homeViewModel.onDismissFeedback()

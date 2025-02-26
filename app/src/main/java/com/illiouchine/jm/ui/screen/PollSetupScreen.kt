@@ -15,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,14 +38,15 @@ import androidx.navigation.compose.rememberNavController
 import com.illiouchine.jm.R
 import com.illiouchine.jm.Screens
 import com.illiouchine.jm.logic.PollSetupViewModel
+import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.ui.composable.GradingSelectionRow
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.deleteColor
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PollSetupScreen(
     modifier: Modifier = Modifier,
@@ -55,6 +55,7 @@ fun PollSetupScreen(
     onAddSubject: (String) -> Unit = {},
     onAddProposal: (String) -> Unit = {},
     onRemoveProposal: (String) -> Unit = {},
+    onGradingSelected: (Grading) -> Unit = {},
     setupFinished: () -> Unit = {},
     onDismissFeedback: () -> Unit = {},
 ) {
@@ -186,6 +187,14 @@ fun PollSetupScreen(
                     }
                 }
             }
+
+            GradingSelectionRow(
+                modifier = Modifier,
+                grading = pollSetupState.pollSetup.grading,
+                onGradingSelected = {
+                    onGradingSelected(it)
+                }
+            )
 
             // Rule: Poll should have more than 1 proposals.
             Button(

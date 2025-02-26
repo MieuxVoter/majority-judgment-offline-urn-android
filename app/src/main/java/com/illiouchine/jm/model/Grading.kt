@@ -1,16 +1,24 @@
 package com.illiouchine.jm.model
 
+import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.Color
 import com.illiouchine.jm.R
+import com.illiouchine.jm.model.Grading.Quality3Grading
+import com.illiouchine.jm.model.Grading.Quality5Grading
+import com.illiouchine.jm.model.Grading.Quality7Grading
+
+val gradings: List<Grading> = listOf(Quality7Grading, Quality5Grading, Quality3Grading)
 
 /**
  * The grades must be unambiguously sorted for MJ to work.
  */
 sealed class Grading(
+    @StringRes val name: Int,
     val grades: List<Grade>
 ) {
     data object Quality7Grading : Grading(
-        listOf(
+        name = R.string.seven_grading,
+        grades = listOf(
             Grade(name = R.string.grade_to_reject, color = Color(0xff870714), Color(0xffffb4a1)),
             Grade(name = R.string.grade_insufficient, color = Color(0xffce202c), Color(0xffffc394)),
             Grade(name = R.string.grade_passable, color = Color(0xffe5542c), Color(0xffffedb7)),
@@ -26,7 +34,8 @@ sealed class Grading(
     )
 
     data object Quality5Grading : Grading(
-        listOf(
+        name = R.string.five_grading,
+        grades = listOf(
             Grade(name = R.string.grade_to_reject, color = Color(0xff870714), Color(0xffffb4a1)),
             Grade(name = R.string.grade_passable, color = Color(0xffe5542c), Color(0xffffedb7)),
             Grade(
@@ -40,7 +49,8 @@ sealed class Grading(
     )
 
     data object Quality3Grading : Grading(
-        listOf(
+        name = R.string.three_grading,
+        grades = listOf(
             Grade(name = R.string.grade_to_reject, color = Color(0xff870714), Color(0xffffb4a1)),
             Grade(
                 name = R.string.grade_somewhat_good,

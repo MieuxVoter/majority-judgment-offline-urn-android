@@ -1,12 +1,16 @@
 package com.illiouchine.jm.logic
 
 import androidx.lifecycle.ViewModel
+import com.illiouchine.jm.data.SharedPrefsHelper
+import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.PollConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
-class PollSetupViewModel : ViewModel() {
+class PollSetupViewModel(
+    private val sharedPrefsHelper: SharedPrefsHelper
+) : ViewModel() {
 
     data class PollSetupViewState(
         val pollSetup: PollConfig = PollConfig(),
@@ -17,12 +21,12 @@ class PollSetupViewModel : ViewModel() {
     val pollSetupViewState: StateFlow<PollSetupViewState> = _pollSetupViewState
 
     fun startPollSetup(
-        pollConfig: PollConfig = PollConfig()
+        pollConfig: PollConfig? = null
     ) {
-        // FIXME: for now the navigation is done in the lambda in the Activity -- is it correct ?
-        // WGU : yes, the viewModel should not know the navController because they have to separate lifecycle
+        val initialPollConfig =
+            pollConfig ?: PollConfig(grading = sharedPrefsHelper.getDefaultGrading())
         _pollSetupViewState.update {
-            it.copy(pollSetup = pollConfig)
+            it.copy(pollSetup = initialPollConfig)
         }
     }
 
@@ -65,6 +69,12 @@ class PollSetupViewModel : ViewModel() {
     fun onDismissFeedback() {
         _pollSetupViewState.update {
             it.copy(feedback = null)
+        }
+    }
+
+    fun onGradingSelected(grading: Grading) {
+        _pollSetupViewState.update {
+            it.copy(pollSetup = it.pollSetup.copy(grading = grading))
         }
     }
 }

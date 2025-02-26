@@ -14,13 +14,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.illiouchine.jm.R
 import com.illiouchine.jm.Screens
 import com.illiouchine.jm.logic.SettingsViewModel
+import com.illiouchine.jm.model.Grading
+import com.illiouchine.jm.ui.composable.GradingSelectionRow
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.theme.JmTheme
@@ -33,6 +38,7 @@ fun SettingsScreen(
     settingsState: SettingsViewModel.SettingsViewState = SettingsViewModel.SettingsViewState(),
     feedback: String? = "",
     onShowOnboardingChange: (Boolean) -> Unit = {},
+    onDefaultGradingSelected: (Grading) -> Unit = {},
     onDismissFeedback: () -> Unit = {}
 ) {
     Scaffold(
@@ -59,15 +65,17 @@ fun SettingsScreen(
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
-            Text("Settings")
+            Text(text = "Settings")
+
             var showOnBoardingCheck by remember { mutableStateOf(settingsState.showOnboarding) }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Show on boarding")
+                Text(stringResource(R.string.show_on_boarding))
                 Switch(
                     modifier = Modifier,
                     checked = showOnBoardingCheck,
@@ -77,6 +85,11 @@ fun SettingsScreen(
                     },
                 )
             }
+            GradingSelectionRow(
+                modifier = Modifier,
+                grading = settingsState.defaultGrading,
+                onGradingSelected = { onDefaultGradingSelected(it) }
+            )
         }
     }
 }

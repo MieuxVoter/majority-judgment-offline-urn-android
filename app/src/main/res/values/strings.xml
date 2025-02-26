@@ -28,4 +28,8 @@
     <string name="verb_is">is</string>
     <string name="toast_proposal_name_already_exists">A proposal with this name already exists.</string>
     <string name="button_report_bug">Report a Bug</string>
+    <string name="seven_grading">Seven grading list</string>
+    <string name="five_grading">Five grading list</string>
+    <string name="three_grading">Three grading list</string>
+    <string name="show_on_boarding">Show on boarding</string>
 </resources>

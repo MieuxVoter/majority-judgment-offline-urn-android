@@ -3,7 +3,6 @@ package com.illiouchine.jm
 import android.app.Application
 import androidx.room.Room
 import com.illiouchine.jm.data.BDDPollDataSource
-import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.data.room.PollDao
@@ -16,10 +15,8 @@ import com.illiouchine.jm.logic.SettingsViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
-import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
-import kotlin.math.sin
 
 class MajorityUrnApplication : Application() {
 
@@ -47,14 +44,14 @@ val module = module {
     }
 
     // Data
-    single{ SharedPrefsHelper(get()) }
+    single { SharedPrefsHelper(get()) }
     //single<PollDataSource>(named("inMemory") { InMemoryPollDataSource() }
     single<PollDataSource> { BDDPollDataSource(get()) }
 
     // ViewModel
     viewModel { HomeViewModel(pollDataSource = get()) }
     viewModel { SettingsViewModel(sharedPreferences = get()) }
-    viewModel { PollSetupViewModel() }
+    viewModel { PollSetupViewModel(sharedPrefsHelper = get()) }
     viewModel { PollVotingViewModel() }
     viewModel { PollResultViewModel() }
 
