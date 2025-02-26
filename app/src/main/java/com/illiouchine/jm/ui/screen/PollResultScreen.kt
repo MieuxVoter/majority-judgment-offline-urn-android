@@ -18,9 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Grading
@@ -84,7 +86,7 @@ fun ResultScreen(
             ) {
                 Text(
                     modifier = modifier.padding(32.dp),
-                    text = "❝ ${poll.pollConfig.subject} ❞",
+                    text = "❝ ${poll.pollConfig.subject} ❞",
                     fontSize = 6.em,
                 )
             }
@@ -135,7 +137,7 @@ fun ResultScreen(
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = onFinish,
-            ) { Text("Finish") }
+            ) { Text(stringResource(R.string.button_finish)) }
         }
     }
 }

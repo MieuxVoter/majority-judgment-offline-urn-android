@@ -4,7 +4,7 @@
     <string name="label_poll_subject">Subject of the Poll</string>
     <string name="label_poll_proposals">Proposals</string>
     <string name="button_add">Add</string>
-    <string name="button_finish">finish</string>
+    <string name="button_finish">Finish</string>
     <string name="button_next">next</string>
     <string name="button_let_s_go">Let\'s go !</string>
     <string name="proposal">Proposal</string>
@@ -33,4 +33,7 @@
     <string name="three_grading">Three grading list</string>
     <string name="show_on_boarding">Show onboarding again</string>
     <string name="settings_screen_title">Settings</string>
+    <string name="incitation_making_new_poll">Try making a new poll, it\'s free !</string>
+    <string name="title_multiline_majority_judgment_urn">Majority\nJudgment\nUrn</string>
+    <string name="button_new_poll">New Poll</string>
 </resources>

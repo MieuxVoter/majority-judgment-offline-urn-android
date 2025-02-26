@@ -34,4 +34,7 @@
     <string name="three_grading">Trois mentions</string>
     <string name="show_on_boarding">Montrer l\'intro de nouveau</string>
     <string name="settings_screen_title">Options</string>
+    <string name="incitation_making_new_poll">Créez un nouveau scrutin, c\'est gratis !</string>
+    <string name="title_multiline_majority_judgment_urn">Urne Jugement Majoritaire</string>
+    <string name="button_new_poll">Nouveau Scrutin</string>
 </resources>

@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.illiouchine.jm.R
 import com.illiouchine.jm.Screens
 import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.model.Ballot
@@ -62,7 +64,7 @@ fun HomeScreen(
                 modifier = Modifier.padding(16.dp),
                 onClick = { onSetupBlankPoll() },
                 icon = { Icon(Icons.Filled.Add, "+") },
-                text = { Text(text = "New Poll") },
+                text = { Text(text = stringResource(R.string.button_new_poll)) },
             )
         }
     ) { innerPadding ->
@@ -81,7 +83,7 @@ fun HomeScreen(
                 fontSize = 8.em,
                 textAlign = TextAlign.Center,
                 lineHeight = 1.3.em,
-                text = "Majority\nJudgment\nUrn",
+                text = stringResource(R.string.title_multiline_majority_judgment_urn),
             )
 
             if (homeViewState.polls.isEmpty()) {
@@ -90,7 +92,7 @@ fun HomeScreen(
                     modifier = Modifier
                         .fillMaxWidth(),
                     textAlign = TextAlign.Center,
-                    text = "Try making a new poll, it's free !",
+                    text = stringResource(R.string.incitation_making_new_poll),
                     fontStyle = FontStyle.Italic,
                 )
             }
@@ -99,7 +101,7 @@ fun HomeScreen(
 
             homeViewState.polls.reversed().forEach { poll ->
                 PollSummary(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(top=8.dp),
                     poll = poll,
                     onSetupClonePoll = { onSetupClonePoll(it) },
                     onResumePoll = { onResumePoll(it) },
@@ -107,7 +109,8 @@ fun HomeScreen(
                     onDeletePoll = { onDeletePoll(it) },
                 )
                 Spacer(
-                    Modifier.height(1.dp)
+                    Modifier
+                        .height(1.dp)
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                         .background(Color.LightGray)
@@ -145,7 +148,15 @@ fun PreviewHomeScreen(modifier: Modifier = Modifier) {
                     Poll(
                         pollConfig = PollConfig(
                             subject = "De combien de megawatts la couleur bleu est-elle plus poilue que sous la mer ?",
-                            proposals = listOf("42", "Rose", "Un sac de rats", "Presque", "Mercure", "Un Sayan", "Merde !"),
+                            proposals = listOf(
+                                "42",
+                                "Rose",
+                                "Un sac de rats",
+                                "Presque",
+                                "Mercure",
+                                "Un Sayan",
+                                "Merde !"
+                            ),
                             grading = Grading.Quality7Grading,
                         ),
                         ballots = listOf(
