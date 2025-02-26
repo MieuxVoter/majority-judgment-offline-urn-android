@@ -45,6 +45,7 @@ fun ResultScreen(
     feedback: String? = "",
     onDismissFeedback: () -> Unit = {},
 ) {
+    // FIXME: refactor this into the viewmodel
     val grading = poll.pollConfig.grading
     val amountOfProposals = poll.pollConfig.proposals.size
     val amountOfGrades = poll.pollConfig.grading.getAmountOfGrades()

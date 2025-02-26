@@ -1,5 +1,7 @@
 package com.illiouchine.jm.ui.screen
 
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,7 +44,13 @@ fun OnBoardingScreen(
     )
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().pointerInput(Unit){
+            detectHorizontalDragGestures { _, dragAmount ->
+
+//                offsetX = (offsetX + dragAmount).coerceIn(-300f, 0f)
+            }
+        },
+
     ) { innerPadding ->
         var currentPageIndex by remember { mutableIntStateOf(0) }
         Box(

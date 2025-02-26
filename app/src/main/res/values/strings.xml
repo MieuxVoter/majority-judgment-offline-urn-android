@@ -46,4 +46,8 @@
     <string name="action_clone">Clone</string>
     <string name="action_resume">Resume</string>
     <string name="action_inspect">Inspect</string>
+    <string name="title_about">About</string>
+    <string name="button_browse_the_source">Browse the Source</string>
+    <string name="about_help_us_make_it_better">Help us make it better !</string>
+    <string name="about_this_app_is_libre_software">This app is libre software.</string>
 </resources>

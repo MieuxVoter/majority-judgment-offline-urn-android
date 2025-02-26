@@ -68,18 +68,18 @@ fun AboutScreen(
                 fontSize = 8.em,
                 textAlign = TextAlign.Center,
                 lineHeight = 1.3.em,
-                text = "About",
+                text = stringResource(R.string.title_about),
             )
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                text = "This app is libre software.",
+                text = stringResource(R.string.about_this_app_is_libre_software),
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                text = "Help us make it better !",
+                text = stringResource(R.string.about_help_us_make_it_better),
             )
 
             Spacer(Modifier.padding(16.dp))
@@ -89,7 +89,7 @@ fun AboutScreen(
                     .align(Alignment.CenterHorizontally),
                 onClick = { onBrowseSource() },
             ) {
-                Text("Browse the Source")
+                Text(stringResource(R.string.button_browse_the_source))
             }
         }
     }
