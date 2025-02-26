@@ -28,9 +28,9 @@
     <string name="verb_is">is</string>
     <string name="toast_proposal_name_already_exists">A proposal with this name already exists.</string>
     <string name="button_report_bug">Report a Bug</string>
-    <string name="seven_grading">Seven grading list</string>
-    <string name="five_grading">Five grading list</string>
-    <string name="three_grading">Three grading list</string>
+    <string name="seven_grading">Seven grades</string>
+    <string name="five_grading">Five grades</string>
+    <string name="three_grading">Three grades</string>
     <string name="show_on_boarding">Show onboarding again</string>
     <string name="settings_screen_title">Settings</string>
     <string name="incitation_making_new_poll">Try making a new poll, it\'s free !</string>
@@ -50,4 +50,7 @@
     <string name="button_browse_the_source">Browse the Source</string>
     <string name="about_help_us_make_it_better">Help us make it better !</string>
     <string name="about_this_app_is_libre_software">This app is libre software.</string>
+    <string name="help_your_participation_was_a_success">Your participation was a success !\nYou can now pass this device to the next participant.</string>
+    <string name="button_be_the_first_to_vote">Be the first to vote</string>
+    <string name="label_grades">Grades</string>
 </resources>

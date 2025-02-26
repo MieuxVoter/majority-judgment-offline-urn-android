@@ -75,7 +75,7 @@ fun PollVotingScreen(
 
                 // State: READY, waiting for new participant.
                 if (pollVotingState.ballots.isNotEmpty()) {
-                    Text("Votre participation a bien été prise en compte.\nVous pouvez maintenant passer cet appareil au prochain participant.")
+                    Text(stringResource(R.string.help_your_participation_was_a_success))
                 }
 
                 Spacer(modifier = Modifier.height(32.dp))
@@ -85,7 +85,7 @@ fun PollVotingScreen(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         onClick = { onStartVoting() },
                         content = {
-                            Text("Be the first to vote")
+                            Text(stringResource(R.string.button_be_the_first_to_vote))
                         }
                     )
                 } else {

@@ -63,7 +63,7 @@ fun HomeScreen(
             ExtendedFloatingActionButton(
                 modifier = Modifier.padding(16.dp),
                 onClick = { onSetupBlankPoll() },
-                icon = { Icon(Icons.Filled.Add, "+") },
+                icon = { Icon(Icons.Filled.Add, "") },
                 text = { Text(text = stringResource(R.string.button_new_poll)) },
             )
         }
