@@ -74,6 +74,7 @@ fun ResultScreen(
         Column(
             modifier = modifier
                 .padding(innerPadding)
+                .padding(horizontal = 8.dp)
                 .fillMaxSize()
                 .verticalScroll(state = ScrollState(initial = 0))
                 .padding(8.dp),
@@ -128,6 +129,8 @@ fun ResultScreen(
 
                 Spacer(modifier = Modifier.padding(8.dp))
             }
+
+            Spacer(modifier = Modifier.padding(8.dp))
 
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
