@@ -20,6 +20,7 @@ This Android app is (will be) available on F-Droid.
 You can also download the `apk` from [the releases](https://github.com/MieuxVoter/majority-judgment-offline-urn-android/releases).
 It is built by our CI on each release.
 
+
 ## Inspiration
 
 There used to be a similar app called "Le Choix Commun".
