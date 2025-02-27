@@ -54,4 +54,5 @@
     <string name="help_your_participation_was_a_success">Votre participation a bien été prise en compte.\nVous pouvez maintenant passer cet appareil au prochain participant.</string>
     <string name="button_be_the_first_to_vote">Votez en premier</string>
     <string name="label_grades">Mentions</string>
+    <string name="setting_play_sound">Effets sonores</string>
 </resources>

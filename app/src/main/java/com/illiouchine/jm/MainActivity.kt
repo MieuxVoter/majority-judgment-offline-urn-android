@@ -1,5 +1,6 @@
 package com.illiouchine.jm
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
@@ -8,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -108,12 +110,19 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Screens.PollVote.name) {
                         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                        val mediaPlayer =
+                            MediaPlayer.create(LocalContext.current, R.raw.confirmation_002)
                         PollVotingScreen(
                             modifier = Modifier,
                             pollVotingState = pollVotingViewState,
                             onStartVoting = { pollVotingViewModel.initParticipantVotingSession() },
                             onJudgmentCast = { pollVotingViewModel.onJudgmentCast(it) },
-                            onBallotConfirmed = { pollVotingViewModel.onBallotConfirmed(it) },
+                            onBallotConfirmed = {
+                                pollVotingViewModel.onBallotConfirmed(it)
+                                if (settingsState.playSound) {
+                                    mediaPlayer.start()
+                                }
+                            },
                             onBallotCanceled = { pollVotingViewModel.onBallotCanceled() },
                             onCancelLastJudgment = { pollVotingViewModel.onCancelLastJudgment() },
                             onFinish = {
@@ -146,6 +155,9 @@ class MainActivity : ComponentActivity() {
                             settingsState = settingsState,
                             onShowOnboardingChange = {
                                 settingsViewModel.updateShowOnBoarding(it)
+                            },
+                            onPlaySoundChange = {
+                                settingsViewModel.updatePlaySound(it)
                             },
                             onDefaultGradingSelected = {
                                 settingsViewModel.updateDefaultGrading(it)
