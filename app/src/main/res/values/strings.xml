@@ -54,4 +54,8 @@
     <string name="button_be_the_first_to_vote">Be the first to vote</string>
     <string name="label_grades">Grades</string>
     <string name="setting_play_sound">Play sounds</string>
+    <string name="summary_are_you_sure">Are you sure ?</string>
+    <string name="summary_is_that_accurate">Is that accurate ?</string>
+    <string name="summary_button_no_rescind">No, rescind</string>
+    <string name="summary_button_yes_confirm">Yes, confirm</string>
 </resources>

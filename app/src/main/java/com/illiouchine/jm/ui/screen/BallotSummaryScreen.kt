@@ -16,9 +16,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Ballot
-import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Grading
+import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.JudgmentSummary
 import com.illiouchine.jm.ui.theme.JmTheme
@@ -41,23 +42,21 @@ fun VoteSummaryScreen(
 
         Text(
             modifier = Modifier.fillMaxWidth(),
-            text = "Are you sure ?",
+            text = stringResource(R.string.summary_are_you_sure),
             fontSize = 8.em,
-        )
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = "Here's a summary of your judgments :",
         )
 
         Spacer(Modifier.height(32.dp))
 
         pollConfig.proposals.forEachIndexed { proposalIndex, proposal ->
-            val grade = ballot.judgments[proposalIndex].grade
+            val gradeIndex = ballot.judgments[proposalIndex].grade
             JudgmentSummary(
-                modifier = Modifier.fillMaxWidth().padding(4.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp),
                 proposal = proposal,
-                gradeString = stringResource(pollConfig.grading.getGradeName(grade)),
-                color = pollConfig.grading.getGradeColor(grade)
+                gradeString = stringResource(pollConfig.grading.getGradeName(gradeIndex)),
+                color = pollConfig.grading.getGradeColor(gradeIndex)
             )
             Spacer(Modifier.height(8.dp))
         }
@@ -65,20 +64,21 @@ fun VoteSummaryScreen(
         Spacer(Modifier.height(32.dp))
 
         Text(
-            text = "Is that accurate ?",
+            text = stringResource(R.string.summary_is_that_accurate),
         )
 
         Row(
-            modifier = Modifier.fillMaxWidth()
-                .padding(16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp),
         ) {
 
             TextButton(
                 onClick = onCancel,
             ) {
                 Text(
-                    text = "No, rescind",
-                    color = deleteColor
+                    text = stringResource(R.string.summary_button_no_rescind),
+                    color = deleteColor,
                 )
             }
 
@@ -88,7 +88,7 @@ fun VoteSummaryScreen(
                 onClick = onConfirm,
             ) {
                 Text(
-                    text = "Yes, confirm",
+                    text = stringResource(R.string.summary_button_yes_confirm),
                 )
             }
         }
@@ -100,8 +100,6 @@ fun VoteSummaryScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewVoteSummaryScreen(modifier: Modifier = Modifier) {
-    // FIXME: figure out how to reuse this across previews
-    // I looked into data providers, but WOW it's complicated >.<
     JmTheme {
         VoteSummaryScreen(
             pollConfig = PollConfig(
