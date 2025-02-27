@@ -31,6 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import com.illiouchine.jm.R
@@ -79,7 +80,7 @@ fun OnBoardingScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .offset(x = -(dragValue / 3).dp)
+                    .offset { IntOffset(x = (-(dragValue * 0.62)).toInt(), y = 0) }
                     .pointerInput(Unit) {
                         detectDragGestures(
                             onDragEnd = {
