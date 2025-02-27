@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -56,7 +57,9 @@ fun OnBoardingScreen(
     onFinish: () -> Unit = {},
 ) {
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag("screen_onboarding"),
     ) { innerPadding ->
 
         var currentPageIndex by remember { mutableIntStateOf(0) }
@@ -102,10 +105,9 @@ fun OnBoardingScreen(
                         .align(Alignment.Center)
                         .padding(horizontal = 24.dp),
                 ) {
-
                     Image(
                         painter = painterResource(onBoardingPages[currentPageIndex].image),
-                        contentDescription = "",
+                        contentDescription = "", // anything but silence would be noise
                     )
                     Spacer(Modifier.padding(16.dp))
                     Text(
@@ -131,12 +133,12 @@ fun OnBoardingScreen(
 
                 if (currentPageIndex == onBoardingPages.size - 1) {
                     TextButton(
-                        modifier = Modifier.weight(0.7f),
+                        modifier = Modifier.weight(0.7f).testTag("screen_onboarding_finish"),
                         onClick = { onFinish() },
                     ) { Text(stringResource(R.string.button_finish)) }
                 } else {
                     TextButton(
-                        modifier = Modifier.weight(0.7f),
+                        modifier = Modifier.weight(0.7f).testTag("screen_onboarding_next"),
                         onClick = { currentPageIndex++ },
                     ) { Text(stringResource(R.string.button_next)) }
                 }
