@@ -21,6 +21,7 @@
   <img src="metadata/en-US/images/phoneScreenshots/2.png" alt="Screenshot of the results screen of the application" width="340px" />
 </p>
 
+
 ## Download
 
 ### F-Droid
@@ -51,11 +52,7 @@ There used to be a similar app called "Le Choix Commun".
 
 ### Code
 
-This is a standard Android project, made with Jetpack Compose.
-
-### Design
-
-:sparks:
+This is a standard Android project in Kotlin, made with Jetpack Compose.
 
 ### Translations
 
