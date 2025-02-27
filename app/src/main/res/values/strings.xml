@@ -53,4 +53,5 @@
     <string name="help_your_participation_was_a_success">Your participation was a success !\nYou can now pass this device to the next participant.</string>
     <string name="button_be_the_first_to_vote">Be the first to vote</string>
     <string name="label_grades">Grades</string>
+    <string name="setting_play_sound">Play sounds</string>
 </resources>

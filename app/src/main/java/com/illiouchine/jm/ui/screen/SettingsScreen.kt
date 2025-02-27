@@ -1,5 +1,6 @@
 package com.illiouchine.jm.ui.screen
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -40,6 +41,7 @@ fun SettingsScreen(
     settingsState: SettingsViewModel.SettingsViewState = SettingsViewModel.SettingsViewState(),
     feedback: String? = "",
     onShowOnboardingChange: (Boolean) -> Unit = {},
+    onPlaySoundChange: (Boolean) -> Unit = {},
     onDefaultGradingSelected: (Grading) -> Unit = {},
     onDismissFeedback: () -> Unit = {}
 ) {
@@ -77,13 +79,14 @@ fun SettingsScreen(
                 text = stringResource(R.string.settings_screen_title)
             )
 
+            // TODO: refacto using SwitchSetting
             var showOnBoardingCheck by remember { mutableStateOf(settingsState.showOnboarding) }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(stringResource(R.string.show_on_boarding))
                 Switch(
@@ -95,6 +98,15 @@ fun SettingsScreen(
                     },
                 )
             }
+
+            SwitchSetting(
+                title = R.string.setting_play_sound,
+                checked = settingsState.playSound,
+                onCheckedChange = {
+                    onPlaySoundChange(it)
+                },
+            )
+
             GradingSelectionRow(
                 modifier = Modifier,
                 grading = settingsState.defaultGrading,
@@ -103,6 +115,29 @@ fun SettingsScreen(
         }
     }
 }
+
+@Composable
+fun SwitchSetting(
+    @StringRes title: Int,
+    checked: Boolean,
+    onCheckedChange: ((Boolean) -> Unit)?,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(stringResource(title))
+        Switch(
+            modifier = Modifier,
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+        )
+    }
+}
+
 
 @Preview(showSystemUi = true)
 @Composable
