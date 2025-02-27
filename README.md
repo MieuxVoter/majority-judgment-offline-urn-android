@@ -16,14 +16,23 @@
 - No permissions required.
 - No anti-features.
 
-![1.png](metadata/en-US/images/phoneScreenshots/1.png "Screenshot of the voting screen of the application" =50%x)&nbsp;![2.png](metadata/en-US/images/phoneScreenshots/2.png "Screenshot of the results screen of the application" =50%x)
-
+<p>
+  <img src="metadata/en-US/images/phoneScreenshots/1.png" alt="Screenshot of the voting screen of the application." width="340px" />
+  <img src="metadata/en-US/images/phoneScreenshots/2.png" alt="Screenshot of the results screen of the application" width="340px" />
+</p>
 
 ## Download
 
 ### F-Droid
 
 This Android app is (will be) available on F-Droid.
+
+### Google Play
+
+Google is asking for money (at least 25€), yet this project is done with recycled cardboard, strings, and love.
+
+We're looking for patrons.
+
 
 ### Direct Download
 
