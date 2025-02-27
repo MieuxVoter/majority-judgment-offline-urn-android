@@ -17,33 +17,47 @@ import org.junit.Test
 class ExampleActivityRuleTest: BaseInstrumentedTest() {
 
     @get:Rule
-    val activityTestRule = createAndroidComposeRule<MainActivity>()
+    val rule = createAndroidComposeRule<MainActivity>()
+
+    // Note: the order of the tests matter, since they share the TestComposeRule.
+    // skimOnboarding should always be first, so onboarding is flagged as done for later tests.
+
+    // I'm not sure about all this ; feel free to experiment.
 
     @Test
-    fun launchTheApp() {
+    fun skimOnboarding() {
+        // When we launch the application for the first time
 
-        activityTestRule.waitForIdle()
-        activityTestRule.onNodeWithTag("screen_onboarding").assertExists()
-        activityTestRule.waitForIdle()
+        // Then we should be on the onboarding screen
+        rule.onNodeWithTag("screen_onboarding").assertExists()
+        rule.waitForIdle()
 
-        activityTestRule.onNodeWithText(getString(R.string.button_next)).assertExists().performClick()
-        activityTestRule.waitForIdle()
+        rule.onNodeWithText(getString(R.string.button_next)).assertExists().performClick()
+        rule.waitForIdle()
 
-        activityTestRule.onNodeWithText(getString(R.string.button_next)).assertExists().performClick()
-        activityTestRule.waitForIdle()
+        rule.onNodeWithText(getString(R.string.button_next)).assertExists().performClick()
+        rule.waitForIdle()
 
-        activityTestRule.onNodeWithText(getString(R.string.button_next)).assertExists().performClick()
-        activityTestRule.waitForIdle()
+        rule.onNodeWithText(getString(R.string.button_next)).assertExists().performClick()
+        rule.waitForIdle()
 
-        activityTestRule.onNodeWithText(getString(R.string.button_finish)).assertExists().performClick()
-        activityTestRule.waitForIdle()
+        // When we click on the node with text button_finish
+        // When we click on button_finish
+        rule.onNodeWithText(getString(R.string.button_finish)).assertExists().performClick()
+        rule.waitForIdle()
 
-        activityTestRule.onNodeWithTag("screen_home").assertExists()
+        // Then we should be on the home screen
+        rule.onNodeWithTag("screen_home").assertExists()
+    }
 
-//        activityTestRule.onNodeWithTag("home_fab").assertExists()
-//        activityTestRule.onNodeWithTag("home_fab").performClick()
-//        activityTestRule.waitForIdle()
-//        activityTestRule.onNodeWithTag("screen_setup").assertExists()
+    @Test
+    fun makeSomePoll() {
+//        skimOnboarding() // we don't need to apparently, the rule's session is shared
 
+        rule.onNodeWithTag("home_fab").assertExists().performClick()
+        rule.waitForIdle()
+        rule.onNodeWithTag("screen_setup").assertExists()
+
+        // TODO: more tests
     }
 }
