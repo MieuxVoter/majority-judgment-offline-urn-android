@@ -1,0 +1,2 @@
+* Play a sound when a ballot is confirmed.
+* Sound effect can be disabled in the settings.
