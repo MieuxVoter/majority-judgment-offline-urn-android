@@ -39,23 +39,21 @@ import com.illiouchine.jm.ui.theme.JmTheme
 
 data class OnBoardingPage(
     @DrawableRes val image: Int,
-    val text: String,
+    @StringRes val text: Int,
 )
 
+val onBoardingPages = listOf(
+    OnBoardingPage(R.drawable.onboarding_0, R.string.onboarding_welcome_to_your_offline_poll_app),
+    OnBoardingPage(R.drawable.onboarding_1, R.string.onboarding_setup_a_poll_and_share_the_phone),
+    OnBoardingPage(R.drawable.onboarding_2, R.string.onboarding_this_is_free_software),
+    OnBoardingPage(R.drawable.onboarding_3, R.string.onboarding_ready),
+)
 
 @Composable
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
     onFinish: () -> Unit = {},
 ) {
-
-    val onBoardingPages = listOf(
-        OnBoardingPage(R.drawable.onboarding_0, stringResource(R.string.onboarding_welcome_to_your_offline_poll_app)),
-        OnBoardingPage(R.drawable.onboarding_1, stringResource(R.string.onboarding_setup_a_poll_and_share_the_phone)),
-        OnBoardingPage(R.drawable.onboarding_2, stringResource(R.string.onboarding_this_is_free_software)),
-        OnBoardingPage(R.drawable.onboarding_3, stringResource(R.string.onboarding_ready)),
-    )
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
     ) { innerPadding ->
@@ -86,9 +84,9 @@ fun OnBoardingScreen(
                         detectDragGestures(
                             onDragEnd = {
                                 when {
+                                    dragValue > 0 && currentPageIndex >= (onBoardingPages.size - 1) -> onFinish()
                                     dragValue > 0 && currentPageIndex < (onBoardingPages.size - 1) -> currentPageIndex++
                                     dragValue < 0 && currentPageIndex > 0 -> currentPageIndex--
-
                                 }
                                 dragValue = 0f
                             },
@@ -105,14 +103,14 @@ fun OnBoardingScreen(
                 ) {
 
                     Image(
-                        painter = painterResource(id = onBoardingPages[currentPageIndex].image),
+                        painter = painterResource(onBoardingPages[currentPageIndex].image),
                         contentDescription = "",
                     )
                     Spacer(Modifier.padding(16.dp))
                     Text(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        text = onBoardingPages[currentPageIndex].text,
+                        text = stringResource(onBoardingPages[currentPageIndex].text),
                     )
                 }
             }
