@@ -1,5 +1,8 @@
 package com.illiouchine.jm.ui.screen
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,7 +38,7 @@ import com.illiouchine.jm.ui.composable.ViewPager
 import com.illiouchine.jm.ui.theme.JmTheme
 
 data class OnBoardingPage(
-    val image: Int, // Todo use Resource
+    @DrawableRes val image: Int,
     val text: String,
 )
 
@@ -46,10 +50,10 @@ fun OnBoardingScreen(
 ) {
 
     val onBoardingPages = listOf(
-        OnBoardingPage(0, stringResource(R.string.onboarding_welcome_to_your_offline_poll_app)),
-        OnBoardingPage(1, stringResource(R.string.onboarding_setup_a_poll_and_share_the_phone)),
-        OnBoardingPage(2, stringResource(R.string.onboarding_this_is_free_software)),
-        OnBoardingPage(3, stringResource(R.string.onboarding_ready)),
+        OnBoardingPage(R.drawable.onboarding_0, stringResource(R.string.onboarding_welcome_to_your_offline_poll_app)),
+        OnBoardingPage(R.drawable.onboarding_1, stringResource(R.string.onboarding_setup_a_poll_and_share_the_phone)),
+        OnBoardingPage(R.drawable.onboarding_2, stringResource(R.string.onboarding_this_is_free_software)),
+        OnBoardingPage(R.drawable.onboarding_3, stringResource(R.string.onboarding_ready)),
     )
 
     Scaffold(
@@ -77,30 +81,40 @@ fun OnBoardingScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .offset(x = -(dragValue/3).dp)
+                    .offset(x = -(dragValue / 3).dp)
                     .pointerInput(Unit) {
                         detectDragGestures(
                             onDragEnd = {
                                 when {
-                                    dragValue> 0 && currentPageIndex < (onBoardingPages.size - 1) -> currentPageIndex++
-                                    dragValue< 0 && currentPageIndex > 0 -> currentPageIndex--
+                                    dragValue > 0 && currentPageIndex < (onBoardingPages.size - 1) -> currentPageIndex++
+                                    dragValue < 0 && currentPageIndex > 0 -> currentPageIndex--
 
                                 }
                                 dragValue = 0f
                             },
-                            onDrag = { change, dragAmount ->
+                            onDrag = { _, dragAmount ->
                                 dragValue += -dragAmount.x
                             }
                         )
                     },
             ) {
-                Text(
+                Column(
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .padding(horizontal = 24.dp)
-                        .fillMaxWidth(),
-                    text = onBoardingPages[currentPageIndex].text,
-                )
+                        .padding(horizontal = 24.dp),
+                ) {
+
+                    Image(
+                        painter = painterResource(id = onBoardingPages[currentPageIndex].image),
+                        contentDescription = "",
+                    )
+                    Spacer(Modifier.padding(16.dp))
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        text = onBoardingPages[currentPageIndex].text,
+                    )
+                }
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -109,7 +123,9 @@ fun OnBoardingScreen(
 
                 Spacer(Modifier.weight(0.7f))
                 ViewPager(
-                    modifier = Modifier.weight(1f).wrapContentSize(),
+                    modifier = Modifier
+                        .weight(1f)
+                        .wrapContentSize(),
                     pageSize = onBoardingPages.size,
                     currentPage = currentPageIndex,
                 )
