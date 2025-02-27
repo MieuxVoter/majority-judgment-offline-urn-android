@@ -12,6 +12,7 @@ class SettingsViewModel(
 ) : ViewModel() {
     data class SettingsViewState(
         val showOnboarding: Boolean = true,
+        val playSound: Boolean = true,
         val defaultGrading: Grading = Grading.Quality7Grading
     )
 
@@ -20,14 +21,8 @@ class SettingsViewModel(
 
     init {
         loadShowOnboarding()
+        loadPlaySound()
         loadDefaultGrading()
-    }
-
-    private fun loadDefaultGrading() {
-        val defaultGrading = sharedPreferences.getDefaultGrading()
-        _settingsViewState.update {
-            it.copy(defaultGrading = defaultGrading)
-        }
     }
 
     private fun loadShowOnboarding() {
@@ -37,10 +32,31 @@ class SettingsViewModel(
         }
     }
 
+    private fun loadPlaySound() {
+        val playSound = sharedPreferences.getPlaySound()
+        _settingsViewState.update {
+            it.copy(playSound = playSound)
+        }
+    }
+
+    private fun loadDefaultGrading() {
+        val defaultGrading = sharedPreferences.getDefaultGrading()
+        _settingsViewState.update {
+            it.copy(defaultGrading = defaultGrading)
+        }
+    }
+
     fun updateShowOnBoarding(visibility: Boolean) {
         sharedPreferences.editShowOnboarding(visibility)
         _settingsViewState.update {
             it.copy(showOnboarding = visibility)
+        }
+    }
+
+    fun updatePlaySound(soundIsOn: Boolean) {
+        sharedPreferences.editPlaySound(soundIsOn)
+        _settingsViewState.update {
+            it.copy(playSound = soundIsOn)
         }
     }
 
