@@ -1,5 +1,6 @@
 # Majority Judgment Offline Mobile Urn
 
+
 [![Release](https://img.shields.io/github/v/release/MieuxVoter/majority-judgment-offline-urn-android?sort=semver&style=for-the-badge)](https://github.com/MieuxVoter/majority-judgment-offline-urn-android/releases)
 [![License](https://img.shields.io/github/license/MieuxVoter/majority-judgment-offline-urn-android?style=for-the-badge)](./LICENSE)
 [![GitHub Build Status](https://img.shields.io/github/actions/workflow/status/MieuxVoter/majority-judgment-offline-urn-android/android.yml?style=for-the-badge)](https://github.com/MieuxVoter/majority-judgment-offline-urn-android/actions/workflows/android.yml)
@@ -15,8 +16,7 @@
 - No permissions required.
 - No anti-features.
 
-![1.png](metadata/en-US/images/phoneScreenshots/1.png)
-![2.png](metadata/en-US/images/phoneScreenshots/2.png)
+![1.png](metadata/en-US/images/phoneScreenshots/1.png "Screenshot of the voting screen of the application" =50%x)&nbsp;![2.png](metadata/en-US/images/phoneScreenshots/2.png "Screenshot of the results screen of the application" =50%x)
 
 
 ## Download
