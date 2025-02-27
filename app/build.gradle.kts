@@ -15,7 +15,7 @@ android {
         minSdk = 27
         targetSdk = 35
         versionCode = 5
-        versionName = "1.2.0"
+        versionName = "1.1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -38,6 +38,17 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+
+    // We find that there is a DependencyInfoBlock in our APK. It's a Signing block added by AGP
+    // and encrypted with the Google public key so it can't be read by anyone else except Google.
+    // We need to remove it before we publish to F-Droid, as it's a security hole.
+    // https://gitlab.com/fdroid/fdroiddata/-/merge_requests/19981
+    dependenciesInfo {
+        // Disables dependency metadata when building APKs.
+        includeInApk = false
+        // Disables dependency metadata when building Android App Bundles.
+        includeInBundle = false
     }
 
     room {
