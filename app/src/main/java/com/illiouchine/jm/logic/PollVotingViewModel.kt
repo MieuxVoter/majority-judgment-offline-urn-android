@@ -30,20 +30,9 @@ class PollVotingViewModel : ViewModel() {
     val pollVotingViewState: StateFlow<PollVotingViewState> = _pollVotingViewState
 
     fun initNewVotingSession(config: PollConfig) {
-        // Rule: if the poll's subject was not provided, use a default.
-        val subject = config.subject.ifEmpty {
-            //FIXME: manage to get the context, or the translated string any other way
-            // context.getString(R.string.poll_of) + " " + DateFormat.getDateInstance().format(Calendar.getInstance().time)
-            "Poll of" + " " + DateFormat.getDateInstance().format(Calendar.getInstance().time)
-        }
-        val pollConfig = PollConfig(
-            subject = subject,
-            proposals = config.proposals,
-            grading = config.grading,
-        )
         _pollVotingViewState.update {
             it.copy(
-                pollConfig = pollConfig,
+                pollConfig = config,
                 ballots = emptyList(),
                 currentBallot = null,
             )

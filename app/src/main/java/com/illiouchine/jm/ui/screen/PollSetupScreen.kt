@@ -45,6 +45,8 @@ import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.deleteColor
+import java.text.DateFormat
+import java.util.Calendar
 
 
 @Composable
@@ -56,7 +58,7 @@ fun PollSetupScreen(
     onAddProposal: (String) -> Unit = {},
     onRemoveProposal: (String) -> Unit = {},
     onGradingSelected: (Grading) -> Unit = {},
-    setupFinished: () -> Unit = {},
+    onSetupFinished: () -> Unit = {},
     onDismissFeedback: () -> Unit = {},
 ) {
 
@@ -84,8 +86,20 @@ fun PollSetupScreen(
         var proposal: String by remember { mutableStateOf("") }
         var subject: String by remember { mutableStateOf(pollSetupState.pollSetup.subject) }
 
+        fun generateSubject(): String {
+            return buildString {
+                append(context.getString(R.string.poll_of))
+                append(" ")
+                append(DateFormat.getDateInstance().format(Calendar.getInstance().time))
+            }
+        }
+
         fun generateProposalName(): String {
-            return "${context.getString(R.string.proposal)} ${(65 + pollSetupState.pollSetup.proposals.size).toChar()}"
+            return buildString {
+                append(context.getString(R.string.proposal))
+                append(" ")
+                append((65 + pollSetupState.pollSetup.proposals.size).toChar())
+            }
         }
 
         val addProposal: () -> Unit = {
@@ -170,9 +184,11 @@ fun PollSetupScreen(
                             .weight(1f),
                         text = propName,
                     )
-                    Spacer(Modifier
-                        .height(16.dp)
-                        .padding(8.dp))
+                    Spacer(
+                        Modifier
+                            .height(16.dp)
+                            .padding(8.dp)
+                    )
                     IconButton(
                         onClick = { onRemoveProposal(propName) }
                     ) {
@@ -194,14 +210,21 @@ fun PollSetupScreen(
                 },
             )
 
-            // Rule: Poll should have more than 1 proposals.
+            // Rule: A poll should have more than 1 proposal.
             Button(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(0.62f)
                     .padding(16.dp),
                 enabled = pollSetupState.pollSetup.proposals.size > 1,
-                onClick = { setupFinished() },
+                onClick = {
+                    // Rule: if the poll's subject was not provided, use a default.
+                    if (subject.isBlank()) {
+                        subject = generateSubject()
+                        onAddSubject(subject)
+                    }
+                    onSetupFinished()
+                },
             ) {
                 Text(stringResource(R.string.button_let_s_go))
             }

@@ -101,7 +101,7 @@ class MainActivity : ComponentActivity() {
                             onAddProposal = { pollSetupViewModel.onAddProposal(it) },
                             onRemoveProposal = { pollSetupViewModel.onRemoveProposal(it) },
                             onGradingSelected = { pollSetupViewModel.onGradingSelected(it) },
-                            setupFinished = {
+                            onSetupFinished = {
                                 pollVotingViewModel.initNewVotingSession(pollSetupState.pollSetup)
                                 navController.navigate(Screens.PollVote.name)
                             },
