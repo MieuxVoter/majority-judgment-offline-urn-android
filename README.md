@@ -17,8 +17,8 @@
 - No anti-features.
 
 <p>
-  <img src="metadata/en-US/images/phoneScreenshots/1.png" alt="Screenshot of the voting screen of the application." width="340px" />
-  <img src="metadata/en-US/images/phoneScreenshots/2.png" alt="Screenshot of the results screen of the application" width="340px" />
+  <img src="metadata/en-US/images/phoneScreenshots/1.png" alt="Screenshot of the voting screen of the application." />
+  <img src="metadata/en-US/images/phoneScreenshots/2.png" alt="Screenshot of the results screen of the application" />
 </p>
 
 
