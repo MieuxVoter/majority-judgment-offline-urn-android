@@ -1,6 +1,5 @@
 package com.illiouchine.jm.logic
 
-import android.icu.util.Calendar
 import androidx.lifecycle.ViewModel
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
@@ -9,7 +8,6 @@ import com.illiouchine.jm.model.PollConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import java.text.DateFormat
 
 class PollVotingViewModel : ViewModel() {
 
@@ -26,7 +24,7 @@ class PollVotingViewModel : ViewModel() {
         }
     }
 
-    private val _pollVotingViewState = MutableStateFlow<PollVotingViewState>(PollVotingViewState())
+    private val _pollVotingViewState = MutableStateFlow(PollVotingViewState())
     val pollVotingViewState: StateFlow<PollVotingViewState> = _pollVotingViewState
 
     fun initNewVotingSession(config: PollConfig) {

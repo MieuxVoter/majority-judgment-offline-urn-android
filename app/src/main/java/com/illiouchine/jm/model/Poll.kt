@@ -8,11 +8,10 @@ data class Poll(
     val judgments: List<Judgment>
         get() = getAllJudgments()
 
-    // make this lazy instead, perhaps ?
-    val _judgments: List<Judgment> = collectAllJudgments()
+    val collectedJudgments: List<Judgment> = collectAllJudgments()
 
     private fun getAllJudgments(): List<Judgment> {
-        return _judgments
+        return collectedJudgments
     }
 
     private fun collectAllJudgments(): List<Judgment> {

@@ -17,7 +17,7 @@ class PollSetupViewModel(
         val feedback: String? = null,
     )
 
-    private val _pollSetupViewState = MutableStateFlow<PollSetupViewState>(PollSetupViewState())
+    private val _pollSetupViewState = MutableStateFlow(PollSetupViewState())
     val pollSetupViewState: StateFlow<PollSetupViewState> = _pollSetupViewState
 
     fun startPollSetup(
