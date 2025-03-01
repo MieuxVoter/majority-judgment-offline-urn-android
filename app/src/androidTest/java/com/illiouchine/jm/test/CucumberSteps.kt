@@ -6,10 +6,12 @@ import androidx.compose.ui.test.SemanticsNodeInteractionCollection
 import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
 import com.illiouchine.jm.MainActivity
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import io.cucumber.junit.WithJunitRule
 import org.junit.Rule
 
@@ -33,8 +35,13 @@ class CucumberSteps(
 //    @Inject
 //    lateinit var compose: ComposeRuleHolder
 
-    @Given("I do nothing")
+    @Given("^I do nothing$")
     fun doNothing() {}
+
+    @Given("^I wait for idle$")
+    fun waitForIdle() {
+        rule.waitForIdle()
+    }
 
     @Given("I launch the app")
     fun initializeApp() {
@@ -46,10 +53,19 @@ class CucumberSteps(
         scenarioHolder.launch(MainActivity.create(instrumentation.targetContext))
     }
 
-    @Then("^I should see the node tagged \"([^\"]+)\"$")
-    fun thenActorSeeNodeByTag(tag: String) {
-        rule.waitForIdle()
+    @Then("^I should see the node tagged \"(?<tag>[^\"]+)\"$")
+    fun thenActorShouldSeeNodeByTag(tag: String) {
         rule.onNodeWithTag(tag).assertExists()
+    }
+
+    @Then("^I should not see the node tagged \"(?<tag>[^\"]+)\"$")
+    fun thenActorShouldNotSeeNodeByTag(tag: String) {
+        rule.onNodeWithTag(tag).assertDoesNotExist()
+    }
+
+    @When("^I click on the node tagged \"([^\"]+)\"$")
+    fun whenActorClicksNodeByTag(tag: String) {
+        rule.onNodeWithTag(tag).assertExists().performClick()
     }
 
     override fun onAllNodes(
