@@ -1,29 +1,20 @@
 package com.illiouchine.jm.test
 
-import android.os.Bundle
-import android.util.Log
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.SemanticsNodeInteractionCollection
 import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.runner.MonitoringInstrumentation
-import com.illiouchine.jm.ActivityScenarioHolder
 import com.illiouchine.jm.MainActivity
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
-import io.cucumber.junit.CucumberOptions
 import io.cucumber.junit.WithJunitRule
 import org.junit.Rule
-import org.junit.runner.RunWith
-import javax.inject.Inject
-import javax.inject.Singleton
 
 
-//@WithJunitRule("not @CustomComposable")
+// We're probably going to need a rule holder if we want multiple step files.
 //@WithJunitRule()
 //@Singleton
 //class ComposeRuleHolder @Inject constructor() {
@@ -31,24 +22,10 @@ import javax.inject.Singleton
 //    val rule = createAndroidComposeRule<MainActivity>()
 //}
 
-@WithJunitRule()
+@WithJunitRule
 class CucumberSteps(
     val scenarioHolder: ActivityScenarioHolder,
 ) : SemanticsNodeInteractionsProvider {
-
-//class CucumberTest : MonitoringInstrumentation() {
-//    private val instrumentationCore: CucumberInstrumentationCore = CucumberInstrumentationCore(this)
-//    override fun onCreate(arguments: Bundle) {
-//        super.onCreate(arguments)
-//
-//        instrumentationCore.create(arguments)
-//        start()
-//    }
-//    override fun onStart() {
-//        super.onStart()
-//        waitForIdleSync()
-//        instrumentationCore.start()
-//    }
 
     @get:Rule(order = 1)
     val rule = createAndroidComposeRule<MainActivity>()
@@ -56,18 +33,21 @@ class CucumberSteps(
 //    @Inject
 //    lateinit var compose: ComposeRuleHolder
 
-    @Given("^I launch the app$")
-    fun initializeApp(){
+    @Given("I do nothing")
+    fun doNothing() {}
+
+    @Given("I launch the app")
+    fun initializeApp() {
 
 //        Log.w("tests", "WHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA") // nope, does nothing
 
-        // This is actually required for the rule to work, and I don't know how it's injected.
         val instrumentation = InstrumentationRegistry.getInstrumentation()
+        // This is actually required for the rule to work, and I don't know how it's injected.
         scenarioHolder.launch(MainActivity.create(instrumentation.targetContext))
     }
 
     @Then("^I should see the node tagged \"([^\"]+)\"$")
-    fun thenActorSeeNodeByTag(tag: String){
+    fun thenActorSeeNodeByTag(tag: String) {
         rule.waitForIdle()
         rule.onNodeWithTag(tag).assertExists()
     }

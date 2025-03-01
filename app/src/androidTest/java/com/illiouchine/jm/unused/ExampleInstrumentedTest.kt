@@ -1,6 +1,6 @@
-package com.illiouchine.jm
+package com.illiouchine.jm.unused
 
-import org.junit.Assert.assertEquals
+import org.junit.Assert
 import org.junit.Test
 
 /**
@@ -11,6 +11,6 @@ import org.junit.Test
 class ExampleInstrumentedTest: BaseInstrumentedTest() {
     @Test
     fun useAppContext() {
-        assertEquals("com.illiouchine.jm", getContext().packageName)
+        Assert.assertEquals("com.illiouchine.jm", getContext().packageName)
     }
 }

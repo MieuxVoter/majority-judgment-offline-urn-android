@@ -1,4 +1,4 @@
-package com.illiouchine.jm
+package com.illiouchine.jm.unused
 
 import android.content.Context
 import androidx.annotation.StringRes

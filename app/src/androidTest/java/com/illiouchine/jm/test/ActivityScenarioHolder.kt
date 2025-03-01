@@ -1,4 +1,4 @@
-package com.illiouchine.jm
+package com.illiouchine.jm.test
 
 import android.app.Activity
 import android.content.Intent

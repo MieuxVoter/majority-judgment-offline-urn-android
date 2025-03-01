@@ -1,12 +1,13 @@
-package com.illiouchine.jm
+package com.illiouchine.jm.unused
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.screen.HomeScreen
 import com.illiouchine.jm.ui.theme.JmTheme
-import org.junit.Assert.assertEquals
+import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 
@@ -37,15 +38,15 @@ class ExampleComposeRuleTest : BaseInstrumentedTest() {
         }
 
         composeTestRule.onNodeWithTag("screen_home").assertExists()
-        assertEquals(0, onSetupBlankPollTriggers)
+        Assert.assertEquals(0, onSetupBlankPollTriggers)
         composeTestRule.onNodeWithTag("home_fab").assertExists().performClick()
-        assertEquals(1, onSetupBlankPollTriggers)
+        Assert.assertEquals(1, onSetupBlankPollTriggers)
 
         // We can also fetch nodes by text, but we need to use translated strings.
         composeTestRule.onNodeWithText(
             getString(R.string.button_new_poll),
             useUnmergedTree = true,
         ).assertExists().performClick()
-        assertEquals(2, onSetupBlankPollTriggers)
+        Assert.assertEquals(2, onSetupBlankPollTriggers)
     }
 }

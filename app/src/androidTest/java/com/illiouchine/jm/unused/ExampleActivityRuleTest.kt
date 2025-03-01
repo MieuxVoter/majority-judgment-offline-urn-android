@@ -1,9 +1,11 @@
-package com.illiouchine.jm
+package com.illiouchine.jm.unused
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import com.illiouchine.jm.MainActivity
+import com.illiouchine.jm.R
 import org.junit.Rule
 import org.junit.Test
 
@@ -52,12 +54,10 @@ class ExampleActivityRuleTest: BaseInstrumentedTest() {
 
     @Test
     fun whooshSomePoll() {
-//        skimOnboarding() // we don't need to apparently, the rule's session is shared
-
         rule.onNodeWithTag("home_fab").assertExists().performClick()
         rule.waitForIdle()
         rule.onNodeWithTag("screen_setup").assertExists()
 
-        // TODO: more tests
+        // … more tests
     }
 }
