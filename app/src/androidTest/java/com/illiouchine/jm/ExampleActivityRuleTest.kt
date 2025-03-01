@@ -25,7 +25,7 @@ class ExampleActivityRuleTest: BaseInstrumentedTest() {
     // I'm not sure about all this ; feel free to experiment.
 
     @Test
-    fun skimOnboarding() {
+    fun aaaSkimOnboarding() {
         // When we launch the application for the first time
 
         // Then we should be on the onboarding screen
@@ -51,7 +51,7 @@ class ExampleActivityRuleTest: BaseInstrumentedTest() {
     }
 
     @Test
-    fun makeSomePoll() {
+    fun whooshSomePoll() {
 //        skimOnboarding() // we don't need to apparently, the rule's session is shared
 
         rule.onNodeWithTag("home_fab").assertExists().performClick()
