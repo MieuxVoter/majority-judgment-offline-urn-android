@@ -8,6 +8,8 @@ import com.illiouchine.jm.model.PollConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import java.util.stream.IntStream
+import kotlin.streams.asSequence
 
 class PollVotingViewModel : ViewModel() {
 
@@ -15,10 +17,12 @@ class PollVotingViewModel : ViewModel() {
         val pollConfig: PollConfig = PollConfig(),
         val ballots: List<Ballot> = emptyList(),
         val currentBallot: Ballot? = null,
+        val currentProposalsOrder: List<Int> = emptyList(),
     ) {
         fun isInStateReady(): Boolean {
             return null == currentBallot
         }
+
         fun isInStateVoting(): Boolean {
             return (null != currentBallot) && (currentBallot.judgments.size < pollConfig.proposals.size)
         }
@@ -26,6 +30,10 @@ class PollVotingViewModel : ViewModel() {
 
     private val _pollVotingViewState = MutableStateFlow(PollVotingViewState())
     val pollVotingViewState: StateFlow<PollVotingViewState> = _pollVotingViewState
+
+    private fun generateRandomOrder(size: Int): List<Int> {
+        return IntStream.range(0, size).asSequence().toList().shuffled()
+    }
 
     fun initNewVotingSession(config: PollConfig) {
         _pollVotingViewState.update {
@@ -50,14 +58,15 @@ class PollVotingViewModel : ViewModel() {
     fun initParticipantVotingSession() {
         _pollVotingViewState.update {
             it.copy(
-                currentBallot = Ballot()
+                currentBallot = Ballot(),
+                currentProposalsOrder = generateRandomOrder(it.pollConfig.proposals.size),
             )
         }
     }
 
     fun onJudgmentCast(judgment: Judgment) {
-        // Rule : Prevent voting for the same proposal two time
-        if (_pollVotingViewState.value.currentBallot?.isAlreadyCast(judgment) == true){
+        // Rule: Voting for the same proposal two times is not allowed
+        if (_pollVotingViewState.value.currentBallot?.isAlreadyCast(judgment) == true) {
             return
         }
         // Add judgment to current ballot
@@ -69,25 +78,27 @@ class PollVotingViewModel : ViewModel() {
     }
 
     fun onBallotConfirmed(ballot: Ballot) {
-        // Add ballot to preview ballots & reset current ballot
+        // Add ballot to previous ballots & reset current ballot
         _pollVotingViewState.update {
             it.copy(
                 currentBallot = null,
-                ballots = it.ballots + ballot
+                ballots = it.ballots + ballot,
             )
         }
     }
 
     fun onBallotCanceled() {
         _pollVotingViewState.update {
-            it.copy(currentBallot = null)
+            it.copy(
+                currentBallot = null,
+            )
         }
     }
 
     fun onCancelLastJudgment() {
         _pollVotingViewState.update {
             it.copy(
-                currentBallot = it.currentBallot?.withoutLastJudgment()
+                currentBallot = it.currentBallot?.withoutLastJudgment(),
             )
         }
     }

@@ -111,10 +111,9 @@ fun PollVotingScreen(
                 ) { Text(stringResource(R.string.button_end_the_poll)) }
             } else {
 
-                val currentProposalIndex = pollVotingState.currentBallot!!.judgments.size
-
                 if (pollVotingState.isInStateVoting()) {
                     // State: VOTING, filling the ballot with judgments.
+                    val currentProposalIndex = pollVotingState.currentProposalsOrder[pollVotingState.currentBallot!!.judgments.size]
                     GradeSelectionList(
                         pollConfig = pollVotingState.pollConfig,
                         forProposalIndex = currentProposalIndex,
@@ -129,14 +128,14 @@ fun PollVotingScreen(
                     JudgmentBalls(
                         modifier = Modifier.fillMaxWidth(),
                         pollConfig = pollVotingState.pollConfig,
-                        ballot = pollVotingState.currentBallot
+                        ballot = pollVotingState.currentBallot,
                     )
                 } else {
 
                     // State: SUMMARY, awaiting confirmation, back or redo.
                     VoteSummaryScreen(
                         pollConfig = pollVotingState.pollConfig,
-                        ballot = pollVotingState.currentBallot,
+                        ballot = pollVotingState.currentBallot!!,
                         onConfirm = {
                             onBallotConfirmed(pollVotingState.currentBallot)
                         },

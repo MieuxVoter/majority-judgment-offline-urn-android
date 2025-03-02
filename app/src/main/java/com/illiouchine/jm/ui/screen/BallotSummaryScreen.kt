@@ -48,8 +48,9 @@ fun VoteSummaryScreen(
 
         Spacer(Modifier.height(32.dp))
 
-        pollConfig.proposals.forEachIndexed { proposalIndex, proposal ->
-            val gradeIndex = ballot.judgments[proposalIndex].grade
+        ballot.judgments.forEach { judgment ->
+            val gradeIndex = judgment.grade
+            val proposal = pollConfig.proposals[judgment.proposal]
             JudgmentSummary(
                 modifier = Modifier
                     .fillMaxWidth()
