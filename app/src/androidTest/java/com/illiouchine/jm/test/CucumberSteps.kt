@@ -5,7 +5,6 @@ import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.SemanticsNodeInteractionCollection
 import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
 import com.illiouchine.jm.MainActivity
@@ -17,8 +16,8 @@ import io.cucumber.junit.WithJunitRule
 
 @WithJunitRule
 class CucumberSteps(
-    val scenarioHolder: ActivityScenarioHolder,
-    val ruleHolder: ComposeRuleHolder,
+    private val scenarioHolder: ActivityScenarioHolder,
+    private val ruleHolder: ComposeRuleHolder,
 ) : SemanticsNodeInteractionsProvider {
 
     private val rule
