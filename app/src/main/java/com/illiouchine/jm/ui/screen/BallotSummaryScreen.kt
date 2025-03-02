@@ -23,7 +23,7 @@ import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.JudgmentSummary
 import com.illiouchine.jm.ui.theme.JmTheme
-import com.illiouchine.jm.ui.theme.deleteColor
+import com.illiouchine.jm.ui.theme.DeleteColor
 
 
 @Composable
@@ -78,7 +78,7 @@ fun VoteSummaryScreen(
             ) {
                 Text(
                     text = stringResource(R.string.summary_button_no_rescind),
-                    color = deleteColor,
+                    color = DeleteColor,
                 )
             }
 
