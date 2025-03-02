@@ -164,7 +164,7 @@ fun PollSetupScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            pollSetupState.pollSetup.proposals.forEachIndexed { propIndex, propName ->
+            pollSetupState.pollSetup.proposals.reversed().forEachIndexed { propIndex, propName ->
 
                 if (propIndex > 0) {
                     HorizontalDivider(
