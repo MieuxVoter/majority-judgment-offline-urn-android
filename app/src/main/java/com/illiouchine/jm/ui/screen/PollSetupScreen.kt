@@ -151,6 +151,7 @@ fun PollSetupScreen(
                     keyboardActions = KeyboardActions(onDone = { addProposal() }),
                     trailingIcon = {
                         IconButton(
+                            modifier = Modifier.testTag("setup_add_proposal"),
                             onClick = { addProposal() }
                         ) {
                             Icon(
@@ -214,6 +215,7 @@ fun PollSetupScreen(
             // Rule: A poll should have more than 1 proposal.
             Button(
                 modifier = Modifier
+                    .testTag("setup_submit")
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(0.62f)
                     .padding(16.dp),

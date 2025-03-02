@@ -5,6 +5,7 @@ import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.SemanticsNodeInteractionCollection
 import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
 import com.illiouchine.jm.MainActivity
@@ -43,6 +44,16 @@ class CucumberSteps(
             rule.onNodeWithTag(tag).assertExists()
         }
     }
+
+    // This is not useful, as it is dependant on the language of the emulator.
+//    @Then("^I should(?<negation> not|) see the node with text \"(?<text>.+)\"$")
+//    fun thenActorShouldSeeNodeByText(negation: String, text: String) {
+//        if (negation != "") {
+//            rule.onNodeWithText(text).assertDoesNotExist()
+//        } else {
+//            rule.onNodeWithText(text).assertExists()
+//        }
+//    }
 
     @When("^I click on the node tagged \"([^\"]+)\"$")
     fun whenActorClicksNodeByTag(tag: String) {
