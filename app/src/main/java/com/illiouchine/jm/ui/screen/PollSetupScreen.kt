@@ -219,7 +219,7 @@ fun PollSetupScreen(
                 enabled = pollSetupState.pollSetup.proposals.size > 1,
                 onClick = {
                     // Rule: if the poll's subject was not provided, use a default.
-                    if (subject.isEmpty() || subject.isBlank()) {
+                    if (subject.isBlank()) {
                         subject = generateSubject()
                         onAddSubject(subject)
                     }

@@ -102,7 +102,9 @@ class MainActivity : ComponentActivity() {
                             onRemoveProposal = { pollSetupViewModel.onRemoveProposal(it) },
                             onGradingSelected = { pollSetupViewModel.onGradingSelected(it) },
                             onSetupFinished = {
-                                pollVotingViewModel.initNewVotingSession(pollSetupState.pollSetup)
+                                pollVotingViewModel.initNewVotingSession(
+                                    pollSetupViewModel.pollSetupViewState.value.pollSetup,
+                                )
                                 navController.navigate(Screens.PollVote.name)
                             },
                             onDismissFeedback = { pollSetupViewModel.onDismissFeedback() },
