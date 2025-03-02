@@ -164,7 +164,7 @@ fun PollSetupScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            pollSetupState.pollSetup.proposals.forEachIndexed { propIndex, propName ->
+            pollSetupState.pollSetup.proposals.reversed().forEachIndexed { propIndex, propName ->
 
                 if (propIndex > 0) {
                     HorizontalDivider(
@@ -219,7 +219,7 @@ fun PollSetupScreen(
                 enabled = pollSetupState.pollSetup.proposals.size > 1,
                 onClick = {
                     // Rule: if the poll's subject was not provided, use a default.
-                    if (subject.isBlank()) {
+                    if (subject.isEmpty() || subject.isBlank()) {
                         subject = generateSubject()
                         onAddSubject(subject)
                     }

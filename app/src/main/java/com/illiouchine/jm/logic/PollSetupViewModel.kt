@@ -47,7 +47,10 @@ class PollSetupViewModel(
                 )
             }
         } else {
-            val newProposals = _pollSetupViewState.value.pollSetup.proposals + proposal
+            val newProposals = buildList {
+                addAll(_pollSetupViewState.value.pollSetup.proposals)
+                add(proposal)
+            }
 
             _pollSetupViewState.update {
                 it.copy(pollSetup = it.pollSetup.copy(proposals = newProposals))
