@@ -135,6 +135,7 @@ fun PollSetupScreen(
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 maxLines = 5,
+                placeholder = { Text(generateSubject()) },
                 value = subject,
                 onValueChange = {
                     subject = it
