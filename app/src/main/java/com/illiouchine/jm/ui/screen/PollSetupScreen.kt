@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -65,7 +66,7 @@ fun PollSetupScreen(
 ) {
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().testTag("screen_setup"),
         snackbarHost = {
             MjuSnackbar(
                 modifier = Modifier,
@@ -152,6 +153,7 @@ fun PollSetupScreen(
                     keyboardActions = KeyboardActions(onDone = { addProposal() }),
                     trailingIcon = {
                         IconButton(
+                            modifier = Modifier.testTag("setup_add_proposal"),
                             onClick = { addProposal() }
                         ) {
                             Icon(
@@ -214,6 +216,7 @@ fun PollSetupScreen(
             // Rule: A poll should have more than 1 proposal.
             Button(
                 modifier = Modifier
+                    .testTag("setup_submit")
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(0.62f)
                     .padding(16.dp),

@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -52,7 +53,7 @@ fun HomeScreen(
     onDeletePoll: (poll: Poll) -> Unit = {},
 ) {
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize().testTag("screen_home"),
         bottomBar = {
             MjuBottomBar(
                 selected = navController.currentDestination?.route ?: Screens.Home.name,
@@ -61,7 +62,7 @@ fun HomeScreen(
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(16.dp).testTag("home_fab"),
                 onClick = { onSetupBlankPoll() },
                 icon = { Icon(Icons.Filled.Add, "") },
                 text = { Text(text = stringResource(R.string.button_new_poll)) },

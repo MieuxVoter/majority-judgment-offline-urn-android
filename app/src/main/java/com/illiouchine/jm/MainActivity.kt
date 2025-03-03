@@ -1,5 +1,7 @@
 package com.illiouchine.jm
 
+import android.content.Context
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.WindowManager
@@ -184,6 +186,12 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+        }
+    }
+
+    companion object {
+        fun create(context: Context?): Intent {
+            return Intent(context, MainActivity::class.java)
         }
     }
 }
