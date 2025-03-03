@@ -8,8 +8,6 @@ import com.illiouchine.jm.model.PollConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import java.util.stream.IntStream
-import kotlin.streams.asSequence
 
 class PollVotingViewModel : ViewModel() {
 
@@ -31,9 +29,7 @@ class PollVotingViewModel : ViewModel() {
     private val _pollVotingViewState = MutableStateFlow(PollVotingViewState())
     val pollVotingViewState: StateFlow<PollVotingViewState> = _pollVotingViewState
 
-    private fun generateRandomOrder(size: Int): List<Int> {
-        return IntStream.range(0, size).asSequence().toList().shuffled()
-    }
+    private fun generateRandomOrder(size: Int): List<Int> = (0..<size).shuffled()
 
     fun initNewVotingSession(config: PollConfig) {
         _pollVotingViewState.update {
