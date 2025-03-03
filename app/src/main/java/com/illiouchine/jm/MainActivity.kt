@@ -114,8 +114,7 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Screens.PollVote.name) {
                         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-                        val mediaPlayer =
-                            MediaPlayer.create(LocalContext.current, R.raw.confirmation_002)
+                        val mediaPlayer = MediaPlayer.create(LocalContext.current, R.raw.success)
                         PollVotingScreen(
                             modifier = Modifier,
                             pollVotingState = pollVotingViewState,
