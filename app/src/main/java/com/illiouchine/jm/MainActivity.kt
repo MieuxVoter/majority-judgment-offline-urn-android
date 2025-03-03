@@ -182,6 +182,9 @@ class MainActivity : ComponentActivity() {
                             onReportBug = {
                                 uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android/issues")
                             },
+                            onOpenWebsite = {
+                                uriHandler.openUri("https://mieuxvoter.fr")
+                            },
                         )
                     }
                 }

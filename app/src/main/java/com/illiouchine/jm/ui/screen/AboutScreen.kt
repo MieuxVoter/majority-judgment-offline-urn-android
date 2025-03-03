@@ -2,6 +2,7 @@ package com.illiouchine.jm.ui.screen
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,10 +15,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,9 +39,10 @@ fun AboutScreen(
     navController: NavController = rememberNavController(),
     onBrowseSource: () -> Unit = {},
     onReportBug: () -> Unit = {},
+    onOpenWebsite: () -> Unit = {},
 ) {
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize().testTag("screen_about"),
         bottomBar = {
             MjuBottomBar(
                 selected = navController.currentDestination?.route ?: Screens.About.name,
@@ -90,6 +93,16 @@ fun AboutScreen(
                 onClick = { onBrowseSource() },
             ) {
                 Text(stringResource(R.string.button_browse_the_source))
+            }
+
+            Row(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            ) {
+                TextButton(
+                    onClick = { onOpenWebsite() },
+                ) {
+                    Text("MieuxVoter.fr")
+                }
             }
         }
     }
