@@ -14,6 +14,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -23,43 +24,29 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import com.illiouchine.jm.R
+import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.model.Ballot
-import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Grading
+import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.theme.JmTheme
-import fr.mieuxvoter.mj.CollectedTally
-import fr.mieuxvoter.mj.DeliberatorInterface
-import fr.mieuxvoter.mj.MajorityJudgmentDeliberator
-import fr.mieuxvoter.mj.ResultInterface
 import java.math.BigInteger
 
 
 @Composable
 fun ResultScreen(
     modifier: Modifier = Modifier,
-    poll: Poll,
+    state: PollResultViewModel.PollResultViewState,
     onFinish: () -> Unit = {},
     feedback: String? = "",
     onDismissFeedback: () -> Unit = {},
 ) {
-    // FIXME: refactor this into the viewmodel
+    val poll = state.poll!!
+    val result = state.result!!
+    val tally = state.tally!!
     val grading = poll.pollConfig.grading
-    val amountOfProposals = poll.pollConfig.proposals.size
-    val amountOfGrades = poll.pollConfig.grading.getAmountOfGrades()
-    val deliberation: DeliberatorInterface = MajorityJudgmentDeliberator()
-    val tally = CollectedTally(amountOfProposals, amountOfGrades)
-
-    poll.pollConfig.proposals.forEachIndexed { proposalIndex, _ ->
-        val voteResult = poll.judgments.filter { it.proposal == proposalIndex }
-        voteResult.forEach { judgment ->
-            tally.collect(proposalIndex, judgment.grade)
-        }
-    }
-
-    val result: ResultInterface = deliberation.deliberate(tally)
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -177,9 +164,12 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
             ),
         ),
     )
+    val pollResultViewModel = PollResultViewModel()
+    pollResultViewModel.finalizePoll(poll)
+    val state = pollResultViewModel.pollResultViewState.collectAsState().value
     JmTheme {
         ResultScreen(
-            poll = poll,
+            state = state,
         )
     }
 }

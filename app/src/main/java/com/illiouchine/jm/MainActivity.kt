@@ -141,7 +141,7 @@ class MainActivity : ComponentActivity() {
                         if (pollResultViewState.poll != null) {
                             ResultScreen(
                                 modifier = Modifier,
-                                poll = pollResultViewState.poll!!,
+                                state = pollResultViewState,
                                 onFinish = {
                                     navController.navigate(Screens.Home.name)
                                 },
