@@ -23,7 +23,7 @@ import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.JudgmentSummary
 import com.illiouchine.jm.ui.theme.JmTheme
-import com.illiouchine.jm.ui.theme.deleteColor
+import com.illiouchine.jm.ui.theme.DeleteColor
 
 
 @Composable
@@ -48,8 +48,9 @@ fun VoteSummaryScreen(
 
         Spacer(Modifier.height(32.dp))
 
-        pollConfig.proposals.forEachIndexed { proposalIndex, proposal ->
-            val gradeIndex = ballot.judgments[proposalIndex].grade
+        ballot.judgments.forEach { judgment ->
+            val gradeIndex = judgment.grade
+            val proposal = pollConfig.proposals[judgment.proposal]
             JudgmentSummary(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -78,7 +79,7 @@ fun VoteSummaryScreen(
             ) {
                 Text(
                     text = stringResource(R.string.summary_button_no_rescind),
-                    color = deleteColor,
+                    color = DeleteColor,
                 )
             }
 

@@ -2,6 +2,7 @@ package com.illiouchine.jm.ui.screen
 
 import android.widget.Toast
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,7 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,7 +44,9 @@ import com.illiouchine.jm.ui.composable.GradingSelectionRow
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.theme.JmTheme
-import com.illiouchine.jm.ui.theme.deleteColor
+import com.illiouchine.jm.ui.theme.SeparatorDark
+import com.illiouchine.jm.ui.theme.SeparatorLight
+import com.illiouchine.jm.ui.theme.DeleteColor
 import java.text.DateFormat
 import java.util.Calendar
 
@@ -168,8 +170,7 @@ fun PollSetupScreen(
 
                 if (propIndex > 0) {
                     HorizontalDivider(
-                        // FIXME: Dark/Light/Theme support, using lightgray is a crutch
-                        color = Color.LightGray,
+                        color = if (isSystemInDarkTheme()) SeparatorDark else SeparatorLight,
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
@@ -196,7 +197,7 @@ fun PollSetupScreen(
                             modifier = Modifier,
                             imageVector = Icons.Outlined.Delete,
                             contentDescription = "",
-                            tint = deleteColor,
+                            tint = DeleteColor,
                         )
                     }
                 }

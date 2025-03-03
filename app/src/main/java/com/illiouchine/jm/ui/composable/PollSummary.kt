@@ -20,7 +20,7 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.theme.JmTheme
-import com.illiouchine.jm.ui.theme.deleteColor
+import com.illiouchine.jm.ui.theme.DeleteColor
 
 @Composable
 fun PollSummary(
@@ -73,7 +73,7 @@ fun PollSummary(
                 TextButton(
                     onClick = { onDeletePoll(poll) },
                     colors = ButtonDefaults.textButtonColors().copy(
-                        contentColor = deleteColor
+                        contentColor = DeleteColor
                     )
                 ) {
                     Text(stringResource(R.string.action_delete))
