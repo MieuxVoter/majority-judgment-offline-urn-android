@@ -2,6 +2,7 @@ package com.illiouchine.jm.ui.screen
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +20,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -74,14 +77,26 @@ fun ResultScreen(
             )
 
             result.proposalResultsRanked.forEach { proposalResult ->
-                Row {
+                Row(
+                    verticalAlignment = Alignment.Bottom,
+                ) {
                     val rank = proposalResult.rank
                     val proposalName = poll.pollConfig.proposals[proposalResult.index]
-                    Text("#$rank  $proposalName")
+                    val medianGrade = proposalResult.analysis.medianGrade
+                    val medianGradeName = stringResource(poll.pollConfig.grading.getGradeName(medianGrade))
+                    Text(
+                        modifier = Modifier.padding(end = 12.dp),
+                        fontSize = 5.em,
+                        text = "#$rank",
+                    )
+                    Text(
+                        text = "$proposalName   ($medianGradeName)",
+                    )
                 }
 
                 Row {
                     // Draw the linear merit profile of the proposal.
+                    val medianLineColor = if (isSystemInDarkTheme()) Color.White else Color.Black
                     Canvas(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -107,11 +122,21 @@ fun ResultScreen(
                             offsetX += sizeW.toFloat()
                         }
 
+                        // Vertical line in the middle, marking the median grade.
+                        drawLine(
+                            color = medianLineColor,
+                            start = Offset(size.width * 0.5f, -10f),
+                            end = Offset(size.width * 0.5f, size.height + 10f),
+                            pathEffect = PathEffect.dashPathEffect(
+                                intervals = floatArrayOf(10f, 5f),
+                                phase = -0.5f,
+                            ),
+                            strokeWidth = 4f,
+                        )
                     }
-
                 }
 
-                Spacer(modifier = Modifier.padding(8.dp))
+                Spacer(modifier = Modifier.padding(12.dp))
             }
 
             Spacer(modifier = Modifier.padding(8.dp))
@@ -131,7 +156,11 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
     val poll = Poll(
         pollConfig = PollConfig(
             subject = "Prézidaaanh ?",
-            proposals = listOf("Tonio", "Bobby", "Mario"),
+            proposals = listOf(
+                "Luigi the green plumber with a mustache and a long name",
+                "Bobby",
+                "Mario",
+            ),
             grading = Grading.Quality7Grading,
         ),
         ballots = listOf(
