@@ -1,2 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="label_poll_proposals">Propuestas</string>
+    <string name="majority_judgment">Sentencia Mayoritaria</string>
+    <string name="button_add">Agregar</string>
+    <string name="button_finish">Finalizar</string>
+    <string name="button_next">siguiente</string>
+    <string name="button_let_s_go">Vamos !</string>
+    <string name="proposal">Propuesta</string>
+    <string name="poll_of">Encuesta de</string>
+    <string name="ballots">votaciónes</string>
+    <string name="ballot">votación</string>
+    <string name="in_the_urn">en la urna</string>
+    <string name="grade_to_reject">rechazar</string>
+    <string name="grade_insufficient">insuficiente</string>
+    <string name="grade_good">bien</string>
+    <string name="grade_very_good">muy bien</string>
+    <string name="grade_excellent">excelente</string>
+    <string name="menu_home">Hogar</string>
+    <string name="menu_settings">Ajustes</string>
+    <string name="button_end_the_poll">Finalizar la encuesta</string>
+    <string name="all_things_considered_i_think">Considerándolo todo, creo que</string>
+    <string name="verb_is">es</string>
+    <string name="button_report_bug">Informar un Error</string>
+    <string name="app_name">Urna</string>
+    <string name="grade_passable">pasable</string>
+    <string name="menu_about">Acerca</string>
+    <string name="toast_proposal_name_already_exists">Ya existe una propuesta con este nombre.</string>
+    <string name="label_poll_subject">Asunto de la Encuesta</string>
+    <string name="grade_somewhat_good">bastante bien</string>
+    <string name="button_next_participant">Siguiente participante</string>
+</resources>
