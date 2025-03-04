@@ -17,6 +17,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
@@ -32,11 +34,12 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.Screens
 import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.model.Ballot
-import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Grading
+import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.MjuBottomBar
+import com.illiouchine.jm.ui.composable.PollDeletionConfirmationDialog
 import com.illiouchine.jm.ui.composable.PollSummary
 import com.illiouchine.jm.ui.theme.JmTheme
 
@@ -53,7 +56,9 @@ fun HomeScreen(
     onDeletePoll: (poll: Poll) -> Unit = {},
 ) {
     Scaffold(
-        modifier = modifier.fillMaxSize().testTag("screen_home"),
+        modifier = modifier
+            .fillMaxSize()
+            .testTag("screen_home"),
         bottomBar = {
             MjuBottomBar(
                 selected = navController.currentDestination?.route ?: Screens.Home.name,
@@ -62,7 +67,9 @@ fun HomeScreen(
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                modifier = Modifier.padding(16.dp).testTag("home_fab"),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .testTag("home_fab"),
                 onClick = { onSetupBlankPoll() },
                 icon = { Icon(Icons.Filled.Add, "") },
                 text = { Text(text = stringResource(R.string.button_new_poll)) },
@@ -101,22 +108,43 @@ fun HomeScreen(
             Spacer(Modifier.height(16.dp))
 
             homeViewState.polls.reversed().forEach { poll ->
+
+                val showDeletionDialog = remember { mutableStateOf(false) }
+
                 PollSummary(
-                    modifier = Modifier.fillMaxWidth().padding(top=8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
                     poll = poll,
                     onSetupClonePoll = { onSetupClonePoll(it) },
                     onResumePoll = { onResumePoll(it) },
                     onShowResult = { onShowResult(it) },
-                    onDeletePoll = { onDeletePoll(it) },
+                    onDeletePoll = {
+                        showDeletionDialog.value = true
+                    },
                 )
                 Spacer(
                     Modifier
                         .height(1.dp)
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
-                        .background(Color.LightGray)
+                        .background(Color.LightGray),
                 )
+
+                if (showDeletionDialog.value) {
+                    PollDeletionConfirmationDialog(
+                        poll = poll,
+                        onConfirm = {
+                            showDeletionDialog.value = false
+                            onDeletePoll(poll)
+                        },
+                        onDismiss = {
+                            showDeletionDialog.value = false
+                        },
+                    )
+                }
             }
+
             // Safe area : cause fab button
             Spacer(Modifier.height(72.dp))
         }

@@ -68,13 +68,13 @@ fun PollSummary(
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 TextButton(
                     onClick = { onDeletePoll(poll) },
                     colors = ButtonDefaults.textButtonColors().copy(
-                        contentColor = DeleteColor
-                    )
+                        contentColor = DeleteColor,
+                    ),
                 ) {
                     Text(stringResource(R.string.action_delete))
                 }
