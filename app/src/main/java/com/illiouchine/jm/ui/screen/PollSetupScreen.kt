@@ -1,6 +1,7 @@
 package com.illiouchine.jm.ui.screen
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -44,10 +46,11 @@ import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.GradingSelectionRow
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.MjuSnackbar
+import com.illiouchine.jm.ui.theme.DeleteColor
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.SeparatorDark
 import com.illiouchine.jm.ui.theme.SeparatorLight
-import com.illiouchine.jm.ui.theme.DeleteColor
+import com.illiouchine.jm.ui.utils.displayed
 import java.text.DateFormat
 import java.util.Calendar
 
@@ -65,8 +68,23 @@ fun PollSetupScreen(
     onDismissFeedback: () -> Unit = {},
 ) {
 
+    var finishButtonVisibility by remember { mutableStateOf(true) }
+    
+    var subject: String by remember { mutableStateOf(pollSetupState.pollSetup.subject) }
+    val context = LocalContext.current
+
+    fun generateSubject(): String {
+        return buildString {
+            append(context.getString(R.string.poll_of))
+            append(" ")
+            append(DateFormat.getDateInstance().format(Calendar.getInstance().time))
+        }
+    }
+
     Scaffold(
-        modifier = Modifier.fillMaxSize().testTag("screen_setup"),
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag("screen_setup"),
         snackbarHost = {
             MjuSnackbar(
                 modifier = Modifier,
@@ -83,19 +101,28 @@ fun PollSetupScreen(
                 onItemSelected = { destination -> navController.navigate(destination.id) }
             )
         },
+        floatingActionButton = {
+            AnimatedVisibility(
+                visible = pollSetupState.pollSetup.proposals.size > 1 && !finishButtonVisibility,
+            ) {
+                ExtendedFloatingActionButton(
+                    modifier = Modifier.padding(16.dp),
+                    onClick = {
+                        // Rule: if the poll's subject was not provided, use a default.
+                        if (subject.isBlank()) {
+                            subject = generateSubject()
+                            onAddSubject(subject)
+                        }
+                        onSetupFinished()
+                    },
+                    icon = { },
+                    text = { Text(stringResource(R.string.button_let_s_go)) },
+                )
+            }
+        },
     ) { innerPadding ->
 
-        val context = LocalContext.current
         var proposal: String by remember { mutableStateOf("") }
-        var subject: String by remember { mutableStateOf(pollSetupState.pollSetup.subject) }
-
-        fun generateSubject(): String {
-            return buildString {
-                append(context.getString(R.string.poll_of))
-                append(" ")
-                append(DateFormat.getDateInstance().format(Calendar.getInstance().time))
-            }
-        }
 
         fun generateProposalName(): String {
             return buildString {
@@ -218,6 +245,7 @@ fun PollSetupScreen(
             Button(
                 modifier = Modifier
                     .testTag("setup_submit")
+                    .displayed { finishButtonVisibility = it }
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(0.62f)
                     .padding(16.dp),
@@ -261,6 +289,31 @@ fun PreviewSetupSurveyScreenWithHugeNames(modifier: Modifier = Modifier) {
                         "Des nouilles aux champignons forestiers sur leur lit de purée de carottes urticantes",
                         "Du riz",
                         "Du riche",
+                    ),
+                ),
+            ),
+        )
+    }
+}
+
+
+@Preview(showSystemUi = true)
+@Composable
+fun PreviewSetupSurveyScreenWithLotsOfPropals(modifier: Modifier = Modifier) {
+    JmTheme {
+        PollSetupScreen(
+            modifier = Modifier,
+            pollSetupState = PollSetupViewModel.PollSetupViewState(
+                pollSetup = PollConfig(
+                    subject = "Repas de ce soir, le Banquet Républicain de l'avènement du Jugement Majoritaire",
+                    proposals = listOf(
+                        "Des nouilles aux champignons forestiers sur leur lit de purée de carottes urticantes",
+                        "Du riz",
+                        "Du riche",
+                        "Des Spaghetti Carbonara",
+                        "Poulet Tikka Masala",
+                        "Sushi",
+                        "Tacos au Bœuf"
                     ),
                 ),
             ),
