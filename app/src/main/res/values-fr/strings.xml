@@ -47,6 +47,7 @@
     <string name="action_clone">Cloner</string>
     <string name="action_resume">Reprendre</string>
     <string name="action_inspect">Voir</string>
+    <string name="action_cancel">Annuler</string>
     <string name="title_about">À Propos</string>
     <string name="button_browse_the_source">Voir la Source</string>
     <string name="about_help_us_make_it_better">Aidez-nous à le rendre meilleur !</string>
@@ -59,4 +60,7 @@
     <string name="summary_is_that_accurate">Est-ce correct ?</string>
     <string name="summary_button_no_rescind">Non, recommencer</string>
     <string name="summary_button_yes_confirm">Oui, confirmer</string>
+    <string name="dialog_are_you_sure">Êtes-vous sûr⋅e ?</string>
+    <string name="dialog_this_will_delete_the_poll">Cela va supprimer le scrutin</string>
+    <string name="dialog_operation_cannot_be_undone">Cette opération est irréversible.</string>
 </resources>

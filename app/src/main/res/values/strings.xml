@@ -46,6 +46,7 @@
     <string name="action_clone">Clone</string>
     <string name="action_resume">Resume</string>
     <string name="action_inspect">Inspect</string>
+    <string name="action_cancel">Cancel</string>
     <string name="title_about">About</string>
     <string name="button_browse_the_source">Browse the Source</string>
     <string name="about_help_us_make_it_better">Help us make it better !</string>
@@ -58,4 +59,7 @@
     <string name="summary_is_that_accurate">Is that accurate ?</string>
     <string name="summary_button_no_rescind">No, rescind</string>
     <string name="summary_button_yes_confirm">Yes, confirm</string>
+    <string name="dialog_are_you_sure">Are you sure ?</string>
+    <string name="dialog_this_will_delete_the_poll">This will delete the poll</string>
+    <string name="dialog_operation_cannot_be_undone">This operation cannot be undone.</string>
 </resources>
