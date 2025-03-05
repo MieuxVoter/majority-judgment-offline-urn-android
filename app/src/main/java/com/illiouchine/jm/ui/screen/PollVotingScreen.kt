@@ -27,6 +27,7 @@ import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.GradeSelectionList
 import com.illiouchine.jm.ui.composable.JudgmentBalls
 import com.illiouchine.jm.ui.composable.MjuSnackbar
@@ -147,22 +148,14 @@ fun PollVotingScreen(
             }
 
 
-            val amountOfBallots = pollVotingState.ballots.size
             Spacer(
                 modifier = Modifier.padding(12.dp),
             )
-            Row(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-            ) {
-                val ballotsString = if (amountOfBallots <= 1)
-                    stringResource(R.string.ballot)
-                else
-                    stringResource(R.string.ballots)
 
-                Text(
-                    "${amountOfBallots} ${ballotsString} " + stringResource(R.string.in_the_urn)
-                )
-            }
+            BallotCountRow(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                ballots = pollVotingState.ballots,
+            )
         }
     }
 

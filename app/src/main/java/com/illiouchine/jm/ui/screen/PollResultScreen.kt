@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.model.Ballot
@@ -32,6 +33,7 @@ import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
@@ -86,7 +88,7 @@ fun ResultScreen(
                     val medianGradeName = stringResource(poll.pollConfig.grading.getGradeName(medianGrade))
                     Text(
                         modifier = Modifier.padding(end = 12.dp),
-                        fontSize = 5.em,
+                        fontSize = 24.sp,
                         text = "#$rank",
                     )
                     Text(
@@ -138,6 +140,13 @@ fun ResultScreen(
 
                 Spacer(modifier = Modifier.padding(12.dp))
             }
+
+            Spacer(modifier = Modifier.padding(8.dp))
+
+            BallotCountRow(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                ballots = poll.ballots,
+            )
 
             Spacer(modifier = Modifier.padding(8.dp))
 
