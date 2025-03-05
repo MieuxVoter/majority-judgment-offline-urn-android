@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.PollVotingViewModel
 import com.illiouchine.jm.model.Ballot
-import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Grading
+import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.GradeSelectionList
