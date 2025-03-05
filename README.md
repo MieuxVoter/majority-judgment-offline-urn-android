@@ -4,6 +4,7 @@
 [![Release](https://img.shields.io/github/v/release/MieuxVoter/majority-judgment-offline-urn-android?sort=semver&style=for-the-badge)](https://github.com/MieuxVoter/majority-judgment-offline-urn-android/releases)
 [![License](https://img.shields.io/github/license/MieuxVoter/majority-judgment-offline-urn-android?style=for-the-badge)](./LICENSE)
 [![GitHub Build Status](https://img.shields.io/github/actions/workflow/status/MieuxVoter/majority-judgment-offline-urn-android/android.yml?style=for-the-badge)](https://github.com/MieuxVoter/majority-judgment-offline-urn-android/actions/workflows/android.yml)
+[![Weblate project translated](https://img.shields.io/weblate/progress/majority-judgment-offline-urn-android?server=https%3A%2F%2Fhosted.weblate.org&style=for-the-badge)](https://hosted.weblate.org/projects/majority-judgment-offline-urn-android/application/)
 ![GitHub top language](https://img.shields.io/github/languages/top/MieuxVoter/majority-judgment-offline-urn-android?style=for-the-badge)
 ![F-Droid Version](https://img.shields.io/f-droid/v/com.illiouchine.jm?style=for-the-badge)
 [![Join the Discord chat at https://discord.gg/rAAQG9S](https://img.shields.io/discord/705322981102190593.svg?style=for-the-badge)](https://discord.gg/rAAQG9S)
@@ -59,7 +60,11 @@ This is a standard Android project in Kotlin, made with Jetpack Compose.
 
 ### Translations
 
-The translation files are in `app/src/main/res/values-<language>`.
+We're using the amazing _Weblate_ for translations : https://hosted.weblate.org/projects/majority-judgment-offline-urn-android/application/
+
+> You can add a new language or edit existing translations without ever touching any code.
+
+If you're a nerd and do want to handle code, the XML translation files are in `app/src/main/res/values-<language>`.
 
 
 ## Additional info
