@@ -120,7 +120,7 @@ fun ResultScreen(
                         var offsetX = 0F
                         val outline = Path()
 
-                        for (gradeIndex in 0..<grading.getAmountOfGrades()) {
+                        for (gradeIndex in (0..<grading.getAmountOfGrades()).reversed()) {
                             val sizeW = bigSizeWidth.multiply(
                                 proposalTally.tally[gradeIndex]
                             ).divide(
