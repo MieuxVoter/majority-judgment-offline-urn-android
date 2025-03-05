@@ -112,6 +112,7 @@ fun PollVotingScreen(
             } else {
 
                 if (pollVotingState.isInStateVoting()) {
+
                     // State: VOTING, filling the ballot with judgments.
                     val currentProposalIndex = pollVotingState.currentProposalsOrder[pollVotingState.currentBallot!!.judgments.size]
                     GradeSelectionList(
