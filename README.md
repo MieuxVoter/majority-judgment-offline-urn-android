@@ -64,10 +64,10 @@ We're using the amazing _Weblate_ for translations : https://hosted.weblate.org/
 
 > You can add a new language or edit existing translations without ever touching any code.
 
-If you're a nerd and do want to handle code, the XML translation files are in `app/src/main/res/values-<language>`.
+If you're a nerd and do want to handle code, the `XML` translation files are in `app/src/main/res/values-<language>`.
 
 
 ## Additional info
 
 Check out https://mieuxvoter.fr for more information about Majority Judgment.
- 
+
