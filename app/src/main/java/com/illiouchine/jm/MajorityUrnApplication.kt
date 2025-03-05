@@ -51,7 +51,12 @@ val module = module {
     // ViewModel
     viewModel { HomeViewModel(pollDataSource = get()) }
     viewModel { SettingsViewModel(sharedPreferences = get()) }
-    viewModel { PollSetupViewModel(sharedPrefsHelper = get()) }
+    viewModel {
+        PollSetupViewModel(
+            sharedPrefsHelper = get(),
+            pollDataSource = get(),
+        )
+    }
     viewModel { PollVotingViewModel() }
     viewModel { PollResultViewModel() }
 

@@ -109,6 +109,8 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate(Screens.PollVote.name)
                             },
                             onDismissFeedback = { pollSetupViewModel.onDismissFeedback() },
+                            onGetSubjectSuggestion = { pollSetupViewModel.getSubjectSuggestion(it) },
+                            onGetProposalSuggestion = { pollSetupViewModel.getProposalSuggestion(it) }
                         )
                     }
                     composable(Screens.PollVote.name) {
