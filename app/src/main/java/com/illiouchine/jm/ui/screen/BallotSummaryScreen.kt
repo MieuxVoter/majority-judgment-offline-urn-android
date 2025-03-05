@@ -27,7 +27,7 @@ import com.illiouchine.jm.ui.theme.JmTheme
 
 
 @Composable
-fun VoteSummaryScreen(
+fun BallotSummaryScreen(
     modifier: Modifier = Modifier,
     pollConfig: PollConfig,
     ballot: Ballot,
@@ -57,7 +57,7 @@ fun VoteSummaryScreen(
                     .padding(4.dp),
                 proposal = proposal,
                 gradeString = stringResource(pollConfig.grading.getGradeName(gradeIndex)),
-                color = pollConfig.grading.getGradeColor(gradeIndex)
+                color = pollConfig.grading.getGradeColor(gradeIndex),
             )
             Spacer(Modifier.height(8.dp))
         }
@@ -100,9 +100,9 @@ fun VoteSummaryScreen(
 
 @Preview(showSystemUi = true)
 @Composable
-fun PreviewVoteSummaryScreen(modifier: Modifier = Modifier) {
+fun PreviewBallotSummaryScreen(modifier: Modifier = Modifier) {
     JmTheme {
-        VoteSummaryScreen(
+        BallotSummaryScreen(
             pollConfig = PollConfig(
                 subject = "Prézidaaanh ?",
                 proposals = listOf("Tonio", "Bobby", "Mario"),
