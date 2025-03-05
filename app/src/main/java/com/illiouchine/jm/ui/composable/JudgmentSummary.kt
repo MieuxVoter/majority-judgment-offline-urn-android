@@ -7,8 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.theme.JmTheme
 
 @Composable
@@ -16,7 +18,7 @@ fun JudgmentSummary(
     modifier: Modifier = Modifier,
     proposal: String = "Tonio",
     gradeString: String = "Excellent",
-    color: Color = Color.Green
+    color: Color = Color.Green,
 ) {
     Row(
         modifier = modifier,
@@ -24,10 +26,10 @@ fun JudgmentSummary(
     ) {
         JudgmentBall(
             modifier = Modifier.padding(8.dp),
-            color = color
+            color = color,
         )
         Text(proposal)
-        Text(" is ")
+        Text(" " + stringResource(R.string.verb_is) + " ")
         Text(gradeString)
     }
 }
