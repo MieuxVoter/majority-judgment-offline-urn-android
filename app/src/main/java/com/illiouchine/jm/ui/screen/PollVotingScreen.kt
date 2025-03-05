@@ -133,7 +133,7 @@ fun PollVotingScreen(
                 } else {
 
                     // State: SUMMARY, awaiting confirmation, back or redo.
-                    VoteSummaryScreen(
+                    BallotSummaryScreen(
                         pollConfig = pollVotingState.pollConfig,
                         ballot = pollVotingState.currentBallot!!,
                         onConfirm = {
