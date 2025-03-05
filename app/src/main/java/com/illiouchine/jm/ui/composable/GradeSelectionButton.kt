@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.ui.theme.JmTheme
 
 @Composable
@@ -41,7 +41,7 @@ fun GradeSelectionButton(
     ) {
         Text(
             text = text,
-            fontSize = 5.em,
+            fontSize = 24.sp,
         )
         // Example with outline
 //        Text(

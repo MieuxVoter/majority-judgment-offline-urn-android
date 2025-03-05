@@ -27,7 +27,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.illiouchine.jm.R
@@ -87,10 +87,10 @@ fun HomeScreen(
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 64.dp),
-                fontSize = 8.em,
+                    .padding(bottom = 16.dp),
+                fontSize = 32.sp,
+                lineHeight = 32.sp,
                 textAlign = TextAlign.Center,
-                lineHeight = 1.3.em,
                 text = stringResource(R.string.title_multiline_majority_judgment_urn),
             )
 

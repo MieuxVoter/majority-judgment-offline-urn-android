@@ -23,7 +23,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Grading
@@ -56,8 +55,8 @@ fun GradeSelectionList(
         Text(
             text = pollConfig.proposals[forProposalIndex],
             textAlign = TextAlign.Center,
-            lineHeight = 32.sp,
-            fontSize = 8.em,
+            fontSize = 24.sp,
+            lineHeight = 24.sp,
         )
     }
     Row(

@@ -15,15 +15,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.JudgmentSummary
-import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.DeleteColor
+import com.illiouchine.jm.ui.theme.JmTheme
 
 
 @Composable
@@ -43,7 +43,7 @@ fun VoteSummaryScreen(
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(R.string.summary_are_you_sure),
-            fontSize = 8.em,
+            fontSize = 32.sp,
         )
 
         Spacer(Modifier.height(32.dp))

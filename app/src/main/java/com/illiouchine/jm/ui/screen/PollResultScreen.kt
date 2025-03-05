@@ -22,7 +22,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.model.Ballot
@@ -31,6 +30,7 @@ import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.MjuSnackbar
+import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
 import java.math.BigInteger
 
@@ -69,15 +69,9 @@ fun ResultScreen(
                 .verticalScroll(state = ScrollState(initial = 0))
                 .padding(8.dp),
         ) {
-            Row(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-            ) {
-                Text(
-                    modifier = modifier.padding(32.dp),
-                    text = "❝ ${poll.pollConfig.subject} ❞",
-                    fontSize = 6.em,
-                )
-            }
+            PollSubject(
+                subject = poll.pollConfig.subject,
+            )
 
             result.proposalResultsRanked.forEach { proposalResult ->
                 Row {

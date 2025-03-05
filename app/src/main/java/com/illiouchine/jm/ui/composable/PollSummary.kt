@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.DeleteColor
+import com.illiouchine.jm.ui.theme.JmTheme
 
 @Composable
 fun PollSummary(

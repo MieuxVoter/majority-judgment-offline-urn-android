@@ -34,7 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.composable.ViewPager
 import com.illiouchine.jm.ui.theme.JmTheme
@@ -74,9 +74,8 @@ fun OnBoardingScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
-                fontSize = 8.em,
+                fontSize = 32.sp,
                 textAlign = TextAlign.Center,
-                lineHeight = 1.3.em,
                 text = stringResource(R.string.majority_judgment),
             )
             Box(
