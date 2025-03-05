@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Grading
@@ -43,7 +44,7 @@ fun VoteSummaryScreen(
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(R.string.summary_are_you_sure),
-            fontSize = 8.em,
+            fontSize = 32.sp,
         )
 
         Spacer(Modifier.height(32.dp))

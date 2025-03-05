@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun PollSubject(
@@ -21,8 +22,8 @@ fun PollSubject(
     ) {
         Text(
             modifier = modifier.padding(24.dp),
-            text = "❝ $subject ❞",
-            fontSize = 6.em,
+            text = "❝ $subject ❞",
+            fontSize = 24.sp,
         )
     }
 }

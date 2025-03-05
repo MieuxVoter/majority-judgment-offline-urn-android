@@ -1,6 +1,7 @@
 package com.illiouchine.jm.ui.screen
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.illiouchine.jm.R
@@ -67,15 +69,15 @@ fun SettingsScreen(
         Column(
             modifier = modifier
                 .padding(innerPadding)
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 64.dp),
-                fontSize = 8.em,
+                fontSize = 32.sp,
                 textAlign = TextAlign.Center,
-                lineHeight = 1.3.em,
+                lineHeight = 32.sp,
                 text = stringResource(R.string.settings_screen_title)
             )
 

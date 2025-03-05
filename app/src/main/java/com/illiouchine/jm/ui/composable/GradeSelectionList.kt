@@ -56,8 +56,8 @@ fun GradeSelectionList(
         Text(
             text = pollConfig.proposals[forProposalIndex],
             textAlign = TextAlign.Center,
-            lineHeight = 32.sp,
-            fontSize = 8.em,
+            fontSize = 24.sp,
+            lineHeight = 24.sp,
         )
     }
     Row(

@@ -104,7 +104,7 @@ fun PollVotingScreen(
                     onClick = {
                         val poll = Poll(
                             pollConfig = pollVotingState.pollConfig,
-                            ballots = pollVotingState.ballots
+                            ballots = pollVotingState.ballots,
                         )
                         onFinish(poll)
                     },

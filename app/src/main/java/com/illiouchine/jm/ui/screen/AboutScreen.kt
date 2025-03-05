@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.illiouchine.jm.R
@@ -68,9 +69,9 @@ fun AboutScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 64.dp),
-                fontSize = 8.em,
+                fontSize = 32.sp,
                 textAlign = TextAlign.Center,
-                lineHeight = 1.3.em,
+                lineHeight = 32.sp,
                 text = stringResource(R.string.title_about),
             )
 
