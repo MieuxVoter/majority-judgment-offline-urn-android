@@ -19,9 +19,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -78,6 +82,13 @@ fun ResultScreen(
                 subject = poll.pollConfig.subject,
             )
 
+            BallotCountRow(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                ballots = poll.ballots,
+            )
+
+            Spacer(modifier = Modifier.padding(8.dp))
+
             result.proposalResultsRanked.forEach { proposalResult ->
                 Row(
                     verticalAlignment = Alignment.Bottom,
@@ -107,6 +118,7 @@ fun ResultScreen(
                         val proposalTally = tally.proposalsTallies[proposalResult.index]
                         val bigSizeWidth = BigInteger.valueOf(size.width.toLong())
                         var offsetX = 0F
+                        val outline = Path()
 
                         for (gradeIndex in 0..<grading.getAmountOfGrades()) {
                             val sizeW = bigSizeWidth.multiply(
@@ -115,14 +127,37 @@ fun ResultScreen(
                                 proposalTally.amountOfJudgments
                             )
 
+                            val gradeRectSize = Size(sizeW.toFloat(), size.height)
+                            val gradeRectOffset = Offset(offsetX, 0F)
+
+                            // Fill a rect with the color of the grade
                             drawRect(
                                 color = grading.getGradeColor(gradeIndex),
-                                size = Size(sizeW.toFloat(), size.height),
-                                topLeft = Offset(offsetX, 0F)
+                                size = gradeRectSize,
+                                topLeft = gradeRectOffset,
                             )
+
+                            // Outline only the median grade
+
+                            if (gradeIndex == proposalResult.analysis.medianGrade) {
+                                outline.addRect(Rect(
+                                    size = gradeRectSize,
+                                    offset = gradeRectOffset,
+                                ))
+                            }
 
                             offsetX += sizeW.toFloat()
                         }
+
+                        // Draw the outline *after* drawing all the grade rectangles
+                        drawPath(
+                            color = medianLineColor,
+                            path = outline,
+                            style = Stroke(
+                                width = 8f,
+                                join = StrokeJoin.Bevel,
+                            ),
+                        )
 
                         // Vertical line in the middle, marking the median grade.
                         drawLine(
@@ -143,13 +178,6 @@ fun ResultScreen(
 
             Spacer(modifier = Modifier.padding(8.dp))
 
-            BallotCountRow(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                ballots = poll.ballots,
-            )
-
-            Spacer(modifier = Modifier.padding(8.dp))
-
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = onFinish,
@@ -164,7 +192,7 @@ fun ResultScreen(
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
     val poll = Poll(
         pollConfig = PollConfig(
-            subject = "Prézidaaanh ?",
+            subject = "Who for Prézidaaanh ?",
             proposals = listOf(
                 "Luigi the green plumber with a mustache and a long name",
                 "Bobby",
@@ -192,6 +220,13 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
                     Judgment(0, 5),
                     Judgment(1, 5),
                     Judgment(2, 6),
+                )
+            ),
+            Ballot(
+                judgments = listOf(
+                    Judgment(0, 3),
+                    Judgment(1, 0),
+                    Judgment(2, 1),
                 )
             ),
         ),
