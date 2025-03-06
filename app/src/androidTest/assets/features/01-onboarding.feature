@@ -17,10 +17,6 @@ Feature: Onboarding
 
     When I click on the node tagged "screen_onboarding_next"
     Then I should see the node tagged "screen_onboarding"
-    Then I should see the node tagged "screen_onboarding_next"
-
-    When I click on the node tagged "screen_onboarding_next"
-    Then I should see the node tagged "screen_onboarding"
     Then I should see the node tagged "screen_onboarding_finish"
 
     When I click on the node tagged "screen_onboarding_finish"
