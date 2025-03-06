@@ -57,6 +57,7 @@
     <string name="dialog_are_you_sure">¿ Estas segure ?</string>
     <string name="dialog_this_will_delete_the_poll">Esto eliminará la encuesta</string>
     <string name="help_your_participation_was_a_success">¡Tu participación fue un éxito!\nAhora puedes pasarle este dispositivo al siguiente participante.</string>
+    <string name="action_cancel">Cancelar</string>
     <string name="title_about">Acerca</string>
     <string name="onboarding_welcome_to_your_offline_poll_app">Bienvenido a tu aplicación de encuestas sin conexión que utiliza Mayoría Sentencia.</string>
     <string name="onboarding_this_is_free_software">Este es software libre, descubre cómo contactarnos o contribuir en la sección Acerca.</string>
