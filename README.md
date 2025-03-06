@@ -1,6 +1,5 @@
 # Majority Judgment Offline Mobile Urn
 
-
 [![Release](https://img.shields.io/github/v/release/MieuxVoter/majority-judgment-offline-urn-android?sort=semver&style=for-the-badge)](https://github.com/MieuxVoter/majority-judgment-offline-urn-android/releases)
 [![License](https://img.shields.io/github/license/MieuxVoter/majority-judgment-offline-urn-android?style=for-the-badge)](./LICENSE)
 [![GitHub Build Status](https://img.shields.io/github/actions/workflow/status/MieuxVoter/majority-judgment-offline-urn-android/android.yml?style=for-the-badge)](https://github.com/MieuxVoter/majority-judgment-offline-urn-android/actions/workflows/android.yml)
@@ -9,19 +8,27 @@
 [![F-Droid Version](https://img.shields.io/f-droid/v/com.illiouchine.jm?style=for-the-badge)](https://f-droid.org/en/packages/com.illiouchine.jm)
 [![Join the Discord chat at https://discord.gg/rAAQG9S](https://img.shields.io/discord/705322981102190593.svg?style=for-the-badge)](https://discord.gg/rAAQG9S)
 
+An application for Android 8.1 and greater that helps groups decide about things when offline, using a single phone.
+
+> If you're looking for an online app, try https://app.mieuxvoter.fr/
 
 ## Features
 
 - *Mobile Urn*: Set up a local, offline poll on your phone.
+- *Vote with Subtlety*: Grade each proposal and so never throw a vote away.
 - *Majority Judgment*: One of the most elegant ranking systems out there.
 - *Libre Software*: We accept merge requests.
-- No permissions required.
-- No anti-features.
+- *No anti-features*: no tracking, no ads.
 
 <p>
   <img src="metadata/en-US/images/phoneScreenshots/1.png" alt="Screenshot of the voting screen of the application." />
   <img src="metadata/en-US/images/phoneScreenshots/2.png" alt="Screenshot of the results screen of the application" />
 </p>
+
+
+## Tips
+
+Since Android 11, you may use [app pinning](https://support.google.com/android/answer/9455138?hl=en) with this app if participants are expected to have gorilla fingers or sneaky paws.
 
 
 ## Download
@@ -30,7 +37,7 @@
 
 This Android app is available on [F-Droid](https://f-droid.org/en/packages/com.illiouchine.jm).
 
-This is the recommended way to install, as you'll benefit from automatic updates.
+> This is the **recommended way to install**, as you'll benefit from automatic updates.
 
 ### Google Play
 
@@ -47,18 +54,21 @@ You can also download the debug `apk` from [the releases](https://github.com/Mie
 > Both are built by our Continuous Integration (CI) on each release.
 
 
-## Inspiration
+## Contribute
 
-There used to be a similar app called _"Le Choix Commun"_.
-
-
-## Contribution
-
-> Merge requests are welcome.
+> Follow the usual _git_ flow:
+> Fork, clone, branch, hack, push and create a merge request.
 
 ### Code
 
-This is a standard Android project in Kotlin, made with Jetpack Compose.
+This is an unremarkable _Android_ project in _Kotlin_, made with _Jetpack Compose_.
+
+#### Tests
+
+There are some rudimentary integration tests in _Gherkin_.
+Run them from _Android Studio_, or with:
+
+    ./gradlew clean connectedCheck
 
 ### Translations
 
@@ -67,6 +77,11 @@ We're using the amazing _Weblate_ for translations : https://hosted.weblate.org/
 > You can add a new language or edit existing translations without ever touching any code.
 
 If you're a nerd and do want to handle code, the `XML` translation files are in `app/src/main/res/values-<language>`.
+
+
+## Inspiration
+
+There used to be a similar app called _"Le Choix Commun"_.
 
 
 ## Additional info
