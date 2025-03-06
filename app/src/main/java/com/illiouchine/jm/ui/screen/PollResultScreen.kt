@@ -119,6 +119,8 @@ fun ResultScreen(
                 }
 
                 Row {
+                    // TODO: refactor this into LinearMeritProfileCanvas @Composable
+
                     val textMeasurer = rememberTextMeasurer()
                     val contrastedColor = if (isSystemInDarkTheme()) Color.White else Color.Black
                     val waitAnimation = remember { Animatable(0f) } // :(|) oOok
@@ -127,17 +129,16 @@ fun ResultScreen(
                     val percentageAnimation = remember { Animatable(0f) }
 
                     LaunchedEffect("apparition") {
+                        // TODO: figure out how to NOT use the waitAnimation hack
                         waitAnimation.animateTo(1f)
                         waitAnimation.animateTo(0f)
                         waitAnimation.animateTo(1f)
                         waitAnimation.animateTo(0f)
                         widthAnimation.animateTo(1f, tween(1500))
+                        outlineAnimation.animateTo(1f, tween(400))
                         waitAnimation.animateTo(1f)
                         waitAnimation.animateTo(0f)
-                        outlineAnimation.animateTo(1f)
-                        waitAnimation.animateTo(1f)
-                        waitAnimation.animateTo(0f)
-                        percentageAnimation.animateTo(1f, tween(1500))
+                        percentageAnimation.animateTo(1f, tween(3000))
                     }
 
                     // Draw the linear merit profile of the proposal.
@@ -216,7 +217,7 @@ fun ResultScreen(
                             color = contrastedColor,
                             path = medianGradeOutline,
                             style = Stroke(
-                                width = 8f,
+                                width = 3.dp.toPx(),
                                 join = StrokeJoin.Bevel,
                             ),
                             alpha = outlineAnimation.value,
@@ -231,7 +232,7 @@ fun ResultScreen(
                                 intervals = floatArrayOf(10f, 5f),
                                 phase = -0.5f,
                             ),
-                            strokeWidth = 4f,
+                            strokeWidth = 1.dp.toPx(),
                             alpha = outlineAnimation.value,
                         )
                     }
