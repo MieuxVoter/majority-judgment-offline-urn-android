@@ -69,7 +69,7 @@ fun PollSetupScreen(
 ) {
 
     var finishButtonVisibility by remember { mutableStateOf(true) }
-    
+
     var subject: String by remember { mutableStateOf(pollSetupState.pollSetup.subject) }
     val context = LocalContext.current
 
@@ -178,11 +178,19 @@ fun PollSetupScreen(
                     value = proposal,
                     onValueChange = { proposal = it },
                     placeholder = { Text(generateProposalName()) },
-                    keyboardActions = KeyboardActions(onDone = { addProposal() }),
+                    keyboardActions = KeyboardActions(onDone = if (proposal.isBlank()) {
+                        // A null value indicates that the default implementation should be executed
+                        // This helps older Android version users to close the keyboard
+                        null
+                    } else {
+                        {
+                            addProposal()
+                        }
+                    }),
                     trailingIcon = {
                         IconButton(
                             modifier = Modifier.testTag("setup_add_proposal"),
-                            onClick = { addProposal() }
+                            onClick = { addProposal() },
                         ) {
                             Icon(
                                 modifier = Modifier,
@@ -190,7 +198,7 @@ fun PollSetupScreen(
                                 contentDescription = stringResource(R.string.button_add),
                             )
                         }
-                    }
+                    },
                 )
             }
 
@@ -221,7 +229,7 @@ fun PollSetupScreen(
                             .padding(8.dp)
                     )
                     IconButton(
-                        onClick = { onRemoveProposal(propName) }
+                        onClick = { onRemoveProposal(propName) },
                     ) {
                         Icon(
                             modifier = Modifier,
