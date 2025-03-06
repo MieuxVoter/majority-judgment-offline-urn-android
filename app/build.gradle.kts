@@ -14,10 +14,10 @@ android {
         applicationId = "com.illiouchine.jm"
         minSdk = 27
         targetSdk = 35
-        versionCode = 5
-        versionName = "1.1.1"
+        versionCode = 6
+        versionName = "1.2.0"
 
-        // FIXME: ideally we'd have both
+        // Ideally we'd have both, but support for multiple runners look experimental
 //        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunner = "io.cucumber.android.runner.CucumberAndroidJUnitRunner"
     }
