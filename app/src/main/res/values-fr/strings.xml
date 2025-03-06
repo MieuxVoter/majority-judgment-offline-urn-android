@@ -7,7 +7,7 @@
     <string name="label_poll_proposals">Propositions</string>
     <string name="majority_judgment">Jugement Majoritaire</string>
     <string name="button_let_s_go">C\'est parti !</string>
-    <string name="proposal">Candidat</string>
+    <string name="proposal">Proposition</string>
     <string name="button_add">Ajouter</string>
     <string name="poll_of">Scrutin du</string>
     <string name="grade_to_reject">à rejeter</string>
