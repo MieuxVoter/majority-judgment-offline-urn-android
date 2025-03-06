@@ -1,13 +1,14 @@
 * Add a crude test suite in Gherkin
+* Adapt to low density devices
 * Reverse the order of proposals on the setup screen
 * Randomize the proposals' order on the voting screen
 * Add a placeholder for the poll's subject
 * Add a link to MieuxVoter.fr in the About screen
+* Add many more buttons to the About screen
 * Use a kinder sound effect for ballot confirmation
 * Ask for confirmation before deleting a poll
 * Add more information on the results screen
 * Animate the merit profiles
-* Adapt to low density devices
+* Fix the locked keyboard focus on proposals
 * Setup Weblate for community-driven translations
 * Add Spanish
-* Fix the too eager keyboard focus on proposals

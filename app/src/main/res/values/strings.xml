@@ -62,4 +62,8 @@
     <string name="dialog_are_you_sure">Are you sure ?</string>
     <string name="dialog_this_will_delete_the_poll">This will delete the poll</string>
     <string name="dialog_operation_cannot_be_undone">This operation cannot be undone.</string>
+    <string name="button_suggest_improvement">Suggest an Improvement</string>
+    <string name="button_translate_app">Translate the App</string>
+    <string name="button_more_about_majority_judgment">More about Majority Judgment</string>
+    <string name="button_ask_a_question">Ask a Question / Discuss</string>
 </resources>

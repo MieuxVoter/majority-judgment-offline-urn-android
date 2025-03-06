@@ -1,8 +1,9 @@
 package com.illiouchine.jm.ui.screen
 
+import android.content.res.Configuration
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,16 +11,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,6 +32,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.illiouchine.jm.R
 import com.illiouchine.jm.Screens
+import com.illiouchine.jm.ui.composable.IconTextButton
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.theme.JmTheme
 
@@ -37,26 +41,23 @@ import com.illiouchine.jm.ui.theme.JmTheme
 fun AboutScreen(
     modifier: Modifier = Modifier,
     navController: NavController = rememberNavController(),
+    onDiscuss: () -> Unit = {},
     onBrowseSource: () -> Unit = {},
     onReportBug: () -> Unit = {},
+    onSuggestImprovement: () -> Unit = {},
+    onContributeTranslations: () -> Unit = {},
     onOpenWebsite: () -> Unit = {},
 ) {
     Scaffold(
-        modifier = modifier.fillMaxSize().testTag("screen_about"),
+        modifier = modifier
+            .fillMaxSize()
+            .testTag("screen_about"),
         bottomBar = {
             MjuBottomBar(
                 selected = navController.currentDestination?.route ?: Screens.About.name,
                 onItemSelected = { destination -> navController.navigate(destination.id) },
             )
         },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                modifier = Modifier.padding(8.dp),
-                onClick = { onReportBug() },
-                icon = { Icon(Icons.Filled.Build, "Report") },
-                text = { Text(text = stringResource(R.string.button_report_bug)) },
-            )
-        }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -67,12 +68,14 @@ fun AboutScreen(
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 64.dp),
+                    .padding(bottom = 8.dp),
                 fontSize = 32.sp,
                 textAlign = TextAlign.Center,
                 lineHeight = 32.sp,
                 text = stringResource(R.string.title_about),
             )
+
+            Image(painterResource(R.drawable.onboarding_3), "")
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
@@ -85,30 +88,70 @@ fun AboutScreen(
                 text = stringResource(R.string.about_help_us_make_it_better),
             )
 
-            Spacer(Modifier.padding(16.dp))
+            Spacer(Modifier.padding(8.dp))
 
-            OutlinedButton(
+            IconTextButton(
                 modifier = Modifier
+                    .padding(bottom = 8.dp)
                     .align(Alignment.CenterHorizontally),
-                onClick = { onBrowseSource() },
-            ) {
-                Text(stringResource(R.string.button_browse_the_source))
-            }
+                icon = Icons.Filled.Person,
+                text = stringResource(R.string.button_ask_a_question),
+                onClick = onDiscuss,
+            )
 
-            Row(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-            ) {
-                TextButton(
-                    onClick = { onOpenWebsite() },
-                ) {
-                    Text("MieuxVoter.fr")
-                }
-            }
+            IconTextButton(
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .align(Alignment.CenterHorizontally),
+                icon = Icons.Filled.Build,
+                text = stringResource(R.string.button_browse_the_source),
+                onClick = onBrowseSource,
+            )
+
+            IconTextButton(
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .align(Alignment.CenterHorizontally),
+                icon = Icons.Filled.Notifications,
+                text = stringResource(R.string.button_report_bug),
+                onClick = onReportBug,
+            )
+
+            IconTextButton(
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .align(Alignment.CenterHorizontally),
+                icon = Icons.Filled.Done,
+                text = stringResource(R.string.button_suggest_improvement),
+                onClick = onSuggestImprovement,
+            )
+
+            IconTextButton(
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .align(Alignment.CenterHorizontally),
+                icon = Icons.Filled.LocationOn,
+                text = stringResource(R.string.button_translate_app),
+                onClick = onContributeTranslations,
+            )
+
+            IconTextButton(
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .align(Alignment.CenterHorizontally),
+                icon = Icons.Filled.Info,
+                text = stringResource(R.string.button_more_about_majority_judgment),
+                onClick = onOpenWebsite,
+            )
         }
     }
 }
 
-@Preview(showSystemUi = true)
+
+@Preview(
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
 @Composable
 fun PreviewAboutScreen(modifier: Modifier = Modifier) {
     JmTheme {

@@ -175,11 +175,20 @@ class MainActivity : ComponentActivity() {
                         AboutScreen(
                             modifier = Modifier,
                             navController = navController,
+                            onDiscuss = {
+                                uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android/discussions")
+                            },
                             onBrowseSource = {
                                 uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android")
                             },
                             onReportBug = {
-                                uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android/issues")
+                                uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android/issues/new?template=bug_report.md")
+                            },
+                            onSuggestImprovement = {
+                                uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android/issues/new?template=feature_request.md")
+                            },
+                            onContributeTranslations = {
+                                uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android/wiki/How-to-Translate-the-App")
                             },
                             onOpenWebsite = {
                                 uriHandler.openUri("https://mieuxvoter.fr")
