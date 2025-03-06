@@ -109,16 +109,16 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier,
                             navController = navController,
                             pollSetupState = pollSetupState,
-                            onAddSubject = { pollSetupViewModel.onAddSubject(it) },
+                            onAddSubject = { context, subject ->
+                                pollSetupViewModel.onAddSubject(context, subject)
+                            },
                             onAddProposal = { context, proposal ->
                                 pollSetupViewModel.onAddProposal(context, proposal)
                             },
                             onRemoveProposal = { pollSetupViewModel.onRemoveProposal(it) },
                             onGradingSelected = { pollSetupViewModel.onGradingSelected(it) },
-                            onSetupFinished = {
-                                pollVotingViewModel.initNewVotingSession(
-                                    pollSetupViewModel.pollSetupViewState.value.pollSetup,
-                                )
+                            onSetupFinished = { pollConfig ->
+                                pollVotingViewModel.initNewVotingSession(config = pollConfig)
                             },
                             onDismissFeedback = { pollSetupViewModel.onDismissFeedback() },
                             onGetSubjectSuggestion = { pollSetupViewModel.getSubjectSuggestion(it) },

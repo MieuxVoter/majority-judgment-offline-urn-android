@@ -44,9 +44,10 @@ class PollSetupViewModel(
         navigator.navigateTo(Navigator.Screens.PollSetup)
     }
 
-    fun onAddSubject(subject: String) {
+    fun onAddSubject(context: Context, subject: String) {
+        val newSubject = subject.ifEmpty { generateSubject(context = context) }
         _pollSetupViewState.update {
-            it.copy(pollSetup = it.pollSetup.copy(subject = subject))
+            it.copy(pollSetup = it.pollSetup.copy(subject = newSubject))
         }
     }
 

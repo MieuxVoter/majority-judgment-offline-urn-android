@@ -52,11 +52,11 @@ fun PollSetupScreen(
     modifier: Modifier = Modifier,
     navController: NavController = rememberNavController(),
     pollSetupState: PollSetupViewModel.PollSetupViewState = PollSetupViewModel.PollSetupViewState(),
-    onAddSubject: (String) -> Unit = {},
+    onAddSubject: (Context, String) -> Unit = { _, _ -> },
     onAddProposal: (Context, String) -> Unit = { _, _ -> },
     onRemoveProposal: (String) -> Unit = {},
     onGradingSelected: (Grading) -> Unit = {},
-    onSetupFinished: () -> Unit = {},
+    onSetupFinished: (PollConfig) -> Unit = {},
     onDismissFeedback: () -> Unit = {},
     onGetSubjectSuggestion: (String) -> Unit = {},
     onGetProposalSuggestion: (String) -> Unit = {},
@@ -65,17 +65,8 @@ fun PollSetupScreen(
 ) {
 
     var finishButtonVisibility by remember { mutableStateOf(true) }
-
     var subject: String by remember { mutableStateOf(pollSetupState.pollSetup.subject) }
     val context = LocalContext.current
-
-    fun generateSubject(): String {
-        return buildString {
-            append(context.getString(R.string.poll_of))
-            append(" ")
-            append(DateFormat.getDateInstance().format(Calendar.getInstance().time))
-        }
-    }
 
     Scaffold(
         modifier = Modifier
@@ -106,10 +97,9 @@ fun PollSetupScreen(
                     onClick = {
                         // Rule: if the poll's subject was not provided, use a default.
                         if (subject.isBlank()) {
-                            subject = generateSubject()
-                            onAddSubject(subject)
+                            onAddSubject(context, subject)
                         }
-                        onSetupFinished()
+                        onSetupFinished(pollSetupState.pollSetup)
                     },
                     icon = { },
                     text = { Text(stringResource(R.string.button_let_s_go)) },
@@ -135,12 +125,12 @@ fun PollSetupScreen(
                 subjectSuggestion = pollSetupState.subjectSuggestion,
                 onSuggestionSelected = {
                     subject = it
-                    onAddSubject(subject)
+                    onAddSubject(context, subject)
                     onGetSubjectSuggestion("")
                 },
                 onSubjectChange = {
                     subject = it
-                    onAddSubject(subject)
+                    onAddSubject(context, subject)
                     if (it.length > 2) {
                         onGetSubjectSuggestion(it)
                     } else {
@@ -211,13 +201,33 @@ fun PollSetupScreen(
                     .padding(16.dp),
                 enabled = pollSetupState.pollSetup.proposals.size > 1,
                 onClick = {
-                    onSetupFinished()
+                    val newPoll = pollSetupState.pollSetup.addSubjectIfEmpty(context)
+                    onSetupFinished(newPoll)
                 },
             ) {
                 Text(stringResource(R.string.button_let_s_go))
             }
         }
     }
+}
+
+//FIXME : This rule should be moved in VM.
+// need typeSafe navigation to work correctly
+fun generateSubject(context: Context): String {
+    return buildString {
+        append(context.getString(R.string.poll_of))
+        append(" ")
+        append(DateFormat.getDateInstance().format(Calendar.getInstance().time))
+    }
+}
+
+//FIXME : This rule should be moved in VM.
+// need typeSafe navigation to work correctly
+private fun PollConfig.addSubjectIfEmpty(context: Context): PollConfig {
+    val newPoll = copy(
+        subject = subject.ifEmpty { generateSubject(context) }
+    )
+    return newPoll
 }
 
 
