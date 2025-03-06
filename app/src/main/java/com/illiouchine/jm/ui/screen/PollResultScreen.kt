@@ -1,5 +1,7 @@
 package com.illiouchine.jm.ui.screen
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -15,7 +17,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -34,6 +38,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.lerp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.model.Ballot
@@ -116,6 +121,24 @@ fun ResultScreen(
                 Row {
                     val textMeasurer = rememberTextMeasurer()
                     val contrastedColor = if (isSystemInDarkTheme()) Color.White else Color.Black
+                    val waitAnimation = remember { Animatable(0f) } // :(|) oOok
+                    val widthAnimation = remember { Animatable(0f) }
+                    val outlineAnimation = remember { Animatable(0f) }
+                    val percentageAnimation = remember { Animatable(0f) }
+
+                    LaunchedEffect("apparition") {
+                        waitAnimation.animateTo(1f)
+                        waitAnimation.animateTo(0f)
+                        waitAnimation.animateTo(1f)
+                        waitAnimation.animateTo(0f)
+                        widthAnimation.animateTo(1f, tween(1500))
+                        waitAnimation.animateTo(1f)
+                        waitAnimation.animateTo(0f)
+                        outlineAnimation.animateTo(1f)
+                        waitAnimation.animateTo(1f)
+                        waitAnimation.animateTo(0f)
+                        percentageAnimation.animateTo(1f, tween(1500))
+                    }
 
                     // Draw the linear merit profile of the proposal.
                     Canvas(
@@ -124,19 +147,21 @@ fun ResultScreen(
                             .height(24.dp)
                     ) {
                         val proposalTally = tally.proposalsTallies[proposalResult.index]
-                        var offsetX = 0F
+                        var offsetX = 0f
                         val medianGradeOutline = Path()
+                        val balancedGradeWidth = size.width / grading.getAmountOfGrades()
 
                         for (gradeIndex in (0..<grading.getAmountOfGrades()).reversed()) {
-                            val gradeWidth = ( // appalling indentation, please help
+                            var gradeWidth = ( // appalling indentation, please help
                                     (size.width * proposalTally.tally[gradeIndex].toFloat())
                                             /
                                             proposalTally.amountOfJudgments.toFloat()
                                     )
+                            gradeWidth = lerp(balancedGradeWidth, gradeWidth, widthAnimation.value)
                             val gradeRectSize = Size(gradeWidth, size.height)
-                            val gradeRectOffset = Offset(offsetX, 0F)
+                            val gradeRectOffset = Offset(offsetX, 0f)
 
-                            // Fill a rect with the color of the grade
+                            // Fill a rectangle with the color of the grade
                             drawRect(
                                 color = grading.getGradeColor(gradeIndex),
                                 size = gradeRectSize,
@@ -169,7 +194,7 @@ fun ResultScreen(
                                         size.height + 8,
                                     ),
                                     color = contrastedColor,
-                                    alpha = 0.8f,
+                                    alpha = 0.8f * percentageAnimation.value,
                                 )
                             }
 
@@ -194,6 +219,7 @@ fun ResultScreen(
                                 width = 8f,
                                 join = StrokeJoin.Bevel,
                             ),
+                            alpha = outlineAnimation.value,
                         )
 
                         // Vertical line in the middle, marking the median grade.
@@ -206,6 +232,7 @@ fun ResultScreen(
                                 phase = -0.5f,
                             ),
                             strokeWidth = 4f,
+                            alpha = outlineAnimation.value,
                         )
                     }
                 }
