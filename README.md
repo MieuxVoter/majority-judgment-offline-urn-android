@@ -6,7 +6,7 @@
 [![GitHub Build Status](https://img.shields.io/github/actions/workflow/status/MieuxVoter/majority-judgment-offline-urn-android/android.yml?style=for-the-badge)](https://github.com/MieuxVoter/majority-judgment-offline-urn-android/actions/workflows/android.yml)
 [![Weblate project translated](https://img.shields.io/weblate/progress/majority-judgment-offline-urn-android?server=https%3A%2F%2Fhosted.weblate.org&style=for-the-badge)](https://hosted.weblate.org/projects/majority-judgment-offline-urn-android/application/)
 ![GitHub top language](https://img.shields.io/github/languages/top/MieuxVoter/majority-judgment-offline-urn-android?style=for-the-badge)
-![F-Droid Version](https://img.shields.io/f-droid/v/com.illiouchine.jm?style=for-the-badge)
+[![F-Droid Version](https://img.shields.io/f-droid/v/com.illiouchine.jm?style=for-the-badge)](https://f-droid.org/en/packages/com.illiouchine.jm)
 [![Join the Discord chat at https://discord.gg/rAAQG9S](https://img.shields.io/discord/705322981102190593.svg?style=for-the-badge)](https://discord.gg/rAAQG9S)
 
 
@@ -30,9 +30,11 @@
 
 This Android app is available on [F-Droid](https://f-droid.org/en/packages/com.illiouchine.jm).
 
+This is the recommended way to install, as you'll benefit from automatic updates.
+
 ### Google Play
 
-Google is asking for money (at least 25€), yet this project is done with recycled cardboard, strings, and love.
+Google is asking for money (at least 25€), yet this project is done with recycled bits, strings, and love.
 
 We're looking for patrons.
 
