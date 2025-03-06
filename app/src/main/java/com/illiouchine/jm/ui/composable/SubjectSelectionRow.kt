@@ -39,7 +39,6 @@ fun ColumnScope.SubjectSelectionRow(
                 .fillMaxWidth()
                 .onGloballyPositioned { coordinates ->
                     textFieldHeight = coordinates.size.height
-
                 },
             maxLines = 5,
             placeholder = { Text("Entrez le sujet du scrutin...") },

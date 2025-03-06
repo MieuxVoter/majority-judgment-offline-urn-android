@@ -9,18 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,6 +37,7 @@ import com.illiouchine.jm.ui.composable.GradingSelectionRow
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.MjuSnackbarWithStringResId
 import com.illiouchine.jm.ui.composable.ProposalRow
+import com.illiouchine.jm.ui.composable.ProposalSelectionRow
 import com.illiouchine.jm.ui.composable.ScreenTitle
 import com.illiouchine.jm.ui.composable.SubjectSelectionRow
 import com.illiouchine.jm.ui.composable.ThemedHorizontalDivider
@@ -123,7 +117,6 @@ fun PollSetupScreen(
     ) { innerPadding ->
 
         var proposal: String by remember { mutableStateOf("") }
-        var subject: String by remember { mutableStateOf(pollSetupState.pollSetup.subject) }
 
         Column(
             modifier = modifier
@@ -154,12 +147,11 @@ fun PollSetupScreen(
                 }
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Text(stringResource(R.string.label_poll_proposals))
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                value = proposal,
-                onValueChange = {
+
+            ProposalSelectionRow(
+                modifier = Modifier,
+                proposal = proposal,
+                onProposalChange = {
                     proposal = it
                     if (it.length > 2) {
                         onGetProposalSuggestion(it)
@@ -167,58 +159,16 @@ fun PollSetupScreen(
                         onGetProposalSuggestion("")
                     }
                 },
-                placeholder = { Text("Entrez vos propositions...") },
-                keyboardActions = KeyboardActions(onDone = if (proposal.isBlank()) {
-                    // A null value indicates that the default implementation should be executed
-                    // This helps older Android version users to close the keyboard
-                    null
-                } else {
-                    {
-                        onAddProposal(context, proposal)
-                        proposal = ""
-                    }
-                }),
-                trailingIcon = {
-                    IconButton(
-                        modifier = Modifier.testTag("setup_add_proposal"),
-                        onClick = {
-                            onAddProposal(context, proposal)
-                            proposal = ""
-                        },
-                    ) {
-                        Icon(
-                            modifier = Modifier,
-                            imageVector = Icons.Outlined.Add,
-                            contentDescription = stringResource(R.string.button_add),
-                        )
-                    }
+                onAddProposal = {
+                    onAddProposal(context, it)
+                    proposal = ""
                 },
-            )
-            AnimatedVisibility(
-                visible = pollSetupState.proposalSuggestion.isNotEmpty()
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                ) {
-                    pollSetupState.proposalSuggestion.take(3)
-                        .forEachIndexed { index, proposalSuggestion ->
-                            if (index > 0) {
-                                ThemedHorizontalDivider()
-                            }
-                            TextButton(
-                                modifier = Modifier.padding(8.dp),
-                                onClick = {
-                                    proposal = proposalSuggestion
-                                    onGetProposalSuggestion("")
-                                }
-                            ) {
-                                Text(proposalSuggestion)
-                            }
-                        }
+                proposalSuggestion = pollSetupState.proposalSuggestion,
+                onProposalSelected = {
+                    proposal = it
+                    onGetProposalSuggestion("")
                 }
-            }
+            )
 
             Spacer(modifier = Modifier.height(8.dp))
 

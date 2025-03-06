@@ -136,6 +136,7 @@ class PollSetupViewModel(
                 pollDataSource.getAllPoll()
                     .map { it.pollConfig.proposals }
                     .flatten()
+                    .distinct()
                     .filter { it.contains(other = proposal, ignoreCase = true) }
             } else {
                 emptyList()
