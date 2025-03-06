@@ -1,4 +1,7 @@
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
     <string name="app_name">Urn</string>
     <string name="majority_judgment">Majority Judgment</string>
     <string name="label_poll_subject">Subject of the Poll</string>
@@ -27,7 +30,6 @@
     <string name="all_things_considered_i_think">All things considered, I think</string>
     <string name="verb_is">is</string>
     <string name="toast_proposal_name_already_exists">A proposal with this name already exists.</string>
-    <string name="button_report_bug">Report a Bug</string>
     <string name="seven_grading">Seven grades</string>
     <string name="five_grading">Five grades</string>
     <string name="three_grading">Three grades</string>
@@ -47,7 +49,6 @@
     <string name="action_inspect">Inspect</string>
     <string name="action_cancel">Cancel</string>
     <string name="title_about">About</string>
-    <string name="button_browse_the_source">Browse the Source</string>
     <string name="about_help_us_make_it_better">Help us make it better !</string>
     <string name="about_this_app_is_libre_software">This app is libre software.</string>
     <string name="help_your_participation_was_a_success">Your participation was a success !\nYou can now pass this device to the next participant.</string>
@@ -61,4 +62,10 @@
     <string name="dialog_are_you_sure">Are you sure ?</string>
     <string name="dialog_this_will_delete_the_poll">This will delete the poll</string>
     <string name="dialog_operation_cannot_be_undone">This operation cannot be undone.</string>
+    <string name="button_ask_a_question">Ask a Question / Discuss</string>
+    <string name="button_browse_the_source">Browse the Source</string>
+    <string name="button_report_bug">Report a Bug</string>
+    <string name="button_suggest_improvement">Suggest an Improvement</string>
+    <string name="button_translate_app">Translate the App</string>
+    <string name="button_more_about_majority_judgment">More about Majority Judgment</string>
 </resources>

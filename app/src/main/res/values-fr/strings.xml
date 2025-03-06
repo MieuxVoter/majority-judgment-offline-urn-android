@@ -62,4 +62,8 @@
     <string name="dialog_are_you_sure">Êtes-vous sûr⋅e ?</string>
     <string name="dialog_this_will_delete_the_poll">Cela va supprimer le scrutin</string>
     <string name="dialog_operation_cannot_be_undone">Cette opération est irréversible.</string>
+    <string name="button_suggest_improvement">Suggérer une amélioration</string>
+    <string name="button_translate_app">Traduire l\'App</string>
+    <string name="button_more_about_majority_judgment">Plus d\'infos sur le Jugement Majoritaire</string>
+    <string name="button_ask_a_question">Poser une question / Discuter</string>
 </resources>

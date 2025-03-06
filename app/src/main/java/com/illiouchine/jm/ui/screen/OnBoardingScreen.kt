@@ -105,7 +105,7 @@ fun OnBoardingScreen(
                 ) {
                     Image(
                         painter = painterResource(onBoardingPages[currentPageIndex].image),
-                        contentDescription = "", // anything but silence would be noise
+                        contentDescription = null, // anything but silence would be noise
                     )
                     Spacer(Modifier.padding(16.dp))
                     Text(
