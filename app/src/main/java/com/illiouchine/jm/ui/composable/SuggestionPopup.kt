@@ -20,11 +20,12 @@ fun SuggestionPopup(
     offset: IntOffset = IntOffset(0, 0),
     suggestions: List<String> = emptyList(),
     onSuggestionSelected: (String) -> Unit = {},
+    onClearSuggestion: () -> Unit = {},
 ) {
     Popup(
         offset = offset,
         alignment = Alignment.TopStart,
-        onDismissRequest = {},
+        onDismissRequest = { onClearSuggestion() },
     ) {
         LazyColumn(
             modifier = modifier

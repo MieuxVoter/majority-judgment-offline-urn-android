@@ -20,6 +20,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -37,6 +38,7 @@ fun ColumnScope.ProposalSelectionRow(
     onAddProposal: (String) -> Unit = {},
     proposalSuggestion: List<String> = emptyList(),
     onProposalSelected: (String) -> Unit = {},
+    onClearSuggestion: () -> Unit = {}
 ) {
     var textFieldHeight by remember { mutableIntStateOf(0) }
     Row {
@@ -46,6 +48,10 @@ fun ColumnScope.ProposalSelectionRow(
             onValueChange = { onProposalChange(it) },
             modifier = modifier.fillMaxWidth().onGloballyPositioned { coordinates ->
                 textFieldHeight = coordinates.size.height
+            }.onFocusChanged {
+                if (!it.isFocused){
+                    onClearSuggestion()
+                }
             },
             singleLine = true,
             placeholder = { Text("Entrez vos propositions...") },
@@ -82,7 +88,8 @@ fun ColumnScope.ProposalSelectionRow(
                 offset = IntOffset(0, textFieldHeight),
                 modifier = Modifier,
                 suggestions = proposalSuggestion.take(3),
-                onSuggestionSelected = { onProposalSelected(it) }
+                onSuggestionSelected = { onProposalSelected(it) },
+                onClearSuggestion = { onClearSuggestion() }
             )
         }
     }

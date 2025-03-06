@@ -60,6 +60,8 @@ fun PollSetupScreen(
     onDismissFeedback: () -> Unit = {},
     onGetSubjectSuggestion: (String) -> Unit = {},
     onGetProposalSuggestion: (String) -> Unit = {},
+    onClearSubjectSuggestion: () -> Unit = {},
+    onClearProposalSuggestion: () -> Unit = {},
 ) {
 
     var finishButtonVisibility by remember { mutableStateOf(true) }
@@ -142,9 +144,12 @@ fun PollSetupScreen(
                     if (it.length > 2) {
                         onGetSubjectSuggestion(it)
                     } else {
-                        onGetSubjectSuggestion("")
+                        onClearSubjectSuggestion()
                     }
-                }
+                },
+                onClearSuggestion = {
+                    onClearSubjectSuggestion()
+                },
             )
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -156,7 +161,7 @@ fun PollSetupScreen(
                     if (it.length > 2) {
                         onGetProposalSuggestion(it)
                     } else {
-                        onGetProposalSuggestion("")
+                        onClearProposalSuggestion()
                     }
                 },
                 onAddProposal = {
@@ -166,7 +171,10 @@ fun PollSetupScreen(
                 proposalSuggestion = pollSetupState.proposalSuggestion,
                 onProposalSelected = {
                     proposal = it
-                    onGetProposalSuggestion("")
+                    onClearProposalSuggestion()
+                },
+                onClearSuggestion = {
+                    onClearProposalSuggestion()
                 }
             )
 

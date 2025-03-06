@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,16 +31,23 @@ fun ColumnScope.SubjectSelectionRow(
     subjectSuggestion: List<String> = emptyList(),
     onSubjectChange: (String) -> Unit = {},
     onSuggestionSelected: (String) -> Unit = {},
+    onClearSuggestion: () -> Unit = {},
 ) {
     var textFieldHeight by remember { mutableIntStateOf(0) }
     Row {
         TextField(
             label = { Text(stringResource(R.string.label_poll_subject)) },
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .onGloballyPositioned { coordinates ->
                     textFieldHeight = coordinates.size.height
-                },
+                }
+                .onFocusChanged {
+                    if (!it.isFocused) {
+                        onClearSuggestion()
+                    }
+                }
+            ,
             maxLines = 5,
             placeholder = { Text("Entrez le sujet du scrutin...") },
             value = subject,
@@ -52,7 +60,8 @@ fun ColumnScope.SubjectSelectionRow(
                 offset = IntOffset(0, textFieldHeight),
                 modifier = Modifier,
                 suggestions = subjectSuggestion.take(3),
-                onSuggestionSelected = { onSuggestionSelected(it) }
+                onSuggestionSelected = { onSuggestionSelected(it) },
+                onClearSuggestion = { onClearSuggestion() }
             )
         }
     }
@@ -78,8 +87,6 @@ private fun PreviewSelectionRow() {
                     "Subject suggestion 3",
                     "Subject suggestion 4",
                 ),
-                onSuggestionSelected = {},
-                onSubjectChange = {},
             )
             Text("Should be under suggestion")
         }

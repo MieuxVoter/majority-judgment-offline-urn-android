@@ -146,4 +146,16 @@ class PollSetupViewModel(
             }
         }
     }
+
+    fun clearSubjectSuggestion() {
+        _pollSetupViewState.update {
+            it.copy(subjectSuggestion = emptyList())
+        }
+    }
+
+    fun clearProposalSuggestion() {
+        _pollSetupViewState.update {
+            it.copy(proposalSuggestion = emptyList())
+        }
+    }
 }

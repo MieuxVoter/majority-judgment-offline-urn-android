@@ -122,7 +122,9 @@ class MainActivity : ComponentActivity() {
                             },
                             onDismissFeedback = { pollSetupViewModel.onDismissFeedback() },
                             onGetSubjectSuggestion = { pollSetupViewModel.getSubjectSuggestion(it) },
-                            onGetProposalSuggestion = { pollSetupViewModel.getProposalSuggestion(it) }
+                            onGetProposalSuggestion = { pollSetupViewModel.getProposalSuggestion(it) },
+                            onClearSubjectSuggestion = { pollSetupViewModel.clearSubjectSuggestion() },
+                            onClearProposalSuggestion = { pollSetupViewModel.clearProposalSuggestion() }
                         )
                     }
                     composable(Navigator.Screens.PollVote.name) {
