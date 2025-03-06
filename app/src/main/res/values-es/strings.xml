@@ -38,14 +38,12 @@
     <string name="title_multiline_majority_judgment_urn">Mayoría\nSentencia\nUrna</string>
     <string name="button_new_poll">Nueva Encuesta</string>
     <string name="onboarding_setup_a_poll_and_share_the_phone">Configure una encuesta y comparta el teléfono entre los participantes.</string>
-    <string name="onboarding_ready">Listo ?</string>
     <string name="votes">votos</string>
     <string name="vote">voto</string>
     <string name="action_delete">Borrar</string>
     <string name="action_clone">Clonar</string>
     <string name="action_resume">Reanudar</string>
     <string name="action_inspect">Ver</string>
-    <string name="action_cancel">Cancelar</string>
     <string name="button_browse_the_source">Explorar la Fuente</string>
     <string name="about_help_us_make_it_better">¡Ayúdanos a hacerlo mejor!</string>
     <string name="about_this_app_is_libre_software">Esta aplicación es software libre.</string>
@@ -61,6 +59,6 @@
     <string name="help_your_participation_was_a_success">¡Tu participación fue un éxito!\nAhora puedes pasarle este dispositivo al siguiente participante.</string>
     <string name="title_about">Acerca</string>
     <string name="onboarding_welcome_to_your_offline_poll_app">Bienvenido a tu aplicación de encuestas sin conexión que utiliza Mayoría Sentencia.</string>
-    <string name="onboarding_this_is_free_software">Este es software libre y usted puede ayudar a mejorarlo.</string>
+    <string name="onboarding_this_is_free_software">Este es software libre, descubre cómo contactarnos o contribuir en la sección Acerca.</string>
     <string name="dialog_operation_cannot_be_undone">Esta operación no se puede deshacer.</string>
 </resources>

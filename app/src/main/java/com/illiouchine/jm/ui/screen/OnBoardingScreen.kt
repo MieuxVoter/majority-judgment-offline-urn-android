@@ -48,7 +48,6 @@ val onBoardingPages = listOf(
     OnBoardingPage(R.drawable.onboarding_0, R.string.onboarding_welcome_to_your_offline_poll_app),
     OnBoardingPage(R.drawable.onboarding_1, R.string.onboarding_setup_a_poll_and_share_the_phone),
     OnBoardingPage(R.drawable.onboarding_2, R.string.onboarding_this_is_free_software),
-    OnBoardingPage(R.drawable.onboarding_3, R.string.onboarding_ready),
 )
 
 @Composable
