@@ -28,13 +28,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.composable.IconTextButton
 import com.illiouchine.jm.ui.composable.MjuBottomBar
+import com.illiouchine.jm.ui.composable.ScreenTitle
 import com.illiouchine.jm.ui.theme.JmTheme
 
 
@@ -66,16 +66,7 @@ fun AboutScreen(
                 .padding(16.dp)
                 .verticalScroll(state = ScrollState(initial = 0))
         ) {
-
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
-                fontSize = 32.sp,
-                textAlign = TextAlign.Center,
-                lineHeight = 32.sp,
-                text = stringResource(R.string.title_about),
-            )
+            ScreenTitle(text = stringResource(R.string.title_about))
 
             Image(painterResource(R.drawable.onboarding_3), null)
 

@@ -44,6 +44,7 @@ import com.illiouchine.jm.ui.composable.GradingSelectionRow
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.MjuSnackbarWithStringResId
 import com.illiouchine.jm.ui.composable.ProposalRow
+import com.illiouchine.jm.ui.composable.ScreenTitle
 import com.illiouchine.jm.ui.composable.SubjectSelectionRow
 import com.illiouchine.jm.ui.composable.ThemedHorizontalDivider
 import com.illiouchine.jm.ui.theme.JmTheme
@@ -131,6 +132,8 @@ fun PollSetupScreen(
                 .padding(16.dp)
                 .verticalScroll(state = ScrollState(initial = 0)),
         ) {
+            ScreenTitle(text = stringResource(R.string.title_poll_setup))
+
             SubjectSelectionRow(
                 modifier = Modifier,
                 subject = subject,
