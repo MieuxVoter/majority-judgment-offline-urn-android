@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -65,6 +66,7 @@ fun AboutScreen(
                 .padding(16.dp)
                 .verticalScroll(state = ScrollState(initial = 0))
         ) {
+
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -75,7 +77,7 @@ fun AboutScreen(
                 text = stringResource(R.string.title_about),
             )
 
-            Image(painterResource(R.drawable.onboarding_3), "")
+            Image(painterResource(R.drawable.onboarding_3), null)
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
@@ -90,13 +92,18 @@ fun AboutScreen(
 
             Spacer(Modifier.padding(8.dp))
 
+            val uriHandler = LocalUriHandler.current
+
             IconTextButton(
                 modifier = Modifier
                     .padding(bottom = 8.dp)
                     .align(Alignment.CenterHorizontally),
                 icon = Icons.Filled.Person,
                 text = stringResource(R.string.button_ask_a_question),
-                onClick = onDiscuss,
+                onClick = {
+                    onDiscuss()
+                    uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android/discussions")
+                },
             )
 
             IconTextButton(
@@ -105,7 +112,10 @@ fun AboutScreen(
                     .align(Alignment.CenterHorizontally),
                 icon = Icons.Filled.Build,
                 text = stringResource(R.string.button_browse_the_source),
-                onClick = onBrowseSource,
+                onClick = {
+                    onBrowseSource()
+                    uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android")
+                },
             )
 
             IconTextButton(
@@ -114,7 +124,10 @@ fun AboutScreen(
                     .align(Alignment.CenterHorizontally),
                 icon = Icons.Filled.Notifications,
                 text = stringResource(R.string.button_report_bug),
-                onClick = onReportBug,
+                onClick = {
+                    onReportBug()
+                    uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android/issues/new?template=bug_report.md")
+                },
             )
 
             IconTextButton(
@@ -123,7 +136,10 @@ fun AboutScreen(
                     .align(Alignment.CenterHorizontally),
                 icon = Icons.Filled.Done,
                 text = stringResource(R.string.button_suggest_improvement),
-                onClick = onSuggestImprovement,
+                onClick = {
+                    onSuggestImprovement()
+                    uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android/issues/new?template=feature_request.md")
+                },
             )
 
             IconTextButton(
@@ -132,7 +148,10 @@ fun AboutScreen(
                     .align(Alignment.CenterHorizontally),
                 icon = Icons.Filled.LocationOn,
                 text = stringResource(R.string.button_translate_app),
-                onClick = onContributeTranslations,
+                onClick = {
+                    onContributeTranslations()
+                    uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android/wiki/How-to-Translate-the-App")
+                },
             )
 
             IconTextButton(
@@ -141,7 +160,10 @@ fun AboutScreen(
                     .align(Alignment.CenterHorizontally),
                 icon = Icons.Filled.Info,
                 text = stringResource(R.string.button_more_about_majority_judgment),
-                onClick = onOpenWebsite,
+                onClick = {
+                    onOpenWebsite()
+                    uriHandler.openUri("https://mieuxvoter.fr")
+                },
             )
         }
     }
