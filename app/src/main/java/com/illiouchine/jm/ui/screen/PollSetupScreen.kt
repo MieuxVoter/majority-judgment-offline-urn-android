@@ -1,10 +1,9 @@
 package com.illiouchine.jm.ui.screen
 
-import android.widget.Toast
+import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,7 +13,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -44,9 +42,10 @@ import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.GradingSelectionRow
 import com.illiouchine.jm.ui.composable.MjuBottomBar
-import com.illiouchine.jm.ui.composable.MjuSnackbar
+import com.illiouchine.jm.ui.composable.MjuSnackbarWithStringResId
+import com.illiouchine.jm.ui.composable.ProposalRow
+import com.illiouchine.jm.ui.composable.SubjectSelectionRow
 import com.illiouchine.jm.ui.composable.ThemedHorizontalDivider
-import com.illiouchine.jm.ui.theme.DeleteColor
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.utils.displayed
 import java.text.DateFormat
@@ -59,7 +58,7 @@ fun PollSetupScreen(
     navController: NavController = rememberNavController(),
     pollSetupState: PollSetupViewModel.PollSetupViewState = PollSetupViewModel.PollSetupViewState(),
     onAddSubject: (String) -> Unit = {},
-    onAddProposal: (String) -> Unit = {},
+    onAddProposal: (Context, String) -> Unit = { _, _ -> },
     onRemoveProposal: (String) -> Unit = {},
     onGradingSelected: (Grading) -> Unit = {},
     onSetupFinished: () -> Unit = {},
@@ -86,9 +85,9 @@ fun PollSetupScreen(
             .fillMaxSize()
             .testTag("screen_setup"),
         snackbarHost = {
-            MjuSnackbar(
+            MjuSnackbarWithStringResId(
                 modifier = Modifier,
-                text = pollSetupState.feedback,
+                textId = pollSetupState.feedback,
                 onDismiss = {
                     onDismissFeedback()
                 },
@@ -123,32 +122,7 @@ fun PollSetupScreen(
     ) { innerPadding ->
 
         var proposal: String by remember { mutableStateOf("") }
-
-        fun generateProposalName(): String {
-            return buildString {
-                append(context.getString(R.string.proposal))
-                append(" ")
-                append((65 + pollSetupState.pollSetup.proposals.size).toChar())
-            }
-        }
-
-        val addProposal: () -> Unit = {
-            // Rule: if the proposal name is not specified, use a default
-            if (proposal == "") {
-                proposal = generateProposalName()
-            }
-            // Rule: proposals must have unique names
-            if (pollSetupState.pollSetup.proposals.contains(proposal)) {
-                Toast.makeText(
-                    context,
-                    context.getString(R.string.toast_proposal_name_already_exists),
-                    Toast.LENGTH_SHORT,
-                ).show()
-            } else {
-                onAddProposal(proposal)
-                proposal = ""
-            }
-        }
+        var subject: String by remember { mutableStateOf(pollSetupState.pollSetup.subject) }
 
         Column(
             modifier = modifier
@@ -157,46 +131,25 @@ fun PollSetupScreen(
                 .padding(16.dp)
                 .verticalScroll(state = ScrollState(initial = 0)),
         ) {
-            Text(stringResource(R.string.label_poll_subject))
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                maxLines = 5,
-                placeholder = { Text(generateSubject()) },
-                value = subject,
-                onValueChange = {
+            SubjectSelectionRow(
+                modifier = Modifier,
+                subject = subject,
+                subjectSuggestion = pollSetupState.subjectSuggestion,
+                onSuggestionSelected = {
                     subject = it
+                    onAddSubject(subject)
+                    onGetSubjectSuggestion("")
+                },
+                onSubjectChange = {
+                    subject = it
+                    onAddSubject(subject)
                     if (it.length > 2) {
                         onGetSubjectSuggestion(it)
                     } else {
                         onGetSubjectSuggestion("")
                     }
-                },
-            )
-            AnimatedVisibility(
-                visible = pollSetupState.subjectSuggestion.isNotEmpty()
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                ) {
-                    pollSetupState.subjectSuggestion.take(3)
-                        .forEachIndexed { index, subjectSuggestion ->
-                            if (index > 0) {
-                                ThemedHorizontalDivider()
-                            }
-                            TextButton(
-                                modifier = Modifier.padding(8.dp),
-                                onClick = {
-                                    subject = subjectSuggestion
-                                    onGetSubjectSuggestion("")
-                                }
-                            ) {
-                                Text(subjectSuggestion)
-                            }
-                        }
                 }
-            }
+            )
             Spacer(modifier = Modifier.height(16.dp))
             Text(stringResource(R.string.label_poll_proposals))
             TextField(
@@ -211,20 +164,24 @@ fun PollSetupScreen(
                         onGetProposalSuggestion("")
                     }
                 },
-                placeholder = { Text(generateProposalName()) },
+                placeholder = { Text("Entrez vos propositions...") },
                 keyboardActions = KeyboardActions(onDone = if (proposal.isBlank()) {
                     // A null value indicates that the default implementation should be executed
                     // This helps older Android version users to close the keyboard
                     null
                 } else {
                     {
-                        addProposal()
+                        onAddProposal(context, proposal)
+                        proposal = ""
                     }
                 }),
                 trailingIcon = {
                     IconButton(
                         modifier = Modifier.testTag("setup_add_proposal"),
-                        onClick = { addProposal() },
+                        onClick = {
+                            onAddProposal(context, proposal)
+                            proposal = ""
+                        },
                     ) {
                         Icon(
                             modifier = Modifier,
@@ -268,32 +225,11 @@ fun PollSetupScreen(
                     ThemedHorizontalDivider()
                 }
 
-                Row(
-                    modifier = Modifier.padding(vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .weight(1f),
-                        text = propName,
-                    )
-                    Spacer(
-                        Modifier
-                            .height(16.dp)
-                            .padding(8.dp)
-                    )
-                    IconButton(
-                        onClick = { onRemoveProposal(propName) },
-                    ) {
-                        Icon(
-                            modifier = Modifier,
-                            imageVector = Icons.Outlined.Delete,
-                            contentDescription = "",
-                            tint = DeleteColor,
-                        )
-                    }
-                }
+                ProposalRow(
+                    modifier = Modifier,
+                    proposal = propName,
+                    onRemoveClicked = { onRemoveProposal(it) }
+                )
             }
 
             GradingSelectionRow(
@@ -314,11 +250,6 @@ fun PollSetupScreen(
                     .padding(16.dp),
                 enabled = pollSetupState.pollSetup.proposals.size > 1,
                 onClick = {
-                    // Rule: if the poll's subject was not provided, use a default.
-                    if (subject.isBlank()) {
-                        subject = generateSubject()
-                        onAddSubject(subject)
-                    }
                     onSetupFinished()
                 },
             ) {

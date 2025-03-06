@@ -1,7 +1,10 @@
 package com.illiouchine.jm.logic
 
+import android.content.Context
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.illiouchine.jm.R
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.model.Grading
@@ -10,6 +13,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.text.DateFormat
+import java.util.Calendar
 
 class PollSetupViewModel(
     private val sharedPrefsHelper: SharedPrefsHelper,
@@ -20,7 +25,7 @@ class PollSetupViewModel(
         val pollSetup: PollConfig = PollConfig(),
         val subjectSuggestion: List<String> = emptyList(),
         val proposalSuggestion: List<String> = emptyList(),
-        val feedback: String? = null,
+        @StringRes val feedback:  Int? = null,
     )
 
     private val _pollSetupViewState = MutableStateFlow(PollSetupViewState())
@@ -42,20 +47,20 @@ class PollSetupViewModel(
         }
     }
 
-    fun onAddProposal(proposal: String) {
-        // Rule: If the proposal already exists, do not add it and show a warning.
-        if (proposalAlreadyExist(proposal)) {
+    fun onAddProposal(context: Context, proposal: String = "") {
+        // Rule: if the proposal name is not specified, use a default
+        val notEmptyProposal = proposal.ifEmpty { generateProposalName(context) }
+        // Rule: proposals must have unique names
+        if (proposalAlreadyExist(notEmptyProposal)) {
             _pollSetupViewState.update {
                 it.copy(
-                    // TODO : Do not use string as feedback,
-                    //  use custom error message with code that can be map to string resource in view
-                    feedback = "The proposal `${proposal}` already exists."
+                    feedback = R.string.toast_proposal_name_already_exists
                 )
             }
         } else {
             val newProposals = buildList {
                 addAll(_pollSetupViewState.value.pollSetup.proposals)
-                add(proposal)
+                add(notEmptyProposal)
             }
 
             _pollSetupViewState.update {
@@ -65,6 +70,22 @@ class PollSetupViewModel(
                     subjectSuggestion = emptyList()
                 )
             }
+        }
+    }
+
+    private fun generateProposalName(context: Context): String {
+        return buildString {
+            append(context.getString(R.string.proposal))
+            append(" ")
+            append((65 + _pollSetupViewState.value.pollSetup.proposals.size).toChar())
+        }
+    }
+
+    private fun generateSubject(context: Context): String {
+        return buildString {
+            append(context.getString(R.string.poll_of))
+            append(" ")
+            append(DateFormat.getDateInstance().format(Calendar.getInstance().time))
         }
     }
 
