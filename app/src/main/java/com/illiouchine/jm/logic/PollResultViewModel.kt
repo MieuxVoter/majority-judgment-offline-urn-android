@@ -2,6 +2,7 @@ package com.illiouchine.jm.logic
 
 import androidx.lifecycle.ViewModel
 import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.ui.Navigator
 import fr.mieuxvoter.mj.CollectedTally
 import fr.mieuxvoter.mj.DeliberatorInterface
 import fr.mieuxvoter.mj.MajorityJudgmentDeliberator
@@ -11,7 +12,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
-class PollResultViewModel : ViewModel() {
+class PollResultViewModel(
+    private val navigator: Navigator,
+) : ViewModel() {
 
     data class PollResultViewState(
         val poll: Poll? = null,
@@ -44,5 +47,6 @@ class PollResultViewModel : ViewModel() {
                 result = result,
             )
         }
+        navigator.navigateTo(Navigator.Screens.PollResult)
     }
 }

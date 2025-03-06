@@ -31,13 +31,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.illiouchine.jm.R
-import com.illiouchine.jm.Screens
 import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.PollDeletionConfirmationDialog
 import com.illiouchine.jm.ui.composable.PollSummary
@@ -61,7 +61,7 @@ fun HomeScreen(
             .testTag("screen_home"),
         bottomBar = {
             MjuBottomBar(
-                selected = navController.currentDestination?.route ?: Screens.Home.name,
+                selected = navController.currentDestination?.route ?: Navigator.Screens.Home.name,
                 onItemSelected = { destination -> navController.navigate(destination.id) },
             )
         },

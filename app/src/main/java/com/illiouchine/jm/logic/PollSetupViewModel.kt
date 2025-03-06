@@ -9,6 +9,7 @@ import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.ui.Navigator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -19,13 +20,14 @@ import java.util.Calendar
 class PollSetupViewModel(
     private val sharedPrefsHelper: SharedPrefsHelper,
     private val pollDataSource: PollDataSource,
+    private val navigator: Navigator,
 ) : ViewModel() {
 
     data class PollSetupViewState(
         val pollSetup: PollConfig = PollConfig(),
         val subjectSuggestion: List<String> = emptyList(),
         val proposalSuggestion: List<String> = emptyList(),
-        @StringRes val feedback:  Int? = null,
+        @StringRes val feedback: Int? = null,
     )
 
     private val _pollSetupViewState = MutableStateFlow(PollSetupViewState())
@@ -39,6 +41,7 @@ class PollSetupViewModel(
         _pollSetupViewState.update {
             it.copy(pollSetup = initialPollConfig)
         }
+        navigator.navigateTo(Navigator.Screens.PollSetup)
     }
 
     fun onAddSubject(subject: String) {
@@ -112,9 +115,9 @@ class PollSetupViewModel(
         }
     }
 
-    fun getSubjectSuggestion(subject: String = ""){
+    fun getSubjectSuggestion(subject: String = "") {
         viewModelScope.launch {
-            val subjectSuggestion = if (subject.isNotEmpty()){
+            val subjectSuggestion = if (subject.isNotEmpty()) {
                 val polls = pollDataSource.getAllPoll()
                 polls.filter { it.pollConfig.subject.contains(other = subject, ignoreCase = true) }
                     .map { it.pollConfig.subject }
@@ -127,9 +130,9 @@ class PollSetupViewModel(
         }
     }
 
-    fun getProposalSuggestion(proposal: String = ""){
+    fun getProposalSuggestion(proposal: String = "") {
         viewModelScope.launch {
-            val proposalSuggestion = if (proposal.isNotEmpty()){
+            val proposalSuggestion = if (proposal.isNotEmpty()) {
                 pollDataSource.getAllPoll()
                     .map { it.pollConfig.proposals }
                     .flatten()

@@ -46,6 +46,7 @@ import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
@@ -296,7 +297,7 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
 //            ),
         ),
     )
-    val pollResultViewModel = PollResultViewModel()
+    val pollResultViewModel = PollResultViewModel(Navigator())
     pollResultViewModel.finalizePoll(poll)
     val state = pollResultViewModel.pollResultViewState.collectAsState().value
     JmTheme {

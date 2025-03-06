@@ -4,13 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.ui.Navigator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val pollDataSource: PollDataSource
+    private val pollDataSource: PollDataSource,
+    private val navigator: Navigator,
 ) : ViewModel() {
 
     data class HomeViewState(
@@ -26,7 +28,7 @@ class HomeViewModel(
 
     private fun loadPolls() {
         viewModelScope.launch {
-            val polls  = pollDataSource.getAllPoll()
+            val polls = pollDataSource.getAllPoll()
             _homeViewState.update {
                 it.copy(polls = polls)
             }

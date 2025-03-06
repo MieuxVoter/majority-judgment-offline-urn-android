@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.illiouchine.jm.R
-import com.illiouchine.jm.Screens
+import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.theme.JmTheme
 
 enum class BottomBarItem(
@@ -26,16 +26,16 @@ enum class BottomBarItem(
     val resId: Int,
     val icon: ImageVector,
 ) {
-    Home(id = Screens.Home.name, resId = R.string.menu_home, icon = Icons.Default.Home),
-    Settings(id = Screens.Settings.name, resId = R.string.menu_settings, icon = Icons.Default.Settings),
-    Info(id = Screens.About.name, resId = R.string.menu_about, icon = Icons.Default.Info);
+    Home(id = Navigator.Screens.Home.name, resId = R.string.menu_home, icon = Icons.Default.Home),
+    Settings(id = Navigator.Screens.Settings.name, resId = R.string.menu_settings, icon = Icons.Default.Settings),
+    Info(id = Navigator.Screens.About.name, resId = R.string.menu_about, icon = Icons.Default.Info);
 
     companion object {
         fun fromId(id: String): BottomBarItem {
             return when (id) {
-                Screens.Home.name -> Home
-                Screens.Settings.name -> Settings
-                Screens.About.name -> Info
+                Navigator.Screens.Home.name -> Home
+                Navigator.Screens.Settings.name -> Settings
+                Navigator.Screens.About.name -> Info
                 else -> Home
             }
         }
@@ -46,7 +46,7 @@ enum class BottomBarItem(
 @Composable
 fun MjuBottomBar(
     modifier: Modifier = Modifier,
-    selected: String = Screens.Home.name,
+    selected: String = Navigator.Screens.Home.name,
     onItemSelected: (BottomBarItem) -> Unit = {}
 ) {
     NavigationBar (modifier) {

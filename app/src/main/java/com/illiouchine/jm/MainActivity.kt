@@ -8,6 +8,7 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -20,6 +21,7 @@ import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.logic.PollVotingViewModel
 import com.illiouchine.jm.logic.SettingsViewModel
+import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.screen.AboutScreen
 import com.illiouchine.jm.ui.screen.HomeScreen
 import com.illiouchine.jm.ui.screen.OnBoardingScreen
@@ -28,6 +30,9 @@ import com.illiouchine.jm.ui.screen.PollVotingScreen
 import com.illiouchine.jm.ui.screen.ResultScreen
 import com.illiouchine.jm.ui.screen.SettingsScreen
 import com.illiouchine.jm.ui.theme.JmTheme
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
@@ -37,6 +42,7 @@ class MainActivity : ComponentActivity() {
     private val pollSetupViewModel: PollSetupViewModel by viewModel()
     private val pollVotingViewModel: PollVotingViewModel by viewModel()
     private val pollResultViewModel: PollResultViewModel by viewModel()
+    private val navigator: Navigator by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,16 +57,25 @@ class MainActivity : ComponentActivity() {
 
             val navController = rememberNavController()
 
+
             // Rule: the screen should never lock during the voting/result phase of the poll
             // Therefore, we clear the flag here and set it on in the appropriate screens.
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
             JmTheme {
+
+                // Handle navigation.
+                LaunchedEffect("navigator") {
+                    navigator.sharedFlow.onEach {
+                        navController.navigate(it.name)
+                    }.launchIn(this)
+                }
+
                 NavHost(
                     navController = navController,
-                    startDestination = Screens.Home.name,
+                    startDestination = Navigator.Screens.Home.name,
                 ) {
-                    composable(Screens.Home.name) {
+                    composable(Navigator.Screens.Home.name) {
                         if (settingsState.showOnboarding) {
                             OnBoardingScreen(
                                 modifier = Modifier,
@@ -76,24 +91,20 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onSetupBlankPoll = {
                                     pollSetupViewModel.startPollSetup()
-                                    navController.navigate(Screens.PollSetup.name)
                                 },
                                 onSetupClonePoll = {
                                     pollSetupViewModel.startPollSetup(it.pollConfig)
-                                    navController.navigate(Screens.PollSetup.name)
                                 },
                                 onResumePoll = {
                                     pollVotingViewModel.resumeVotingSession(it)
-                                    navController.navigate(Screens.PollVote.name)
                                 },
                                 onShowResult = {
                                     pollResultViewModel.finalizePoll(poll = it)
-                                    navController.navigate(Screens.PollResult.name)
                                 },
                             )
                         }
                     }
-                    composable(Screens.PollSetup.name) {
+                    composable(Navigator.Screens.PollSetup.name) {
                         PollSetupScreen(
                             modifier = Modifier,
                             navController = navController,
@@ -101,21 +112,20 @@ class MainActivity : ComponentActivity() {
                             onAddSubject = { pollSetupViewModel.onAddSubject(it) },
                             onAddProposal = { context, proposal ->
                                 pollSetupViewModel.onAddProposal(context, proposal)
-                                            },
+                            },
                             onRemoveProposal = { pollSetupViewModel.onRemoveProposal(it) },
                             onGradingSelected = { pollSetupViewModel.onGradingSelected(it) },
                             onSetupFinished = {
                                 pollVotingViewModel.initNewVotingSession(
                                     pollSetupViewModel.pollSetupViewState.value.pollSetup,
                                 )
-                                navController.navigate(Screens.PollVote.name)
                             },
                             onDismissFeedback = { pollSetupViewModel.onDismissFeedback() },
                             onGetSubjectSuggestion = { pollSetupViewModel.getSubjectSuggestion(it) },
                             onGetProposalSuggestion = { pollSetupViewModel.getProposalSuggestion(it) }
                         )
                     }
-                    composable(Screens.PollVote.name) {
+                    composable(Navigator.Screens.PollVote.name) {
                         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                         val mediaPlayer = MediaPlayer.create(LocalContext.current, R.raw.success)
                         PollVotingScreen(
@@ -132,20 +142,19 @@ class MainActivity : ComponentActivity() {
                             onBallotCanceled = { pollVotingViewModel.onBallotCanceled() },
                             onCancelLastJudgment = { pollVotingViewModel.onCancelLastJudgment() },
                             onFinish = {
-                                pollResultViewModel.finalizePoll(it)
                                 homeViewModel.savePolls(it)
-                                navController.navigate(Screens.PollResult.name)
+                                pollResultViewModel.finalizePoll(it)
                             },
                         )
                     }
-                    composable(Screens.PollResult.name) {
+                    composable(Navigator.Screens.PollResult.name) {
                         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                         if (pollResultViewState.poll != null) {
                             ResultScreen(
                                 modifier = Modifier,
                                 state = pollResultViewState,
                                 onFinish = {
-                                    navController.navigate(Screens.Home.name)
+                                    navigator.navigateTo(Navigator.Screens.Home)
                                 },
                             )
                         } else {
@@ -154,7 +163,7 @@ class MainActivity : ComponentActivity() {
                             // For now, nothing is cool I guess ?
                         }
                     }
-                    composable(Screens.Settings.name) {
+                    composable(Navigator.Screens.Settings.name) {
                         SettingsScreen(
                             modifier = Modifier,
                             navController = navController,
@@ -173,7 +182,7 @@ class MainActivity : ComponentActivity() {
                             },
                         )
                     }
-                    composable(Screens.About.name) {
+                    composable(Navigator.Screens.About.name) {
                         AboutScreen(
                             modifier = Modifier,
                             navController = navController,

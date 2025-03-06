@@ -36,10 +36,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.illiouchine.jm.R
-import com.illiouchine.jm.Screens
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.composable.GradingSelectionRow
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.MjuSnackbarWithStringResId
@@ -96,7 +96,7 @@ fun PollSetupScreen(
         bottomBar = {
             MjuBottomBar(
                 modifier = Modifier,
-                selected = navController.currentDestination?.route ?: Screens.Home.name,
+                selected = navController.currentDestination?.route ?: Navigator.Screens.Home.name,
                 onItemSelected = { destination -> navController.navigate(destination.id) }
             )
         },

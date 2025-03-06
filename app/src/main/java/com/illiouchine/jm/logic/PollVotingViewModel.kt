@@ -5,11 +5,14 @@ import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.ui.Navigator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
-class PollVotingViewModel : ViewModel() {
+class PollVotingViewModel(
+    private val navigator: Navigator
+) : ViewModel() {
 
     data class PollVotingViewState(
         val pollConfig: PollConfig = PollConfig(),
@@ -39,6 +42,7 @@ class PollVotingViewModel : ViewModel() {
                 currentBallot = null,
             )
         }
+        navigator.navigateTo(Navigator.Screens.PollVote)
     }
 
     fun resumeVotingSession(poll: Poll) {
@@ -49,6 +53,7 @@ class PollVotingViewModel : ViewModel() {
                 currentBallot = null,
             )
         }
+        navigator.navigateTo(Navigator.Screens.PollVote)
     }
 
     fun initParticipantVotingSession() {
