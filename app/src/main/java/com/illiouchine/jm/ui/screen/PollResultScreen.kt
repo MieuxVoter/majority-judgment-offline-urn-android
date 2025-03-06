@@ -27,6 +27,10 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,7 +45,8 @@ import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
-import java.math.BigInteger
+import java.util.Locale
+import kotlin.math.round
 
 
 @Composable
@@ -96,7 +101,8 @@ fun ResultScreen(
                     val rank = proposalResult.rank
                     val proposalName = poll.pollConfig.proposals[proposalResult.index]
                     val medianGrade = proposalResult.analysis.medianGrade
-                    val medianGradeName = stringResource(poll.pollConfig.grading.getGradeName(medianGrade))
+                    val medianGradeName =
+                        stringResource(poll.pollConfig.grading.getGradeName(medianGrade))
                     Text(
                         modifier = Modifier.padding(end = 12.dp),
                         fontSize = 24.sp,
@@ -108,26 +114,26 @@ fun ResultScreen(
                 }
 
                 Row {
+                    val textMeasurer = rememberTextMeasurer()
+                    val contrastedColor = if (isSystemInDarkTheme()) Color.White else Color.Black
+
                     // Draw the linear merit profile of the proposal.
-                    val medianLineColor = if (isSystemInDarkTheme()) Color.White else Color.Black
                     Canvas(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(24.dp)
                     ) {
                         val proposalTally = tally.proposalsTallies[proposalResult.index]
-                        val bigSizeWidth = BigInteger.valueOf(size.width.toLong())
                         var offsetX = 0F
-                        val outline = Path()
+                        val medianGradeOutline = Path()
 
                         for (gradeIndex in (0..<grading.getAmountOfGrades()).reversed()) {
-                            val sizeW = bigSizeWidth.multiply(
-                                proposalTally.tally[gradeIndex]
-                            ).divide(
-                                proposalTally.amountOfJudgments
-                            )
-
-                            val gradeRectSize = Size(sizeW.toFloat(), size.height)
+                            val gradeWidth = ( // appalling indentation, please help
+                                    (size.width * proposalTally.tally[gradeIndex].toFloat())
+                                            /
+                                            proposalTally.amountOfJudgments.toFloat()
+                                    )
+                            val gradeRectSize = Size(gradeWidth, size.height)
                             val gradeRectOffset = Offset(offsetX, 0F)
 
                             // Fill a rect with the color of the grade
@@ -137,22 +143,53 @@ fun ResultScreen(
                                 topLeft = gradeRectOffset,
                             )
 
-                            // Outline only the median grade
-
-                            if (gradeIndex == proposalResult.analysis.medianGrade) {
-                                outline.addRect(Rect(
-                                    size = gradeRectSize,
-                                    offset = gradeRectOffset,
-                                ))
+                            // Show the percentage under each grade with at least one judgment
+                            if (gradeWidth > 0) {
+                                val percentage = 100f * gradeWidth / size.width
+                                val approximate = if (round(percentage) != percentage) {
+                                    "~"
+                                } else {
+                                    ""
+                                }
+                                val measuredText =
+                                    textMeasurer.measure(
+                                        text = AnnotatedString(
+                                            String.format(
+                                                locale = Locale.FRANCE,
+                                                format = "$approximate%.0f%%",
+                                                percentage,
+                                            )
+                                        ),
+                                        style = TextStyle(fontSize = 10.sp),
+                                    )
+                                drawText(
+                                    textLayoutResult = measuredText,
+                                    topLeft = gradeRectOffset + Offset(
+                                        (gradeRectSize.width - measuredText.size.width) * 0.5f,
+                                        size.height + 8,
+                                    ),
+                                    color = contrastedColor,
+                                    alpha = 0.8f,
+                                )
                             }
 
-                            offsetX += sizeW.toFloat()
+                            // Outline only the median grade
+                            if (gradeIndex == proposalResult.analysis.medianGrade) {
+                                medianGradeOutline.addRect(
+                                    Rect(
+                                        size = gradeRectSize,
+                                        offset = gradeRectOffset,
+                                    )
+                                )
+                            }
+
+                            offsetX += gradeWidth
                         }
 
-                        // Draw the outline *after* drawing all the grade rectangles
+                        // Draw the median grade outline *after* drawing all the grade rectangles
                         drawPath(
-                            color = medianLineColor,
-                            path = outline,
+                            color = contrastedColor,
+                            path = medianGradeOutline,
                             style = Stroke(
                                 width = 8f,
                                 join = StrokeJoin.Bevel,
@@ -161,9 +198,9 @@ fun ResultScreen(
 
                         // Vertical line in the middle, marking the median grade.
                         drawLine(
-                            color = medianLineColor,
-                            start = Offset(size.width * 0.5f, -10f),
-                            end = Offset(size.width * 0.5f, size.height + 10f),
+                            color = contrastedColor,
+                            start = Offset(size.width * 0.5f, -11f),
+                            end = Offset(size.width * 0.5f, size.height + 12f),
                             pathEffect = PathEffect.dashPathEffect(
                                 intervals = floatArrayOf(10f, 5f),
                                 phase = -0.5f,
@@ -222,13 +259,13 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
                     Judgment(2, 6),
                 )
             ),
-            Ballot(
-                judgments = listOf(
-                    Judgment(0, 3),
-                    Judgment(1, 0),
-                    Judgment(2, 1),
-                )
-            ),
+//            Ballot(
+//                judgments = listOf(
+//                    Judgment(0, 3),
+//                    Judgment(1, 0),
+//                    Judgment(2, 1),
+//                )
+//            ),
         ),
     )
     val pollResultViewModel = PollResultViewModel()
