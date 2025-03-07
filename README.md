@@ -85,6 +85,8 @@ If you're a nerd and do want to handle code, the `XML` translation files are in 
 
 There used to be a similar app called _"Le Choix Commun"_.
 
+The [comic by Marjolaine Leray](https://marjolaineleray.com/wp-content/uploads/2023/04/BD-MajorityJudgment-MarjolaineLeray-EN.pdf) is a good read about Majority Judgment.
+
 
 ## Additional info
 
