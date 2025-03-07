@@ -33,7 +33,6 @@
     <string name="seven_grading">Seven grades</string>
     <string name="five_grading">Five grades</string>
     <string name="three_grading">Three grades</string>
-    <string name="show_on_boarding">Show onboarding again</string>
     <string name="settings_screen_title">Settings</string>
     <string name="incitation_making_new_poll">Try making a new poll, it\'s free !</string>
     <string name="title_multiline_majority_judgment_urn">Majority\nJudgment\nUrn</string>
@@ -55,7 +54,9 @@
     <string name="help_your_participation_was_a_success">Your participation was a success !\nYou can now pass this device to the next participant.</string>
     <string name="button_be_the_first_to_vote">Be the first to vote</string>
     <string name="label_grades">Grades</string>
+    <string name="setting_show_onboarding">Show onboarding again</string>
     <string name="setting_play_sound">Play sounds</string>
+    <string name="setting_pin_screen">Pin screen automatically</string>
     <string name="summary_are_you_sure">Are you sure ?</string>
     <string name="summary_is_that_accurate">Is that accurate ?</string>
     <string name="summary_button_no_rescind">No, rescind</string>

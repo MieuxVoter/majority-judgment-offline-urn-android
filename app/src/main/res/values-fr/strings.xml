@@ -32,7 +32,7 @@
     <string name="seven_grading">Sept mentions</string>
     <string name="five_grading">Cinq mentions</string>
     <string name="three_grading">Trois mentions</string>
-    <string name="show_on_boarding">Montrer l\'intro à nouveau</string>
+    <string name="setting_show_onboarding">Montrer l\'intro à nouveau</string>
     <string name="settings_screen_title">Options</string>
     <string name="incitation_making_new_poll">Créez un nouveau scrutin, c\'est gratis !</string>
     <string name="title_multiline_majority_judgment_urn">Urne\nJugement\nMajoritaire</string>

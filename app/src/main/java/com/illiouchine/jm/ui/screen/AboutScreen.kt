@@ -2,12 +2,14 @@ package com.illiouchine.jm.ui.screen
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
@@ -61,17 +63,28 @@ fun AboutScreen(
             )
         },
     ) { innerPadding ->
+
+        val scrollState = rememberScrollState()
+
         Column(
             modifier = Modifier
+                .verticalScroll(state = scrollState)
                 .padding(innerPadding)
-                .padding(16.dp)
-                .verticalScroll(state = ScrollState(initial = 0))
         ) {
             val uriHandler = LocalUriHandler.current
 
             ScreenTitle(text = stringResource(R.string.title_about))
 
-            Image(painterResource(R.drawable.onboarding_3), null)
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.onboarding_3),
+                    contentDescription = null,
+                )
+            }
 
             Text(
                 modifier = Modifier.fillMaxWidth(),

@@ -122,12 +122,16 @@ fun OnBoardingScreen(
 
                 if (currentPageIndex == onBoardingPages.size - 1) {
                     TextButton(
-                        modifier = Modifier.weight(0.7f).testTag("screen_onboarding_finish"),
+                        modifier = Modifier
+                            .weight(0.7f)
+                            .testTag("screen_onboarding_finish"),
                         onClick = { onFinish() },
                     ) { Text(stringResource(R.string.button_finish)) }
                 } else {
                     TextButton(
-                        modifier = Modifier.weight(0.7f).testTag("screen_onboarding_next"),
+                        modifier = Modifier
+                            .weight(0.7f)
+                            .testTag("screen_onboarding_next"),
                         onClick = { currentPageIndex++ },
                     ) { Text(stringResource(R.string.button_next)) }
                 }

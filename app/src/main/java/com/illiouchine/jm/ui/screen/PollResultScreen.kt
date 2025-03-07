@@ -2,7 +2,6 @@ package com.illiouchine.jm.ui.screen
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
@@ -45,8 +45,8 @@ import kotlin.math.min
 
 // This was not invented here, most definitely.  Where are the steps in Kotlin?
 fun smoothStep(edge0: Float, edge1: Float, x: Float): Float {
-    val value = clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);
-    return value * value * (3.0f - 2.0f * value);
+    val value = clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f)
+    return value * value * (3.0f - 2.0f * value)
 }
 
 @Composable
@@ -75,12 +75,14 @@ fun ResultScreen(
         },
     ) { innerPadding ->
 
+        val scrollState = rememberScrollState()
+
         Column(
             modifier = modifier
                 .padding(innerPadding)
                 .padding(horizontal = 8.dp)
                 .fillMaxSize()
-                .verticalScroll(state = ScrollState(initial = 0))
+                .verticalScroll(state = scrollState)
                 .padding(8.dp),
         ) {
             PollSubject(
