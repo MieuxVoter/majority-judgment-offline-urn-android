@@ -1,8 +1,7 @@
-Transform your phone into a mobile, offline urn for a local majority judgement poll.
+Transform your phone into a mobile, offline urn for a local Majority Judgment poll.
 
 Setup a poll in seconds, and share the phone amongst participants.
 
-This application does not need any permission.
+This application helps groups decide together quickly about some subject.
 
-Majority judgement is an elegant polling system used in french wine contests,
-where each participant judges each proposal, so there is no "throwing a vote away".
+Majority Judgment is an elegant ranking system used in french wine contests, where each participant judges each proposal, so there is no "throwing your vote away".
