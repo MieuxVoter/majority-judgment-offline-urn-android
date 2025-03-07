@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Poll
@@ -42,7 +42,7 @@ fun PollDeletionConfirmationDialog(
             ) {
                 Text(
                     modifier = Modifier.padding(bottom = 16.dp),
-                    fontSize = 5.em,
+                    fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     text = stringResource(R.string.dialog_are_you_sure),
                 )
@@ -53,7 +53,7 @@ fun PollDeletionConfirmationDialog(
                 )
                 Text(
                     modifier = Modifier.padding(top = 16.dp),
-                    fontSize = 3.em,
+                    fontSize = 12.sp,
                     text = stringResource(R.string.dialog_operation_cannot_be_undone),
                 )
                 Row {
