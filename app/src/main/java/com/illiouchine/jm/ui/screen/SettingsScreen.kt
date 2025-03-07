@@ -1,13 +1,13 @@
 package com.illiouchine.jm.ui.screen
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -65,9 +65,12 @@ fun SettingsScreen(
             )
         },
     ) { innerPadding ->
+
+        val scrollState = rememberScrollState()
+
         Column(
             modifier = modifier
-                .verticalScroll(state = ScrollState(initial = 0))
+                .verticalScroll(state = scrollState)
                 .padding(innerPadding),
         ) {
             ScreenTitle(
