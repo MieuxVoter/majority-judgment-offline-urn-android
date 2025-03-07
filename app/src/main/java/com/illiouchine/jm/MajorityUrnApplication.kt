@@ -65,6 +65,7 @@ val module = module {
     }
     viewModel {
         PollVotingViewModel(
+            pollDataSource = get(),
             navigator = get(),
         )
     }

@@ -38,6 +38,7 @@ import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.Navigator
+import com.illiouchine.jm.ui.Screens
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.PollDeletionConfirmationDialog
 import com.illiouchine.jm.ui.composable.PollSummary
@@ -61,8 +62,8 @@ fun HomeScreen(
             .testTag("screen_home"),
         bottomBar = {
             MjuBottomBar(
-                selected = navController.currentDestination?.route ?: Navigator.Screens.Home.name,
-                onItemSelected = { destination -> navController.navigate(destination.id) },
+                selected = Screens.Home,
+                onItemSelected = { destination -> navController.navigate(destination) },
             )
         },
         floatingActionButton = {

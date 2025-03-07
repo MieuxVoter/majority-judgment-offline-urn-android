@@ -28,6 +28,7 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.SettingsViewModel
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.ui.Navigator
+import com.illiouchine.jm.ui.Screens
 import com.illiouchine.jm.ui.composable.GradingSelectionRow
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.MjuSnackbar
@@ -59,8 +60,8 @@ fun SettingsScreen(
         bottomBar = {
             MjuBottomBar(
                 modifier = Modifier,
-                selected = navController.currentDestination?.route ?: Navigator.Screens.Settings.name,
-                onItemSelected = { destination -> navController.navigate(destination.id) }
+                selected = Screens.Settings,
+                onItemSelected = { destination -> navController.navigate(destination) }
             )
         },
     ) { innerPadding ->

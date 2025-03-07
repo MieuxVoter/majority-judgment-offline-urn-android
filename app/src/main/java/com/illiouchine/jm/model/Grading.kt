@@ -6,16 +6,19 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Grading.Quality3Grading
 import com.illiouchine.jm.model.Grading.Quality5Grading
 import com.illiouchine.jm.model.Grading.Quality7Grading
+import kotlinx.serialization.Serializable
 
 val gradings: List<Grading> = listOf(Quality7Grading, Quality5Grading, Quality3Grading)
 
 /**
  * The grades must be unambiguously sorted for MJ to work.
  */
+@Serializable
 sealed class Grading(
     @StringRes val name: Int,
     val grades: List<Grade>,
 ) {
+    @Serializable
     data object Quality7Grading : Grading(
         name = R.string.seven_grading,
         grades = listOf(
@@ -56,7 +59,7 @@ sealed class Grading(
             ),
         ),
     )
-
+    @Serializable
     data object Quality5Grading : Grading(
         name = R.string.five_grading,
         grades = listOf(
@@ -87,7 +90,7 @@ sealed class Grading(
             ),
         ),
     )
-
+    @Serializable
     data object Quality3Grading : Grading(
         name = R.string.three_grading,
         grades = listOf(

@@ -18,44 +18,52 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.illiouchine.jm.R
-import com.illiouchine.jm.ui.Navigator
+import com.illiouchine.jm.ui.Screens
+import com.illiouchine.jm.ui.composable.BottomBarItem.Home
+import com.illiouchine.jm.ui.composable.BottomBarItem.Info
+import com.illiouchine.jm.ui.composable.BottomBarItem.Settings
 import com.illiouchine.jm.ui.theme.JmTheme
 
 enum class BottomBarItem(
-    val id: String,
+    val screen: Screens,
     val resId: Int,
     val icon: ImageVector,
 ) {
-    Home(id = Navigator.Screens.Home.name, resId = R.string.menu_home, icon = Icons.Default.Home),
-    Settings(id = Navigator.Screens.Settings.name, resId = R.string.menu_settings, icon = Icons.Default.Settings),
-    Info(id = Navigator.Screens.About.name, resId = R.string.menu_about, icon = Icons.Default.Info);
+    Home(screen = Screens.Home, resId = R.string.menu_home, icon = Icons.Default.Home),
+    Settings(screen = Screens.Settings, resId = R.string.menu_settings, icon = Icons.Default.Settings),
+    Info(screen = Screens.About, resId = R.string.menu_about, icon = Icons.Default.Info);
+}
 
-    companion object {
-        fun fromId(id: String): BottomBarItem {
-            return when (id) {
-                Navigator.Screens.Home.name -> Home
-                Navigator.Screens.Settings.name -> Settings
-                Navigator.Screens.About.name -> Info
-                else -> Home
-            }
-        }
+private fun Screens.toBottomBarItem() : BottomBarItem {
+    return when (this) {
+        Screens.Home -> Home
+        Screens.Settings -> Settings
+        Screens.About -> Info
+        else -> Home
     }
 }
 
+private fun BottomBarItem.toScreen(): Screens {
+    return when (this) {
+        Home -> Screens.Home
+        Settings -> Screens.Settings
+        Info -> Screens.About
+    }
+}
 
 @Composable
 fun MjuBottomBar(
     modifier: Modifier = Modifier,
-    selected: String = Navigator.Screens.Home.name,
-    onItemSelected: (BottomBarItem) -> Unit = {}
+    selected: Screens = Screens.Home,
+    onItemSelected: (Screens) -> Unit = {}
 ) {
     NavigationBar (modifier) {
         BottomBarItem.entries.forEach {
             NavigationBarItem(
                 modifier = Modifier,
-                selected = it == BottomBarItem.fromId(selected),
+                selected = it == selected.toBottomBarItem(),
                 onClick = {
-                    onItemSelected(it)
+                    onItemSelected(it.toScreen())
                 },
                 icon = {
                     Icon(

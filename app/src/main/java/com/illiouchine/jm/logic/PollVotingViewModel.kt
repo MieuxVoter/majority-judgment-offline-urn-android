@@ -1,16 +1,21 @@
 package com.illiouchine.jm.logic
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.Navigator
+import com.illiouchine.jm.ui.Screens
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class PollVotingViewModel(
+    private val pollDataSource: PollDataSource,
     private val navigator: Navigator
 ) : ViewModel() {
 
@@ -34,26 +39,17 @@ class PollVotingViewModel(
 
     private fun generateRandomOrder(size: Int): List<Int> = (0..<size).shuffled()
 
-    fun initNewVotingSession(config: PollConfig) {
+    fun initVotingSession(
+        config: PollConfig,
+        ballots: List<Ballot>,
+    ) {
         _pollVotingViewState.update {
             it.copy(
                 pollConfig = config,
-                ballots = emptyList(),
+                ballots = ballots,
                 currentBallot = null,
             )
         }
-        navigator.navigateTo(Navigator.Screens.PollVote)
-    }
-
-    fun resumeVotingSession(poll: Poll) {
-        _pollVotingViewState.update {
-            it.copy(
-                pollConfig = poll.pollConfig,
-                ballots = poll.ballots,
-                currentBallot = null,
-            )
-        }
-        navigator.navigateTo(Navigator.Screens.PollVote)
     }
 
     fun initParticipantVotingSession() {
@@ -101,6 +97,17 @@ class PollVotingViewModel(
             it.copy(
                 currentBallot = it.currentBallot?.withoutLastJudgment(),
             )
+        }
+    }
+
+    fun finalizePoll() {
+        viewModelScope.launch {
+            val poll = Poll(
+                pollConfig = _pollVotingViewState.value.pollConfig,
+                ballots = _pollVotingViewState.value.ballots,
+            )
+            pollDataSource.savePolls(poll)
+            navigator.navigateTo(Screens.PollResult(poll = poll))
         }
     }
 }

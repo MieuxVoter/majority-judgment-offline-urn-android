@@ -298,7 +298,7 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
         ),
     )
     val pollResultViewModel = PollResultViewModel(Navigator())
-    pollResultViewModel.finalizePoll(poll)
+    pollResultViewModel.initializePollResult(poll)
     val state = pollResultViewModel.pollResultViewState.collectAsState().value
     JmTheme {
         ResultScreen(

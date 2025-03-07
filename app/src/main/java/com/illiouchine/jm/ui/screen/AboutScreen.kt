@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.illiouchine.jm.R
-import com.illiouchine.jm.ui.Navigator
+import com.illiouchine.jm.ui.Screens
 import com.illiouchine.jm.ui.composable.IconTextButton
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.ScreenTitle
@@ -55,8 +55,8 @@ fun AboutScreen(
             .testTag("screen_about"),
         bottomBar = {
             MjuBottomBar(
-                selected = navController.currentDestination?.route ?: Navigator.Screens.About.name,
-                onItemSelected = { destination -> navController.navigate(destination.id) },
+                selected = Screens.About,
+                onItemSelected = { destination -> navController.navigate(destination) },
             )
         },
     ) { innerPadding ->
