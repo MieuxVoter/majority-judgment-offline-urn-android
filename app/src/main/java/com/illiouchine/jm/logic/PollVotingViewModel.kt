@@ -1,8 +1,12 @@
 package com.illiouchine.jm.logic
 
+import android.content.Context
+import android.media.MediaPlayer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.illiouchine.jm.R
 import com.illiouchine.jm.data.PollDataSource
+import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
@@ -16,6 +20,7 @@ import kotlinx.coroutines.launch
 
 class PollVotingViewModel(
     private val pollDataSource: PollDataSource,
+    private val sharedPrefsHelper: SharedPrefsHelper,
     private val navigator: Navigator
 ) : ViewModel() {
 
@@ -61,7 +66,7 @@ class PollVotingViewModel(
         }
     }
 
-    fun onJudgmentCast(judgment: Judgment) {
+    fun castJudgment(judgment: Judgment) {
         // Rule: Voting for the same proposal two times is not allowed
         if (_pollVotingViewState.value.currentBallot?.isAlreadyCast(judgment) == true) {
             return
@@ -74,7 +79,12 @@ class PollVotingViewModel(
         }
     }
 
-    fun onBallotConfirmed(ballot: Ballot) {
+    fun confirmBallot(context: Context, ballot: Ballot) {
+        val mediaPlayer = MediaPlayer.create(context, R.raw.success)
+        if (sharedPrefsHelper.getPlaySound()) {
+            mediaPlayer.start()
+        }
+
         // Add ballot to previous ballots & reset current ballot
         _pollVotingViewState.update {
             it.copy(
@@ -84,7 +94,7 @@ class PollVotingViewModel(
         }
     }
 
-    fun onBallotCanceled() {
+    fun cancelBallot() {
         _pollVotingViewState.update {
             it.copy(
                 currentBallot = null,
@@ -92,7 +102,7 @@ class PollVotingViewModel(
         }
     }
 
-    fun onCancelLastJudgment() {
+    fun cancelLastJudgment() {
         _pollVotingViewState.update {
             it.copy(
                 currentBallot = it.currentBallot?.withoutLastJudgment(),

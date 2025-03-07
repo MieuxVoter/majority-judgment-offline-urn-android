@@ -25,7 +25,6 @@ class PollResultViewModel(
     private val _pollResultViewState = MutableStateFlow<PollResultViewState>(PollResultViewState())
     val pollResultViewState: StateFlow<PollResultViewState> = _pollResultViewState
 
-    // Todo : Initial method
     fun initializePollResult(poll: Poll) {
         val amountOfProposals = poll.pollConfig.proposals.size
         val amountOfGrades = poll.pollConfig.grading.getAmountOfGrades()

@@ -2,7 +2,6 @@ package com.illiouchine.jm
 
 import android.content.Context
 import android.content.Intent
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
@@ -13,7 +12,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -108,7 +106,12 @@ class MainActivity : ComponentActivity() {
                                     navigator.navigateTo(Screens.PollSetup(config = poll.pollConfig))
                                 },
                                 onResumePoll = { poll: Poll ->
-                                    navigator.navigateTo(Screens.PollVote(config = poll.pollConfig, ballots = poll.ballots))
+                                    navigator.navigateTo(
+                                        Screens.PollVote(
+                                            config = poll.pollConfig,
+                                            ballots = poll.ballots
+                                        )
+                                    )
                                 },
                                 onShowResult = { poll: Poll ->
                                     navigator.navigateTo(Screens.PollResult(poll = poll))
@@ -140,8 +143,16 @@ class MainActivity : ComponentActivity() {
                             onGradingSelected = { pollSetupViewModel.selectGrading(it) },
                             onSetupFinished = { pollSetupViewModel.finishSetup(it) },
                             onDismissFeedback = { pollSetupViewModel.clearFeedback() },
-                            onGetSubjectSuggestion = { pollSetupViewModel.refreshSubjectSuggestion(it) },
-                            onGetProposalSuggestion = { pollSetupViewModel.refreshProposalSuggestion(it) },
+                            onGetSubjectSuggestion = {
+                                pollSetupViewModel.refreshSubjectSuggestion(
+                                    it
+                                )
+                            },
+                            onGetProposalSuggestion = {
+                                pollSetupViewModel.refreshProposalSuggestion(
+                                    it
+                                )
+                            },
                             onClearSubjectSuggestion = { pollSetupViewModel.clearSubjectSuggestion() },
                             onClearProposalSuggestion = { pollSetupViewModel.clearProposalSuggestion() }
                         )
@@ -153,7 +164,7 @@ class MainActivity : ComponentActivity() {
                         )
                     ) { backStackEntry ->
 
-                        val pollVote : Screens.PollVote = backStackEntry.toRoute()
+                        val pollVote: Screens.PollVote = backStackEntry.toRoute()
                         LaunchedEffect(pollVote) {
                             pollVotingViewModel.initVotingSession(
                                 config = pollVote.config,
@@ -162,23 +173,20 @@ class MainActivity : ComponentActivity() {
                         }
 
                         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-                        val mediaPlayer = MediaPlayer.create(LocalContext.current, R.raw.success)
                         PollVotingScreen(
                             modifier = Modifier,
                             pollVotingState = pollVotingViewState,
                             onStartVoting = { pollVotingViewModel.initParticipantVotingSession() },
-                            onJudgmentCast = { pollVotingViewModel.onJudgmentCast(it) },
-                            onBallotConfirmed = {
-                                pollVotingViewModel.onBallotConfirmed(it)
-                                if (settingsState.playSound) {
-                                    mediaPlayer.start()
-                                }
+                            onJudgmentCast = { pollVotingViewModel.castJudgment(it) },
+                            onBallotConfirmed = { context, ballot ->
+                                pollVotingViewModel.confirmBallot(
+                                    context = context,
+                                    ballot = ballot
+                                )
                             },
-                            onBallotCanceled = { pollVotingViewModel.onBallotCanceled() },
-                            onCancelLastJudgment = { pollVotingViewModel.onCancelLastJudgment() },
-                            onFinish = {
-                                pollVotingViewModel.finalizePoll()
-                            },
+                            onBallotCanceled = { pollVotingViewModel.cancelBallot() },
+                            onCancelLastJudgment = { pollVotingViewModel.cancelLastJudgment() },
+                            onFinish = { pollVotingViewModel.finalizePoll() },
                         )
                     }
                     composable<Screens.PollResult>(
@@ -187,7 +195,7 @@ class MainActivity : ComponentActivity() {
                         )
                     ) { backStackEntry ->
 
-                        val pollResult : Screens.PollResult = backStackEntry.toRoute()
+                        val pollResult: Screens.PollResult = backStackEntry.toRoute()
                         LaunchedEffect(pollResult) {
                             pollResultViewModel.initializePollResult(poll = pollResult.poll)
                         }
@@ -197,9 +205,7 @@ class MainActivity : ComponentActivity() {
                             ResultScreen(
                                 modifier = Modifier,
                                 state = pollResultViewState,
-                                onFinish = {
-                                    navigator.navigateTo(Screens.Home)
-                                },
+                                onFinish = { navigator.navigateTo(Screens.Home) },
                             )
                         } else {
                             // During the screen navigation transition to home (in onFinish above),
