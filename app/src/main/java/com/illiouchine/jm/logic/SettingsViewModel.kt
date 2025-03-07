@@ -13,7 +13,8 @@ class SettingsViewModel(
     data class SettingsViewState(
         val showOnboarding: Boolean = true,
         val playSound: Boolean = true,
-        val defaultGrading: Grading = Grading.Quality7Grading
+        val pinScreen: Boolean = false,
+        val defaultGrading: Grading = Grading.Quality7Grading,
     )
 
     private val _settingsViewState = MutableStateFlow<SettingsViewState>(SettingsViewState())
@@ -22,6 +23,7 @@ class SettingsViewModel(
     init {
         loadShowOnboarding()
         loadPlaySound()
+        loadPinScreen()
         loadDefaultGrading()
     }
 
@@ -36,6 +38,13 @@ class SettingsViewModel(
         val playSound = sharedPreferences.getPlaySound()
         _settingsViewState.update {
             it.copy(playSound = playSound)
+        }
+    }
+
+    private fun loadPinScreen() {
+        val pinScreen = sharedPreferences.getPinScreen()
+        _settingsViewState.update {
+            it.copy(pinScreen = pinScreen)
         }
     }
 
@@ -57,6 +66,13 @@ class SettingsViewModel(
         sharedPreferences.editPlaySound(soundIsOn)
         _settingsViewState.update {
             it.copy(playSound = soundIsOn)
+        }
+    }
+
+    fun updatePinScreen(pinScreen: Boolean) {
+        sharedPreferences.editPinScreen(pinScreen)
+        _settingsViewState.update {
+            it.copy(pinScreen = pinScreen)
         }
     }
 

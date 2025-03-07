@@ -32,7 +32,7 @@
     <string name="seven_grading">Siete grados</string>
     <string name="five_grading">Cinco grados</string>
     <string name="three_grading">Tres grados</string>
-    <string name="show_on_boarding">Mostrar la introducción nuevamente</string>
+    <string name="setting_show_onboarding">Mostrar la introducción nuevamente</string>
     <string name="settings_screen_title">Ajustes</string>
     <string name="incitation_making_new_poll">Prueba a hacer una nueva encuesta, ¡es gratis!</string>
     <string name="title_multiline_majority_judgment_urn">Mayoría\nSentencia\nUrna</string>
