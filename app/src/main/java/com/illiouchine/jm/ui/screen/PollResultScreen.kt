@@ -1,5 +1,7 @@
 package com.illiouchine.jm.ui.screen
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,13 +15,17 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.math.MathUtils.clamp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.model.Ballot
@@ -33,7 +39,15 @@ import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
+import kotlin.math.max
+import kotlin.math.min
 
+
+// This was not invented here, most definitely.  Where are the steps in Kotlin?
+fun smoothStep(edge0: Float, edge1: Float, x: Float): Float {
+    val value = clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);
+    return value * value * (3.0f - 2.0f * value);
+}
 
 @Composable
 fun ResultScreen(
@@ -78,39 +92,56 @@ fun ResultScreen(
                 ballots = poll.ballots,
             )
 
-            Spacer(modifier = Modifier.padding(8.dp))
+            Spacer(Modifier.padding(vertical = 8.dp))
 
-            result.proposalResultsRanked.forEach { proposalResult ->
-                Row(
-                    verticalAlignment = Alignment.Bottom,
+            val appearAnimation = remember { Animatable(0f) }
+            LaunchedEffect("waterfall") {
+                appearAnimation.animateTo(1f, tween(1500))
+            }
+
+            val amountOfProposals = result.proposalResultsRanked.size
+            result.proposalResultsRanked.forEachIndexed { displayIndex, proposalResult ->
+                Column(
+                    modifier = Modifier
+                        .alpha(
+                            smoothStep(
+                                max(0f, 0.85f * displayIndex / amountOfProposals),
+                                min(1f, 1.15f * (displayIndex + 1) / amountOfProposals),
+                                appearAnimation.value,
+                            )
+                        ),
                 ) {
-                    val rank = proposalResult.rank
-                    val proposalName = poll.pollConfig.proposals[proposalResult.index]
-                    val medianGrade = proposalResult.analysis.medianGrade
-                    val medianGradeName =
-                        stringResource(poll.pollConfig.grading.getGradeName(medianGrade))
-                    Text(
-                        modifier = Modifier.padding(end = 12.dp),
-                        fontSize = 24.sp,
-                        text = "#$rank",
-                    )
-                    Text(
-                        text = "$proposalName   ($medianGradeName)",
-                    )
-                }
+                    Row(
+                        verticalAlignment = Alignment.Bottom,
+                    ) {
+                        val rank = proposalResult.rank
+                        val proposalName = poll.pollConfig.proposals[proposalResult.index]
+                        val medianGrade = proposalResult.analysis.medianGrade
+                        val medianGradeName =
+                            stringResource(poll.pollConfig.grading.getGradeName(medianGrade))
+                        Text(
+                            modifier = Modifier.padding(end = 12.dp),
+                            fontSize = 24.sp,
+                            text = "#$rank",
+                        )
+                        Text(
+                            text = "$proposalName   ($medianGradeName)",
+                        )
+                    }
 
-                Row {
-                    LinearMeritProfileCanvas(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(24.dp),
-                        tally = tally,
-                        proposalResult = proposalResult,
-                        grading = grading,
-                    )
-                }
+                    Row {
+                        LinearMeritProfileCanvas(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(24.dp),
+                            tally = tally,
+                            proposalResult = proposalResult,
+                            grading = grading,
+                        )
+                    }
 
-                Spacer(modifier = Modifier.padding(12.dp))
+                    Spacer(Modifier.padding(vertical = 12.dp))
+                }
             }
 
             Spacer(modifier = Modifier.padding(8.dp))
@@ -159,13 +190,6 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
                     Judgment(2, 6),
                 )
             ),
-//            Ballot(
-//                judgments = listOf(
-//                    Judgment(0, 3),
-//                    Judgment(1, 0),
-//                    Judgment(2, 1),
-//                )
-//            ),
         ),
     )
     val pollResultViewModel = PollResultViewModel(Navigator())
