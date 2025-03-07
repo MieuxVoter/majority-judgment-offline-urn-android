@@ -63,4 +63,8 @@
     <string name="onboarding_welcome_to_your_offline_poll_app">Bienvenido a tu aplicación de encuestas sin conexión que utiliza Mayoría Sentencia.</string>
     <string name="onboarding_this_is_free_software">Este es software libre, descubre cómo contactarnos o contribuir en la sección Acerca.</string>
     <string name="dialog_operation_cannot_be_undone">Esta operación no se puede deshacer.</string>
+    <string name="button_ask_a_question">Haz una pregunta / Discute</string>
+    <string name="button_suggest_improvement">Sugerir una mejora</string>
+    <string name="button_translate_app">Traducir la Aplicación</string>
+    <string name="button_more_about_majority_judgment">Más sobre Sentencia Mayoritaria</string>
 </resources>
