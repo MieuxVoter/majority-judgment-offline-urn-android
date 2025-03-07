@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,12 +29,11 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
+import com.illiouchine.jm.ui.composable.ScreenTitle
 import com.illiouchine.jm.ui.composable.ViewPager
 import com.illiouchine.jm.ui.theme.JmTheme
 
@@ -69,14 +67,7 @@ fun OnBoardingScreen(
                 .padding(innerPadding)
                 .padding(16.dp),
         ) {
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                fontSize = 32.sp,
-                textAlign = TextAlign.Center,
-                text = stringResource(R.string.majority_judgment),
-            )
+            ScreenTitle(text = stringResource(R.string.majority_judgment))
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
