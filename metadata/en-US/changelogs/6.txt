@@ -7,6 +7,7 @@
 * Add many more buttons to the About screen
 * Use a kinder sound effect for ballot confirmation
 * Ask for confirmation before deleting a poll
+* Automatically pin screen (opt-in)
 * Add more information on the results screen
 * Animate the merit profiles
 * Fix the locked keyboard focus on proposals
