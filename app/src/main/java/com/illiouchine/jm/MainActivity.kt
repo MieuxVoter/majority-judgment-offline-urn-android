@@ -75,6 +75,7 @@ class MainActivity : ComponentActivity() {
                 // Handle navigation.
                 LaunchedEffect("navigator") {
                     navigator.sharedFlow.onEach {
+                        Log.d("WGU", "Navigator triggered with destination : $it")
                         navController.navigate(it)
                     }.launchIn(this)
                 }
@@ -84,6 +85,9 @@ class MainActivity : ComponentActivity() {
                     startDestination = Screens.Home,
                 ) {
                     composable<Screens.Home> {
+
+                        homeViewModel.loadPolls()
+
                         if (settingsState.showOnboarding) {
                             OnBoardingScreen(
                                 modifier = Modifier,
@@ -118,9 +122,8 @@ class MainActivity : ComponentActivity() {
                         )
                     ) { backStackEntry ->
                         val pollSetup = backStackEntry.toRoute<Screens.PollSetup>()
-                        Log.d("WGU", "${pollSetup.config}")
-                        LaunchedEffect(pollSetup.config) {
-                            pollSetupViewModel.startPollSetup(pollConfig = pollSetup.config)
+                        LaunchedEffect(pollSetup) {
+                            pollSetupViewModel.initWithConfig(config = pollSetup.config)
                         }
 
                         PollSetupScreen(
@@ -128,20 +131,17 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             pollSetupState = pollSetupState,
                             onAddSubject = { context, subject ->
-                                pollSetupViewModel.onAddSubject(context, subject)
+                                pollSetupViewModel.addSubject(context, subject)
                             },
                             onAddProposal = { context, proposal ->
-                                Log.d("WGU", "MA AddProposal")
-                                pollSetupViewModel.onAddProposal(context, proposal)
+                                pollSetupViewModel.addProposal(context, proposal)
                             },
-                            onRemoveProposal = { pollSetupViewModel.onRemoveProposal(it) },
-                            onGradingSelected = { pollSetupViewModel.onGradingSelected(it) },
-                            onSetupFinished = { pollConfig ->
-                                pollSetupViewModel.onSetupFinished(pollConfig)
-                            },
-                            onDismissFeedback = { pollSetupViewModel.onDismissFeedback() },
-                            onGetSubjectSuggestion = { pollSetupViewModel.getSubjectSuggestion(it) },
-                            onGetProposalSuggestion = { pollSetupViewModel.getProposalSuggestion(it) },
+                            onRemoveProposal = { pollSetupViewModel.removeProposal(it) },
+                            onGradingSelected = { pollSetupViewModel.selectGrading(it) },
+                            onSetupFinished = { pollSetupViewModel.finishSetup(it) },
+                            onDismissFeedback = { pollSetupViewModel.clearFeedback() },
+                            onGetSubjectSuggestion = { pollSetupViewModel.refreshSubjectSuggestion(it) },
+                            onGetProposalSuggestion = { pollSetupViewModel.refreshProposalSuggestion(it) },
                             onClearSubjectSuggestion = { pollSetupViewModel.clearSubjectSuggestion() },
                             onClearProposalSuggestion = { pollSetupViewModel.clearProposalSuggestion() }
                         )
@@ -154,10 +154,12 @@ class MainActivity : ComponentActivity() {
                     ) { backStackEntry ->
 
                         val pollVote : Screens.PollVote = backStackEntry.toRoute()
-                        pollVotingViewModel.initVotingSession(
-                            config = pollVote.config,
-                            ballots = pollVote.ballots
-                        )
+                        LaunchedEffect(pollVote) {
+                            pollVotingViewModel.initVotingSession(
+                                config = pollVote.config,
+                                ballots = pollVote.ballots
+                            )
+                        }
 
                         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                         val mediaPlayer = MediaPlayer.create(LocalContext.current, R.raw.success)
@@ -186,9 +188,9 @@ class MainActivity : ComponentActivity() {
                     ) { backStackEntry ->
 
                         val pollResult : Screens.PollResult = backStackEntry.toRoute()
-                        pollResultViewModel.initializePollResult(
-                            poll = pollResult.poll
-                        )
+                        LaunchedEffect(pollResult) {
+                            pollResultViewModel.initializePollResult(poll = pollResult.poll)
+                        }
 
                         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                         if (pollResultViewState.poll != null) {

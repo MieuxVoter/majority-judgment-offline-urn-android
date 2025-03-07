@@ -32,7 +32,6 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.Screens
 import com.illiouchine.jm.ui.composable.GradingSelectionRow
 import com.illiouchine.jm.ui.composable.MjuBottomBar
@@ -44,8 +43,6 @@ import com.illiouchine.jm.ui.composable.SubjectSelectionRow
 import com.illiouchine.jm.ui.composable.ThemedHorizontalDivider
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.utils.displayed
-import java.text.DateFormat
-import java.util.Calendar
 
 
 @Composable
@@ -57,7 +54,7 @@ fun PollSetupScreen(
     onAddProposal: (Context, String) -> Unit = { _, _ -> },
     onRemoveProposal: (String) -> Unit = {},
     onGradingSelected: (Grading) -> Unit = {},
-    onSetupFinished: (PollConfig) -> Unit = {},
+    onSetupFinished: (Context) -> Unit = {},
     onDismissFeedback: () -> Unit = {},
     onGetSubjectSuggestion: (String) -> Unit = {},
     onGetProposalSuggestion: (String) -> Unit = {},
@@ -66,7 +63,6 @@ fun PollSetupScreen(
 ) {
 
     var finishButtonVisibility by remember { mutableStateOf(true) }
-    var subject: String by remember { mutableStateOf(pollSetupState.pollSetup.subject) }
     val context = LocalContext.current
 
     Scaffold(
@@ -77,9 +73,7 @@ fun PollSetupScreen(
             MjuSnackbarWithStringResId(
                 modifier = Modifier,
                 textId = pollSetupState.feedback,
-                onDismiss = {
-                    onDismissFeedback()
-                },
+                onDismiss = { onDismissFeedback() },
             )
         },
         bottomBar = {
@@ -91,17 +85,11 @@ fun PollSetupScreen(
         },
         floatingActionButton = {
             AnimatedVisibility(
-                visible = pollSetupState.pollSetup.proposals.size > 1 && !finishButtonVisibility,
+                visible = pollSetupState.config.proposals.size > 1 && !finishButtonVisibility,
             ) {
                 ExtendedFloatingActionButton(
                     modifier = Modifier.padding(16.dp),
-                    onClick = {
-                        // Rule: if the poll's subject was not provided, use a default.
-                        if (subject.isBlank()) {
-                            onAddSubject(context, subject)
-                        }
-                        onSetupFinished(pollSetupState.pollSetup)
-                    },
+                    onClick = { onSetupFinished(context) },
                     icon = { },
                     text = { Text(stringResource(R.string.button_let_s_go)) },
                 )
@@ -122,16 +110,14 @@ fun PollSetupScreen(
 
             SubjectSelectionRow(
                 modifier = Modifier,
-                subject = subject,
+                subject = pollSetupState.config.subject,
                 subjectSuggestion = pollSetupState.subjectSuggestion,
                 onSuggestionSelected = {
-                    subject = it
-                    onAddSubject(context, subject)
+                    onAddSubject(context, it)
                     onGetSubjectSuggestion("")
                 },
                 onSubjectChange = {
-                    subject = it
-                    onAddSubject(context, subject)
+                    onAddSubject(context, it)
                     if (it.length > 2) {
                         onGetSubjectSuggestion(it)
                     } else {
@@ -171,7 +157,7 @@ fun PollSetupScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            pollSetupState.pollSetup.proposals.reversed().forEachIndexed { propIndex, propName ->
+            pollSetupState.config.proposals.reversed().forEachIndexed { propIndex, propName ->
 
                 if (propIndex > 0) {
                     ThemedHorizontalDivider()
@@ -186,7 +172,7 @@ fun PollSetupScreen(
 
             GradingSelectionRow(
                 modifier = Modifier,
-                grading = pollSetupState.pollSetup.grading,
+                grading = pollSetupState.config.grading,
                 onGradingSelected = {
                     onGradingSelected(it)
                 },
@@ -200,37 +186,14 @@ fun PollSetupScreen(
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(0.62f)
                     .padding(16.dp),
-                enabled = pollSetupState.pollSetup.proposals.size > 1,
-                onClick = {
-                    val newPoll = pollSetupState.pollSetup.addSubjectIfEmpty(context)
-                    onSetupFinished(newPoll)
-                },
+                enabled = pollSetupState.config.proposals.size > 1,
+                onClick = { onSetupFinished(context) },
             ) {
                 Text(stringResource(R.string.button_let_s_go))
             }
         }
     }
 }
-
-//FIXME : This rule should be moved in VM.
-// need typeSafe navigation to work correctly
-fun generateSubject(context: Context): String {
-    return buildString {
-        append(context.getString(R.string.poll_of))
-        append(" ")
-        append(DateFormat.getDateInstance().format(Calendar.getInstance().time))
-    }
-}
-
-//FIXME : This rule should be moved in VM.
-// need typeSafe navigation to work correctly
-private fun PollConfig.addSubjectIfEmpty(context: Context): PollConfig {
-    val newPoll = copy(
-        subject = subject.ifEmpty { generateSubject(context) }
-    )
-    return newPoll
-}
-
 
 @Preview(showSystemUi = true)
 @Composable
@@ -249,7 +212,7 @@ fun PreviewSetupSurveyScreenWithHugeNames(modifier: Modifier = Modifier) {
         PollSetupScreen(
             modifier = Modifier,
             pollSetupState = PollSetupViewModel.PollSetupViewState(
-                pollSetup = PollConfig(
+                config = PollConfig(
                     subject = "Repas de ce soir, le Banquet Républicain de l'avènement du Jugement Majoritaire",
                     proposals = listOf(
                         "Des nouilles aux champignons forestiers sur leur lit de purée de carottes urticantes",
@@ -270,7 +233,7 @@ fun PreviewSetupSurveyScreenWithLotsOfPropals(modifier: Modifier = Modifier) {
         PollSetupScreen(
             modifier = Modifier,
             pollSetupState = PollSetupViewModel.PollSetupViewState(
-                pollSetup = PollConfig(
+                config = PollConfig(
                     subject = "Repas de ce soir, le Banquet Républicain de l'avènement du Jugement Majoritaire",
                     proposals = listOf(
                         "Des nouilles aux champignons forestiers sur leur lit de purée de carottes urticantes",

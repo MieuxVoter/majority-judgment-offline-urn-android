@@ -26,7 +26,7 @@ class HomeViewModel(
         loadPolls()
     }
 
-    private fun loadPolls() {
+    fun loadPolls() {
         viewModelScope.launch {
             val polls = pollDataSource.getAllPoll()
             _homeViewState.update {
