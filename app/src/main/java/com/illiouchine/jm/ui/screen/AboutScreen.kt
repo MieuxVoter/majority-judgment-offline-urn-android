@@ -3,7 +3,9 @@ package com.illiouchine.jm.ui.screen
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -71,7 +73,17 @@ fun AboutScreen(
 
             ScreenTitle(text = stringResource(R.string.title_about))
 
-            Image(painterResource(R.drawable.onboarding_3), null)
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.onboarding_3),
+                    contentDescription = null,
+                )
+            }
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
