@@ -1,5 +1,8 @@
 package com.illiouchine.jm.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Ballot(
     val judgments: List<Judgment> = emptyList(),
 ) {

@@ -12,6 +12,7 @@ import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.logic.PollVotingViewModel
 import com.illiouchine.jm.logic.SettingsViewModel
+import com.illiouchine.jm.ui.Navigator
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -48,11 +49,30 @@ val module = module {
     //single<PollDataSource>(named("inMemory") { InMemoryPollDataSource() }
     single<PollDataSource> { BDDPollDataSource(get()) }
 
-    // ViewModel
-    viewModel { HomeViewModel(pollDataSource = get()) }
-    viewModel { SettingsViewModel(sharedPreferences = get()) }
-    viewModel { PollSetupViewModel(sharedPrefsHelper = get()) }
-    viewModel { PollVotingViewModel() }
-    viewModel { PollResultViewModel() }
 
+    // compose
+    single { Navigator() }
+
+    // ViewModel
+    viewModel { HomeViewModel(pollDataSource = get(), navigator = get()) }
+    viewModel { SettingsViewModel(sharedPreferences = get()) }
+    viewModel {
+        PollSetupViewModel(
+            sharedPrefsHelper = get(),
+            pollDataSource = get(),
+            navigator = get()
+        )
+    }
+    viewModel {
+        PollVotingViewModel(
+            pollDataSource = get(),
+            sharedPrefsHelper = get(),
+            navigator = get(),
+        )
+    }
+    viewModel {
+        PollResultViewModel(
+            navigator = get(),
+        )
+    }
 }

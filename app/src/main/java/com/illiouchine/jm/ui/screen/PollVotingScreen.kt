@@ -1,5 +1,6 @@
 package com.illiouchine.jm.ui.screen
 
+import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,13 +41,14 @@ fun PollVotingScreen(
     pollVotingState: PollVotingViewModel.PollVotingViewState = PollVotingViewModel.PollVotingViewState(),
     onStartVoting: () -> Unit = {},
     onJudgmentCast: (Judgment) -> Unit = {},
-    onBallotConfirmed: (Ballot) -> Unit = {},
+    onBallotConfirmed: (Context, Ballot) -> Unit = { _, _ -> },
     onBallotCanceled: () -> Unit = {},
     onCancelLastJudgment: () -> Unit = {},
     onFinish: (Poll) -> Unit = {},
     feedback: String? = "",
     onDismissFeedback: () -> Unit = {},
 ) {
+    val context = LocalContext.current
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = {
@@ -114,7 +117,8 @@ fun PollVotingScreen(
                 if (pollVotingState.isInStateVoting()) {
 
                     // State: VOTING, filling the ballot with judgments.
-                    val currentProposalIndex = pollVotingState.currentProposalsOrder[pollVotingState.currentBallot!!.judgments.size]
+                    val currentProposalIndex =
+                        pollVotingState.currentProposalsOrder[pollVotingState.currentBallot!!.judgments.size]
                     GradeSelectionList(
                         pollConfig = pollVotingState.pollConfig,
                         forProposalIndex = currentProposalIndex,
@@ -138,7 +142,7 @@ fun PollVotingScreen(
                         pollConfig = pollVotingState.pollConfig,
                         ballot = pollVotingState.currentBallot!!,
                         onConfirm = {
-                            onBallotConfirmed(pollVotingState.currentBallot)
+                            onBallotConfirmed(context, pollVotingState.currentBallot)
                         },
                         onCancel = {
                             onBallotCanceled()

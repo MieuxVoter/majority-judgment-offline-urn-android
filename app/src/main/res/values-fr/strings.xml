@@ -4,10 +4,10 @@
     <string name="button_finish">terminer</string>
     <string name="button_next">suivant</string>
     <string name="label_poll_subject">Sujet du Scrutin</string>
-    <string name="label_poll_proposals">Candidats</string>
+    <string name="label_poll_proposals">Propositions</string>
     <string name="majority_judgment">Jugement Majoritaire</string>
     <string name="button_let_s_go">C\'est parti !</string>
-    <string name="proposal">Candidat</string>
+    <string name="proposal">Proposition</string>
     <string name="button_add">Ajouter</string>
     <string name="poll_of">Scrutin du</string>
     <string name="grade_to_reject">à rejeter</string>
@@ -48,6 +48,7 @@
     <string name="action_inspect">Voir</string>
     <string name="action_cancel">Annuler</string>
     <string name="title_about">À Propos</string>
+    <string name="title_poll_setup">Sondage</string>
     <string name="button_browse_the_source">Voir la Source</string>
     <string name="about_help_us_make_it_better">Aidez-nous à le rendre meilleur !</string>
     <string name="about_this_app_is_libre_software">Ce logiciel est libre et gratuit.</string>

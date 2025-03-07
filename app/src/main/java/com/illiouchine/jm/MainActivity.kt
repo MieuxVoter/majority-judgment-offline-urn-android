@@ -2,24 +2,31 @@ package com.illiouchine.jm
 
 import android.content.Context
 import android.content.Intent
-import android.media.MediaPlayer
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.logic.PollVotingViewModel
 import com.illiouchine.jm.logic.SettingsViewModel
+import com.illiouchine.jm.model.Ballot
+import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.ui.CustomNavType
+import com.illiouchine.jm.ui.Navigator
+import com.illiouchine.jm.ui.Screens
 import com.illiouchine.jm.ui.screen.AboutScreen
 import com.illiouchine.jm.ui.screen.HomeScreen
 import com.illiouchine.jm.ui.screen.OnBoardingScreen
@@ -28,7 +35,11 @@ import com.illiouchine.jm.ui.screen.PollVotingScreen
 import com.illiouchine.jm.ui.screen.ResultScreen
 import com.illiouchine.jm.ui.screen.SettingsScreen
 import com.illiouchine.jm.ui.theme.JmTheme
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.reflect.typeOf
 
 class MainActivity : ComponentActivity() {
 
@@ -37,6 +48,7 @@ class MainActivity : ComponentActivity() {
     private val pollSetupViewModel: PollSetupViewModel by viewModel()
     private val pollVotingViewModel: PollVotingViewModel by viewModel()
     private val pollResultViewModel: PollResultViewModel by viewModel()
+    private val navigator: Navigator by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,16 +63,29 @@ class MainActivity : ComponentActivity() {
 
             val navController = rememberNavController()
 
+
             // Rule: the screen should never lock during the voting/result phase of the poll
             // Therefore, we clear the flag here and set it on in the appropriate screens.
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
             JmTheme {
+
+                // Handle navigation.
+                LaunchedEffect("navigator") {
+                    navigator.sharedFlow.onEach {
+                        Log.d("WGU", "Navigator triggered with destination : $it")
+                        navController.navigate(it)
+                    }.launchIn(this)
+                }
+
                 NavHost(
                     navController = navController,
-                    startDestination = Screens.Home.name,
+                    startDestination = Screens.Home,
                 ) {
-                    composable(Screens.Home.name) {
+                    composable<Screens.Home> {
+
+                        homeViewModel.loadPolls()
+
                         if (settingsState.showOnboarding) {
                             OnBoardingScreen(
                                 modifier = Modifier,
@@ -75,74 +100,112 @@ class MainActivity : ComponentActivity() {
                                     homeViewModel.deletePoll(it)
                                 },
                                 onSetupBlankPoll = {
-                                    pollSetupViewModel.startPollSetup()
-                                    navController.navigate(Screens.PollSetup.name)
+                                    navigator.navigateTo(Screens.PollSetup())
                                 },
-                                onSetupClonePoll = {
-                                    pollSetupViewModel.startPollSetup(it.pollConfig)
-                                    navController.navigate(Screens.PollSetup.name)
+                                onSetupClonePoll = { poll: Poll ->
+                                    navigator.navigateTo(Screens.PollSetup(config = poll.pollConfig))
                                 },
-                                onResumePoll = {
-                                    pollVotingViewModel.resumeVotingSession(it)
-                                    navController.navigate(Screens.PollVote.name)
+                                onResumePoll = { poll: Poll ->
+                                    navigator.navigateTo(
+                                        Screens.PollVote(
+                                            config = poll.pollConfig,
+                                            ballots = poll.ballots
+                                        )
+                                    )
                                 },
-                                onShowResult = {
-                                    pollResultViewModel.finalizePoll(poll = it)
-                                    navController.navigate(Screens.PollResult.name)
+                                onShowResult = { poll: Poll ->
+                                    navigator.navigateTo(Screens.PollResult(poll = poll))
                                 },
                             )
                         }
                     }
-                    composable(Screens.PollSetup.name) {
+                    composable<Screens.PollSetup>(
+                        typeMap = mapOf(
+                            typeOf<PollConfig?>() to CustomNavType.NullablePollConfigType,
+                        )
+                    ) { backStackEntry ->
+                        val pollSetup = backStackEntry.toRoute<Screens.PollSetup>()
+                        LaunchedEffect(pollSetup) {
+                            pollSetupViewModel.initWithConfig(config = pollSetup.config)
+                        }
+
                         PollSetupScreen(
                             modifier = Modifier,
                             navController = navController,
                             pollSetupState = pollSetupState,
-                            onAddSubject = { pollSetupViewModel.onAddSubject(it) },
-                            onAddProposal = { pollSetupViewModel.onAddProposal(it) },
-                            onRemoveProposal = { pollSetupViewModel.onRemoveProposal(it) },
-                            onGradingSelected = { pollSetupViewModel.onGradingSelected(it) },
-                            onSetupFinished = {
-                                pollVotingViewModel.initNewVotingSession(
-                                    pollSetupViewModel.pollSetupViewState.value.pollSetup,
-                                )
-                                navController.navigate(Screens.PollVote.name)
+                            onAddSubject = { context, subject ->
+                                pollSetupViewModel.addSubject(context, subject)
                             },
-                            onDismissFeedback = { pollSetupViewModel.onDismissFeedback() },
+                            onAddProposal = { context, proposal ->
+                                pollSetupViewModel.addProposal(context, proposal)
+                            },
+                            onRemoveProposal = { pollSetupViewModel.removeProposal(it) },
+                            onGradingSelected = { pollSetupViewModel.selectGrading(it) },
+                            onSetupFinished = { pollSetupViewModel.finishSetup(it) },
+                            onDismissFeedback = { pollSetupViewModel.clearFeedback() },
+                            onGetSubjectSuggestion = {
+                                pollSetupViewModel.refreshSubjectSuggestion(
+                                    it
+                                )
+                            },
+                            onGetProposalSuggestion = {
+                                pollSetupViewModel.refreshProposalSuggestion(
+                                    it
+                                )
+                            },
+                            onClearSubjectSuggestion = { pollSetupViewModel.clearSubjectSuggestion() },
+                            onClearProposalSuggestion = { pollSetupViewModel.clearProposalSuggestion() }
                         )
                     }
-                    composable(Screens.PollVote.name) {
+                    composable<Screens.PollVote>(
+                        typeMap = mapOf(
+                            typeOf<PollConfig>() to CustomNavType.PollConfigType,
+                            typeOf<List<Ballot>>() to CustomNavType.Ballots
+                        )
+                    ) { backStackEntry ->
+
+                        val pollVote: Screens.PollVote = backStackEntry.toRoute()
+                        LaunchedEffect(pollVote) {
+                            pollVotingViewModel.initVotingSession(
+                                config = pollVote.config,
+                                ballots = pollVote.ballots
+                            )
+                        }
+
                         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-                        val mediaPlayer = MediaPlayer.create(LocalContext.current, R.raw.success)
                         PollVotingScreen(
                             modifier = Modifier,
                             pollVotingState = pollVotingViewState,
                             onStartVoting = { pollVotingViewModel.initParticipantVotingSession() },
-                            onJudgmentCast = { pollVotingViewModel.onJudgmentCast(it) },
-                            onBallotConfirmed = {
-                                pollVotingViewModel.onBallotConfirmed(it)
-                                if (settingsState.playSound) {
-                                    mediaPlayer.start()
-                                }
+                            onJudgmentCast = { pollVotingViewModel.castJudgment(it) },
+                            onBallotConfirmed = { context, ballot ->
+                                pollVotingViewModel.confirmBallot(
+                                    context = context,
+                                    ballot = ballot
+                                )
                             },
-                            onBallotCanceled = { pollVotingViewModel.onBallotCanceled() },
-                            onCancelLastJudgment = { pollVotingViewModel.onCancelLastJudgment() },
-                            onFinish = {
-                                pollResultViewModel.finalizePoll(it)
-                                homeViewModel.savePolls(it)
-                                navController.navigate(Screens.PollResult.name)
-                            },
+                            onBallotCanceled = { pollVotingViewModel.cancelBallot() },
+                            onCancelLastJudgment = { pollVotingViewModel.cancelLastJudgment() },
+                            onFinish = { pollVotingViewModel.finalizePoll() },
                         )
                     }
-                    composable(Screens.PollResult.name) {
+                    composable<Screens.PollResult>(
+                        typeMap = mapOf(
+                            typeOf<Poll>() to CustomNavType.Poll,
+                        )
+                    ) { backStackEntry ->
+
+                        val pollResult: Screens.PollResult = backStackEntry.toRoute()
+                        LaunchedEffect(pollResult) {
+                            pollResultViewModel.initializePollResult(poll = pollResult.poll)
+                        }
+
                         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                         if (pollResultViewState.poll != null) {
                             ResultScreen(
                                 modifier = Modifier,
                                 state = pollResultViewState,
-                                onFinish = {
-                                    navController.navigate(Screens.Home.name)
-                                },
+                                onFinish = { navigator.navigateTo(Screens.Home) },
                             )
                         } else {
                             // During the screen navigation transition to home (in onFinish above),
@@ -150,7 +213,7 @@ class MainActivity : ComponentActivity() {
                             // For now, nothing is cool I guess ?
                         }
                     }
-                    composable(Screens.Settings.name) {
+                    composable<Screens.Settings> {
                         SettingsScreen(
                             modifier = Modifier,
                             navController = navController,
@@ -169,7 +232,7 @@ class MainActivity : ComponentActivity() {
                             },
                         )
                     }
-                    composable(Screens.About.name) {
+                    composable<Screens.About> {
                         AboutScreen(
                             modifier = Modifier,
                             navController = navController,

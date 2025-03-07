@@ -1,5 +1,8 @@
 package com.illiouchine.jm.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Poll(
     val id: Int = 0,
     val pollConfig: PollConfig,
