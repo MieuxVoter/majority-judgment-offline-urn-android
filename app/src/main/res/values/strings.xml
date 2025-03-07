@@ -69,4 +69,5 @@
     <string name="button_suggest_improvement">Suggest an Improvement</string>
     <string name="button_translate_app">Translate the App</string>
     <string name="button_more_about_majority_judgment">More about Majority Judgment</string>
+    <string name="button_try_online_webapp">Try the Online WebApp</string>
 </resources>

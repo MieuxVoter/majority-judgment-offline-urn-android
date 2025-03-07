@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -66,6 +67,8 @@ fun AboutScreen(
                 .padding(16.dp)
                 .verticalScroll(state = ScrollState(initial = 0))
         ) {
+            val uriHandler = LocalUriHandler.current
+
             ScreenTitle(text = stringResource(R.string.title_about))
 
             Image(painterResource(R.drawable.onboarding_3), null)
@@ -82,8 +85,6 @@ fun AboutScreen(
             )
 
             Spacer(Modifier.padding(8.dp))
-
-            val uriHandler = LocalUriHandler.current
 
             IconTextButton(
                 modifier = Modifier
@@ -154,6 +155,17 @@ fun AboutScreen(
                 onClick = {
                     onOpenWebsite()
                     uriHandler.openUri("https://mieuxvoter.fr")
+                },
+            )
+
+            IconTextButton(
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .align(Alignment.CenterHorizontally),
+                icon = Icons.Filled.ThumbUp,
+                text = stringResource(R.string.button_try_online_webapp),
+                onClick = {
+                    uriHandler.openUri("https://app.mieuxvoter.fr/")
                 },
             )
         }
