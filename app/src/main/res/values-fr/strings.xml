@@ -67,4 +67,6 @@
     <string name="button_translate_app">Traduire l\'App</string>
     <string name="button_more_about_majority_judgment">Plus d\'infos sur le Jugement Majoritaire</string>
     <string name="button_ask_a_question">Poser une question / Discuter</string>
+    <string name="setting_pin_screen">Épingler l\'écran</string>
+    <string name="button_try_online_webapp">Essayer la WebApp</string>
 </resources>
