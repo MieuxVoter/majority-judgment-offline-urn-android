@@ -36,7 +36,7 @@ interface PollDao {
         poll: PollEntity,
         proposals: List<ProposalEntity>,
         ballots: List<List<JudgmentEntity>>,
-    ) {
+    ): Int {
 
         val pollId = insertPollDatumOnly(poll).toInt()
         insertProposals(
@@ -54,6 +54,8 @@ interface PollDao {
                 }
             )
         }
+
+        return pollId
     }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

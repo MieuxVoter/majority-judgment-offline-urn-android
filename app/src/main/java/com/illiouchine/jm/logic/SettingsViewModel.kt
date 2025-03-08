@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.update
 class SettingsViewModel(
     private val sharedPreferences: SharedPrefsHelper,
 ) : ViewModel() {
+
     data class SettingsViewState(
         val showOnboarding: Boolean = true,
         val playSound: Boolean = true,
@@ -17,7 +18,7 @@ class SettingsViewModel(
         val defaultGrading: Grading = Grading.Quality7Grading,
     )
 
-    private val _settingsViewState = MutableStateFlow<SettingsViewState>(SettingsViewState())
+    private val _settingsViewState = MutableStateFlow(SettingsViewState())
     val settingsViewState: StateFlow<SettingsViewState> = _settingsViewState
 
     init {
@@ -55,7 +56,7 @@ class SettingsViewModel(
         }
     }
 
-    fun updateShowOnBoarding(visibility: Boolean) {
+    fun updateShowOnboarding(visibility: Boolean) {
         sharedPreferences.editShowOnboarding(visibility)
         _settingsViewState.update {
             it.copy(showOnboarding = visibility)

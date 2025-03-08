@@ -1,1 +1,1 @@
-Decide offline, with votes on majority judgement polls
+Offline polls to decide and vote using Majority Judgement

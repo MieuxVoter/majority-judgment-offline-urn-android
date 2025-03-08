@@ -50,15 +50,12 @@ class MainActivity : ComponentActivity() {
     private val pollResultViewModel: PollResultViewModel by viewModel()
     private val navigator: Navigator by inject()
 
-    fun perhapsLockScreen(
-        pollVotingViewState: PollVotingViewModel.PollVotingViewState,
+    private fun perhapsLockScreen(
         settingsViewState: SettingsViewModel.SettingsViewState,
     ) {
         val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         if (
             settingsViewState.pinScreen
-            &&
-            pollVotingViewState.isInStateReady() // can probably be removed safely now
             &&
             activityManager.lockTaskModeState == ActivityManager.LOCK_TASK_MODE_NONE
         ) {
@@ -105,7 +102,7 @@ class MainActivity : ComponentActivity() {
                         if (settingsViewState.showOnboarding) {
                             OnBoardingScreen(
                                 modifier = Modifier,
-                                onFinish = { settingsViewModel.updateShowOnBoarding(false) },
+                                onFinish = { settingsViewModel.updateShowOnboarding(false) },
                             )
                         } else {
                             HomeScreen(
@@ -124,8 +121,7 @@ class MainActivity : ComponentActivity() {
                                 onResumePoll = { poll: Poll ->
                                     navigator.navigateTo(
                                         Screens.PollVote(
-                                            config = poll.pollConfig,
-                                            ballots = poll.ballots,
+                                            pollId = poll.id,
                                         )
                                     )
                                 },
@@ -140,6 +136,7 @@ class MainActivity : ComponentActivity() {
                             typeOf<PollConfig?>() to CustomNavType.NullablePollConfigType,
                         )
                     ) { backStackEntry ->
+
                         val pollSetup = backStackEntry.toRoute<Screens.PollSetup>()
                         LaunchedEffect(pollSetup) {
                             pollSetupViewModel.initWithConfig(config = pollSetup.config)
@@ -169,27 +166,21 @@ class MainActivity : ComponentActivity() {
                             onClearProposalSuggestion = { pollSetupViewModel.clearProposalSuggestion() },
                         )
                     }
-                    composable<Screens.PollVote>(
-                        typeMap = mapOf(
-                            typeOf<PollConfig>() to CustomNavType.PollConfigType,
-                            typeOf<List<Ballot>>() to CustomNavType.Ballots,
-                        )
-                    ) { backStackEntry ->
+                    composable<Screens.PollVote>() { backStackEntry ->
 
                         val pollVote: Screens.PollVote = backStackEntry.toRoute()
                         LaunchedEffect(pollVote) {
-                            pollVotingViewModel.initVotingSession(
-                                config = pollVote.config,
-                                ballots = pollVote.ballots,
-                            )
-                            perhapsLockScreen(
-                                pollVotingViewState,
-                                settingsViewState,
+                            pollVotingViewModel.initVotingSessionForPoll(
+                                pollVote.pollId,
                             )
                         }
 
+                        LaunchedEffect("screen_pinning") {
+                            perhapsLockScreen(settingsViewState)
+                        }
 
                         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
                         PollVotingScreen(
                             modifier = Modifier,
                             pollVotingState = pollVotingViewState,
@@ -236,7 +227,7 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             settingsState = settingsViewState,
                             onShowOnboardingChange = {
-                                settingsViewModel.updateShowOnBoarding(it)
+                                settingsViewModel.updateShowOnboarding(it)
                             },
                             onPlaySoundChange = {
                                 settingsViewModel.updatePlaySound(it)

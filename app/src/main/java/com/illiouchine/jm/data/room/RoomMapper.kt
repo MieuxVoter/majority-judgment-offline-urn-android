@@ -24,6 +24,17 @@ fun Poll.toProposalsEntity(): List<ProposalEntity> {
     }
 }
 
+fun Ballot.toListOfJudgments(ballotId: Int): List<JudgmentEntity> {
+    return this.judgments.map { j ->
+        JudgmentEntity(
+            ballotId = ballotId,
+            proposalIndex = j.proposal,
+            gradeIndex = j.grade,
+        )
+    }
+}
+
+
 fun List<Ballot>.toListOfJudgments(): List<List<JudgmentEntity>> {
     return this.map { ballot: Ballot ->
         ballot.judgments.map {

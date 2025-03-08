@@ -1,5 +1,6 @@
 package com.illiouchine.jm.data
 
+import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Poll
 
 
@@ -9,11 +10,20 @@ import com.illiouchine.jm.model.Poll
 class InMemoryPollDataSource : PollDataSource {
     private val polls: MutableList<Poll> = mutableListOf()
 
-    override suspend fun savePolls(poll: Poll) {
-        polls.add(poll)
+    override suspend fun saveBallot(ballot: Ballot, pollId: Int): Int {
+        TODO("Not yet implemented")
     }
 
-    override suspend fun getAllPoll(): List<Poll> {
+    override suspend fun savePoll(poll: Poll): Int {
+        polls.add(poll)
+        return polls.size - 1
+    }
+
+    override suspend fun getPollById(pollId: Int): Poll? {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getAllPolls(): List<Poll> {
         return polls.toList()
     }
 

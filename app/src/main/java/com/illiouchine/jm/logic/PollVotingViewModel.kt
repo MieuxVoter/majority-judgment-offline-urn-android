@@ -21,10 +21,11 @@ import kotlinx.coroutines.launch
 class PollVotingViewModel(
     private val pollDataSource: PollDataSource,
     private val sharedPrefsHelper: SharedPrefsHelper,
-    private val navigator: Navigator
+    private val navigator: Navigator,
 ) : ViewModel() {
 
     data class PollVotingViewState(
+        val pollId: Int = 0,
         val pollConfig: PollConfig = PollConfig(),
         val ballots: List<Ballot> = emptyList(),
         val currentBallot: Ballot? = null,
@@ -43,6 +44,23 @@ class PollVotingViewModel(
     val pollVotingViewState: StateFlow<PollVotingViewState> = _pollVotingViewState
 
     private fun generateRandomOrder(size: Int): List<Int> = (0..<size).shuffled()
+
+    fun initVotingSessionForPoll(
+        pollId: Int,
+    ) {
+        viewModelScope.launch {
+            val poll = pollDataSource.getPollById(pollId)
+
+            _pollVotingViewState.update {
+                it.copy(
+                    pollId = pollId,
+                    pollConfig = poll?.pollConfig ?: PollConfig(),
+                    ballots = poll?.ballots ?: emptyList(),
+                    currentBallot = null,
+                )
+            }
+        }
+    }
 
     fun initVotingSession(
         config: PollConfig,
@@ -92,6 +110,10 @@ class PollVotingViewModel(
                 ballots = it.ballots + ballot,
             )
         }
+
+        viewModelScope.launch {
+            pollDataSource.saveBallot(ballot, _pollVotingViewState.value.pollId)
+        }
     }
 
     fun cancelBallot() {
@@ -116,7 +138,7 @@ class PollVotingViewModel(
                 pollConfig = _pollVotingViewState.value.pollConfig,
                 ballots = _pollVotingViewState.value.ballots,
             )
-            pollDataSource.savePolls(poll)
+//            pollDataSource.savePoll(poll)
             navigator.navigateTo(Screens.PollResult(poll = poll))
         }
     }
