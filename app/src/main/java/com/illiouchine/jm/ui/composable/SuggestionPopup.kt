@@ -30,7 +30,7 @@ fun SuggestionPopup(
         LazyColumn(
             modifier = modifier
                 .padding(horizontal = 16.dp)
-                .background(MaterialTheme.colorScheme.onPrimaryContainer),
+                .background(MaterialTheme.colorScheme.primary),
             horizontalAlignment = Alignment.CenterHorizontally,
             userScrollEnabled = false,
         ) {
@@ -43,9 +43,12 @@ fun SuggestionPopup(
                 Text(
                     modifier = Modifier
                         .fillParentMaxWidth()
-                        .clickable { onSuggestionSelected(suggestion) }
-                        .padding(16.dp),
-                    text = suggestion
+                        .padding(16.dp)
+                        .clickable {
+                            onSuggestionSelected(suggestion)
+                        },
+                    text = suggestion,
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
         }

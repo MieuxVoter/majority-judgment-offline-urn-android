@@ -17,6 +17,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -24,6 +25,8 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -38,33 +41,50 @@ fun ColumnScope.ProposalSelectionRow(
     onAddProposal: (String) -> Unit = {},
     proposalSuggestion: List<String> = emptyList(),
     onProposalSelected: (String) -> Unit = {},
-    onClearSuggestion: () -> Unit = {}
+    onClearSuggestion: () -> Unit = {},
 ) {
     var textFieldHeight by remember { mutableIntStateOf(0) }
+    // Helps us put the cursor at the end after selecting a suggestion.
+    var textFieldSelection by remember {
+        mutableStateOf(
+            TextRange(proposal.length)
+        )
+    }
+
     Row {
         TextField(
-            value = proposal,
+            value = TextFieldValue(
+                text = proposal,
+                selection = textFieldSelection,
+            ),
             label = { Text(stringResource(R.string.label_poll_proposals)) },
-            onValueChange = { onProposalChange(it) },
-            modifier = modifier.fillMaxWidth().onGloballyPositioned { coordinates ->
-                textFieldHeight = coordinates.size.height
-            }.onFocusChanged {
-                if (!it.isFocused){
-                    onClearSuggestion()
-                }
+            onValueChange = {
+                textFieldSelection = it.selection
+                onProposalChange(it.text)
             },
-            singleLine = true,
-            placeholder = { Text("Entrez vos propositions...") },
-            keyboardActions = KeyboardActions(onDone =
-            if (proposal.isBlank()) {
-                // A null value indicates that the default implementation should be executed
-                // This helps older Android version users to close the keyboard
-                null
-            } else {
-                {
-                    onAddProposal(proposal)
+            modifier = modifier
+                .fillMaxWidth()
+                .onGloballyPositioned { coordinates ->
+                    textFieldHeight = coordinates.size.height
                 }
-            }
+                .onFocusChanged {
+                    if (!it.isFocused) {
+                        onClearSuggestion()
+                    }
+                },
+            singleLine = true,
+            placeholder = { Text("Entrez une proposition…") },
+            keyboardActions = KeyboardActions(
+                onDone =
+                if (proposal.isBlank()) {
+                    // A null value indicates that the default implementation should be executed
+                    // This helps older Android version users to close the keyboard
+                    null
+                } else {
+                    {
+                        onAddProposal(proposal)
+                    }
+                }
             ),
             trailingIcon = {
                 IconButton(
@@ -88,8 +108,11 @@ fun ColumnScope.ProposalSelectionRow(
                 offset = IntOffset(0, textFieldHeight),
                 modifier = Modifier,
                 suggestions = proposalSuggestion.take(3),
-                onSuggestionSelected = { onProposalSelected(it) },
-                onClearSuggestion = { onClearSuggestion() }
+                onSuggestionSelected = {
+                    textFieldSelection = TextRange(it.length)
+                    onProposalSelected(it)
+                },
+                onClearSuggestion = { onClearSuggestion() },
             )
         }
     }
@@ -115,7 +138,7 @@ private fun PreviewProposalSelectionRow() {
                     "Subject suggestion 2",
                     "Subject suggestion 3",
                     "Subject suggestion 4",
-                    )
+                )
             )
         }
     }
