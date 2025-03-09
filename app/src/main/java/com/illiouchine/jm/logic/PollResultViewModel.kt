@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.ui.Destination
-import com.illiouchine.jm.ui.Navigator2
+import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.Screens
 import com.illiouchine.jm.ui.mapType
 import fr.mieuxvoter.mj.CollectedTally
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 
 class PollResultViewModel(
     savedStateHandle: SavedStateHandle,
-    private val navigator: Navigator2,
+    private val navigator: Navigator,
 ) : ViewModel() {
 
     private val pollResult = savedStateHandle.toRoute<Screens.PollResult>(Screens.PollResult.mapType())

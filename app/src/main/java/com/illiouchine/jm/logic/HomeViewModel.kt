@@ -6,7 +6,7 @@ import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.ui.Destination
-import com.illiouchine.jm.ui.Navigator2
+import com.illiouchine.jm.ui.Navigator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val pollDataSource: PollDataSource,
-    private val navigator: Navigator2,
+    private val navigator: Navigator,
     private val prefsHelper: SharedPrefsHelper,
 ) : ViewModel() {
 

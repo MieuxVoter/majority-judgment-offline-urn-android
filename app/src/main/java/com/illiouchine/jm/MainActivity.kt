@@ -24,7 +24,7 @@ import com.illiouchine.jm.logic.SettingsViewModel
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.ui.Destination
 import com.illiouchine.jm.ui.NavigationAction
-import com.illiouchine.jm.ui.Navigator2
+import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.ObserveAsEvents
 import com.illiouchine.jm.ui.Screens
 import com.illiouchine.jm.ui.screen.AboutScreen
@@ -46,9 +46,9 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             val navController = rememberNavController()
-            val navigator2 : Navigator2 by inject<Navigator2>()
+            val navigator : Navigator by inject<Navigator>()
 
-            ObserveAsEvents(navigator2.navigationAction) { action ->
+            ObserveAsEvents(navigator.navigationAction) { action ->
                 when(action) {
                     is NavigationAction.Navigate -> navController.navigate(
                         action.destination
@@ -67,7 +67,7 @@ class MainActivity : ComponentActivity() {
             JmTheme {
                 NavHost(
                     navController = navController,
-                    startDestination = navigator2.startDestination,
+                    startDestination = navigator.startDestination,
                 ) {
                     composable<Destination.Home> {
                         val homeViewModel: HomeViewModel by viewModel()

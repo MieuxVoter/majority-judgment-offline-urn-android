@@ -1,7 +1,6 @@
 package com.illiouchine.jm
 
 import android.app.Application
-import androidx.navigation.Navigator
 import androidx.room.Room
 import com.illiouchine.jm.data.SqlitePollDataSource
 import com.illiouchine.jm.data.PollDataSource
@@ -15,7 +14,6 @@ import com.illiouchine.jm.logic.PollVotingViewModel
 import com.illiouchine.jm.logic.SettingsViewModel
 import com.illiouchine.jm.ui.DefaultNavigator
 import com.illiouchine.jm.ui.Destination
-import com.illiouchine.jm.ui.Navigator2
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -56,7 +54,7 @@ val module = module {
 
 
     // compose
-    single<Navigator2> {
+    single<com.illiouchine.jm.ui.Navigator> {
         DefaultNavigator(startDestination = Destination.Home)
     }
 

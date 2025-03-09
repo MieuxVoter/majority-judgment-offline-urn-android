@@ -40,7 +40,7 @@ sealed interface NavigationAction {
     data object NavigateUp : NavigationAction
 }
 
-interface Navigator2 {
+interface Navigator {
     val startDestination: Destination
     val navigationAction: Flow<NavigationAction>
 
@@ -54,7 +54,7 @@ interface Navigator2 {
 
 class DefaultNavigator(
     override val startDestination: Destination,
-) : Navigator2 {
+) : Navigator {
     private val _navigationAction = Channel<NavigationAction>()
     override val navigationAction: Flow<NavigationAction> = _navigationAction.receiveAsFlow()
 
@@ -75,28 +75,36 @@ class DefaultNavigator(
     }
 }
 
+@Deprecated("")
 @Serializable
 sealed class Screens {
     @Serializable
     data object Home : Screens()
+
     @Serializable
     data object Settings : Screens()
+
     @Serializable
     data object About : Screens()
+
     @Serializable
     data class PollSetup(val config: PollConfig? = null) : Screens()
+
     @Serializable
     data class PollVote(val pollId: Int) : Screens()
+
     @Serializable
     data class PollResult(val poll: Poll) : Screens()
 }
 
+@Deprecated("")
 fun Screens.PollSetup.Companion.mapType(): Map<KType, @JvmSuppressWildcards NavType<*>> {
     return mapOf(
         typeOf<PollConfig?>() to CustomNavType.NullablePollConfigType,
     )
 }
 
+@Deprecated("")
 fun Screens.PollVote.Companion.mapType(): Map<KType, @JvmSuppressWildcards NavType<*>> {
     return mapOf(
         typeOf<PollConfig>() to CustomNavType.PollConfigType,
@@ -104,13 +112,14 @@ fun Screens.PollVote.Companion.mapType(): Map<KType, @JvmSuppressWildcards NavTy
     )
 }
 
+@Deprecated("")
 fun Screens.PollResult.Companion.mapType(): Map<KType, @JvmSuppressWildcards NavType<*>> {
     return mapOf(
         typeOf<Poll>() to CustomNavType.Poll,
     )
 }
 
-
+@Deprecated("")
 object CustomNavType {
 
     val NullablePollConfigType = object : NavType<PollConfig?>(isNullableAllowed = true) {
