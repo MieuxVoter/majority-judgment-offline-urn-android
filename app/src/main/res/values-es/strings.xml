@@ -67,4 +67,6 @@
     <string name="button_suggest_improvement">Sugerir una mejora</string>
     <string name="button_translate_app">Traducir la Aplicación</string>
     <string name="button_more_about_majority_judgment">Más sobre Sentencia Mayoritaria</string>
+    <string name="button_try_online_webapp">Pruebe la aplicación web</string>
+    <string name="setting_pin_screen">Fijar pantalla automáticamente</string>
 </resources>
