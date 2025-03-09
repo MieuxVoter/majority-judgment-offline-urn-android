@@ -126,8 +126,8 @@ fun LinearMeritProfileCanvas(
                         ),
                         offset = Offset(
                             x = lerp(
-                                middleX - medianGradeRectInitialWidth * 0.5f,
-                                gradeRectOffset.x,
+                                start = middleX - medianGradeRectInitialWidth * 0.5f,
+                                stop = gradeRectOffset.x,
                                 fraction = outlineAnimation.value,
                             ),
                             y = gradeRectOffset.y,
@@ -154,7 +154,7 @@ fun LinearMeritProfileCanvas(
         // Amount by which the median line overshoots the merit profile vertically
         val medianLineVerticalOvershoot = 3.dp.toPx()
 
-        // Vertical line in the middle, marking the median grade.
+        // Vertical line in the middle, marking the median grade
         drawLine(
             color = contrastedColor,
             start = Offset(middleX, 0 - medianLineVerticalOvershoot),

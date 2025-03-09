@@ -62,19 +62,6 @@ class PollVotingViewModel(
         }
     }
 
-    fun initVotingSession(
-        config: PollConfig,
-        ballots: List<Ballot>,
-    ) {
-        _pollVotingViewState.update {
-            it.copy(
-                pollConfig = config,
-                ballots = ballots,
-                currentBallot = null,
-            )
-        }
-    }
-
     fun initParticipantVotingSession() {
         _pollVotingViewState.update {
             it.copy(
@@ -138,7 +125,6 @@ class PollVotingViewModel(
                 pollConfig = _pollVotingViewState.value.pollConfig,
                 ballots = _pollVotingViewState.value.ballots,
             )
-//            pollDataSource.savePoll(poll)
             navigator.navigateTo(Screens.PollResult(poll = poll))
         }
     }

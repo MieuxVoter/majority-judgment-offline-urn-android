@@ -39,15 +39,9 @@ import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
+import com.illiouchine.jm.ui.utils.smoothStep
 import kotlin.math.max
 import kotlin.math.min
-
-
-// This was not invented here, most definitely.  Where are the steps in Kotlin?
-fun smoothStep(edge0: Float, edge1: Float, x: Float): Float {
-    val value = clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f)
-    return value * value * (3.0f - 2.0f * value)
-}
 
 @Composable
 fun ResultScreen(
