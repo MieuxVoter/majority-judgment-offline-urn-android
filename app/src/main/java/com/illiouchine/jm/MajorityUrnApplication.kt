@@ -12,9 +12,11 @@ import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.logic.PollVotingViewModel
 import com.illiouchine.jm.logic.SettingsViewModel
-import com.illiouchine.jm.ui.Navigator
+import com.illiouchine.jm.ui.DefaultNavigator
+import com.illiouchine.jm.ui.Destination
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -25,6 +27,7 @@ class MajorityUrnApplication : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@MajorityUrnApplication)
+            androidLogger()
             modules(module)
         }
     }
@@ -51,13 +54,20 @@ val module = module {
 
 
     // compose
-    single { Navigator() }
+    single<com.illiouchine.jm.ui.Navigator> {
+        DefaultNavigator(startDestination = Destination.Home)
+    }
 
     // ViewModel
-    viewModel { HomeViewModel(pollDataSource = get(), navigator = get()) }
+    viewModel { HomeViewModel(
+        pollDataSource = get(),
+        navigator = get(),
+        prefsHelper = get()
+    ) }
     viewModel { SettingsViewModel(sharedPreferences = get()) }
     viewModel {
         PollSetupViewModel(
+            savedStateHandle = get(),
             sharedPrefsHelper = get(),
             pollDataSource = get(),
             navigator = get(),
@@ -65,6 +75,7 @@ val module = module {
     }
     viewModel {
         PollVotingViewModel(
+            savedStateHandle = get(),
             pollDataSource = get(),
             sharedPrefsHelper = get(),
             navigator = get(),
@@ -72,6 +83,7 @@ val module = module {
     }
     viewModel {
         PollResultViewModel(
+            savedStateHandle = get(),
             navigator = get(),
         )
     }

@@ -16,7 +16,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,12 +32,18 @@ import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
+import fr.mieuxvoter.mj.ProposalResult
+import fr.mieuxvoter.mj.ProposalResultInterface
+import fr.mieuxvoter.mj.ProposalTally
+import fr.mieuxvoter.mj.ProposalTallyInterface
+import fr.mieuxvoter.mj.ResultInterface
+import fr.mieuxvoter.mj.TallyInterface
+import java.math.BigInteger
 import kotlin.math.max
 import kotlin.math.min
 
@@ -160,6 +165,21 @@ fun ResultScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
+    /*
+    // FIXME : Clean this Preview by not exposing Majority Judgment Object
+    val pollResultViewModel = PollResultViewModel(
+        navigator = Navigator(),
+        savedStateHandle =
+    )
+    pollResultViewModel.initializePollResult(poll)
+    val state = pollResultViewModel.pollResultViewState.collectAsState().value
+    JmTheme {
+        ResultScreen(
+            state = state,
+        )
+    }
+    */
+
     val poll = Poll(
         pollConfig = PollConfig(
             subject = "Who for Prézidaaanh ?",
@@ -194,9 +214,39 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
             ),
         ),
     )
-    val pollResultViewModel = PollResultViewModel(Navigator())
-    pollResultViewModel.initializePollResult(poll)
-    val state = pollResultViewModel.pollResultViewState.collectAsState().value
+
+    class DummyTally : TallyInterface {
+        override fun getProposalsTallies(): Array<ProposalTallyInterface> {
+            return listOf(ProposalTally()).toTypedArray()
+        }
+
+        override fun getAmountOfJudges(): BigInteger {
+            return BigInteger.valueOf(3L)
+        }
+
+        override fun getAmountOfProposals(): Int {
+            return 3
+        }
+    }
+
+    class JMResult: ResultInterface {
+        override fun getProposalResults(): Array<ProposalResultInterface> {
+            return listOf(ProposalResult()).toTypedArray()
+        }
+
+        override fun getProposalResultsRanked(): Array<ProposalResultInterface> {
+            return listOf(ProposalResult()).toTypedArray()
+        }
+    }
+
+    val dummyTally = DummyTally()
+    val jmResult = JMResult()
+    val state : PollResultViewModel.PollResultViewState = PollResultViewModel.PollResultViewState(
+        poll = poll,
+        tally = dummyTally,
+        result = jmResult
+    )
+
     JmTheme {
         ResultScreen(
             state = state,
