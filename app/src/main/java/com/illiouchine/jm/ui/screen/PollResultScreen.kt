@@ -1,7 +1,9 @@
 package com.illiouchine.jm.ui.screen
 
+import android.widget.Toast
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,11 +23,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.math.MathUtils.clamp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.model.Ballot
@@ -40,6 +42,7 @@ import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.utils.smoothStep
+import fr.mieuxvoter.mj.ProposalResultInterface
 import kotlin.math.max
 import kotlin.math.min
 
@@ -55,6 +58,86 @@ fun ResultScreen(
     val result = state.result!!
     val tally = state.tally!!
     val grading = poll.pollConfig.grading
+    val context = LocalContext.current
+
+    // WiP ; needs more work, but nice for testing
+    fun showDuelExplanation(base: ProposalResultInterface, other: ProposalResultInterface) {
+        var explained = false
+        if (base.rank == other.rank) {
+            Toast.makeText(
+                context,
+                context.getString(
+                    R.string.ranking_explain_perfectly_equal,
+                    poll.pollConfig.proposals[base.index],
+                    poll.pollConfig.proposals[other.index],
+                ),
+                Toast.LENGTH_LONG,
+            ).show()
+            explained = true
+        } else if (base.rank < other.rank && base.analysis.medianGrade > other.analysis.medianGrade) {
+            Toast.makeText(
+                context,
+                context.getString(
+                    R.string.ranking_explain_better_median,
+                    poll.pollConfig.proposals[base.index],
+                    context.getString(poll.pollConfig.grading.getGradeName(base.analysis.medianGrade)),
+                    poll.pollConfig.proposals[other.index],
+                    context.getString(poll.pollConfig.grading.getGradeName(other.analysis.medianGrade)),
+                ),
+                Toast.LENGTH_LONG,
+            ).show()
+            explained = true
+        } else if (base.rank < other.rank && base.analysis.medianGrade == other.analysis.medianGrade) {
+            if (base.analysis.secondMedianGroupSize > other.analysis.secondMedianGroupSize) {
+                Toast.makeText(
+                    context,
+                    context.getString(
+                        R.string.ranking_explain_same_median,
+                        poll.pollConfig.proposals[base.index],
+                        poll.pollConfig.proposals[other.index],
+                        context.getString(poll.pollConfig.grading.getGradeName(base.analysis.medianGrade)),
+                        if (base.analysis.secondMedianGroupSign >= 0) {
+                            context.getString(R.string.adhesion)
+                        } else {
+                            context.getString(R.string.contestation)
+                        },
+                        poll.pollConfig.proposals[base.index],
+                    ),
+                    Toast.LENGTH_LONG,
+                ).show()
+                explained = true
+            }
+            else if (base.analysis.secondMedianGroupSize < other.analysis.secondMedianGroupSize) {
+                Toast.makeText(
+                    context,
+                    context.getString(
+                        R.string.ranking_explain_same_median,
+                        poll.pollConfig.proposals[base.index],
+                        poll.pollConfig.proposals[other.index],
+                        context.getString(poll.pollConfig.grading.getGradeName(base.analysis.medianGrade)),
+                        if (other.analysis.secondMedianGroupSign >= 0) {
+                            context.getString(R.string.adhesion)
+                        } else {
+                            context.getString(R.string.contestation)
+                        },
+                        poll.pollConfig.proposals[other.index],
+                    ),
+                    Toast.LENGTH_LONG,
+                ).show()
+                explained = true
+            }
+        }
+
+        if (!explained) {
+            Toast.makeText(
+                context,
+                context.getString(
+                    R.string.wip_stay_tuned,
+                ),
+                Toast.LENGTH_SHORT,
+            ).show()
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -97,8 +180,18 @@ fun ResultScreen(
 
             val amountOfProposals = result.proposalResultsRanked.size
             result.proposalResultsRanked.forEachIndexed { displayIndex, proposalResult ->
+                val neighborProposalResult = result.proposalResultsRanked[
+                    if (displayIndex < amountOfProposals - 1) {
+                        displayIndex + 1
+                    } else {
+                        displayIndex - 1
+                    }
+                ]
                 Column(
                     modifier = Modifier
+                        .clickable {
+                            showDuelExplanation(proposalResult, neighborProposalResult)
+                        }
                         .alpha(
                             smoothStep(
                                 max(0f, 0.85f * displayIndex / amountOfProposals),
@@ -106,7 +199,8 @@ fun ResultScreen(
                                 appearAnimation.value,
                             )
                         ),
-                ) {
+
+                    ) {
                     Row(
                         verticalAlignment = Alignment.Bottom,
                     ) {
