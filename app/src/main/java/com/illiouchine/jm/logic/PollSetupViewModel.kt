@@ -8,6 +8,7 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.model.Grading
+import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.Screens
@@ -93,7 +94,7 @@ class PollSetupViewModel(
     fun refreshSubjectSuggestion(subject: String = "") {
         viewModelScope.launch {
             val subjectSuggestion = if (subject.isNotEmpty()) {
-                val polls = pollDataSource.getAllPoll()
+                val polls = pollDataSource.getAllPolls()
                 polls.filter { it.pollConfig.subject.contains(other = subject, ignoreCase = true) }
                     .map { it.pollConfig.subject }
             } else {
@@ -108,7 +109,7 @@ class PollSetupViewModel(
     fun refreshProposalSuggestion(proposal: String = "") {
         viewModelScope.launch {
             val proposalSuggestion = if (proposal.isNotEmpty()) {
-                pollDataSource.getAllPoll()
+                pollDataSource.getAllPolls()
                     .map { it.pollConfig.proposals }
                     .flatten()
                     .distinct()
@@ -136,7 +137,15 @@ class PollSetupViewModel(
 
     fun finishSetup(context: Context) {
         val pollConfig = _pollSetupViewState.value.config.addSubjectIfEmpty(context = context)
-        navigator.navigateTo(Screens.PollVote(pollConfig))
+
+        viewModelScope.launch {
+            val poll = Poll(
+                pollConfig = pollConfig,
+                ballots = emptyList(),
+            )
+            val pollId = pollDataSource.savePoll(poll)
+            navigator.navigateTo(Screens.PollVote(pollId = pollId))
+        }
     }
 
     private fun generateProposalName(context: Context): String {

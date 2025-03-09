@@ -2,7 +2,7 @@ package com.illiouchine.jm
 
 import android.app.Application
 import androidx.room.Room
-import com.illiouchine.jm.data.BDDPollDataSource
+import com.illiouchine.jm.data.SqlitePollDataSource
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.data.room.PollDao
@@ -35,8 +35,8 @@ val module = module {
     single {
         Room.databaseBuilder(
             context = androidApplication(),
-            PollDataBase::class.java,
-            "PollDataBase"
+            klass = PollDataBase::class.java,
+            name = "PollDataBase",
         ).build()
     }
     single<PollDao> {
@@ -47,7 +47,7 @@ val module = module {
     // Data
     single { SharedPrefsHelper(get()) }
     //single<PollDataSource>(named("inMemory") { InMemoryPollDataSource() }
-    single<PollDataSource> { BDDPollDataSource(get()) }
+    single<PollDataSource> { SqlitePollDataSource(get()) }
 
 
     // compose
@@ -60,7 +60,7 @@ val module = module {
         PollSetupViewModel(
             sharedPrefsHelper = get(),
             pollDataSource = get(),
-            navigator = get()
+            navigator = get(),
         )
     }
     viewModel {

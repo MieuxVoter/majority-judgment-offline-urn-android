@@ -7,14 +7,11 @@ import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 class Navigator {
-
 
     private val _sharedFlow = MutableSharedFlow<Screens>(extraBufferCapacity = 1)
     val sharedFlow = _sharedFlow.asSharedFlow()
@@ -30,7 +27,7 @@ sealed class Screens {
     @Serializable data object Settings: Screens()
     @Serializable data object About: Screens()
     @Serializable data class PollSetup(val config: PollConfig? = null): Screens()
-    @Serializable data class PollVote(val config: PollConfig = PollConfig(), val ballots: List<Ballot> = emptyList()) :Screens()
+    @Serializable data class PollVote(val pollId: Int) :Screens()
     @Serializable data class PollResult(val poll: Poll) : Screens()
 }
 
@@ -71,6 +68,7 @@ object CustomNavType {
             return Uri.encode(Json.encodeToString(value))
         }
     }
+
     val Ballots = object : NavType<List<Ballot>>(isNullableAllowed = false) {
         override fun get(bundle: Bundle, key: String): List<Ballot> {
             return Json.decodeFromString(bundle.getString(key) ?: return emptyList())

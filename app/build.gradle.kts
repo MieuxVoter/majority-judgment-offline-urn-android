@@ -91,8 +91,8 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
-    androidTestImplementation("io.cucumber:cucumber-android:4.9.0")
-    androidTestImplementation("io.cucumber:cucumber-picocontainer:4.8.1")
+    androidTestImplementation(libs.cucumber.android)
+    androidTestImplementation(libs.cucumber.picocontainer)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

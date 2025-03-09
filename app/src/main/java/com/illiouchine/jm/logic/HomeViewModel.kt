@@ -28,16 +28,16 @@ class HomeViewModel(
 
     fun loadPolls() {
         viewModelScope.launch {
-            val polls = pollDataSource.getAllPoll()
+            val polls = pollDataSource.getAllPolls()
             _homeViewState.update {
                 it.copy(polls = polls)
             }
         }
     }
 
-    fun savePolls(poll: Poll) {
+    fun savePoll(poll: Poll) {
         viewModelScope.launch {
-            pollDataSource.savePolls(poll)
+            pollDataSource.savePoll(poll)
             loadPolls()
         }
     }

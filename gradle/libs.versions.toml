@@ -1,5 +1,7 @@
 [versions]
 agp = "8.8.2"
+cucumberAndroid = "4.9.0"
+cucumberPicocontainer = "4.8.1"
 kotlin = "2.0.21"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -17,6 +19,8 @@ serialization = "2.1.0"
 serialization-json = "1.8.0"
 
 [libraries]
+cucumber-android = { module = "io.cucumber:cucumber-android", version.ref = "cucumberAndroid" }
+cucumber-picocontainer = { module = "io.cucumber:cucumber-picocontainer", version.ref = "cucumberPicocontainer" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

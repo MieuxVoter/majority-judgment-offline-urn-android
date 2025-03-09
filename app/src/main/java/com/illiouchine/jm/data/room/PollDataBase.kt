@@ -12,7 +12,7 @@ import com.illiouchine.jm.data.room.entity.ProposalEntity
         PollEntity::class,
         ProposalEntity::class,
         BallotEntity::class,
-        JudgmentEntity::class
+        JudgmentEntity::class,
     ],
     version = 1,
     exportSchema = false, // don't want to keep history of versions now

@@ -39,22 +39,22 @@ fun LinearMeritProfileCanvas(
 
     val textMeasurer = rememberTextMeasurer()
     val contrastedColor = if (isSystemInDarkTheme()) Color.White else Color.Black
-    val waitAnimation = remember { Animatable(0f) } // :(|) oOok
     val widthAnimation = remember { Animatable(0f) }
+    val outlineAlphaAnimation = remember { Animatable(0f) }
     val outlineAnimation = remember { Animatable(0f) }
     val percentageAnimation = remember { Animatable(0f) }
 
     LaunchedEffect("apparition") {
-        // TODO: figure out how to NOT use the waitAnimation hack
-        waitAnimation.animateTo(1f)
-        waitAnimation.animateTo(0f)
-        waitAnimation.animateTo(1f)
-        waitAnimation.animateTo(0f)
-        widthAnimation.animateTo(1f, tween(1500))
-        outlineAnimation.animateTo(1f, tween(400))
-        waitAnimation.animateTo(1f)
-        waitAnimation.animateTo(0f)
-        percentageAnimation.animateTo(1f, tween(3000))
+        widthAnimation.animateTo(1f, tween(1500, 1000))
+        outlineAlphaAnimation.animateTo(1f, tween(600, 150))
+        outlineAnimation.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(
+                durationMillis = 400,
+                easing = { x -> x * x * x },
+            )
+        )
+        percentageAnimation.animateTo(1f, tween(3000, 150))
     }
 
     // Draw the linear merit profile of the proposal.
@@ -62,16 +62,14 @@ fun LinearMeritProfileCanvas(
         modifier = modifier,
     ) {
         val proposalTally = tally.proposalsTallies[proposalResult.index]
+        val middleX = size.width * 0.5f
         var offsetX = 0f
         val medianGradeOutline = Path()
         val balancedGradeWidth = size.width / grading.getAmountOfGrades()
 
         for (gradeIndex in (0..<grading.getAmountOfGrades()).reversed()) {
-            var gradeWidth = ( // appalling indentation, please help
-                    (size.width * proposalTally.tally[gradeIndex].toFloat())
-                            /
-                            proposalTally.amountOfJudgments.toFloat()
-                    )
+            var gradeWidth = (size.width * proposalTally.tally[gradeIndex].toFloat()) /
+                    proposalTally.amountOfJudgments.toFloat()
             gradeWidth = lerp(balancedGradeWidth, gradeWidth, widthAnimation.value)
             val gradeRectSize = Size(gradeWidth, size.height)
             val gradeRectOffset = Offset(offsetX, 0f)
@@ -105,8 +103,8 @@ fun LinearMeritProfileCanvas(
                 drawText(
                     textLayoutResult = measuredText,
                     topLeft = gradeRectOffset + Offset(
-                        (gradeRectSize.width - measuredText.size.width) * 0.5f,
-                        size.height + 4.dp.toPx(),
+                        x = (gradeRectSize.width - measuredText.size.width) * 0.5f,
+                        y = size.height + 4.dp.toPx(),
                     ),
                     color = contrastedColor,
                     alpha = 0.78f * percentageAnimation.value,
@@ -115,16 +113,32 @@ fun LinearMeritProfileCanvas(
 
             // Outline only the median grade
             if (gradeIndex == proposalResult.analysis.medianGrade) {
+                val medianGradeRectInitialWidth = 2.dp.toPx()
                 medianGradeOutline.addRect(
                     Rect(
-                        size = gradeRectSize,
-                        offset = gradeRectOffset,
+                        size = Size(
+                            width = lerp(
+                                start = medianGradeRectInitialWidth,
+                                stop = gradeRectSize.width,
+                                fraction = outlineAnimation.value,
+                            ),
+                            height = gradeRectSize.height,
+                        ),
+                        offset = Offset(
+                            x = lerp(
+                                middleX - medianGradeRectInitialWidth * 0.5f,
+                                gradeRectOffset.x,
+                                fraction = outlineAnimation.value,
+                            ),
+                            y = gradeRectOffset.y,
+                        ),
                     )
                 )
             }
 
             offsetX += gradeWidth
         }
+
 
         // Draw the median grade outline *after* drawing all the grade rectangles
         drawPath(
@@ -134,20 +148,23 @@ fun LinearMeritProfileCanvas(
                 width = 3.dp.toPx(),
                 join = StrokeJoin.Bevel,
             ),
-            alpha = outlineAnimation.value,
+            alpha = outlineAlphaAnimation.value,
         )
+
+        // Amount by which the median line overshoots the merit profile vertically
+        val medianLineVerticalOvershoot = 3.dp.toPx()
 
         // Vertical line in the middle, marking the median grade.
         drawLine(
             color = contrastedColor,
-            start = Offset(size.width * 0.5f, -3.dp.toPx()),
-            end = Offset(size.width * 0.5f, size.height + 3.dp.toPx()),
+            start = Offset(middleX, 0 - medianLineVerticalOvershoot),
+            end = Offset(middleX, size.height + medianLineVerticalOvershoot),
             pathEffect = PathEffect.dashPathEffect(
                 intervals = floatArrayOf(3.dp.toPx(), 1.dp.toPx()),
                 phase = -1.dp.toPx(),
             ),
             strokeWidth = 1.dp.toPx(),
-            alpha = outlineAnimation.value,
+            alpha = widthAnimation.value,
         )
     }
 }
