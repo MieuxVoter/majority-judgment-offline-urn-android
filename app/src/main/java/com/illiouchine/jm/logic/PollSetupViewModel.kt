@@ -2,8 +2,10 @@ package com.illiouchine.jm.logic
 
 import android.content.Context
 import androidx.annotation.StringRes
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.data.SharedPrefsHelper
@@ -12,6 +14,7 @@ import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.Screens
+import com.illiouchine.jm.ui.mapType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -20,10 +23,13 @@ import java.text.DateFormat
 import java.util.Calendar
 
 class PollSetupViewModel(
+    savedStateHandle: SavedStateHandle,
     private val sharedPrefsHelper: SharedPrefsHelper,
     private val pollDataSource: PollDataSource,
     private val navigator: Navigator,
 ) : ViewModel() {
+
+    private val pollSetup = savedStateHandle.toRoute<Screens.PollSetup>(Screens.PollSetup.mapType())
 
     data class PollSetupViewState(
         val config: PollConfig = PollConfig(),
@@ -32,15 +38,8 @@ class PollSetupViewModel(
         @StringRes val feedback: Int? = null,
     )
 
-    private val _pollSetupViewState = MutableStateFlow(PollSetupViewState())
+    private val _pollSetupViewState = MutableStateFlow(PollSetupViewState(config = initWithConfig(pollSetup.config)))
     val pollSetupViewState: StateFlow<PollSetupViewState> = _pollSetupViewState
-
-    fun initWithConfig(config: PollConfig? = null) {
-        val initialPollConfig = config ?: PollConfig(grading = sharedPrefsHelper.getDefaultGrading())
-        _pollSetupViewState.update {
-            it.copy(config = initialPollConfig)
-        }
-    }
 
     fun addSubject(context: Context, subject: String) {
         val newSubject = subject.ifEmpty { generateSubject(context = context) }
@@ -147,6 +146,8 @@ class PollSetupViewModel(
             navigator.navigateTo(Screens.PollVote(pollId = pollId))
         }
     }
+
+    private fun initWithConfig(config: PollConfig? = null) = config ?: PollConfig(grading = sharedPrefsHelper.getDefaultGrading())
 
     private fun generateProposalName(context: Context): String {
         return buildString {

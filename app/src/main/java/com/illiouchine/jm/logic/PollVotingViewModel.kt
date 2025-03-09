@@ -2,8 +2,10 @@ package com.illiouchine.jm.logic
 
 import android.content.Context
 import android.media.MediaPlayer
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.data.SharedPrefsHelper
@@ -13,16 +15,20 @@ import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.Screens
+import com.illiouchine.jm.ui.mapType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PollVotingViewModel(
+    savedStateHandle: SavedStateHandle,
     private val pollDataSource: PollDataSource,
     private val sharedPrefsHelper: SharedPrefsHelper,
     private val navigator: Navigator,
 ) : ViewModel() {
+
+    private val pollVote = savedStateHandle.toRoute<Screens.PollVote>(Screens.PollVote.mapType())
 
     data class PollVotingViewState(
         val pollId: Int = 0,
@@ -30,6 +36,7 @@ class PollVotingViewModel(
         val ballots: List<Ballot> = emptyList(),
         val currentBallot: Ballot? = null,
         val currentProposalsOrder: List<Int> = emptyList(),
+        val pinScreen: Boolean = false,
     ) {
         fun isInStateReady(): Boolean {
             return null == currentBallot
@@ -40,7 +47,12 @@ class PollVotingViewModel(
         }
     }
 
-    private val _pollVotingViewState = MutableStateFlow(PollVotingViewState())
+    private val _pollVotingViewState = MutableStateFlow(
+        PollVotingViewState(
+            pollConfig = pollVote.config,
+            ballots = pollVote.ballots
+        )
+    )
     val pollVotingViewState: StateFlow<PollVotingViewState> = _pollVotingViewState
 
     private fun generateRandomOrder(size: Int): List<Int> = (0..<size).shuffled()
@@ -72,6 +84,17 @@ class PollVotingViewModel(
                 ballots = ballots,
                 currentBallot = null,
             )
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            val pinScreen = sharedPrefsHelper.getPinScreen()
+            _pollVotingViewState.update {
+                it.copy(
+                    pinScreen = pinScreen,
+                )
+            }
         }
     }
 

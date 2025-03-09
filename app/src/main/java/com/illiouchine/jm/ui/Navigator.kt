@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlin.reflect.KType
+import kotlin.reflect.typeOf
 
 class Navigator {
 
@@ -30,6 +32,26 @@ sealed class Screens {
     @Serializable data class PollVote(val pollId: Int) :Screens()
     @Serializable data class PollResult(val poll: Poll) : Screens()
 }
+
+fun Screens.PollSetup.Companion.mapType() : Map<KType, @JvmSuppressWildcards NavType<*>> {
+    return mapOf(
+        typeOf<PollConfig?>() to CustomNavType.NullablePollConfigType,
+    )
+}
+
+fun Screens.PollVote.Companion.mapType() : Map<KType, @JvmSuppressWildcards NavType<*>> {
+    return mapOf(
+        typeOf<PollConfig>() to CustomNavType.PollConfigType,
+        typeOf<List<Ballot>>() to CustomNavType.Ballots,
+    )
+}
+
+fun Screens.PollResult.Companion.mapType() : Map<KType, @JvmSuppressWildcards NavType<*>> {
+    return mapOf(
+        typeOf<Poll>() to CustomNavType.Poll,
+    )
+}
+
 
 object CustomNavType {
 

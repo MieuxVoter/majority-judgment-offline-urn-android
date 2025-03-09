@@ -54,10 +54,15 @@ val module = module {
     single { Navigator() }
 
     // ViewModel
-    viewModel { HomeViewModel(pollDataSource = get(), navigator = get()) }
+    viewModel { HomeViewModel(
+        pollDataSource = get(),
+        navigator = get(),
+        prefsHelper = get()
+    ) }
     viewModel { SettingsViewModel(sharedPreferences = get()) }
     viewModel {
         PollSetupViewModel(
+            savedStateHandle = get(),
             sharedPrefsHelper = get(),
             pollDataSource = get(),
             navigator = get(),
@@ -65,6 +70,7 @@ val module = module {
     }
     viewModel {
         PollVotingViewModel(
+            savedStateHandle = get(),
             pollDataSource = get(),
             sharedPrefsHelper = get(),
             navigator = get(),
@@ -72,6 +78,7 @@ val module = module {
     }
     viewModel {
         PollResultViewModel(
+            savedStateHandle = get(),
             navigator = get(),
         )
     }
