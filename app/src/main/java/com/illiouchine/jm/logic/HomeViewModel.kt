@@ -5,7 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.model.Poll
-import com.illiouchine.jm.ui.Navigator
+import com.illiouchine.jm.ui.Destination
+import com.illiouchine.jm.ui.Navigator2
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -13,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val pollDataSource: PollDataSource,
-    private val navigator: Navigator,
+    private val navigator: Navigator2,
     private val prefsHelper: SharedPrefsHelper,
 ) : ViewModel() {
 
@@ -68,6 +69,30 @@ class HomeViewModel(
         viewModelScope.launch {
             pollDataSource.deletePoll(poll)
             loadPolls()
+        }
+    }
+
+    fun setupBlankPoll() {
+        viewModelScope.launch {
+            navigator.navigate(Destination.PollSetup())
+        }
+    }
+
+    fun setupPoll(poll : Poll) {
+        viewModelScope.launch {
+            navigator.navigate(Destination.PollSetup(poll.id))
+        }
+    }
+
+    fun resumePoll(poll: Poll){
+        viewModelScope.launch {
+            navigator.navigate(Destination.PollVote(poll.id))
+        }
+    }
+
+    fun showResult(poll: Poll) {
+        viewModelScope.launch {
+            navigator.navigate(Destination.PollResult(poll.id))
         }
     }
 }

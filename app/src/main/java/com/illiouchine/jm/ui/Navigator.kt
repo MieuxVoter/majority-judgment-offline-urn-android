@@ -2,51 +2,109 @@ package com.illiouchine.jm.ui
 
 import android.net.Uri
 import android.os.Bundle
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.NavType
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
-class Navigator {
 
-    private val _sharedFlow = MutableSharedFlow<Screens>(extraBufferCapacity = 1)
-    val sharedFlow = _sharedFlow.asSharedFlow()
+sealed interface Destination {
+    @Serializable
+    data object Home : Destination
+    @Serializable
+    data object Settings : Destination
+    @Serializable
+    data object About : Destination
+    @Serializable
+    data class PollSetup(val id: Int = 0) : Destination
+    @Serializable
+    data class PollVote(val id: Int = 0) : Destination
+    @Serializable
+    data class PollResult(val id: Int = 0) : Destination
+}
 
-    fun navigateTo(navTarget: Screens) {
-        _sharedFlow.tryEmit(navTarget)
+sealed interface NavigationAction {
+    data class Navigate(
+        val destination: Destination,
+        val navOptions: NavOptionsBuilder.() -> Unit = {}
+    ) : NavigationAction
+
+    data object NavigateUp : NavigationAction
+}
+
+interface Navigator2 {
+    val startDestination: Destination
+    val navigationAction: Flow<NavigationAction>
+
+    suspend fun navigate(
+        destination: Destination,
+        navOptions: NavOptionsBuilder.() -> Unit = {}
+    )
+
+    suspend fun navigateUp()
+}
+
+class DefaultNavigator(
+    override val startDestination: Destination,
+) : Navigator2 {
+    private val _navigationAction = Channel<NavigationAction>()
+    override val navigationAction: Flow<NavigationAction> = _navigationAction.receiveAsFlow()
+
+    override suspend fun navigate(
+        destination: Destination,
+        navOptions: NavOptionsBuilder.() -> Unit
+    ) {
+        _navigationAction.send(
+            NavigationAction.Navigate(
+                destination = destination,
+                navOptions = navOptions
+            )
+        )
+    }
+
+    override suspend fun navigateUp() {
+        _navigationAction.send(NavigationAction.NavigateUp)
     }
 }
 
 @Serializable
 sealed class Screens {
-    @Serializable data object Home: Screens()
-    @Serializable data object Settings: Screens()
-    @Serializable data object About: Screens()
-    @Serializable data class PollSetup(val config: PollConfig? = null): Screens()
-    @Serializable data class PollVote(val pollId: Int) :Screens()
-    @Serializable data class PollResult(val poll: Poll) : Screens()
+    @Serializable
+    data object Home : Screens()
+    @Serializable
+    data object Settings : Screens()
+    @Serializable
+    data object About : Screens()
+    @Serializable
+    data class PollSetup(val config: PollConfig? = null) : Screens()
+    @Serializable
+    data class PollVote(val pollId: Int) : Screens()
+    @Serializable
+    data class PollResult(val poll: Poll) : Screens()
 }
 
-fun Screens.PollSetup.Companion.mapType() : Map<KType, @JvmSuppressWildcards NavType<*>> {
+fun Screens.PollSetup.Companion.mapType(): Map<KType, @JvmSuppressWildcards NavType<*>> {
     return mapOf(
         typeOf<PollConfig?>() to CustomNavType.NullablePollConfigType,
     )
 }
 
-fun Screens.PollVote.Companion.mapType() : Map<KType, @JvmSuppressWildcards NavType<*>> {
+fun Screens.PollVote.Companion.mapType(): Map<KType, @JvmSuppressWildcards NavType<*>> {
     return mapOf(
         typeOf<PollConfig>() to CustomNavType.PollConfigType,
         typeOf<List<Ballot>>() to CustomNavType.Ballots,
     )
 }
 
-fun Screens.PollResult.Companion.mapType() : Map<KType, @JvmSuppressWildcards NavType<*>> {
+fun Screens.PollResult.Companion.mapType(): Map<KType, @JvmSuppressWildcards NavType<*>> {
     return mapOf(
         typeOf<Poll>() to CustomNavType.Poll,
     )
@@ -111,7 +169,12 @@ object CustomNavType {
 
     val Poll = object : NavType<Poll>(isNullableAllowed = false) {
         override fun get(bundle: Bundle, key: String): Poll {
-            return Json.decodeFromString(bundle.getString(key) ?: return Poll(pollConfig = PollConfig(), ballots = emptyList()))
+            return Json.decodeFromString(
+                bundle.getString(key) ?: return Poll(
+                    pollConfig = PollConfig(),
+                    ballots = emptyList()
+                )
+            )
         }
 
         override fun parseValue(value: String): Poll {

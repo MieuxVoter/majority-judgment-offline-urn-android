@@ -12,7 +12,8 @@ import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.Navigator
+import com.illiouchine.jm.ui.Destination
+import com.illiouchine.jm.ui.Navigator2
 import com.illiouchine.jm.ui.Screens
 import com.illiouchine.jm.ui.mapType
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +27,7 @@ class PollSetupViewModel(
     savedStateHandle: SavedStateHandle,
     private val sharedPrefsHelper: SharedPrefsHelper,
     private val pollDataSource: PollDataSource,
-    private val navigator: Navigator,
+    private val navigator: Navigator2,
 ) : ViewModel() {
 
     private val pollSetup = savedStateHandle.toRoute<Screens.PollSetup>(Screens.PollSetup.mapType())
@@ -143,7 +144,7 @@ class PollSetupViewModel(
                 ballots = emptyList(),
             )
             val pollId = pollDataSource.savePoll(poll)
-            navigator.navigateTo(Screens.PollVote(pollId = pollId))
+            navigator.navigate(Destination.PollVote(pollId))
         }
     }
 

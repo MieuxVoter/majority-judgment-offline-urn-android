@@ -22,9 +22,11 @@ import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.logic.PollVotingViewModel
 import com.illiouchine.jm.logic.SettingsViewModel
 import com.illiouchine.jm.model.Poll
-import com.illiouchine.jm.ui.Navigator
+import com.illiouchine.jm.ui.Destination
+import com.illiouchine.jm.ui.NavigationAction
+import com.illiouchine.jm.ui.Navigator2
+import com.illiouchine.jm.ui.ObserveAsEvents
 import com.illiouchine.jm.ui.Screens
-import com.illiouchine.jm.ui.mapType
 import com.illiouchine.jm.ui.screen.AboutScreen
 import com.illiouchine.jm.ui.screen.HomeScreen
 import com.illiouchine.jm.ui.screen.OnBoardingScreen
@@ -33,30 +35,10 @@ import com.illiouchine.jm.ui.screen.PollVotingScreen
 import com.illiouchine.jm.ui.screen.ResultScreen
 import com.illiouchine.jm.ui.screen.SettingsScreen
 import com.illiouchine.jm.ui.theme.JmTheme
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
-
-    private val navigator: Navigator by inject()
-
-    fun perhapsLockScreen(
-        pollVotingViewState: PollVotingViewModel.PollVotingViewState,
-        settingsViewState: SettingsViewModel.SettingsViewState,
-    ) {
-        val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        if (
-            settingsViewState.pinScreen
-            &&
-            pollVotingViewState.isInStateReady() // can probably be removed safely now
-            &&
-            activityManager.lockTaskModeState == ActivityManager.LOCK_TASK_MODE_NONE
-        ) {
-            startLockTask()
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,26 +46,30 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             val navController = rememberNavController()
+            val navigator2 : Navigator2 by inject<Navigator2>()
+
+            ObserveAsEvents(navigator2.navigationAction) { action ->
+                when(action) {
+                    is NavigationAction.Navigate -> navController.navigate(
+                        action.destination
+                    ) {
+                        action.navOptions(this)
+                    }
+                    NavigationAction.NavigateUp -> navController.navigateUp()
+                }
+            }
+
 
             // Rule: the screen should never lock during the voting/result phase of the poll
             // Therefore, we clear the flag here and set it on in the appropriate screens.
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
             JmTheme {
-
-                // Handle navigation.
-                LaunchedEffect("navigator") {
-                    navigator.sharedFlow.onEach {
-                        //Log.d("WGU", "Navigator triggered with destination : $it")
-                        navController.navigate(it)
-                    }.launchIn(this)
-                }
-
                 NavHost(
                     navController = navController,
-                    startDestination = Screens.Home,
+                    startDestination = navigator2.startDestination,
                 ) {
-                    composable<Screens.Home> {
+                    composable<Destination.Home> {
                         val homeViewModel: HomeViewModel by viewModel()
                         homeViewModel.loadPolls()
                         val homeViewState by homeViewModel.homeViewState.collectAsState()
@@ -102,27 +88,21 @@ class MainActivity : ComponentActivity() {
                                     homeViewModel.deletePoll(it)
                                 },
                                 onSetupBlankPoll = {
-                                    navigator.navigateTo(Screens.PollSetup())
+                                    homeViewModel.setupBlankPoll()
                                 },
                                 onSetupClonePoll = { poll: Poll ->
-                                    navigator.navigateTo(Screens.PollSetup(config = poll.pollConfig))
+                                    homeViewModel.setupPoll(poll)
                                 },
                                 onResumePoll = { poll: Poll ->
-                                    navigator.navigateTo(
-                                        Screens.PollVote(
-                                            pollId = poll.id,
-                                        )
-                                    )
+                                    homeViewModel.resumePoll(poll)
                                 },
                                 onShowResult = { poll: Poll ->
-                                    navigator.navigateTo(Screens.PollResult(poll = poll))
+                                    homeViewModel.showResult(poll)
                                 },
                             )
                         }
                     }
-                    composable<Screens.PollSetup>(
-                        typeMap = Screens.PollSetup.mapType()
-                    ) {
+                    composable<Destination.PollSetup>() {
                         val pollSetupViewModel: PollSetupViewModel by viewModel()
                         val pollSetupViewState by pollSetupViewModel.pollSetupViewState.collectAsState()
 
@@ -150,9 +130,7 @@ class MainActivity : ComponentActivity() {
                             onClearProposalSuggestion = { pollSetupViewModel.clearProposalSuggestion() },
                         )
                     }
-                    composable<Screens.PollVote>(
-                        typeMap = Screens.PollVote.mapType()
-                    ) { backStackEntry ->
+                    composable<Destination.PollVote> { backStackEntry ->
 
                         val pollVotingViewModel: PollVotingViewModel by viewModel()
                         val pollVotingViewState by pollVotingViewModel.pollVotingViewState.collectAsState()
@@ -186,9 +164,7 @@ class MainActivity : ComponentActivity() {
                             onFinish = { pollVotingViewModel.finalizePoll() },
                         )
                     }
-                    composable<Screens.PollResult>(
-                        typeMap = Screens.PollResult.mapType()
-                    ) { backStackEntry ->
+                    composable<Destination.PollResult> { backStackEntry ->
 
                         val pollResultViewModel: PollResultViewModel by viewModel()
                         val pollResultViewState by pollResultViewModel.pollResultViewState.collectAsState()
@@ -198,7 +174,9 @@ class MainActivity : ComponentActivity() {
                             ResultScreen(
                                 modifier = Modifier,
                                 state = pollResultViewState,
-                                onFinish = { navigator.navigateTo(Screens.Home) },
+                                onFinish = {
+                                    pollResultViewModel.returnHome()
+                                           },
                             )
                         } else {
                             // During the screen navigation transition to home (in onFinish above),
@@ -206,9 +184,10 @@ class MainActivity : ComponentActivity() {
                             // For now, nothing is cool I guess ?
                         }
                     }
-                    composable<Screens.Settings> {
+                    composable<Destination.Settings> {
                         val settingsViewModel: SettingsViewModel by viewModel()
                         val settingsViewState by settingsViewModel.settingsViewState.collectAsState()
+
                         SettingsScreen(
                             modifier = Modifier,
                             navController = navController,
@@ -230,7 +209,7 @@ class MainActivity : ComponentActivity() {
                             },
                         )
                     }
-                    composable<Screens.About> {
+                    composable<Destination.About> {
                         AboutScreen(
                             modifier = Modifier,
                             navController = navController,
