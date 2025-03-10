@@ -69,4 +69,12 @@
     <string name="button_ask_a_question">Poser une question / Discuter</string>
     <string name="setting_pin_screen">Épingler l\'écran</string>
     <string name="button_try_online_webapp">Essayer la WebApp</string>
+    <string name="ranking_explain_perfectly_equal">%1$s and %2$s are perfectly equal.</string>
+    <string name="ranking_explain_different_median">%1$s est %2$s et donc %3$s que %4$s qui est %5$s.</string>
+    <string name="ranking_explain_same_median">%1$s et %2$s sont %3$s, mais le groupe %4$s de %5$s est le plus gros.</string>
+    <string name="wip_stay_tuned">Travaux en cours.</string>
+    <string name="adhesion">d\'adhésion</string>
+    <string name="contestation">de contestation</string>
+    <string name="higher">plus haut</string>
+    <string name="lower">plus bas</string>
 </resources>

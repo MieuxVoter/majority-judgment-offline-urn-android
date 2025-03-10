@@ -8,7 +8,7 @@ import com.illiouchine.jm.ui.Navigator
 import fr.mieuxvoter.mj.CollectedTally
 import fr.mieuxvoter.mj.DeliberatorInterface
 import fr.mieuxvoter.mj.MajorityJudgmentDeliberator
-import fr.mieuxvoter.mj.ProposalResultInterface
+import fr.mieuxvoter.mj.ParticipantGroup
 import fr.mieuxvoter.mj.ResultInterface
 import fr.mieuxvoter.mj.TallyInterface
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,20 +46,18 @@ class PollResultViewModel(
 
         val explanations: MutableList<String> = mutableListOf()
         result.proposalResultsRanked.forEachIndexed { displayIndex, proposalResult ->
-            val neighborProposalResult = result.proposalResultsRanked[
-                if (displayIndex < amountOfProposals - 1) {
-                    displayIndex + 1
-                } else {
-                    displayIndex - 1
-                }
-            ]
-
             explanations.add(
                 generateDuelExplanation(
                     context = context,
                     poll = poll,
-                    base = proposalResult,
-                    other = neighborProposalResult,
+                    tally = tally,
+                    result = result,
+                    baseIndex = displayIndex,
+                    otherIndex = if (displayIndex < amountOfProposals - 1) {
+                        displayIndex + 1
+                    } else {
+                        displayIndex - 1
+                    },
                 )
             )
         }
@@ -77,9 +75,17 @@ class PollResultViewModel(
     fun generateDuelExplanation(
         context: Context,
         poll: Poll,
-        base: ProposalResultInterface,
-        other: ProposalResultInterface,
+        tally: TallyInterface,
+        result: ResultInterface,
+        baseIndex: Int,
+        otherIndex: Int,
     ): String {
+
+        val base = result.proposalResultsRanked[baseIndex]
+        val other = result.proposalResultsRanked[otherIndex]
+
+        val baseGroups = base.analysis.computeResolution(tally.proposalsTallies[base.index])
+        val otherGroups = other.analysis.computeResolution(tally.proposalsTallies[other.index])
 
         if (base.rank == other.rank) {
             return context.getString(
@@ -87,40 +93,51 @@ class PollResultViewModel(
                 poll.pollConfig.proposals[base.index],
                 poll.pollConfig.proposals[other.index],
             )
-        } else if (base.rank < other.rank && base.analysis.medianGrade > other.analysis.medianGrade) {
-            return context.getString(
-                R.string.ranking_explain_higher_median,
-                poll.pollConfig.proposals[base.index],
-                context.getString(poll.pollConfig.grading.getGradeName(base.analysis.medianGrade)),
-                poll.pollConfig.proposals[other.index],
-                context.getString(poll.pollConfig.grading.getGradeName(other.analysis.medianGrade)),
-            )
-        } else if (base.rank < other.rank && base.analysis.medianGrade == other.analysis.medianGrade) {
-            if (base.analysis.secondMedianGroupSize > other.analysis.secondMedianGroupSize) {
+        }
+
+        for (i in (0..<baseGroups.size)) {
+            val baseGroup = baseGroups[i]
+            val otherGroup = otherGroups[i]
+
+            if (baseGroup.type == ParticipantGroup.Type.Median && otherGroup.type == ParticipantGroup.Type.Median) {
+                if (baseGroup.grade == otherGroup.grade) {
+                    continue
+                }
+
                 return context.getString(
-                    R.string.ranking_explain_same_median,
+                    R.string.ranking_explain_different_median,
                     poll.pollConfig.proposals[base.index],
-                    poll.pollConfig.proposals[other.index],
                     context.getString(poll.pollConfig.grading.getGradeName(base.analysis.medianGrade)),
-                    if (base.analysis.secondMedianGroupSign >= 0) {
-                        context.getString(R.string.adhesion)
+                    if (baseGroup.grade > otherGroup.grade) {
+                        context.getString(R.string.higher)
                     } else {
-                        context.getString(R.string.contestation)
+                        context.getString(R.string.lower)
                     },
-                    poll.pollConfig.proposals[base.index],
+                    poll.pollConfig.proposals[other.index],
+                    context.getString(poll.pollConfig.grading.getGradeName(other.analysis.medianGrade)),
                 )
-            } else if (base.analysis.secondMedianGroupSize < other.analysis.secondMedianGroupSize) {
+            } else if (baseGroup.size != otherGroup.size) {
+                val biggestGroup = if (baseGroup.size > otherGroup.size) {
+                    baseGroup
+                } else {
+                    otherGroup
+                }
+                val biggest = if (baseGroup.size > otherGroup.size) {
+                    base
+                } else {
+                    other
+                }
                 return context.getString(
                     R.string.ranking_explain_same_median,
                     poll.pollConfig.proposals[base.index],
                     poll.pollConfig.proposals[other.index],
                     context.getString(poll.pollConfig.grading.getGradeName(base.analysis.medianGrade)),
-                    if (other.analysis.secondMedianGroupSign >= 0) {
+                    if (biggestGroup.type == ParticipantGroup.Type.Adhesion) {
                         context.getString(R.string.adhesion)
                     } else {
                         context.getString(R.string.contestation)
                     },
-                    poll.pollConfig.proposals[other.index],
+                    poll.pollConfig.proposals[biggest.index],
                 )
             }
         }
