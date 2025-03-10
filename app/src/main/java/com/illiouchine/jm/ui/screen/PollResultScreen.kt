@@ -1,6 +1,5 @@
 package com.illiouchine.jm.ui.screen
 
-import android.widget.Toast
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
@@ -19,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,83 +60,60 @@ fun ResultScreen(
     val grading = poll.pollConfig.grading
     val context = LocalContext.current
 
+    val isAnyProfileSelected = remember { mutableStateOf(false) }
+    val selectedProfile = remember { mutableStateOf(0) }
+
     // WiP ; needs more work, but nice for testing
-    fun showDuelExplanation(base: ProposalResultInterface, other: ProposalResultInterface) {
-        var explained = false
+    fun generateDuelExplanation(
+        base: ProposalResultInterface,
+        other: ProposalResultInterface,
+    ): String {
+
         if (base.rank == other.rank) {
-            Toast.makeText(
-                context,
-                context.getString(
-                    R.string.ranking_explain_perfectly_equal,
-                    poll.pollConfig.proposals[base.index],
-                    poll.pollConfig.proposals[other.index],
-                ),
-                Toast.LENGTH_LONG,
-            ).show()
-            explained = true
+            return context.getString(
+                R.string.ranking_explain_perfectly_equal,
+                poll.pollConfig.proposals[base.index],
+                poll.pollConfig.proposals[other.index],
+            )
         } else if (base.rank < other.rank && base.analysis.medianGrade > other.analysis.medianGrade) {
-            Toast.makeText(
-                context,
-                context.getString(
-                    R.string.ranking_explain_better_median,
-                    poll.pollConfig.proposals[base.index],
-                    context.getString(poll.pollConfig.grading.getGradeName(base.analysis.medianGrade)),
-                    poll.pollConfig.proposals[other.index],
-                    context.getString(poll.pollConfig.grading.getGradeName(other.analysis.medianGrade)),
-                ),
-                Toast.LENGTH_LONG,
-            ).show()
-            explained = true
+            return context.getString(
+                R.string.ranking_explain_better_median,
+                poll.pollConfig.proposals[base.index],
+                context.getString(poll.pollConfig.grading.getGradeName(base.analysis.medianGrade)),
+                poll.pollConfig.proposals[other.index],
+                context.getString(poll.pollConfig.grading.getGradeName(other.analysis.medianGrade)),
+            )
         } else if (base.rank < other.rank && base.analysis.medianGrade == other.analysis.medianGrade) {
             if (base.analysis.secondMedianGroupSize > other.analysis.secondMedianGroupSize) {
-                Toast.makeText(
-                    context,
-                    context.getString(
-                        R.string.ranking_explain_same_median,
-                        poll.pollConfig.proposals[base.index],
-                        poll.pollConfig.proposals[other.index],
-                        context.getString(poll.pollConfig.grading.getGradeName(base.analysis.medianGrade)),
-                        if (base.analysis.secondMedianGroupSign >= 0) {
-                            context.getString(R.string.adhesion)
-                        } else {
-                            context.getString(R.string.contestation)
-                        },
-                        poll.pollConfig.proposals[base.index],
-                    ),
-                    Toast.LENGTH_LONG,
-                ).show()
-                explained = true
-            }
-            else if (base.analysis.secondMedianGroupSize < other.analysis.secondMedianGroupSize) {
-                Toast.makeText(
-                    context,
-                    context.getString(
-                        R.string.ranking_explain_same_median,
-                        poll.pollConfig.proposals[base.index],
-                        poll.pollConfig.proposals[other.index],
-                        context.getString(poll.pollConfig.grading.getGradeName(base.analysis.medianGrade)),
-                        if (other.analysis.secondMedianGroupSign >= 0) {
-                            context.getString(R.string.adhesion)
-                        } else {
-                            context.getString(R.string.contestation)
-                        },
-                        poll.pollConfig.proposals[other.index],
-                    ),
-                    Toast.LENGTH_LONG,
-                ).show()
-                explained = true
+                return context.getString(
+                    R.string.ranking_explain_same_median,
+                    poll.pollConfig.proposals[base.index],
+                    poll.pollConfig.proposals[other.index],
+                    context.getString(poll.pollConfig.grading.getGradeName(base.analysis.medianGrade)),
+                    if (base.analysis.secondMedianGroupSign >= 0) {
+                        context.getString(R.string.adhesion)
+                    } else {
+                        context.getString(R.string.contestation)
+                    },
+                    poll.pollConfig.proposals[base.index],
+                )
+            } else if (base.analysis.secondMedianGroupSize < other.analysis.secondMedianGroupSize) {
+                return context.getString(
+                    R.string.ranking_explain_same_median,
+                    poll.pollConfig.proposals[base.index],
+                    poll.pollConfig.proposals[other.index],
+                    context.getString(poll.pollConfig.grading.getGradeName(base.analysis.medianGrade)),
+                    if (other.analysis.secondMedianGroupSign >= 0) {
+                        context.getString(R.string.adhesion)
+                    } else {
+                        context.getString(R.string.contestation)
+                    },
+                    poll.pollConfig.proposals[other.index],
+                )
             }
         }
 
-        if (!explained) {
-            Toast.makeText(
-                context,
-                context.getString(
-                    R.string.wip_stay_tuned,
-                ),
-                Toast.LENGTH_SHORT,
-            ).show()
-        }
+        return context.getString(R.string.wip_stay_tuned)
     }
 
     Scaffold(
@@ -190,7 +167,12 @@ fun ResultScreen(
                 Column(
                     modifier = Modifier
                         .clickable {
-                            showDuelExplanation(proposalResult, neighborProposalResult)
+                            if (isAnyProfileSelected.value && selectedProfile.value == displayIndex) {
+                                isAnyProfileSelected.value = false
+                            } else {
+                                isAnyProfileSelected.value = true
+                                selectedProfile.value = displayIndex
+                            }
                         }
                         .alpha(
                             smoothStep(
@@ -230,7 +212,19 @@ fun ResultScreen(
                         )
                     }
 
-                    Spacer(Modifier.padding(vertical = 12.dp))
+                    Spacer(Modifier.padding(vertical = 10.dp))
+
+                    var explainRowModifier: Modifier = Modifier
+                    if (!isAnyProfileSelected.value || selectedProfile.value != displayIndex) {
+                        explainRowModifier = explainRowModifier.height(0.dp)
+                    }
+                    Row(
+                        modifier = explainRowModifier,
+                    ) {
+                        Text(generateDuelExplanation(proposalResult, neighborProposalResult))
+                    }
+
+                    Spacer(Modifier.padding(vertical = 2.dp))
                 }
             }
 
