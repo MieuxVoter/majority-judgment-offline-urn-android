@@ -42,7 +42,6 @@ import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.utils.smoothStep
-import fr.mieuxvoter.mj.ProposalResultInterface
 import kotlin.math.max
 import kotlin.math.min
 
@@ -58,63 +57,9 @@ fun ResultScreen(
     val result = state.result!!
     val tally = state.tally!!
     val grading = poll.pollConfig.grading
-    val context = LocalContext.current
 
     val isAnyProfileSelected = remember { mutableStateOf(false) }
     val selectedProfile = remember { mutableStateOf(0) }
-
-    // WiP ; needs more work, but nice for testing
-    fun generateDuelExplanation(
-        base: ProposalResultInterface,
-        other: ProposalResultInterface,
-    ): String {
-
-        if (base.rank == other.rank) {
-            return context.getString(
-                R.string.ranking_explain_perfectly_equal,
-                poll.pollConfig.proposals[base.index],
-                poll.pollConfig.proposals[other.index],
-            )
-        } else if (base.rank < other.rank && base.analysis.medianGrade > other.analysis.medianGrade) {
-            return context.getString(
-                R.string.ranking_explain_better_median,
-                poll.pollConfig.proposals[base.index],
-                context.getString(poll.pollConfig.grading.getGradeName(base.analysis.medianGrade)),
-                poll.pollConfig.proposals[other.index],
-                context.getString(poll.pollConfig.grading.getGradeName(other.analysis.medianGrade)),
-            )
-        } else if (base.rank < other.rank && base.analysis.medianGrade == other.analysis.medianGrade) {
-            if (base.analysis.secondMedianGroupSize > other.analysis.secondMedianGroupSize) {
-                return context.getString(
-                    R.string.ranking_explain_same_median,
-                    poll.pollConfig.proposals[base.index],
-                    poll.pollConfig.proposals[other.index],
-                    context.getString(poll.pollConfig.grading.getGradeName(base.analysis.medianGrade)),
-                    if (base.analysis.secondMedianGroupSign >= 0) {
-                        context.getString(R.string.adhesion)
-                    } else {
-                        context.getString(R.string.contestation)
-                    },
-                    poll.pollConfig.proposals[base.index],
-                )
-            } else if (base.analysis.secondMedianGroupSize < other.analysis.secondMedianGroupSize) {
-                return context.getString(
-                    R.string.ranking_explain_same_median,
-                    poll.pollConfig.proposals[base.index],
-                    poll.pollConfig.proposals[other.index],
-                    context.getString(poll.pollConfig.grading.getGradeName(base.analysis.medianGrade)),
-                    if (other.analysis.secondMedianGroupSign >= 0) {
-                        context.getString(R.string.adhesion)
-                    } else {
-                        context.getString(R.string.contestation)
-                    },
-                    poll.pollConfig.proposals[other.index],
-                )
-            }
-        }
-
-        return context.getString(R.string.wip_stay_tuned)
-    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -214,14 +159,28 @@ fun ResultScreen(
 
                     Spacer(Modifier.padding(vertical = 10.dp))
 
+                    // Ux: Explanations are shown one at a time (exclusive toggle)
+                    val shouldShowExplanation = isAnyProfileSelected.value
+                            && selectedProfile.value == displayIndex
+
                     var explainRowModifier: Modifier = Modifier
-                    if (!isAnyProfileSelected.value || selectedProfile.value != displayIndex) {
+                    if (!shouldShowExplanation) {
+                        // TODO: animate
                         explainRowModifier = explainRowModifier.height(0.dp)
                     }
+
                     Row(
                         modifier = explainRowModifier,
                     ) {
-                        Text(generateDuelExplanation(proposalResult, neighborProposalResult))
+                        Text(
+                            fontSize = 14.sp,
+                            text =
+                            if (state.explanations.size > displayIndex) {
+                                state.explanations[displayIndex]
+                            } else {
+                                "\uD83D\uDC1E"
+                            }
+                        )
                     }
 
                     Spacer(Modifier.padding(vertical = 2.dp))
@@ -278,6 +237,7 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
     )
     val pollResultViewModel = PollResultViewModel(Navigator())
     pollResultViewModel.initializePollResult(poll)
+    pollResultViewModel.collectDuelExplanations(LocalContext.current)
     val state = pollResultViewModel.pollResultViewState.collectAsState().value
     JmTheme {
         ResultScreen(
