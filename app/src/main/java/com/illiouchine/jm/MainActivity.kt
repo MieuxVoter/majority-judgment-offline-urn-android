@@ -206,8 +206,10 @@ class MainActivity : ComponentActivity() {
                         val context = LocalContext.current
                         val pollResult: Screens.PollResult = backStackEntry.toRoute()
                         LaunchedEffect(pollResult) {
-                            pollResultViewModel.initializePollResult(poll = pollResult.poll)
-                            pollResultViewModel.collectDuelExplanations(context = context)
+                            pollResultViewModel.initializePollResult(
+                                context = context,
+                                poll = pollResult.poll,
+                            )
                         }
 
                         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)

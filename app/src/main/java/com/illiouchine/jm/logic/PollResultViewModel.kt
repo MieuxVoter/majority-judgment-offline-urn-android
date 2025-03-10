@@ -29,7 +29,7 @@ class PollResultViewModel(
     private val _pollResultViewState = MutableStateFlow<PollResultViewState>(PollResultViewState())
     val pollResultViewState: StateFlow<PollResultViewState> = _pollResultViewState
 
-    fun initializePollResult(poll: Poll) {
+    fun initializePollResult(context: Context, poll: Poll) {
         val amountOfProposals = poll.pollConfig.proposals.size
         val amountOfGrades = poll.pollConfig.grading.getAmountOfGrades()
         val deliberation: DeliberatorInterface = MajorityJudgmentDeliberator()
@@ -44,22 +44,6 @@ class PollResultViewModel(
 
         val result: ResultInterface = deliberation.deliberate(tally)
 
-        _pollResultViewState.update {
-            it.copy(
-                poll = poll,
-                tally = tally,
-                result = result,
-            )
-        }
-    }
-
-    fun collectDuelExplanations(context: Context) {
-        if (_pollResultViewState.value.result == null) {
-            return
-        }
-
-        val result = _pollResultViewState.value.result!!
-        val amountOfProposals = result.proposalResultsRanked.size
         val explanations: MutableList<String> = mutableListOf()
         result.proposalResultsRanked.forEachIndexed { displayIndex, proposalResult ->
             val neighborProposalResult = result.proposalResultsRanked[
@@ -73,6 +57,7 @@ class PollResultViewModel(
             explanations.add(
                 generateDuelExplanation(
                     context = context,
+                    poll = poll,
                     base = proposalResult,
                     other = neighborProposalResult,
                 )
@@ -81,6 +66,9 @@ class PollResultViewModel(
 
         _pollResultViewState.update {
             it.copy(
+                poll = poll,
+                tally = tally,
+                result = result,
                 explanations = explanations,
             )
         }
@@ -88,11 +76,11 @@ class PollResultViewModel(
 
     fun generateDuelExplanation(
         context: Context,
+        poll: Poll,
         base: ProposalResultInterface,
         other: ProposalResultInterface,
     ): String {
 
-        val poll = _pollResultViewState.value.poll!!
         if (base.rank == other.rank) {
             return context.getString(
                 R.string.ranking_explain_perfectly_equal,

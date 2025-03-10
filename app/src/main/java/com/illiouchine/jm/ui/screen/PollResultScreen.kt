@@ -102,21 +102,19 @@ fun ResultScreen(
 
             val amountOfProposals = result.proposalResultsRanked.size
             result.proposalResultsRanked.forEachIndexed { displayIndex, proposalResult ->
-                val neighborProposalResult = result.proposalResultsRanked[
-                    if (displayIndex < amountOfProposals - 1) {
-                        displayIndex + 1
-                    } else {
-                        displayIndex - 1
-                    }
-                ]
                 Column(
                     modifier = Modifier
                         .clickable {
-                            if (isAnyProfileSelected.value && selectedProfile.value == displayIndex) {
+                            val clickedIndex = if (displayIndex == amountOfProposals - 1) {
+                                displayIndex - 1
+                            } else {
+                                displayIndex
+                            }
+                            if (isAnyProfileSelected.value && selectedProfile.value == clickedIndex) {
                                 isAnyProfileSelected.value = false
                             } else {
                                 isAnyProfileSelected.value = true
-                                selectedProfile.value = displayIndex
+                                selectedProfile.value = clickedIndex
                             }
                         }
                         .alpha(
@@ -236,8 +234,7 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
         ),
     )
     val pollResultViewModel = PollResultViewModel(Navigator())
-    pollResultViewModel.initializePollResult(poll)
-    pollResultViewModel.collectDuelExplanations(LocalContext.current)
+    pollResultViewModel.initializePollResult(LocalContext.current, poll)
     val state = pollResultViewModel.pollResultViewState.collectAsState().value
     JmTheme {
         ResultScreen(
