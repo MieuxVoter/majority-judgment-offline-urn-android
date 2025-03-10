@@ -71,9 +71,11 @@
     <string name="button_translate_app">Translate the App</string>
     <string name="button_more_about_majority_judgment">More about Majority Judgment</string>
     <string name="button_try_online_webapp">Try the Online WebApp</string>
-    <string name="ranking_explain_perfectly_equal">%1$s et %2$s sont parfaitement à égalité.</string>
+    <string name="ranking_explain_perfectly_equal">%1$s and %2$s are perfectly equal.</string>
     <string name="ranking_explain_different_median">%1$s is %2$s and therefore %3$s than %4$s which is %5$s.</string>
     <string name="ranking_explain_same_median">%1$s and %2$s are both %3$s, but the %4$s group of %5$s is bigger.</string>
+    <string name="ranking_explain_different_sub_groups">The %1$s group of %2$s says %3$s, which is %4$s than the %5$s group of %6$s saying %7$s.</string>
+    <string name="ranking_explain_double_majority">Double majority !  The %1$s group of %2$s is just as big as the %3$s group of %4$s.  Both mean that %5$s should be %6$s than %7$s.</string>
     <string name="wip_stay_tuned">Work in Progress.\nStay tuned for updates via F-Droid.</string>
     <string name="adhesion">adhesion</string>
     <string name="contestation">contestation</string>

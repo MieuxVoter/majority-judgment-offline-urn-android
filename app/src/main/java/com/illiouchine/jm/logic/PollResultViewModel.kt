@@ -77,8 +77,8 @@ class PollResultViewModel(
         poll: Poll,
         tally: TallyInterface,
         result: ResultInterface,
-        baseIndex: Int,
-        otherIndex: Int,
+        baseIndex: Int, // profile that was clicked
+        otherIndex: Int, // neighbor profile
     ): String {
 
         val base = result.proposalResultsRanked[baseIndex]
@@ -138,6 +138,64 @@ class PollResultViewModel(
                         context.getString(R.string.contestation)
                     },
                     poll.pollConfig.proposals[biggest.index],
+                )
+            } else if (baseGroup.grade != otherGroup.grade) {
+
+                if (baseGroup.type != otherGroup.type) {
+                    // The %1$s group of %2$s is just as big as the %3$s group of %4$s.
+                    // Both mean that %5$s should be %6$s than %7$s.
+                    return context.getString(
+                        R.string.ranking_explain_double_majority,
+                        if (baseGroup.type == ParticipantGroup.Type.Adhesion) {
+                            context.getString(R.string.adhesion)
+                        } else {
+                            context.getString(R.string.contestation)
+                        },
+                        poll.pollConfig.proposals[base.index],
+                        if (otherGroup.type == ParticipantGroup.Type.Adhesion) {
+                            context.getString(R.string.adhesion)
+                        } else {
+                            context.getString(R.string.contestation)
+                        },
+                        poll.pollConfig.proposals[other.index],
+                        poll.pollConfig.proposals[base.index],
+                        if (base.rank < other.rank) {
+                            context.getString(R.string.higher)
+                        } else {
+                            context.getString(R.string.lower)
+                        },
+                        poll.pollConfig.proposals[other.index],
+                    )
+                }
+
+                val bestGroup = if (baseGroup.grade > otherGroup.grade) {
+                    baseGroup
+                } else {
+                    otherGroup
+                }
+
+                // The %1$s group of %2$s is %3$s which is %4$s than the %5$s group of %6$s which is %7$s
+                return context.getString(
+                    R.string.ranking_explain_different_sub_groups,
+                    if (baseGroup.type == ParticipantGroup.Type.Adhesion) {
+                        context.getString(R.string.adhesion)
+                    } else {
+                        context.getString(R.string.contestation)
+                    },
+                    poll.pollConfig.proposals[base.index],
+                    context.getString(poll.pollConfig.grading.getGradeName(baseGroup.grade)),
+                    if (baseGroup == bestGroup) {
+                        context.getString(R.string.higher)
+                    } else {
+                        context.getString(R.string.lower)
+                    },
+                    if (otherGroup.type == ParticipantGroup.Type.Adhesion) {
+                        context.getString(R.string.adhesion)
+                    } else {
+                        context.getString(R.string.contestation)
+                    },
+                    poll.pollConfig.proposals[other.index],
+                    context.getString(poll.pollConfig.grading.getGradeName(otherGroup.grade)),
                 )
             }
         }
