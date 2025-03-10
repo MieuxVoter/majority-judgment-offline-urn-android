@@ -8,12 +8,13 @@ import com.illiouchine.jm.ui.Navigator
 import fr.mieuxvoter.mj.CollectedTally
 import fr.mieuxvoter.mj.DeliberatorInterface
 import fr.mieuxvoter.mj.MajorityJudgmentDeliberator
-import fr.mieuxvoter.mj.ParticipantGroup
+import fr.mieuxvoter.mj.ParticipantGroup.Type
 import fr.mieuxvoter.mj.ResultInterface
 import fr.mieuxvoter.mj.TallyInterface
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlin.math.max
 
 class PollResultViewModel(
     private val navigator: Navigator,
@@ -26,7 +27,7 @@ class PollResultViewModel(
         val explanations: List<String> = emptyList(),
     )
 
-    private val _pollResultViewState = MutableStateFlow<PollResultViewState>(PollResultViewState())
+    private val _pollResultViewState = MutableStateFlow(PollResultViewState())
     val pollResultViewState: StateFlow<PollResultViewState> = _pollResultViewState
 
     fun initializePollResult(context: Context, poll: Poll) {
@@ -95,15 +96,43 @@ class PollResultViewModel(
             )
         }
 
-        for (i in (0..<baseGroups.size)) {
+        for (i in (0..<max(baseGroups.size, otherGroups.size))) {
+            if (i >= baseGroups.size) {
+                val otherGroup = otherGroups[i]
+                // The %1$s group of %2$s is the biggest, as %3$s has no more groups.
+                return context.getString(
+                    R.string.ranking_explain_no_more_groups,
+                    if (otherGroup.type == Type.Adhesion) {
+                        context.getString(R.string.adhesion)
+                    } else {
+                        context.getString(R.string.contestation)
+                    },
+                    poll.pollConfig.proposals[other.index],
+                    poll.pollConfig.proposals[base.index],
+                )
+            }
             val baseGroup = baseGroups[i]
+            if (i >= otherGroups.size) {
+                // The %1$s group of %2$s is the biggest, as %3$s has no more groups.
+                return context.getString(
+                    R.string.ranking_explain_no_more_groups,
+                    if (baseGroup.type == Type.Adhesion) {
+                        context.getString(R.string.adhesion)
+                    } else {
+                        context.getString(R.string.contestation)
+                    },
+                    poll.pollConfig.proposals[base.index],
+                    poll.pollConfig.proposals[other.index],
+                )
+            }
             val otherGroup = otherGroups[i]
 
-            if (baseGroup.type == ParticipantGroup.Type.Median && otherGroup.type == ParticipantGroup.Type.Median) {
+            if (baseGroup.type == Type.Median && otherGroup.type == Type.Median) {
+                // The median grades are the same, go deeper
                 if (baseGroup.grade == otherGroup.grade) {
                     continue
                 }
-
+                // Or the median grades are different, and so we already found a winner
                 return context.getString(
                     R.string.ranking_explain_different_median,
                     poll.pollConfig.proposals[base.index],
@@ -132,7 +161,7 @@ class PollResultViewModel(
                     poll.pollConfig.proposals[base.index],
                     poll.pollConfig.proposals[other.index],
                     context.getString(poll.pollConfig.grading.getGradeName(base.analysis.medianGrade)),
-                    if (biggestGroup.type == ParticipantGroup.Type.Adhesion) {
+                    if (biggestGroup.type == Type.Adhesion) {
                         context.getString(R.string.adhesion)
                     } else {
                         context.getString(R.string.contestation)
@@ -146,13 +175,13 @@ class PollResultViewModel(
                     // Both mean that %5$s should be %6$s than %7$s.
                     return context.getString(
                         R.string.ranking_explain_double_majority,
-                        if (baseGroup.type == ParticipantGroup.Type.Adhesion) {
+                        if (baseGroup.type == Type.Adhesion) {
                             context.getString(R.string.adhesion)
                         } else {
                             context.getString(R.string.contestation)
                         },
                         poll.pollConfig.proposals[base.index],
-                        if (otherGroup.type == ParticipantGroup.Type.Adhesion) {
+                        if (otherGroup.type == Type.Adhesion) {
                             context.getString(R.string.adhesion)
                         } else {
                             context.getString(R.string.contestation)
@@ -177,7 +206,7 @@ class PollResultViewModel(
                 // The %1$s group of %2$s is %3$s which is %4$s than the %5$s group of %6$s which is %7$s
                 return context.getString(
                     R.string.ranking_explain_different_sub_groups,
-                    if (baseGroup.type == ParticipantGroup.Type.Adhesion) {
+                    if (baseGroup.type == Type.Adhesion) {
                         context.getString(R.string.adhesion)
                     } else {
                         context.getString(R.string.contestation)
@@ -189,7 +218,7 @@ class PollResultViewModel(
                     } else {
                         context.getString(R.string.lower)
                     },
-                    if (otherGroup.type == ParticipantGroup.Type.Adhesion) {
+                    if (otherGroup.type == Type.Adhesion) {
                         context.getString(R.string.adhesion)
                     } else {
                         context.getString(R.string.contestation)
