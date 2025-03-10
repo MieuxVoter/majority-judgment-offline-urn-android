@@ -82,6 +82,7 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .padding(innerPadding)
+                .padding(horizontal = 4.dp)
                 .verticalScroll(state = scrollState)
         ) {
             Text(

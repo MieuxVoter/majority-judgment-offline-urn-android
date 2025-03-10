@@ -2,6 +2,7 @@ package com.illiouchine.jm.ui.screen
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,15 +18,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.math.MathUtils.clamp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.model.Ballot
@@ -39,15 +41,9 @@ import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
+import com.illiouchine.jm.ui.utils.smoothStep
 import kotlin.math.max
 import kotlin.math.min
-
-
-// This was not invented here, most definitely.  Where are the steps in Kotlin?
-fun smoothStep(edge0: Float, edge1: Float, x: Float): Float {
-    val value = clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f)
-    return value * value * (3.0f - 2.0f * value)
-}
 
 @Composable
 fun ResultScreen(
@@ -61,6 +57,9 @@ fun ResultScreen(
     val result = state.result!!
     val tally = state.tally!!
     val grading = poll.pollConfig.grading
+
+    val isAnyProfileSelected = remember { mutableStateOf(false) }
+    val selectedProfile = remember { mutableStateOf(0) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -105,6 +104,19 @@ fun ResultScreen(
             result.proposalResultsRanked.forEachIndexed { displayIndex, proposalResult ->
                 Column(
                     modifier = Modifier
+                        .clickable {
+                            val clickedIndex = if (displayIndex == amountOfProposals - 1) {
+                                displayIndex - 1
+                            } else {
+                                displayIndex
+                            }
+                            if (isAnyProfileSelected.value && selectedProfile.value == clickedIndex) {
+                                isAnyProfileSelected.value = false
+                            } else {
+                                isAnyProfileSelected.value = true
+                                selectedProfile.value = clickedIndex
+                            }
+                        }
                         .alpha(
                             smoothStep(
                                 max(0f, 0.85f * displayIndex / amountOfProposals),
@@ -112,7 +124,8 @@ fun ResultScreen(
                                 appearAnimation.value,
                             )
                         ),
-                ) {
+
+                    ) {
                     Row(
                         verticalAlignment = Alignment.Bottom,
                     ) {
@@ -142,7 +155,33 @@ fun ResultScreen(
                         )
                     }
 
-                    Spacer(Modifier.padding(vertical = 12.dp))
+                    Spacer(Modifier.padding(vertical = 10.dp))
+
+                    // Ux: Explanations are shown one at a time (exclusive toggle)
+                    val shouldShowExplanation = isAnyProfileSelected.value
+                            && selectedProfile.value == displayIndex
+
+                    var explainRowModifier: Modifier = Modifier
+                    if (!shouldShowExplanation) {
+                        // TODO: animate
+                        explainRowModifier = explainRowModifier.height(0.dp)
+                    }
+
+                    Row(
+                        modifier = explainRowModifier,
+                    ) {
+                        Text(
+                            fontSize = 14.sp,
+                            text =
+                            if (state.explanations.size > displayIndex) {
+                                state.explanations[displayIndex]
+                            } else {
+                                "\uD83D\uDC1E"
+                            }
+                        )
+                    }
+
+                    Spacer(Modifier.padding(vertical = 2.dp))
                 }
             }
 
@@ -195,7 +234,7 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
         ),
     )
     val pollResultViewModel = PollResultViewModel(Navigator())
-    pollResultViewModel.initializePollResult(poll)
+    pollResultViewModel.initializePollResult(LocalContext.current, poll)
     val state = pollResultViewModel.pollResultViewState.collectAsState().value
     JmTheme {
         ResultScreen(

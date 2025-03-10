@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -21,7 +22,6 @@ import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.logic.PollVotingViewModel
 import com.illiouchine.jm.logic.SettingsViewModel
-import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.CustomNavType
@@ -203,9 +203,13 @@ class MainActivity : ComponentActivity() {
                         )
                     ) { backStackEntry ->
 
+                        val context = LocalContext.current
                         val pollResult: Screens.PollResult = backStackEntry.toRoute()
                         LaunchedEffect(pollResult) {
-                            pollResultViewModel.initializePollResult(poll = pollResult.poll)
+                            pollResultViewModel.initializePollResult(
+                                context = context,
+                                poll = pollResult.poll,
+                            )
                         }
 
                         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -215,10 +219,6 @@ class MainActivity : ComponentActivity() {
                                 state = pollResultViewState,
                                 onFinish = { navigator.navigateTo(Screens.Home) },
                             )
-                        } else {
-                            // During the screen navigation transition to home (in onFinish above),
-                            // we end up here very briefly, 'cause concurrency probably.
-                            // For now, nothing is cool I guess ?
                         }
                     }
                     composable<Screens.Settings> {
