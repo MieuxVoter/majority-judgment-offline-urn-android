@@ -46,7 +46,7 @@ class PollResultViewModel(
         val result: ResultInterface = deliberation.deliberate(tally)
 
         val explanations: MutableList<String> = mutableListOf()
-        result.proposalResultsRanked.forEachIndexed { displayIndex, proposalResult ->
+        result.proposalResultsRanked.forEachIndexed { displayIndex, _ ->
             explanations.add(
                 generateDuelExplanation(
                     context = context,
@@ -73,7 +73,7 @@ class PollResultViewModel(
         }
     }
 
-    fun generateDuelExplanation(
+    private fun generateDuelExplanation(
         context: Context,
         poll: Poll,
         tally: TallyInterface,
@@ -156,6 +156,7 @@ class PollResultViewModel(
                 } else {
                     other
                 }
+                // %1$s and %2$s are both %3$s, but the %4$s group of %5$s is bigger.
                 return context.getString(
                     R.string.ranking_explain_same_median,
                     poll.pollConfig.proposals[base.index],
