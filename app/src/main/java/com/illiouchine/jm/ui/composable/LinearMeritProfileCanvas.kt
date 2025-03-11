@@ -24,6 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import com.illiouchine.jm.model.Grading
+import com.illiouchine.jm.service.ParticipantGroupAnalysis
+import fr.mieuxvoter.mj.ParticipantGroup
 import fr.mieuxvoter.mj.ProposalResultInterface
 import fr.mieuxvoter.mj.TallyInterface
 import java.util.Locale
@@ -35,6 +37,8 @@ fun LinearMeritProfileCanvas(
     tally: TallyInterface,
     proposalResult: ProposalResultInterface,
     grading: Grading,
+    decisiveGroups: List<ParticipantGroupAnalysis>,
+    showDecisiveGroups: Boolean = false,
 ) {
 
     val textMeasurer = rememberTextMeasurer()
@@ -61,18 +65,25 @@ fun LinearMeritProfileCanvas(
     Canvas(
         modifier = modifier,
     ) {
+        val greenToRed = false
         val proposalTally = tally.proposalsTallies[proposalResult.index]
         val middleX = size.width * 0.5f
         var offsetX = 0f
         val medianGradeOutline = Path()
         val balancedGradeWidth = size.width / grading.getAmountOfGrades()
 
-        for (gradeIndex in (0..<grading.getAmountOfGrades()).reversed()) {
+        val gradesRects: MutableList<Rect> = mutableListOf()
+
+        for (gradeIndex in (0..<grading.getAmountOfGrades())) {
             var gradeWidth = (size.width * proposalTally.tally[gradeIndex].toFloat()) /
                     proposalTally.amountOfJudgments.toFloat()
             gradeWidth = lerp(balancedGradeWidth, gradeWidth, widthAnimation.value)
             val gradeRectSize = Size(gradeWidth, size.height)
             val gradeRectOffset = Offset(offsetX, 0f)
+            gradesRects.add(Rect(
+                offset = gradeRectOffset,
+                size = gradeRectSize,
+            ))
 
             // Fill a rectangle with the color of the grade
             drawRect(
@@ -139,17 +150,79 @@ fun LinearMeritProfileCanvas(
             offsetX += gradeWidth
         }
 
-
         // Draw the median grade outline *after* drawing all the grade rectangles
-        drawPath(
-            color = contrastedColor,
-            path = medianGradeOutline,
-            style = Stroke(
-                width = 3.dp.toPx(),
-                join = StrokeJoin.Bevel,
-            ),
-            alpha = outlineAlphaAnimation.value,
-        )
+        if (!showDecisiveGroups) {
+            drawPath(
+                color = contrastedColor,
+                path = medianGradeOutline,
+                style = Stroke(
+                    width = 3.dp.toPx(),
+                    join = StrokeJoin.Bevel,
+                ),
+                alpha = outlineAlphaAnimation.value,
+            )
+        }
+
+        fun expand(
+            rect: Rect,
+            towardsLeft: Boolean,
+            invert: Boolean,
+        ): Rect {
+            if (towardsLeft xor invert) {
+                return Rect(
+                    offset = Offset(
+                        x = 0f,
+                        y = rect.topLeft.y,
+                    ),
+                    size = Size(
+                        width = rect.size.width + rect.topLeft.x,
+                        height = rect.size.height,
+                    ),
+                )
+            } else {
+                return Rect(
+                    offset = rect.topLeft,
+                    size = Size(
+                        width = size.width - rect.topLeft.x,
+                        height = rect.size.height,
+                    ),
+                )
+            }
+        }
+
+        // Draw the outline of the decisive groups
+        if (showDecisiveGroups) {
+            for (decisiveGroup in decisiveGroups) {
+
+                val groupOutline = Path()
+                val groupOutlineRect: Rect
+                if (decisiveGroup.group.type != ParticipantGroup.Type.Median) {
+                    groupOutlineRect = expand(
+                        gradesRects[decisiveGroup.group.grade],
+                        decisiveGroup.group.type == ParticipantGroup.Type.Contestation,
+                        greenToRed,
+                    )
+                } else {
+                    groupOutlineRect = gradesRects[decisiveGroup.group.grade]
+                }
+                groupOutline.addRect(groupOutlineRect)
+
+                drawPath(
+                    color = contrastedColor,
+                    path = groupOutline,
+                    style = Stroke(
+                        width = if (decisiveGroup.decisive) {
+                            3.dp.toPx()
+                        } else {
+                            1.dp.toPx()
+                        },
+                        join = StrokeJoin.Bevel,
+                    ),
+                    alpha = outlineAlphaAnimation.value,
+                )
+            }
+        }
+
 
         // Amount by which the median line overshoots the merit profile vertically
         val medianLineVerticalOvershoot = 3.dp.toPx()

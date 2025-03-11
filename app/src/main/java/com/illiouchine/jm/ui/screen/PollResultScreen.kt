@@ -61,7 +61,7 @@ fun ResultScreen(
     val grading = poll.pollConfig.grading
 
     var isAnyProfileSelected by remember { mutableStateOf(false) }
-    val selectedProfile = remember { mutableStateOf(0) }
+    val selectedProfile = remember { mutableStateOf(0) } // index
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -156,6 +156,8 @@ fun ResultScreen(
                             tally = tally,
                             proposalResult = proposalResult,
                             grading = grading,
+                            decisiveGroups = state.groups[selectedProfile.value].groups.filter { pga -> pga.participant == displayIndex },
+                            showDecisiveGroups = isAnyProfileSelected,
                         )
                     }
 
