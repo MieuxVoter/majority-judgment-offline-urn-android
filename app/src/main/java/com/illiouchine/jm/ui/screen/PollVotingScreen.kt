@@ -15,6 +15,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -34,6 +35,7 @@ import com.illiouchine.jm.ui.composable.JudgmentBalls
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun PollVotingScreen(
@@ -118,6 +120,8 @@ fun PollVotingScreen(
 
                 if (pollVotingState.isInStateVoting()) {
 
+                    val scrollCoroutine = rememberCoroutineScope()
+
                     // State: VOTING, filling the ballot with judgments.
                     val currentProposalIndex =
                         pollVotingState.currentProposalsOrder[pollVotingState.currentBallot!!.judgments.size]
@@ -130,6 +134,9 @@ fun PollVotingScreen(
                                 grade = result,
                             )
                             onJudgmentCast(judgment)
+                            scrollCoroutine.launch {
+                                scrollState.scrollTo(67)
+                            }
                         }
                     )
                     JudgmentBalls(

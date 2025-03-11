@@ -18,8 +18,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -58,8 +60,8 @@ fun ResultScreen(
     val tally = state.tally!!
     val grading = poll.pollConfig.grading
 
-    val isAnyProfileSelected = remember { mutableStateOf(false) }
-    val selectedProfile = remember { mutableStateOf(0) }
+    var isAnyProfileSelected by remember { mutableStateOf(false) }
+    val selectedProfile = remember { mutableStateOf(0) } // index
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -105,15 +107,17 @@ fun ResultScreen(
                 Column(
                     modifier = Modifier
                         .clickable {
+                            // Clicking on the last is clicking on the penultimate.
                             val clickedIndex = if (displayIndex == amountOfProposals - 1) {
                                 displayIndex - 1
                             } else {
                                 displayIndex
                             }
-                            if (isAnyProfileSelected.value && selectedProfile.value == clickedIndex) {
-                                isAnyProfileSelected.value = false
+                            // Behaves like an exclusive toggle
+                            if (isAnyProfileSelected && selectedProfile.value == clickedIndex) {
+                                isAnyProfileSelected = false
                             } else {
-                                isAnyProfileSelected.value = true
+                                isAnyProfileSelected = true
                                 selectedProfile.value = clickedIndex
                             }
                         }
@@ -152,13 +156,15 @@ fun ResultScreen(
                             tally = tally,
                             proposalResult = proposalResult,
                             grading = grading,
+                            decisiveGroups = state.groups[selectedProfile.value].groups.filter { pga -> pga.participant == displayIndex },
+                            showDecisiveGroups = isAnyProfileSelected,
                         )
                     }
 
                     Spacer(Modifier.padding(vertical = 10.dp))
 
                     // Ux: Explanations are shown one at a time (exclusive toggle)
-                    val shouldShowExplanation = isAnyProfileSelected.value
+                    val shouldShowExplanation = isAnyProfileSelected
                             && selectedProfile.value == displayIndex
 
                     var explainRowModifier: Modifier = Modifier

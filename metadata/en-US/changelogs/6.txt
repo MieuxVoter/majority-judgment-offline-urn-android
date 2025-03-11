@@ -11,6 +11,8 @@
 * Automatically pin screen (opt-in)
 * Add more information on the results screen
 * Animate the merit profiles
+* Explain how proposals are ranked a little
+* Highlight the decisive groups when selecting a duel
 * Setup Weblate for community-driven translations
 * Add Spanish
 * Add a crude test suite in Gherkin

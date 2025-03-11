@@ -2,13 +2,13 @@ package com.illiouchine.jm.logic
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.service.DuelAnalyzer
+import com.illiouchine.jm.service.ParticipantGroupAnalysis
 import com.illiouchine.jm.ui.Navigator
 import fr.mieuxvoter.mj.CollectedTally
 import fr.mieuxvoter.mj.DeliberatorInterface
 import fr.mieuxvoter.mj.MajorityJudgmentDeliberator
-import fr.mieuxvoter.mj.ParticipantGroup
 import fr.mieuxvoter.mj.ResultInterface
 import fr.mieuxvoter.mj.TallyInterface
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,9 +24,14 @@ class PollResultViewModel(
         val tally: TallyInterface? = null,
         val result: ResultInterface? = null,
         val explanations: List<String> = emptyList(),
+        val groups: List<DuelGroups> = emptyList(),
     )
 
-    private val _pollResultViewState = MutableStateFlow<PollResultViewState>(PollResultViewState())
+    data class DuelGroups(
+        val groups: List<ParticipantGroupAnalysis>,
+    )
+
+    private val _pollResultViewState = MutableStateFlow(PollResultViewState())
     val pollResultViewState: StateFlow<PollResultViewState> = _pollResultViewState
 
     fun initializePollResult(context: Context, poll: Poll) {
@@ -44,20 +49,29 @@ class PollResultViewModel(
 
         val result: ResultInterface = deliberation.deliberate(tally)
 
+        val groups: MutableList<DuelGroups> = mutableListOf()
         val explanations: MutableList<String> = mutableListOf()
-        result.proposalResultsRanked.forEachIndexed { displayIndex, proposalResult ->
+        result.proposalResultsRanked.forEachIndexed { displayIndex, _ ->
+            val otherIndex = if (displayIndex < amountOfProposals - 1) {
+                displayIndex + 1
+            } else {
+                displayIndex - 1
+            }
+            val duelAnalyzer = DuelAnalyzer(
+                poll = poll,
+                tally = tally,
+                result = result,
+                baseIndex = displayIndex,
+                otherIndex = otherIndex,
+            )
             explanations.add(
-                generateDuelExplanation(
+                duelAnalyzer.generateDuelExplanation(
                     context = context,
-                    poll = poll,
-                    tally = tally,
-                    result = result,
-                    baseIndex = displayIndex,
-                    otherIndex = if (displayIndex < amountOfProposals - 1) {
-                        displayIndex + 1
-                    } else {
-                        displayIndex - 1
-                    },
+                )
+            )
+            groups.add(
+                DuelGroups(
+                    groups = duelAnalyzer.generateGroups(),
                 )
             )
         }
@@ -68,138 +82,8 @@ class PollResultViewModel(
                 tally = tally,
                 result = result,
                 explanations = explanations,
+                groups = groups,
             )
         }
-    }
-
-    fun generateDuelExplanation(
-        context: Context,
-        poll: Poll,
-        tally: TallyInterface,
-        result: ResultInterface,
-        baseIndex: Int, // profile that was clicked
-        otherIndex: Int, // neighbor profile
-    ): String {
-
-        val base = result.proposalResultsRanked[baseIndex]
-        val other = result.proposalResultsRanked[otherIndex]
-
-        val baseGroups = base.analysis.computeResolution(tally.proposalsTallies[base.index])
-        val otherGroups = other.analysis.computeResolution(tally.proposalsTallies[other.index])
-
-        if (base.rank == other.rank) {
-            return context.getString(
-                R.string.ranking_explain_perfectly_equal,
-                poll.pollConfig.proposals[base.index],
-                poll.pollConfig.proposals[other.index],
-            )
-        }
-
-        for (i in (0..<baseGroups.size)) {
-            val baseGroup = baseGroups[i]
-            val otherGroup = otherGroups[i]
-
-            if (baseGroup.type == ParticipantGroup.Type.Median && otherGroup.type == ParticipantGroup.Type.Median) {
-                if (baseGroup.grade == otherGroup.grade) {
-                    continue
-                }
-
-                return context.getString(
-                    R.string.ranking_explain_different_median,
-                    poll.pollConfig.proposals[base.index],
-                    context.getString(poll.pollConfig.grading.getGradeName(base.analysis.medianGrade)),
-                    if (baseGroup.grade > otherGroup.grade) {
-                        context.getString(R.string.higher)
-                    } else {
-                        context.getString(R.string.lower)
-                    },
-                    poll.pollConfig.proposals[other.index],
-                    context.getString(poll.pollConfig.grading.getGradeName(other.analysis.medianGrade)),
-                )
-            } else if (baseGroup.size != otherGroup.size) {
-                val biggestGroup = if (baseGroup.size > otherGroup.size) {
-                    baseGroup
-                } else {
-                    otherGroup
-                }
-                val biggest = if (baseGroup.size > otherGroup.size) {
-                    base
-                } else {
-                    other
-                }
-                return context.getString(
-                    R.string.ranking_explain_same_median,
-                    poll.pollConfig.proposals[base.index],
-                    poll.pollConfig.proposals[other.index],
-                    context.getString(poll.pollConfig.grading.getGradeName(base.analysis.medianGrade)),
-                    if (biggestGroup.type == ParticipantGroup.Type.Adhesion) {
-                        context.getString(R.string.adhesion)
-                    } else {
-                        context.getString(R.string.contestation)
-                    },
-                    poll.pollConfig.proposals[biggest.index],
-                )
-            } else if (baseGroup.grade != otherGroup.grade) {
-
-                if (baseGroup.type != otherGroup.type) {
-                    // The %1$s group of %2$s is just as big as the %3$s group of %4$s.
-                    // Both mean that %5$s should be %6$s than %7$s.
-                    return context.getString(
-                        R.string.ranking_explain_double_majority,
-                        if (baseGroup.type == ParticipantGroup.Type.Adhesion) {
-                            context.getString(R.string.adhesion)
-                        } else {
-                            context.getString(R.string.contestation)
-                        },
-                        poll.pollConfig.proposals[base.index],
-                        if (otherGroup.type == ParticipantGroup.Type.Adhesion) {
-                            context.getString(R.string.adhesion)
-                        } else {
-                            context.getString(R.string.contestation)
-                        },
-                        poll.pollConfig.proposals[other.index],
-                        poll.pollConfig.proposals[base.index],
-                        if (base.rank < other.rank) {
-                            context.getString(R.string.higher)
-                        } else {
-                            context.getString(R.string.lower)
-                        },
-                        poll.pollConfig.proposals[other.index],
-                    )
-                }
-
-                val bestGroup = if (baseGroup.grade > otherGroup.grade) {
-                    baseGroup
-                } else {
-                    otherGroup
-                }
-
-                // The %1$s group of %2$s is %3$s which is %4$s than the %5$s group of %6$s which is %7$s
-                return context.getString(
-                    R.string.ranking_explain_different_sub_groups,
-                    if (baseGroup.type == ParticipantGroup.Type.Adhesion) {
-                        context.getString(R.string.adhesion)
-                    } else {
-                        context.getString(R.string.contestation)
-                    },
-                    poll.pollConfig.proposals[base.index],
-                    context.getString(poll.pollConfig.grading.getGradeName(baseGroup.grade)),
-                    if (baseGroup == bestGroup) {
-                        context.getString(R.string.higher)
-                    } else {
-                        context.getString(R.string.lower)
-                    },
-                    if (otherGroup.type == ParticipantGroup.Type.Adhesion) {
-                        context.getString(R.string.adhesion)
-                    } else {
-                        context.getString(R.string.contestation)
-                    },
-                    poll.pollConfig.proposals[other.index],
-                    context.getString(poll.pollConfig.grading.getGradeName(otherGroup.grade)),
-                )
-            }
-        }
-
-        return context.getString(R.string.wip_stay_tuned)
     }
 }
