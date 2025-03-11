@@ -76,7 +76,6 @@ class MainActivity : ComponentActivity() {
 
             val navController = rememberNavController()
 
-
             // Rule: the screen should never lock during the voting/result phase of the poll
             // Therefore, we clear the flag here and set it on in the appropriate screens.
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
