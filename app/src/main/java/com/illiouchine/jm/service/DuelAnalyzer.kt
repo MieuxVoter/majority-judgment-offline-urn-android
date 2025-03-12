@@ -284,23 +284,19 @@ class DuelAnalyzer(
                     return groups
                 }
 
-                val bestIndex = if (baseGroup.grade > otherGroup.grade) {
-                    baseIndex
-                } else {
-                    otherIndex
-                }
-                val bestGroup = if (baseGroup.grade > otherGroup.grade) {
-                    baseGroup
-                } else {
-                    otherGroup
-                }
-
                 // The %1$s group of %2$s is %3$s which is %4$s than the %5$s group of %6$s which is %7$s
                 groups.add(
                     ParticipantGroupAnalysis(
-                        participant = bestIndex,
-                        group = bestGroup,
-                        decisive = true,
+                        participant = baseIndex,
+                        group = baseGroup,
+                        decisive = (baseGroup.grade >= otherGroup.grade),
+                    )
+                )
+                groups.add(
+                    ParticipantGroupAnalysis(
+                        participant = otherIndex,
+                        group = otherGroup,
+                        decisive = (baseGroup.grade <= otherGroup.grade),
                     )
                 )
                 return groups
