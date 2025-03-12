@@ -130,7 +130,7 @@ class MainActivity : ComponentActivity() {
                             pollVotingViewModel.initVotingSessionForPoll(pollVote.id)
                         }
 
-                        LaunchedEffect("screen_pinning") {
+                        LaunchedEffect(pollVotingViewState.pinScreens) {
                             perhapsLockScreen(pollVotingViewState.pinScreens)
                         }
 
