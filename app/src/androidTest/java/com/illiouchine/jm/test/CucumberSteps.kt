@@ -35,8 +35,27 @@ class CucumberSteps(
         rule.waitForIdle()
     }
 
-    @Then("^I should(?<negation> not|) see the node tagged \"(?<tag>[^\"]+)\"$")
+    @When("^I wait for (?<seconds>[0-9]+[.]?[0-9]*|[0-9]*[.]?[0-9]+) ?s$")
+    fun waitForSeconds(seconds: Float) {
+        val duration = (seconds * 1000f).toLong()
+        rule.waitUntil(duration * 2) {
+            Thread.sleep(duration)
+            true
+        }
+    }
+
+    @Then("^I should(?: still)?(?<negation> not|) see the node tagged \"(?<tag>[^\"]+)\"$")
     fun thenActorShouldSeeNodeByTag(negation: String, tag: String) {
+        if (negation != "") {
+            rule.onNodeWithTag(tag).assertDoesNotExist()
+        } else {
+            rule.onNodeWithTag(tag).assertExists()
+        }
+    }
+
+    @Then("^I should(?: still| now)?(?<negation> not|) see the (?<name>.+?) screen(?: anymore)?$")
+    fun thenActorShouldSeeScreen(negation: String, name: String) {
+        val tag = "${name.replace(Regex("\\s+"), "_")}_screen"
         if (negation != "") {
             rule.onNodeWithTag(tag).assertDoesNotExist()
         } else {

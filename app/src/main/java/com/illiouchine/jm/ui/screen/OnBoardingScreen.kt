@@ -56,7 +56,7 @@ fun OnBoardingScreen(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .testTag("screen_onboarding"),
+            .testTag("onboarding_screen"),
     ) { innerPadding ->
 
         var currentPageIndex by remember { mutableIntStateOf(0) }
@@ -124,14 +124,14 @@ fun OnBoardingScreen(
                     TextButton(
                         modifier = Modifier
                             .weight(0.7f)
-                            .testTag("screen_onboarding_finish"),
+                            .testTag("onboarding_screen_finish"),
                         onClick = { onFinish() },
                     ) { Text(stringResource(R.string.button_finish)) }
                 } else {
                     TextButton(
                         modifier = Modifier
                             .weight(0.7f)
-                            .testTag("screen_onboarding_next"),
+                            .testTag("onboarding_screen_next"),
                         onClick = { currentPageIndex++ },
                     ) { Text(stringResource(R.string.button_next)) }
                 }

@@ -68,7 +68,7 @@ fun PollSetupScreen(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .testTag("screen_setup"),
+            .testTag("setup_screen"),
         snackbarHost = {
             MjuSnackbarWithStringResId(
                 modifier = Modifier,

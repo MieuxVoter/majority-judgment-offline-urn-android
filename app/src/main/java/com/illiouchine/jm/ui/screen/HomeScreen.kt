@@ -58,7 +58,7 @@ fun HomeScreen(
     Scaffold(
         modifier = modifier
             .fillMaxSize()
-            .testTag("screen_home"),
+            .testTag("home_screen"),
         bottomBar = {
             MjuBottomBar(
                 selected = Screens.Home,
