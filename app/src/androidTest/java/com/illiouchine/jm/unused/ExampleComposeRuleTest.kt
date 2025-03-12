@@ -37,7 +37,7 @@ class ExampleComposeRuleTest : BaseInstrumentedTest() {
             }
         }
 
-        composeTestRule.onNodeWithTag("screen_home").assertExists()
+        composeTestRule.onNodeWithTag("home_screen").assertExists()
         Assert.assertEquals(0, onSetupBlankPollTriggers)
         composeTestRule.onNodeWithTag("home_fab").assertExists().performClick()
         Assert.assertEquals(1, onSetupBlankPollTriggers)

@@ -7,18 +7,18 @@ Feature: Onboarding
     Given I launch the app
     And I wait for idle
 
-    Then I should not see the node tagged "screen_home"
-    Then I should see the node tagged "screen_onboarding"
-    Then I should see the node tagged "screen_onboarding_next"
+    Then I should not see the home screen
+    Then I should see the onboarding screen
+    Then I should see the node tagged "onboarding_screen_next"
 
-    When I click on the node tagged "screen_onboarding_next"
-    Then I should see the node tagged "screen_onboarding"
-    Then I should see the node tagged "screen_onboarding_next"
+    When I click on the node tagged "onboarding_screen_next"
+    Then I should see the onboarding screen
+    Then I should see the node tagged "onboarding_screen_next"
 
-    When I click on the node tagged "screen_onboarding_next"
-    Then I should see the node tagged "screen_onboarding"
-    Then I should see the node tagged "screen_onboarding_finish"
+    When I click on the node tagged "onboarding_screen_next"
+    Then I should see the onboarding screen
+    Then I should see the node tagged "onboarding_screen_finish"
 
-    When I click on the node tagged "screen_onboarding_finish"
-    Then I should not see the node tagged "screen_onboarding"
-    But I should see the node tagged "screen_home"
+    When I click on the node tagged "onboarding_screen_finish"
+    Then I should not see the onboarding screen
+    But I should see the home screen

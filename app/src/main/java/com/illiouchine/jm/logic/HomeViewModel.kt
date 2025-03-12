@@ -90,6 +90,12 @@ class HomeViewModel(
     fun finishOnboarding() {
         viewModelScope.launch {
             sharedPrefsHelper.editShowOnboarding(false)
+            // hotfix: perhaps we should observe the prefs instead ?
+            _homeViewState.update {
+                it.copy(
+                    showOnboarding = false,
+                )
+            }
         }
     }
 }

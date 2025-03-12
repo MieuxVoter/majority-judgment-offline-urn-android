@@ -31,7 +31,7 @@ class ExampleActivityRuleTest: BaseInstrumentedTest() {
         // When we launch the application for the first time
 
         // Then we should be on the onboarding screen
-        rule.onNodeWithTag("screen_onboarding").assertExists()
+        rule.onNodeWithTag("onboarding_screen").assertExists()
         rule.waitForIdle()
 
         rule.onNodeWithText(getString(R.string.button_next)).assertExists().performClick()
@@ -49,14 +49,14 @@ class ExampleActivityRuleTest: BaseInstrumentedTest() {
         rule.waitForIdle()
 
         // Then we should be on the home screen
-        rule.onNodeWithTag("screen_home").assertExists()
+        rule.onNodeWithTag("home_screen").assertExists()
     }
 
     @Test
     fun whooshSomePoll() {
         rule.onNodeWithTag("home_fab").assertExists().performClick()
         rule.waitForIdle()
-        rule.onNodeWithTag("screen_setup").assertExists()
+        rule.onNodeWithTag("setup_screen").assertExists()
 
         // … more tests
     }
