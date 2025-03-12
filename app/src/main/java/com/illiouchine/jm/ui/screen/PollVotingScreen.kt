@@ -27,7 +27,6 @@ import com.illiouchine.jm.logic.PollVotingViewModel
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
-import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.GradeSelectionList
@@ -46,7 +45,7 @@ fun PollVotingScreen(
     onBallotConfirmed: (Context, Ballot) -> Unit = { _, _ -> },
     onBallotCanceled: () -> Unit = {},
     onCancelLastJudgment: () -> Unit = {},
-    onFinish: (Poll) -> Unit = {},
+    onFinish: () -> Unit = {},
     feedback: String? = "",
     onDismissFeedback: () -> Unit = {},
 ) {
@@ -108,13 +107,7 @@ fun PollVotingScreen(
                 OutlinedButton(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     enabled = pollVotingState.ballots.isNotEmpty(),
-                    onClick = {
-                        val poll = Poll(
-                            pollConfig = pollVotingState.pollConfig,
-                            ballots = pollVotingState.ballots,
-                        )
-                        onFinish(poll)
-                    },
+                    onClick = { onFinish() },
                 ) { Text(stringResource(R.string.button_end_the_poll)) }
             } else {
 

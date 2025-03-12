@@ -12,6 +12,7 @@ import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 
 fun Poll.toPollEntity(): PollEntity = PollEntity(
+    uid = this.id,
     subject = this.pollConfig.subject,
     nbGrading = this.pollConfig.grading.grades.size,
 )
