@@ -65,25 +65,35 @@ fun LinearMeritProfileCanvas(
     Canvas(
         modifier = modifier,
     ) {
-        val greenToRed = false
+        val greenToRed = true // hoist this to Composable params and then settings ?
         val proposalTally = tally.proposalsTallies[proposalResult.index]
         val middleX = size.width * 0.5f
-        var offsetX = 0f
+        val amountOfGrades = grading.getAmountOfGrades()
+        if (0 >= amountOfGrades) {
+            return@Canvas
+        }
         val medianGradeOutline = Path()
-        val balancedGradeWidth = size.width / grading.getAmountOfGrades()
+        val balancedGradeWidth = size.width / amountOfGrades
 
         val gradesRects: MutableList<Rect> = mutableListOf()
+        var gradesIndices: IntProgression = (0..<amountOfGrades)
+        if (greenToRed) {
+            gradesIndices = gradesIndices.reversed()
+        }
 
-        for (gradeIndex in (0..<grading.getAmountOfGrades())) {
+        var offsetX = 0f // cursor for the grades' loop
+        for (gradeIndex in gradesIndices) {
             var gradeWidth = (size.width * proposalTally.tally[gradeIndex].toFloat()) /
                     proposalTally.amountOfJudgments.toFloat()
             gradeWidth = lerp(balancedGradeWidth, gradeWidth, widthAnimation.value)
             val gradeRectSize = Size(gradeWidth, size.height)
             val gradeRectOffset = Offset(offsetX, 0f)
-            gradesRects.add(Rect(
-                offset = gradeRectOffset,
-                size = gradeRectSize,
-            ))
+            gradesRects.add(
+                Rect(
+                    offset = gradeRectOffset,
+                    size = gradeRectSize,
+                )
+            )
 
             // Fill a rectangle with the color of the grade
             drawRect(
@@ -150,6 +160,10 @@ fun LinearMeritProfileCanvas(
             offsetX += gradeWidth
         }
 
+        if (greenToRed) {
+            gradesRects.reverse()
+        }
+
         // Draw the median grade outline *after* drawing all the grade rectangles
         if (!showDecisiveGroups) {
             drawPath(
@@ -163,7 +177,9 @@ fun LinearMeritProfileCanvas(
             )
         }
 
-        fun expand(
+        // Utility to create a bigger, decisive group's rectangle from a grade's rectangle.
+        // Of Note: scoped here because it needs the size of the Canvas.  Could be a param.
+        fun expandToGroup(
             rect: Rect,
             towardsLeft: Boolean,
             invert: Boolean,
@@ -197,7 +213,7 @@ fun LinearMeritProfileCanvas(
                 val groupOutline = Path()
                 val groupOutlineRect: Rect
                 if (decisiveGroup.group.type != ParticipantGroup.Type.Median) {
-                    groupOutlineRect = expand(
+                    groupOutlineRect = expandToGroup(
                         gradesRects[decisiveGroup.group.grade],
                         decisiveGroup.group.type == ParticipantGroup.Type.Contestation,
                         greenToRed,
