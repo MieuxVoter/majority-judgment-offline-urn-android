@@ -34,3 +34,16 @@ Feature: Making a Poll
 
      And I wait for 3s
 
+#    Then I should see the node tagged "voting_start"
+    Then I should see the node tagged "voting_start_first"
+    Then I should not see the node tagged "voting_start_next"
+
+    When I click on the node tagged "voting_start_first"
+     And I wait for 3s
+
+    When I click on the node tagged "grade_selection_4"
+    When I click on the node tagged "grade_selection_2"
+     And I wait for 3s
+
+
+
