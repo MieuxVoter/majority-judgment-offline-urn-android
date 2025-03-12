@@ -30,6 +30,7 @@ class PollVotingViewModel(
         val ballots: List<Ballot> = emptyList(),
         val currentBallot: Ballot? = null,
         val currentProposalsOrder: List<Int> = emptyList(),
+        val pinScreens: Boolean = false,
     ) {
         fun isInStateReady(): Boolean {
             return null == currentBallot
@@ -49,6 +50,7 @@ class PollVotingViewModel(
         pollId: Int,
     ) {
         viewModelScope.launch {
+            val pinScreens = sharedPrefsHelper.getPinScreen()
             val poll = pollDataSource.getPollById(pollId)
 
             _pollVotingViewState.update {
@@ -57,6 +59,7 @@ class PollVotingViewModel(
                     pollConfig = poll?.pollConfig ?: PollConfig(),
                     ballots = poll?.ballots ?: emptyList(),
                     currentBallot = null,
+                    pinScreens = pinScreens,
                 )
             }
         }
@@ -122,10 +125,12 @@ class PollVotingViewModel(
     fun finalizePoll() {
         viewModelScope.launch {
             val poll = Poll(
+                id = _pollVotingViewState.value.pollId,
                 pollConfig = _pollVotingViewState.value.pollConfig,
                 ballots = _pollVotingViewState.value.ballots,
             )
-            navigator.navigateTo(Screens.PollResult(poll = poll))
+            val newPollId = pollDataSource.savePoll(poll)
+            navigator.navigateTo(Screens.PollResult(id = newPollId))
         }
     }
 }

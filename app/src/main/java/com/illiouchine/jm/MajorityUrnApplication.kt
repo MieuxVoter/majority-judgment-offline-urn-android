@@ -2,9 +2,9 @@ package com.illiouchine.jm
 
 import android.app.Application
 import androidx.room.Room
-import com.illiouchine.jm.data.SqlitePollDataSource
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.data.SharedPrefsHelper
+import com.illiouchine.jm.data.SqlitePollDataSource
 import com.illiouchine.jm.data.room.PollDao
 import com.illiouchine.jm.data.room.PollDataBase
 import com.illiouchine.jm.logic.HomeViewModel
@@ -12,7 +12,9 @@ import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.logic.PollVotingViewModel
 import com.illiouchine.jm.logic.SettingsViewModel
+import com.illiouchine.jm.ui.DefaultNavigator
 import com.illiouchine.jm.ui.Navigator
+import com.illiouchine.jm.ui.Screens
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -50,11 +52,17 @@ val module = module {
     single<PollDataSource> { SqlitePollDataSource(get()) }
 
 
-    // compose
-    single { Navigator() }
+    // Navigation
+    single<Navigator> { DefaultNavigator(Screens.Home) }
 
     // ViewModel
-    viewModel { HomeViewModel(pollDataSource = get(), navigator = get()) }
+    viewModel {
+        HomeViewModel(
+            pollDataSource = get(),
+            navigator = get(),
+            sharedPrefsHelper = get()
+        )
+    }
     viewModel { SettingsViewModel(sharedPreferences = get()) }
     viewModel {
         PollSetupViewModel(
@@ -72,6 +80,7 @@ val module = module {
     }
     viewModel {
         PollResultViewModel(
+            pollDataSource = get(),
             navigator = get(),
         )
     }

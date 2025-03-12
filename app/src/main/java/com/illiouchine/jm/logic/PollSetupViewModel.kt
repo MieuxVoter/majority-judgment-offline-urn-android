@@ -35,10 +35,14 @@ class PollSetupViewModel(
     private val _pollSetupViewState = MutableStateFlow(PollSetupViewState())
     val pollSetupViewState: StateFlow<PollSetupViewState> = _pollSetupViewState
 
-    fun initWithConfig(config: PollConfig? = null) {
-        val initialPollConfig = config ?: PollConfig(grading = sharedPrefsHelper.getDefaultGrading())
-        _pollSetupViewState.update {
-            it.copy(config = initialPollConfig)
+    fun initialize(pollId: Int = 0) {
+        viewModelScope.launch {
+            val poll = pollDataSource.getPollById(pollId = pollId)
+            val initialPoll =
+                poll?.pollConfig ?: PollConfig(grading = sharedPrefsHelper.getDefaultGrading())
+            _pollSetupViewState.update {
+                it.copy(config = initialPoll)
+            }
         }
     }
 
@@ -144,7 +148,7 @@ class PollSetupViewModel(
                 ballots = emptyList(),
             )
             val pollId = pollDataSource.savePoll(poll)
-            navigator.navigateTo(Screens.PollVote(pollId = pollId))
+            navigator.navigateTo(Screens.PollVote(id = pollId))
         }
     }
 
@@ -171,6 +175,7 @@ class PollSetupViewModel(
         return newPoll
     }
 
-    private fun proposalAlreadyExist(proposal: String): Boolean = _pollSetupViewState.value.config.proposals.any { it == proposal }
+    private fun proposalAlreadyExist(proposal: String): Boolean =
+        _pollSetupViewState.value.config.proposals.any { it == proposal }
 
 }
