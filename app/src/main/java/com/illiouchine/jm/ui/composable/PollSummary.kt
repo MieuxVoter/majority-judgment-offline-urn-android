@@ -84,7 +84,10 @@ fun PollSummary(
                 TextButton(onClick = { onResumePoll(poll) }) {
                     Text(stringResource(R.string.action_resume))
                 }
-                TextButton(onClick = { onShowResult(poll) }) {
+                TextButton(
+                    enabled = poll.ballots.isNotEmpty(),
+                    onClick = { onShowResult(poll) },
+                ) {
                     Text(stringResource(R.string.action_inspect))
                 }
             }

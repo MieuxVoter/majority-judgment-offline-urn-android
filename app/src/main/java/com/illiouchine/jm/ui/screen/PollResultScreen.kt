@@ -44,6 +44,7 @@ import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.utils.smoothStep
+import java.math.BigInteger
 import kotlin.math.max
 import kotlin.math.min
 
@@ -104,90 +105,92 @@ fun ResultScreen(
 
             val amountOfProposals = result.proposalResultsRanked.size
             result.proposalResultsRanked.forEachIndexed { displayIndex, proposalResult ->
-                Column(
-                    modifier = Modifier
-                        .clickable {
-                            // Clicking on the last is clicking on the penultimate.
-                            val clickedIndex = if (displayIndex == amountOfProposals - 1) {
-                                displayIndex - 1
-                            } else {
-                                displayIndex
+                if (proposalResult.analysis.totalSize.compareTo(BigInteger.ZERO) > 0) {
+                    Column(
+                        modifier = Modifier
+                            .clickable {
+                                // Clicking on the last is clicking on the penultimate.
+                                val clickedIndex = if (displayIndex == amountOfProposals - 1) {
+                                    displayIndex - 1
+                                } else {
+                                    displayIndex
+                                }
+                                // Behaves like an exclusive toggle
+                                if (isAnyProfileSelected && selectedProfile.value == clickedIndex) {
+                                    isAnyProfileSelected = false
+                                } else {
+                                    isAnyProfileSelected = true
+                                    selectedProfile.value = clickedIndex
+                                }
                             }
-                            // Behaves like an exclusive toggle
-                            if (isAnyProfileSelected && selectedProfile.value == clickedIndex) {
-                                isAnyProfileSelected = false
-                            } else {
-                                isAnyProfileSelected = true
-                                selectedProfile.value = clickedIndex
-                            }
-                        }
-                        .alpha(
-                            smoothStep(
-                                max(0f, 0.85f * displayIndex / amountOfProposals),
-                                min(1f, 1.15f * (displayIndex + 1) / amountOfProposals),
-                                appearAnimation.value,
+                            .alpha(
+                                smoothStep(
+                                    max(0f, 0.85f * displayIndex / amountOfProposals),
+                                    min(1f, 1.15f * (displayIndex + 1) / amountOfProposals),
+                                    appearAnimation.value,
+                                )
+                            ),
+
+                        ) {
+                        Row(
+                            verticalAlignment = Alignment.Bottom,
+                        ) {
+                            val rank = proposalResult.rank
+                            val proposalName = poll.pollConfig.proposals[proposalResult.index]
+                            val medianGrade = proposalResult.analysis.medianGrade
+                            val medianGradeName =
+                                stringResource(poll.pollConfig.grading.getGradeName(medianGrade))
+                            Text(
+                                modifier = Modifier.padding(end = 12.dp),
+                                fontSize = 24.sp,
+                                text = "#$rank",
                             )
-                        ),
+                            Text(
+                                text = "$proposalName   ($medianGradeName)",
+                            )
+                        }
 
-                    ) {
-                    Row(
-                        verticalAlignment = Alignment.Bottom,
-                    ) {
-                        val rank = proposalResult.rank
-                        val proposalName = poll.pollConfig.proposals[proposalResult.index]
-                        val medianGrade = proposalResult.analysis.medianGrade
-                        val medianGradeName =
-                            stringResource(poll.pollConfig.grading.getGradeName(medianGrade))
-                        Text(
-                            modifier = Modifier.padding(end = 12.dp),
-                            fontSize = 24.sp,
-                            text = "#$rank",
-                        )
-                        Text(
-                            text = "$proposalName   ($medianGradeName)",
-                        )
+                        Row {
+                            LinearMeritProfileCanvas(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(24.dp),
+                                tally = tally,
+                                proposalResult = proposalResult,
+                                grading = grading,
+                                decisiveGroups = state.groups[selectedProfile.value].groups.filter { pga -> pga.participant == displayIndex },
+                                showDecisiveGroups = isAnyProfileSelected,
+                            )
+                        }
+
+                        Spacer(Modifier.padding(vertical = 10.dp))
+
+                        // Ux: Explanations are shown one at a time (exclusive toggle)
+                        val shouldShowExplanation = isAnyProfileSelected
+                                && selectedProfile.value == displayIndex
+
+                        var explainRowModifier: Modifier = Modifier
+                        if (!shouldShowExplanation) {
+                            // TODO: animate
+                            explainRowModifier = explainRowModifier.height(0.dp)
+                        }
+
+                        Row(
+                            modifier = explainRowModifier,
+                        ) {
+                            Text(
+                                fontSize = 14.sp,
+                                text =
+                                if (state.explanations.size > displayIndex) {
+                                    state.explanations[displayIndex]
+                                } else {
+                                    "\uD83D\uDC1E"
+                                }
+                            )
+                        }
+
+                        Spacer(Modifier.padding(vertical = 2.dp))
                     }
-
-                    Row {
-                        LinearMeritProfileCanvas(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(24.dp),
-                            tally = tally,
-                            proposalResult = proposalResult,
-                            grading = grading,
-                            decisiveGroups = state.groups[selectedProfile.value].groups.filter { pga -> pga.participant == displayIndex },
-                            showDecisiveGroups = isAnyProfileSelected,
-                        )
-                    }
-
-                    Spacer(Modifier.padding(vertical = 10.dp))
-
-                    // Ux: Explanations are shown one at a time (exclusive toggle)
-                    val shouldShowExplanation = isAnyProfileSelected
-                            && selectedProfile.value == displayIndex
-
-                    var explainRowModifier: Modifier = Modifier
-                    if (!shouldShowExplanation) {
-                        // TODO: animate
-                        explainRowModifier = explainRowModifier.height(0.dp)
-                    }
-
-                    Row(
-                        modifier = explainRowModifier,
-                    ) {
-                        Text(
-                            fontSize = 14.sp,
-                            text =
-                            if (state.explanations.size > displayIndex) {
-                                state.explanations[displayIndex]
-                            } else {
-                                "\uD83D\uDC1E"
-                            }
-                        )
-                    }
-
-                    Spacer(Modifier.padding(vertical = 2.dp))
                 }
             }
 
