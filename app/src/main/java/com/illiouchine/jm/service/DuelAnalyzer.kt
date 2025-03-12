@@ -304,5 +304,4 @@ class DuelAnalyzer(
 
         return groups
     }
-
 }
