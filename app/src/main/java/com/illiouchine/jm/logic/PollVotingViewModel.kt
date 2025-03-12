@@ -30,7 +30,7 @@ class PollVotingViewModel(
         val ballots: List<Ballot> = emptyList(),
         val currentBallot: Ballot? = null,
         val currentProposalsOrder: List<Int> = emptyList(),
-        val pinScreens: Boolean = true,
+        val pinScreens: Boolean = false,
     ) {
         fun isInStateReady(): Boolean {
             return null == currentBallot
