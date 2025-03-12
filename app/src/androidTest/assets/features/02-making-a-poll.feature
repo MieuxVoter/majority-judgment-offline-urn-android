@@ -12,7 +12,7 @@ Feature: Making a Poll
     Then I should see the node tagged "home_fab"
     When I click on the node tagged "home_fab"
     Then I should not see the home screen anymore
-    But I should now see the setup screen
+     But I should now see the setup screen
     Then I should see the node tagged "setup_add_proposal"
     Then I should see the node tagged "setup_submit"
 
@@ -25,8 +25,12 @@ Feature: Making a Poll
     When I click on the node tagged "setup_submit"
     Then I should still see the setup screen
 
-    # Submit button should be enabled (2 proposals)
+    # Submit button should now be enabled (2 proposals)
     When I click on the node tagged "setup_add_proposal"
-    When I click on the node tagged "setup_submit"
+    # But we might need to scroll to it first, on small screens
+    When I scroll to the node tagged "setup_submit"
+     And I click on the node tagged "setup_submit"
     Then I should not see the setup screen anymore
+
+     And I wait for 3s
 

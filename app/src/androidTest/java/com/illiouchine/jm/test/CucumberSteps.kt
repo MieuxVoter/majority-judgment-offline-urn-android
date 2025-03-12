@@ -4,8 +4,11 @@ import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.SemanticsNodeInteractionCollection
 import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import androidx.test.platform.app.InstrumentationRegistry
 import com.illiouchine.jm.MainActivity
 import io.cucumber.java.en.Given
@@ -76,6 +79,32 @@ class CucumberSteps(
     @When("^I click on the node tagged \"([^\"]+)\"$")
     fun whenActorClicksNodeByTag(tag: String) {
         rule.onNodeWithTag(tag).assertExists().performClick()
+    }
+
+    @When("^I scroll to the node tagged \"([^\"]+)\"\$")
+    fun whenActorScrolls(tag: String) {
+        var current = rule.onNodeWithTag(tag)
+        var scrolled = false
+        var bestEffort = 64 // max depth, "just in case"©
+
+        while (0 < bestEffort--) {
+            try {
+                current.performScrollToNode(
+                    matcher = hasTestTag(tag),
+                )
+                scrolled = true
+            } catch (_: AssertionError) {
+                // EAFP pattern 'cause simpler here ; fix at will
+            }
+
+            if (scrolled or current.fetchSemanticsNode().isRoot) {
+                break
+            }
+
+            current = current.onParent()
+        }
+
+        assert(scrolled) { "Did not perform any scroll." }
     }
 
     override fun onAllNodes(
