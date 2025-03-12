@@ -28,8 +28,10 @@ class DuelAnalyzer(
     private val base: ProposalResultInterface = result.proposalResultsRanked[baseIndex]
     private val other: ProposalResultInterface = result.proposalResultsRanked[otherIndex]
 
-    private val baseGroups: Array<ParticipantGroup> = base.analysis.computeResolution(tally.proposalsTallies[base.index])
-    private val otherGroups: Array<ParticipantGroup> = other.analysis.computeResolution(tally.proposalsTallies[other.index])
+    private val baseGroups: Array<ParticipantGroup> =
+        base.analysis.computeResolution(tally.proposalsTallies[base.index])
+    private val otherGroups: Array<ParticipantGroup> =
+        other.analysis.computeResolution(tally.proposalsTallies[other.index])
 
 
     fun generateDuelExplanation(
@@ -242,22 +244,19 @@ class DuelAnalyzer(
                 return groups
 
             } else if (baseGroup.size != otherGroup.size) {
-                val biggestIndex = if (baseGroup.size > otherGroup.size) {
-                    baseIndex
-                } else {
-                    otherIndex
-                }
-                val biggestGroup = if (baseGroup.size > otherGroup.size) {
-                    baseGroup
-                } else {
-                    otherGroup
-                }
                 // %1$s and %2$s are both %3$s, but the %4$s group of %5$s is bigger.
                 groups.add(
                     ParticipantGroupAnalysis(
-                        participant = biggestIndex,
-                        group = biggestGroup,
-                        decisive = true,
+                        participant = baseIndex,
+                        group = baseGroup,
+                        decisive = (baseGroup.size >= otherGroup.size),
+                    )
+                )
+                groups.add(
+                    ParticipantGroupAnalysis(
+                        participant = otherIndex,
+                        group = otherGroup,
+                        decisive = (baseGroup.size <= otherGroup.size),
                     )
                 )
                 return groups
