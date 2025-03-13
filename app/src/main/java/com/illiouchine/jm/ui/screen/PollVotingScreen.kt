@@ -19,6 +19,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,7 +52,9 @@ fun PollVotingScreen(
 ) {
     val context = LocalContext.current
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag("voting_screen"),
         snackbarHost = {
             MjuSnackbar(
                 modifier = Modifier,
@@ -88,7 +91,9 @@ fun PollVotingScreen(
 
                 if (pollVotingState.ballots.isEmpty()) {
                     Button(
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .testTag("voting_start_first"),
                         onClick = { onStartVoting() },
                         content = {
                             Text(stringResource(R.string.button_be_the_first_to_vote))
@@ -96,7 +101,9 @@ fun PollVotingScreen(
                     )
                 } else {
                     Button(
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .testTag("voting_start_next"),
                         onClick = { onStartVoting() },
                         content = {
                             Text(stringResource(R.string.button_next_participant))

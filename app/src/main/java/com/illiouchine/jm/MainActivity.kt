@@ -8,9 +8,12 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
@@ -130,7 +133,12 @@ class MainActivity : ComponentActivity() {
                             pollVotingViewModel.initVotingSessionForPoll(pollVote.id)
                         }
 
+                        // Hotfix: Wait for the state to be updated by initVotingSessionForPoll
+                        // Otherwise pollVotingViewState.pinScreens may be true when it should not,
+                        // albeit only once after setting the "pin auto." Setting to false.
+                        val waitAnimation = remember { Animatable(0f) }
                         LaunchedEffect(pollVotingViewState.pinScreens) {
+                            waitAnimation.animateTo(1f, tween(1000))
                             perhapsLockScreen(pollVotingViewState.pinScreens)
                         }
 

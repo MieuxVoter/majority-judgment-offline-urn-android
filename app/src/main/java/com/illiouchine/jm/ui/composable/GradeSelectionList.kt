@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -81,7 +82,9 @@ fun GradeSelectionList(
             targetValue = if (interactionSourceIsPressed) 80.dp else 64.dp
         )
         GradeSelectionButton(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("grade_selection_$gradeIndex"),
             height = animatedHeight,
             enabled =  ((selectedGradeIndex == null) || (selectedGradeIndex == gradeIndex)),
             text = context.getString(pollConfig.grading.grades[gradeIndex].name).uppercase(),
