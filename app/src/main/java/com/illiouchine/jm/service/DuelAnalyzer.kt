@@ -18,6 +18,7 @@ data class ParticipantGroupAnalysis(
     val decisive: Boolean = false,
 )
 
+@Suppress("CanBeParameter")
 class DuelAnalyzer(
     private val poll: Poll,
     private val tally: TallyInterface,
