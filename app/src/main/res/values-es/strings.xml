@@ -69,4 +69,15 @@
     <string name="button_more_about_majority_judgment">Más sobre Sentencia Mayoritaria</string>
     <string name="button_try_online_webapp">Pruebe la aplicación web</string>
     <string name="setting_pin_screen">Fijar pantalla automáticamente</string>
+    <string name="ranking_explain_perfectly_equal">%1$s y %2$s son perfectamente iguales.</string>
+    <string name="ranking_explain_different_median">%1$s es %2$s y por lo tanto %3$s que %4$s que es %5$s.</string>
+    <string name="ranking_explain_same_median">%1$s y %2$s son ambos %3$s, pero el grupo %4$s de %5$s es más grande y, por lo tanto, decisivo.</string>
+    <string name="ranking_explain_different_sub_groups">El grupo %1$s de %2$s dice %3$s, que es %4$s que el grupo %5$s de %6$s que dice %7$s.</string>
+    <string name="ranking_explain_no_more_groups">El grupo %1$s de %2$s es el más grande, ya que %3$s no tiene más grupos de opinión.</string>
+    <string name="higher">mayor</string>
+    <string name="lower">menor</string>
+    <string name="adhesion">adhesión</string>
+    <string name="wip_stay_tuned">En progreso.\nManténgase al tanto de las actualizaciones a través de F-Droid.</string>
+    <string name="ranking_explain_double_majority">¡ Doble mayoría ! El grupo de %1$s de %2$s es tan grande como el grupo de %3$s de %4$s. Ambos significan que %5$s debería ser %6$s que %7$s.</string>
+    <string name="contestation">lucha</string>
 </resources>
