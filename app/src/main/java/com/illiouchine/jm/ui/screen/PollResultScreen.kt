@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -175,7 +176,7 @@ fun ResultScreen(
                                 if (state.explanations.size > displayIndex) {
                                     state.explanations[displayIndex]
                                 } else {
-                                    "\uD83D\uDC1E"
+                                    AnnotatedString("\uD83D\uDC1E")
                                 }
                             )
                         }
