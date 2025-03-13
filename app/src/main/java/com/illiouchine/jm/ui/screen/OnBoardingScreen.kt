@@ -48,6 +48,8 @@ val onBoardingPages = listOf(
     OnBoardingPage(R.drawable.onboarding_2, R.string.onboarding_this_is_free_software),
 )
 
+val dragAmountThresholds = 200.dp
+
 @Composable
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
@@ -77,9 +79,10 @@ fun OnBoardingScreen(
                         detectDragGestures(
                             onDragEnd = {
                                 when {
-                                    dragValue > 0 && currentPageIndex >= (onBoardingPages.size - 1) -> onFinish()
-                                    dragValue > 0 && currentPageIndex < (onBoardingPages.size - 1) -> currentPageIndex++
-                                    dragValue < 0 && currentPageIndex > 0 -> currentPageIndex--
+                                    dragValue > dragAmountThresholds.toPx() && currentPageIndex >= (onBoardingPages.size - 1) -> onFinish()
+                                    dragValue > dragAmountThresholds.toPx() && currentPageIndex < (onBoardingPages.size - 1) -> currentPageIndex++
+                                    dragValue < dragAmountThresholds.toPx() && currentPageIndex > 0 -> currentPageIndex--
+                                    else -> {}
                                 }
                                 dragValue = 0f
                             },
