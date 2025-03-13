@@ -1,12 +1,14 @@
 package com.illiouchine.jm.logic
 
 import android.content.Context
+import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.service.DuelAnalyzer
 import com.illiouchine.jm.service.ParticipantGroupAnalysis
+import com.illiouchine.jm.service.TextStylist
 import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.Screens
 import fr.mieuxvoter.mj.CollectedTally
@@ -28,7 +30,7 @@ class PollResultViewModel(
         val poll: Poll? = null,
         val tally: TallyInterface? = null,
         val result: ResultInterface? = null,
-        val explanations: List<String> = emptyList(),
+        val explanations: List<AnnotatedString> = emptyList(),
         val groups: List<DuelGroups> = emptyList(),
     )
 
@@ -61,8 +63,9 @@ class PollResultViewModel(
 
                 val result: ResultInterface = deliberation.deliberate(tally)
 
+                val stylist = TextStylist()
                 val groups: MutableList<DuelGroups> = mutableListOf()
-                val explanations: MutableList<String> = mutableListOf()
+                val explanations: MutableList<AnnotatedString> = mutableListOf()
                 result.proposalResultsRanked.forEachIndexed { displayIndex, _ ->
                     val otherIndex = if (displayIndex < amountOfProposals - 1) {
                         displayIndex + 1
@@ -79,6 +82,7 @@ class PollResultViewModel(
                     explanations.add(
                         duelAnalyzer.generateDuelExplanation(
                             context = context,
+                            stylist = stylist,
                         )
                     )
                     groups.add(
