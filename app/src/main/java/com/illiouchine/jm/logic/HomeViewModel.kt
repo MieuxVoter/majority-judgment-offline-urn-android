@@ -26,7 +26,7 @@ class HomeViewModel(
     private val _homeViewState = MutableStateFlow<HomeViewState>(HomeViewState())
     val homeViewState: StateFlow<HomeViewState> = _homeViewState
 
-    init {
+    fun initialize() {
         loadPolls()
         loadDefaultSettings()
     }
@@ -40,19 +40,12 @@ class HomeViewModel(
         }
     }
 
-    fun loadPolls() {
+    private fun loadPolls() {
         viewModelScope.launch {
             val polls = pollDataSource.getAllPolls()
             _homeViewState.update {
                 it.copy(polls = polls)
             }
-        }
-    }
-
-    fun savePoll(poll: Poll) {
-        viewModelScope.launch {
-            pollDataSource.savePoll(poll)
-            loadPolls()
         }
     }
 
@@ -90,7 +83,6 @@ class HomeViewModel(
     fun finishOnboarding() {
         viewModelScope.launch {
             sharedPrefsHelper.editShowOnboarding(false)
-            // hotfix: perhaps we should observe the prefs instead ?
             _homeViewState.update {
                 it.copy(
                     showOnboarding = false,

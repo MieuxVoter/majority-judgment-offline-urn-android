@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -74,7 +75,7 @@ class MainActivity : ComponentActivity() {
                         val homeViewModel: HomeViewModel by viewModel()
                         val homeViewState by homeViewModel.homeViewState.collectAsState()
 
-                        homeViewModel.loadPolls()
+                        SideEffect { homeViewModel.initialize() }
 
                         if (homeViewState.showOnboarding) {
                             OnBoardingScreen(
@@ -173,6 +174,8 @@ class MainActivity : ComponentActivity() {
                     composable<Screens.Settings> {
                         val settingsViewModel: SettingsViewModel by viewModel()
                         val settingsViewState by settingsViewModel.settingsViewState.collectAsState()
+
+                        SideEffect { settingsViewModel.initialize() }
 
                         SettingsScreen(
                             modifier = Modifier,

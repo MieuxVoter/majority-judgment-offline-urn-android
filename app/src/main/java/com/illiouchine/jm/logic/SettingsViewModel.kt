@@ -21,7 +21,7 @@ class SettingsViewModel(
     private val _settingsViewState = MutableStateFlow(SettingsViewState())
     val settingsViewState: StateFlow<SettingsViewState> = _settingsViewState
 
-    init {
+    fun initialize() {
         loadShowOnboarding()
         loadPlaySound()
         loadPinScreen()
