@@ -93,6 +93,7 @@ Feature: Making a Poll
       And I wait for idle
       And I wait for 1s
 
+     Then there should be 1 poll in the database
  #    Then there should be 2 ballots in the urn
 
 

@@ -15,12 +15,16 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import io.cucumber.junit.WithJunitRule
+import org.junit.Assert.assertEquals
 
 
 @WithJunitRule
 class CucumberSteps(
     private val scenarioHolder: ActivityScenarioHolder,
     private val ruleHolder: ComposeRuleHolder,
+    // Sadly, nope, we get:
+    // org.picocontainer.injectors.AbstractInjector$UnsatisfiableDependenciesException: com.illiouchine.jm.test.CucumberSteps has unsatisfied dependency 'interface com.illiouchine.jm.data.room.PollDao'
+    //private val pollDao: PollDao,
 ) : SemanticsNodeInteractionsProvider {
 
     // We need a rule holder for scoping and bypassing the one-@Rule-per-class limitation.
@@ -108,6 +112,16 @@ class CucumberSteps(
         }
 
         assert(scrolled) { "Did not perform any scroll." }
+    }
+
+    @Then("^there should be (?<amount>[0-9]+?) polls? in the database$")
+    fun thenThereShouldBePollsInDb(amount: Int) {
+//        val actual = pollDao.loadPolls().size
+        val actual = TODO()
+        assertEquals(
+            amount,
+            actual,
+        )
     }
 
     override fun onAllNodes(
