@@ -23,13 +23,14 @@ class CucumberSteps(
     private val ruleHolder: ComposeRuleHolder,
 ) : SemanticsNodeInteractionsProvider {
 
+    // We need a rule holder for scoping and bypassing the one-@Rule-per-class limitation.
     private val rule
         get() = ruleHolder.rule
 
     @Given("^I launch the app$")
     fun initializeApp() {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
-        // This is actually required for the rule to work, and I don't know how it's injected.
+        // This is required for the rule to work.
         scenarioHolder.launch(MainActivity.create(instrumentation.targetContext))
     }
 
@@ -67,6 +68,7 @@ class CucumberSteps(
     }
 
     // This is not useful, as it is dependant on the language of the emulator.
+    // But if we can manage to fetch a R.string.<something> from "something" as String… Might work.
 //    @Then("^I should(?<negation> not|) see the node with text \"(?<text>.+)\"$")
 //    fun thenActorShouldSeeNodeByText(negation: String, text: String) {
 //        if (negation != "") {
@@ -83,10 +85,11 @@ class CucumberSteps(
 
     @When("^I scroll to the node tagged \"([^\"]+)\"\$")
     fun whenActorScrolls(tag: String) {
-        var current = rule.onNodeWithTag(tag)
+        var current = rule.onNodeWithTag(tag).assertExists()
         var scrolled = false
         var bestEffort = 64 // max depth, "just in case"©
 
+        // We're going to try every parent 'til one can scroll.
         while (0 < bestEffort--) {
             try {
                 current.performScrollToNode(
