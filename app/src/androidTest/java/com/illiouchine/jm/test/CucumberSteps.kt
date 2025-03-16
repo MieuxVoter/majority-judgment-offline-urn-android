@@ -11,6 +11,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.test.platform.app.InstrumentationRegistry
 import com.illiouchine.jm.MainActivity
+import com.illiouchine.jm.data.room.PollDao
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
@@ -25,6 +26,7 @@ class CucumberSteps(
     // Sadly, nope, we get:
     // org.picocontainer.injectors.AbstractInjector$UnsatisfiableDependenciesException: com.illiouchine.jm.test.CucumberSteps has unsatisfied dependency 'interface com.illiouchine.jm.data.room.PollDao'
     //private val pollDao: PollDao,
+
 ) : SemanticsNodeInteractionsProvider {
 
     // We need a rule holder for scoping and bypassing the one-@Rule-per-class limitation.
