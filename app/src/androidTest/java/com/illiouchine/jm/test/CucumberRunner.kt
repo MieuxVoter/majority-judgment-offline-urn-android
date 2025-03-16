@@ -8,12 +8,14 @@ import io.cucumber.junit.CucumberOptions
  * Only the first annotated class that is found will be used, others are ignored. If no class is
  * annotated, an exception is thrown. This annotation does not have to placed in runner class
  */
+@Suppress("unused") // used by our testInstrumentationRunner
 @CucumberOptions(
     features = ["features"],
-    glue = ["com.illiouchine.jm.test"],
+    glue = ["com.illiouchine.jm"],
 )
 class CucumberRunner : CucumberAndroidJUnitRunner() {
 
     // nothing is cool
+    // https://insert-koin.io/docs/reference/koin-android/instrumented-testing/
 
 }
