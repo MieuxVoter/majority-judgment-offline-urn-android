@@ -80,4 +80,6 @@
     <string name="higher">plus haut</string>
     <string name="lower">plus bas</string>
     <string name="wip_stay_tuned">Travaux en cours.\nSoyez aux aguets d\'une mise à jour via F-Droid.</string>
+    <string name="poll_setup_subject_placeholder">Entrez le sujet du scrutin…</string>
+    <string name="poll_setup_proposal_placeholder">Entrez une proposition…</string>
 </resources>

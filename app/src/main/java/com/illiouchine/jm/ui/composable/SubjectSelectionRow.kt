@@ -25,6 +25,7 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.theme.JmTheme
 
 @Composable
+@Suppress("UnusedReceiverParameter")
 fun ColumnScope.SubjectSelectionRow(
     modifier: Modifier = Modifier,
     subject: String = "",
@@ -46,10 +47,11 @@ fun ColumnScope.SubjectSelectionRow(
                     if (!it.isFocused) {
                         onClearSuggestion()
                     }
-                }
-            ,
+                },
             maxLines = 5,
-            placeholder = { Text("Entrez le sujet du scrutin...") },
+            placeholder = {
+                Text(stringResource(R.string.poll_setup_subject_placeholder))
+            },
             value = subject,
             onValueChange = { onSubjectChange(it) },
         )
