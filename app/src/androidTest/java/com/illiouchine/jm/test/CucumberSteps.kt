@@ -24,7 +24,9 @@ class CucumberSteps(
     private val scenarioHolder: ActivityScenarioHolder,
     private val ruleHolder: ComposeRuleHolder,
     // Sadly, nope, we get:
-    // org.picocontainer.injectors.AbstractInjector$UnsatisfiableDependenciesException: com.illiouchine.jm.test.CucumberSteps has unsatisfied dependency 'interface com.illiouchine.jm.data.room.PollDao'
+    // org.picocontainer.injectors.AbstractInjector$UnsatisfiableDependenciesException:
+    // com.illiouchine.jm.test.CucumberSteps has unsatisfied dependency
+    // 'interface com.illiouchine.jm.data.room.PollDao'
     //private val pollDao: PollDao,
 
 ) : SemanticsNodeInteractionsProvider {

@@ -140,7 +140,7 @@ detekt {
     ignoreFailures = true
 
     // The build fails when there is at least one issue with this severity (or above).
-    // If set ot `Never`, the task will not fail regardless of the number of issues and their severities.
+    // If set ot `Never`, the task will not fail regardless of the number of issues.
     // If `ignoreFailures` is set to `true`, the value of this property is ignored.
     // Defaults to `Error`
     //failOnSeverity = io.gitlab.arturbosch.detekt.extensions.FailOnSeverity.Error
