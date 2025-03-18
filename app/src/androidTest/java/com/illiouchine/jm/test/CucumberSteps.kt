@@ -1,5 +1,6 @@
 package com.illiouchine.jm.test
 
+import android.content.Context
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.SemanticsNodeInteractionCollection
@@ -9,13 +10,16 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import com.illiouchine.jm.MainActivity
-import com.illiouchine.jm.data.room.PollDao
+import com.illiouchine.jm.data.room.PollDataBase
+import io.cucumber.java.Before
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import io.cucumber.junit.WithJunitRule
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 
 
@@ -35,11 +39,29 @@ class CucumberSteps(
     private val rule
         get() = ruleHolder.rule
 
+    private lateinit var pollDb: PollDataBase
+
+    private fun getAppContext(): Context {
+        return InstrumentationRegistry.getInstrumentation().targetContext
+    }
+
+    @Before
+    fun before() {
+        // 1. Get the dep from Koin
+        // … how ?
+
+        // 2. Build it ourselves  (urgh)
+        pollDb = Room.databaseBuilder(
+            context = getAppContext(),
+            klass = PollDataBase::class.java,
+            name = "PollDataBase",
+        ).build()
+    }
+
     @Given("^I launch the app$")
     fun initializeApp() {
-        val instrumentation = InstrumentationRegistry.getInstrumentation()
         // This is required for the rule to work.
-        scenarioHolder.launch(MainActivity.create(instrumentation.targetContext))
+        scenarioHolder.launch(MainActivity.create(getAppContext()))
     }
 
     @When("^I wait for idle$")
@@ -120,12 +142,10 @@ class CucumberSteps(
 
     @Then("^there should be (?<amount>[0-9]+?) polls? in the database$")
     fun thenThereShouldBePollsInDb(amount: Int) {
-//        val actual = pollDao.loadPolls().size
-        val actual = TODO()
-        assertEquals(
-            amount,
-            actual,
-        )
+        runTest {
+            val actual = pollDb.pollDao().loadPolls().size
+            assertEquals(amount, actual)
+        }
     }
 
     override fun onAllNodes(
