@@ -17,6 +17,7 @@ room = "2.6.1"
 ksp = "2.0.21-1.0.27" # first part should follow kotlin version
 serialization = "2.1.0"
 serialization-json = "1.8.0"
+detekt = "1.23.8"
 
 [libraries]
 cucumber-android = { module = "io.cucumber:cucumber-android", version.ref = "cucumberAndroid" }
@@ -39,6 +40,11 @@ majority-judgment-library-java = { module = "com.github.MieuxVoter:majority-judg
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
 koin-core = { module = "io.insert-koin:koin-core" }
 koin-android = { module = "io.insert-koin:koin-android" }
+# Version needs to be specified here, or we get "Failed to resolve"
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin-bom" }
+koin-android-test = { module = "io.insert-koin:koin-android-test", version.ref = "koin-bom" }
+koin-test-junit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin-bom" }
+# #################################################################
 androidx-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-room-runtime = { group ="androidx.room", name = "room-runtime", version.ref = "room"}
 androidx-room-compiler = { group ="androidx.room", name = "room-compiler", version.ref = "room"}
@@ -53,5 +59,6 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 room = { id = "androidx.room", version.ref = "room"}
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"}
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 
 

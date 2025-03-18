@@ -21,6 +21,7 @@ import io.cucumber.java.en.When
 import io.cucumber.junit.WithJunitRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.koin.test.KoinTest
 
 
 @WithJunitRule
@@ -33,7 +34,7 @@ class CucumberSteps(
     // 'interface com.illiouchine.jm.data.room.PollDao'
     //private val pollDao: PollDao,
 
-) : SemanticsNodeInteractionsProvider {
+) : KoinTest {
 
     // We need a rule holder for scoping and bypassing the one-@Rule-per-class limitation.
     private val rule
@@ -47,15 +48,16 @@ class CucumberSteps(
 
     @Before
     fun before() {
-        // 1. Get the dep from Koin
-        // … how ?
+        // I.a. Get the dep from Koin
+        // Not sure this is the instance that runs in the app, or another.
+        pollDb = getKoin().get<PollDataBase>()
 
-        // 2. Build it ourselves  (urgh)
-        pollDb = Room.databaseBuilder(
-            context = getAppContext(),
-            klass = PollDataBase::class.java,
-            name = "PollDataBase",
-        ).build()
+        // I.b. Or build it ourselves  (urgh ; works, but it's not the app's instance)
+//        pollDb = Room.databaseBuilder(
+//            context = getAppContext(),
+//            klass = PollDataBase::class.java,
+//            name = "PollDataBase",
+//        ).build()
     }
 
     @Given("^I launch the app$")
@@ -99,6 +101,7 @@ class CucumberSteps(
 
     // This is not useful, as it is dependant on the language of the emulator.
     // But if we can manage to fetch a R.string.<something> from "something" as String… Might work.
+    // We might also be able to force the language of the emulator.  How, though ?
 //    @Then("^I should(?<negation> not|) see the node with text \"(?<text>.+)\"$")
 //    fun thenActorShouldSeeNodeByText(negation: String, text: String) {
 //        if (negation != "") {
@@ -148,23 +151,4 @@ class CucumberSteps(
         }
     }
 
-    override fun onAllNodes(
-        matcher: SemanticsMatcher,
-        useUnmergedTree: Boolean,
-    ): SemanticsNodeInteractionCollection {
-        return rule.onAllNodes(
-            matcher = matcher,
-            useUnmergedTree = useUnmergedTree,
-        )
-    }
-
-    override fun onNode(
-        matcher: SemanticsMatcher,
-        useUnmergedTree: Boolean,
-    ): SemanticsNodeInteraction {
-        return rule.onNode(
-            matcher = matcher,
-            useUnmergedTree = useUnmergedTree,
-        )
-    }
 }
