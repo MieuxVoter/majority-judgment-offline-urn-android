@@ -34,6 +34,7 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.theme.JmTheme
 
 @Composable
+@Suppress("UnusedReceiverParameter")
 fun ColumnScope.ProposalSelectionRow(
     modifier: Modifier = Modifier,
     proposal: String = "",
@@ -73,7 +74,9 @@ fun ColumnScope.ProposalSelectionRow(
                     }
                 },
             singleLine = true,
-            placeholder = { Text("Entrez une proposition…") },
+            placeholder = {
+                Text(stringResource(R.string.poll_setup_proposal_placeholder))
+            },
             keyboardActions = KeyboardActions(
                 onDone =
                 if (proposal.isBlank()) {
@@ -130,7 +133,7 @@ private fun PreviewProposalSelectionRow() {
         ) {
             ProposalSelectionRow(
                 modifier = Modifier,
-                proposal = "proposal",
+                proposal = "Mario",
                 onAddProposal = {},
                 onProposalChange = {},
                 proposalSuggestion = listOf(

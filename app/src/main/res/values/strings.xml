@@ -6,6 +6,8 @@
     <string name="majority_judgment">Majority Judgment</string>
     <string name="label_poll_subject">Subject of the Poll</string>
     <string name="label_poll_proposals">Proposals</string>
+    <string name="poll_setup_subject_placeholder">Enter the subject of the poll…</string>
+    <string name="poll_setup_proposal_placeholder">Enter a proposal…</string>
     <string name="button_add">Add</string>
     <string name="button_finish">Finish</string>
     <string name="button_next">next</string>
