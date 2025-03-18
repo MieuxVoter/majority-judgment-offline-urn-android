@@ -2,20 +2,24 @@ package com.illiouchine.jm.ui.composable.loading
 
 import android.content.res.Configuration
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.model.Grading
@@ -30,6 +34,7 @@ const val TAU: Double = PI * 2
 class Spirograph(
     val epicycloid: Epicycloid,
 ) {
+
     fun getPoint(
         position: Double,
     ): Point {
@@ -58,6 +63,7 @@ class Spirograph(
 }
 
 data class Epicycloid(
+    val name: String = "",
     val compasses: List<Compass>,
 )
 
@@ -79,52 +85,122 @@ data class Point(
     }
 }
 
+
+val epicycloids: List<Epicycloid> = listOf(
+    Epicycloid(
+        // i like this one
+        name = "Crusty Juggler",
+        compasses = listOf(
+            Compass(
+                radius = 0.20,
+            ),
+            Compass(
+                radius = 0.36,
+                speed = 5.0,
+            ),
+            Compass(
+                radius = 0.14,
+                speed = 6.0,
+            ),
+            Compass(
+                radius = 0.06,
+                speed = 3.0,
+            ),
+        ),
+    ),
+    // ring respiration
+    Epicycloid(
+        name = "Ring Respite",
+        compasses = listOf(
+            Compass(
+                radius = 0.3,
+            ),
+            Compass(
+                radius = 0.08,
+                speed = 2.0,
+            ),
+            Compass(
+                radius = 0.25,
+                speed = 8.0,
+            ),
+            Compass(
+                radius = 0.05,
+                speed = 2.0,
+            ),
+        ),
+    ),
+    // Trippy circle
+    Epicycloid(
+        name = "Trippy Circle",
+        compasses = listOf(
+            Compass(
+                radius = 0.62,
+                speed = 2.0,
+            ),
+            Compass(
+                radius = 0.1,
+                speed = 2.0,
+            ),
+            Compass(
+                radius = 0.2,
+                speed = 12.0,
+            ),
+        ),
+    ),
+    // Triangle in square
+    Epicycloid(
+        name = "Flatland",
+        compasses = listOf(
+            Compass(
+                radius = 0.52,
+                speed = 3.0,
+            ),
+            Compass(
+                radius = 0.1,
+                speed = 3.0,
+            ),
+            Compass(
+                radius = 0.2,
+                speed = 12.0,
+            ),
+        ),
+    ),
+    // School of fishes
+    Epicycloid(
+        name = "Happy Fishes",
+        compasses = listOf(
+            Compass(
+                radius = 0.42,
+                speed = 7.0,
+            ),
+            Compass(
+                radius = 0.15,
+                speed = -3.0,
+            ),
+            Compass(
+                radius = 0.08,
+                speed = 1.0,
+            ),
+            Compass(
+                radius = 0.3,
+                speed = 9.0,
+            ),
+        ),
+    ),
+)
+
+
 @Composable
 fun Loader(
     modifier: Modifier = Modifier,
 ) {
     val grading = Grading.Quality7Grading
-    val amountOfBalls = grading.getAmountOfGrades()
+    val amountOfOrbitals = grading.getAmountOfGrades()
     val trailLength = 7
-    val trailGap = 0.0007
+    val trailDelay = 0.0007
+    var currentEpicycloidPresetIndex by remember { mutableIntStateOf(0) }
     val spirograph = Spirograph(
-        epicycloid = Epicycloid(
-            // i like this one
-            compasses = listOf(
-                Compass(
-                    radius = 0.20,
-                ),
-                Compass(
-                    radius = 0.36,
-                    speed = 5.0,
-                ),
-                Compass(
-                    radius = 0.14,
-                    speed = 6.0,
-                ),
-                Compass(
-                    radius = 0.06,
-                    speed = 3.0,
-                ),
-            ),
-//            compasses = listOf(
-//                Compass(
-//                    radius = 0.3,
-//                ),
-//                Compass(
-//                    radius = 0.08,
-//                    speed = 2.0,
-//                ),
-//                Compass(
-//                    radius = 0.25,
-//                    speed = 8.0,
-//                ),
-//                Compass(
-//                    radius = 0.05,
-//                    speed = 2.0,
-//                ),
-//            ),
-        ),
+        epicycloid = epicycloids[currentEpicycloidPresetIndex],
     )
 
     val loopAnimation = remember { Animatable(0f) }
@@ -134,48 +210,48 @@ fun Loader(
             targetValue = 1f,
             animationSpec = infiniteRepeatable(
                 animation = tween(
-                    durationMillis = 21000,
-                    easing = Easing { x -> x }
+                    durationMillis = 28000,
+                    easing = { x -> x },
                 ),
                 repeatMode = RepeatMode.Restart,
-//                initialStartOffset = TODO()
             ),
         )
     }
 
     Canvas(
-        modifier = modifier,
+        modifier = modifier
+            .pointerInput(Unit) {
+                detectTapGestures(
+//                    onDoubleTap = TODO(), // change epicycloid (recharge full config from preset)
+//                    onLongPress = TODO(), // save
+                    onTap = { // change current targeted compass
+                        currentEpicycloidPresetIndex = (currentEpicycloidPresetIndex + 1) % epicycloids.size
+                    },
+                )
+
+                detectDragGestures(
+                    // vertical drag => speed
+                    // horizontal drag => radius
+                    onDragEnd = {
+                    },
+                    onDrag = { _, dragAmount ->
+                    }
+                )
+            },
     ) {
 
-        for (i in (0..<amountOfBalls)) {
+        for (i in (0..<amountOfOrbitals)) {
             val position = (
                     loopAnimation.value +
-                    i.toDouble() / amountOfBalls.toDouble()
+                            i.toDouble() / amountOfOrbitals.toDouble()
                     ).mod(1.0)
-
-//            drawCircle(
-//                color = grading.getGradeColor(i),
-//                radius = 6.dp.toPx(),
-//                center = spirograph.getPoint(
-//                    position = position - 0.0032,
-//                ).toOffset(size),
-//                alpha = 0.38f,
-//            )
-//            drawCircle(
-//                color = grading.getGradeColor(i),
-//                radius = 8.dp.toPx(),
-//                center = spirograph.getPoint(
-//                    position = position - 0.0015,
-//                ).toOffset(size),
-//                alpha = 0.62f,
-//            )
 
             for (trail in (1..trailLength)) {
                 drawCircle(
                     color = grading.getGradeColor(i),
                     radius = (10f * (trailLength - trail) / trailLength).dp.toPx(),
                     center = spirograph.getPoint(
-                        position = position - (trail * trailGap),
+                        position = position - (trail * trailDelay),
                     ).toOffset(size),
                     alpha = (1f * (trailLength - trail) / trailLength),
                 )
