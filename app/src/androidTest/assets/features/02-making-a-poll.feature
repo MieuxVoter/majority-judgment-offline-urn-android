@@ -6,6 +6,7 @@ Feature: Making a Poll
   Scenario: Set up a poll and use it
     Given I launch the app
       And I wait for idle
+      And there should be 0 poll in the database
 
      Then I should see the home screen
      Then I should not see the node tagged "onboarding_screen"
@@ -30,13 +31,14 @@ Feature: Making a Poll
      # But we might need to scroll to it first, on small screens
      When I scroll to the node tagged "setup_submit"
       And I click on the node tagged "setup_submit"
-     Then I should not see the setup screen anymore
 
       And I wait for idle
       And I wait for 1s
 
-     Then I should see the node tagged "voting_start_first"
-     Then I should not see the node tagged "voting_start_next"
+     Then I should not see the setup screen anymore
+      And I should see the node tagged "voting_start_first"
+      And I should not see the node tagged "voting_start_next"
+      And there should be 1 poll in the database
 
      When I click on the node tagged "voting_start_first"
       And I wait for idle
