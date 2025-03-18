@@ -2,6 +2,9 @@ package com.illiouchine.jm.ui.screen
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -63,6 +66,14 @@ fun OnBoardingScreen(
 
         var currentPageIndex by remember { mutableIntStateOf(0) }
         var dragValue by remember { mutableFloatStateOf(0f) }
+        val animatedDragValue: Float by animateFloatAsState(
+            targetValue = dragValue,
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioLowBouncy,
+                stiffness = Spring.StiffnessLow
+            )
+
+        )
 
         Column(
             modifier = modifier
@@ -74,14 +85,14 @@ fun OnBoardingScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .offset { IntOffset(x = (-(dragValue * 0.62)).toInt(), y = 0) }
+                    .offset { IntOffset(x = (-(animatedDragValue * 0.62)).toInt(), y = 0) }
                     .pointerInput(Unit) {
                         detectDragGestures(
                             onDragEnd = {
                                 when {
                                     dragValue > dragAmountThresholds.toPx() && currentPageIndex >= (onBoardingPages.size - 1) -> onFinish()
                                     dragValue > dragAmountThresholds.toPx() && currentPageIndex < (onBoardingPages.size - 1) -> currentPageIndex++
-                                    dragValue < dragAmountThresholds.toPx() && currentPageIndex > 0 -> currentPageIndex--
+                                    dragValue < -dragAmountThresholds.toPx() && currentPageIndex > 0 -> currentPageIndex--
                                     else -> {}
                                 }
                                 dragValue = 0f
