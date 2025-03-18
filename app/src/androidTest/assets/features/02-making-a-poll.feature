@@ -78,7 +78,8 @@ Feature: Making a Poll
 
         # Second user
 
-     Then I become another participant
+     Then I give the device to someone else
+      And another participant becomes the "I" in our narration
 
      When I click on the node tagged "voting_start_next"
       And I wait for idle
