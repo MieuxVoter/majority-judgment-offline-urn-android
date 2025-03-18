@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.room)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
-    id("io.gitlab.arturbosch.detekt") version "1.23.8"
+    alias(libs.plugins.detekt)
 }
 
 
@@ -22,7 +22,8 @@ android {
 
         // Ideally we'd have both, but support for multiple runners look experimental
 //        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunner = "io.cucumber.android.runner.CucumberAndroidJUnitRunner"
+//        testInstrumentationRunner = "io.cucumber.android.runner.CucumberAndroidJUnitRunner"
+        testInstrumentationRunner = "com.illiouchine.jm.test.CucumberRunner"
     }
 
     buildTypes {
@@ -96,6 +97,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.cucumber.android)
     androidTestImplementation(libs.cucumber.picocontainer)
+    androidTestImplementation(libs.koin.test)
+    androidTestImplementation(libs.koin.android.test)
+    androidTestImplementation(libs.koin.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

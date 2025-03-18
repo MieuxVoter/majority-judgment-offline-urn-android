@@ -15,7 +15,6 @@ import io.cucumber.junit.CucumberOptions
 )
 class CucumberRunner : CucumberAndroidJUnitRunner() {
 
-    // nothing is cool
     // https://insert-koin.io/docs/reference/koin-android/instrumented-testing/
 
 }
