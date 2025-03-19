@@ -1,6 +1,7 @@
 package com.illiouchine.jm.ui.composable.loading
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
@@ -8,200 +9,115 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.ui.theme.JmTheme
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
 
-// Why isn't TAU in kotlin.math ?   …   Sigh.
-const val TAU: Double = PI * 2
 
-class Spirograph(
-    val epicycloid: Epicycloid,
+@Composable
+fun LoaderScreen(
+    modifier: Modifier = Modifier,
 ) {
+    var currentEpicycloidPresetIndex by remember { mutableIntStateOf(0) }
+    var spirograph by remember { mutableStateOf(
+        Spirograph(epicycloid = epicycloids[currentEpicycloidPresetIndex])
+    ) }
 
-    fun getPoint(
-        position: Double,
-    ): Point {
-        var p = Point(x = 0.0, y = 0.0)
-        epicycloid.compasses.forEach { compass ->
-            p = getPointOnCircle(
-                center = p,
-                position = position,
-                compass = compass,
-            )
+    var showMenu by remember { mutableStateOf(false) }
+
+    Scaffold(
+        floatingActionButton = {
+            if (showMenu){
+                IconButton(
+                    modifier = Modifier.graphicsLayer { alpha = 0.2f },
+                    onClick = { showMenu = false }
+                ) { Icon(Icons.Filled.Close, "Close") }
+            } else {
+                IconButton(
+                    modifier = Modifier.graphicsLayer { alpha = 0.2f },
+                    onClick = { showMenu = true }
+                ) { Icon(Icons.Filled.Settings, "Settings") }
+            }
         }
-        return p
-    }
-
-    fun getPointOnCircle(
-        center: Point,
-        position: Double,
-        compass: Compass,
-    ): Point {
-        val angle = TAU * (position * compass.speed + compass.phase)
-        return Point(
-            x = center.x + cos(angle) * compass.radius,
-            y = center.y + sin(angle) * compass.radius,
-        )
+    ) { innerPadding ->
+        Box(modifier = Modifier.padding(innerPadding)){
+            if (showMenu) {
+                SpirographMenu(
+                    modifier = Modifier.fillMaxSize(),
+                    spirograph = spirograph,
+                    onSaveSpirograph = {},
+                    onAddCompass = {},
+                )
+            } else {
+                Loader(
+                    modifier = modifier.fillMaxSize(),
+                    spirograph = spirograph,
+                    onNextSpirograph = {
+                        currentEpicycloidPresetIndex = (currentEpicycloidPresetIndex + 1) % epicycloids.size
+                    },
+                    onChangeCompassValue = { index,radius,speed ->
+                        val oldCompass = spirograph.epicycloid.compasses[index]
+                        val newCompass = oldCompass.copy(
+                            radius = radius.coerceIn(0.0, 1.0),
+                            speed = speed.coerceIn(0.0, 5.0)
+                        )
+                        Log.d("wgu", "$newCompass")
+                        spirograph = spirograph.copy(
+                            epicycloid = spirograph.epicycloid.copy(
+                                compasses = spirograph.epicycloid.compasses.mapIndexed{ compassIndex, compass ->
+                                    if (compassIndex == index){
+                                        newCompass
+                                    } else {
+                                        compass
+                                    }
+                                }
+                            )
+                        )
+                    },
+                )
+            }
+        }
     }
 }
-
-data class Epicycloid(
-    val name: String = "",
-    val compasses: List<Compass>,
-)
-
-data class Compass(
-    val radius: Double,
-    val speed: Double = 1.0,
-    val phase: Double = 0.0,
-)
-
-data class Point(
-    val x: Double,
-    val y: Double,
-) {
-    fun toOffset(size: Size): Offset {
-        return Offset(
-            x = (x.toFloat() + 1.0f) * 0.5f * size.width,
-            y = (y.toFloat() + 1.0f) * 0.5f * size.height,
-        )
-    }
-}
-
-
-val epicycloids: List<Epicycloid> = listOf(
-    Epicycloid(
-        // i like this one
-        name = "Crusty Juggler",
-        compasses = listOf(
-            Compass(
-                radius = 0.20,
-            ),
-            Compass(
-                radius = 0.36,
-                speed = 5.0,
-            ),
-            Compass(
-                radius = 0.14,
-                speed = 6.0,
-            ),
-            Compass(
-                radius = 0.06,
-                speed = 3.0,
-            ),
-        ),
-    ),
-    // ring respiration
-    Epicycloid(
-        name = "Ring Respite",
-        compasses = listOf(
-            Compass(
-                radius = 0.3,
-            ),
-            Compass(
-                radius = 0.08,
-                speed = 2.0,
-            ),
-            Compass(
-                radius = 0.25,
-                speed = 8.0,
-            ),
-            Compass(
-                radius = 0.05,
-                speed = 2.0,
-            ),
-        ),
-    ),
-    // Trippy circle
-    Epicycloid(
-        name = "Trippy Circle",
-        compasses = listOf(
-            Compass(
-                radius = 0.62,
-                speed = 2.0,
-            ),
-            Compass(
-                radius = 0.1,
-                speed = 2.0,
-            ),
-            Compass(
-                radius = 0.2,
-                speed = 12.0,
-            ),
-        ),
-    ),
-    // Triangle in square
-    Epicycloid(
-        name = "Flatland",
-        compasses = listOf(
-            Compass(
-                radius = 0.52,
-                speed = 3.0,
-            ),
-            Compass(
-                radius = 0.1,
-                speed = 3.0,
-            ),
-            Compass(
-                radius = 0.2,
-                speed = 12.0,
-            ),
-        ),
-    ),
-    // School of fishes
-    Epicycloid(
-        name = "Happy Fishes",
-        compasses = listOf(
-            Compass(
-                radius = 0.42,
-                speed = 7.0,
-            ),
-            Compass(
-                radius = 0.15,
-                speed = -3.0,
-            ),
-            Compass(
-                radius = 0.08,
-                speed = 1.0,
-            ),
-            Compass(
-                radius = 0.3,
-                speed = 9.0,
-            ),
-        ),
-    ),
-)
-
 
 @Composable
 fun Loader(
     modifier: Modifier = Modifier,
+    spirograph: Spirograph = Spirograph(epicycloid = epicycloids.first()),
+    onNextSpirograph: () -> Unit = {},
+    onChangeCompassValue: (index: Int, radius: Double, speed: Double) -> Unit = { _,_,_ ->  },
 ) {
     val grading = Grading.Quality7Grading
     val amountOfOrbitals = grading.getAmountOfGrades()
     val trailLength = 7
     val trailDelay = 0.0007
-    var currentEpicycloidPresetIndex by remember { mutableIntStateOf(0) }
-    val spirograph = Spirograph(
-        epicycloid = epicycloids[currentEpicycloidPresetIndex],
-    )
+
+    var currentCompassPresetIndex by remember { mutableIntStateOf(0) }
+    var offsetX by remember { mutableFloatStateOf(0f) }
+    var offsetY by remember { mutableFloatStateOf(0f) }
 
     val loopAnimation = remember { Animatable(0f) }
 
@@ -218,25 +134,65 @@ fun Loader(
         )
     }
 
+
     Canvas(
         modifier = modifier
+            .fillMaxSize()
             .pointerInput(Unit) {
                 detectTapGestures(
-//                    onDoubleTap = TODO(), // change epicycloid (recharge full config from preset)
-//                    onLongPress = TODO(), // save
-                    onTap = { // change current targeted compass
-                        currentEpicycloidPresetIndex = (currentEpicycloidPresetIndex + 1) % epicycloids.size
+                    onDoubleTap = {
+                        // change epicycloid (recharge full config from preset)
+                        onNextSpirograph()
+                        Log.d(
+                            "WGU",
+                            "doubleTAP : change epicycloid (recharge full config from preset)"
+                        )
+                    },
+                    onLongPress = {
+                        // onLongPress = TODO(), // save
+                    },
+                    onTap = {
+                        // change current targeted compass
+                        currentCompassPresetIndex =
+                            (currentCompassPresetIndex + 1) % spirograph.epicycloid.compasses.size
+                        Log.d(
+                            "WGU",
+                            "onTap : change current targeted compass $currentCompassPresetIndex"
+                        )
                     },
                 )
-
+            }
+            .pointerInput(Unit) {
                 detectDragGestures(
-                    // vertical drag => speed
-                    // horizontal drag => radius
                     onDragEnd = {
-                    },
-                    onDrag = { _, dragAmount ->
+                        Log.d("WGU", "----------------")
+
+                        Log.d("WGU", "Drag value  = $offsetX : $offsetY")
+
+                        val compass = spirograph.epicycloid.compasses[currentCompassPresetIndex]
+                        Log.d("WGU", "radius : ${compass.radius}")
+                        Log.d("WGU", "speed : ${compass.speed}")
+
+
+                        val radiusRatio = (offsetX / size.width)
+                        Log.d("WGU", "radiusRatio : ${offsetX}/${size.width} = $radiusRatio")
+                        val speedRatio = (offsetY / size.height)
+                        Log.d("WGU", "speedRatio : ${offsetY}/${size.height} = $speedRatio")
+
+
+                        onChangeCompassValue(
+                            currentCompassPresetIndex,
+                            compass.radius + radiusRatio,
+                            compass.speed + speedRatio
+                        )
+                        offsetX = 0f
+                        offsetY = 0f
                     }
-                )
+                ) { change, dragAmount ->
+                    Log.d("WGU", "dragAmount : ${dragAmount.x} ${dragAmount.y}")
+                    offsetX += dragAmount.x
+                    offsetY += dragAmount.y
+                }
             },
     ) {
 
@@ -276,7 +232,7 @@ fun Loader(
 @Composable
 private fun PreviewLoader() {
     JmTheme {
-        Loader(
+        LoaderScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()

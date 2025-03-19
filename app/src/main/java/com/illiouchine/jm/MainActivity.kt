@@ -10,6 +10,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
@@ -29,6 +30,7 @@ import com.illiouchine.jm.logic.SettingsViewModel
 import com.illiouchine.jm.ui.NavigationAction
 import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.Screens
+import com.illiouchine.jm.ui.composable.loading.LoaderScreen
 import com.illiouchine.jm.ui.screen.AboutScreen
 import com.illiouchine.jm.ui.screen.HomeScreen
 import com.illiouchine.jm.ui.screen.OnBoardingScreen
@@ -201,6 +203,9 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier,
                             navController = navController,
                         )
+                    }
+                    composable<Screens.Loader> {
+                        LoaderScreen(modifier = Modifier.fillMaxSize())
                     }
                 }
             }
