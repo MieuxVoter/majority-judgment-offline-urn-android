@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -38,7 +37,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.ui.theme.JmTheme
-import kotlin.math.sin
 
 
 @Composable
@@ -46,7 +44,7 @@ fun EpicycloidMenu(
     modifier: Modifier,
     epicycloid: Epicycloid,
     onSaveEpicycloid: (epicycloid: Epicycloid) -> Unit = {},
-){
+) {
     var name by remember { mutableStateOf(epicycloid.name) }
     var compasses by remember { mutableStateOf(epicycloid.compasses) }
 
@@ -64,7 +62,7 @@ fun EpicycloidMenu(
         }
 
 
-        itemsIndexed(compasses, key = { index, compass -> compass.hashCode() }){ index, compass ->
+        itemsIndexed(compasses, key = { index, compass -> compass.hashCode() }) { index, compass ->
             CompassMenu(
                 modifier = Modifier.animateItem(),
                 compassIndex = index,
@@ -74,19 +72,19 @@ fun EpicycloidMenu(
                     newCompasses.removeAt(index)
                     compasses = newCompasses.toList()
                 },
-                onChangeRadius =  { radius ->
+                onChangeRadius = { radius ->
                     val newCompasses = compasses.toMutableList()
                     val newCompass = newCompasses[index].copy(radius = radius)
                     newCompasses[index] = newCompass
                     compasses = newCompasses.toList()
                 },
-                onChangeSpeed =  { speed ->
+                onChangeSpeed = { speed ->
                     val newCompasses = compasses.toMutableList()
                     val newCompass = newCompasses[index].copy(speed = speed)
                     newCompasses[index] = newCompass
                     compasses = newCompasses.toList()
                 },
-                onChangePhase =  { phase ->
+                onChangePhase = { phase ->
                     val newCompasses = compasses.toMutableList()
                     val newCompass = newCompasses[index].copy(phase = phase)
                     newCompasses[index] = newCompass
@@ -113,7 +111,7 @@ fun EpicycloidMenu(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
-            ){
+            ) {
                 Button(
                     modifier = Modifier,
                     onClick = {
@@ -148,9 +146,11 @@ fun CompassMenu(
     var speed by remember { mutableFloatStateOf(compass.speed.toFloat()) }
     var phase by remember { mutableFloatStateOf(compass.phase.toFloat()) }
 
-    Column(modifier = modifier
-        .fillMaxWidth()
-        .wrapContentHeight()) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -160,7 +160,13 @@ fun CompassMenu(
             IconButton(
                 modifier = Modifier.graphicsLayer { alpha = 0.6f },
                 onClick = { onDeleteCompass() }
-            ) { Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete", tint = Color.Red) }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = "Delete",
+                    tint = Color.Red
+                )
+            }
         }
         Row(
             modifier = Modifier.fillMaxWidth(),

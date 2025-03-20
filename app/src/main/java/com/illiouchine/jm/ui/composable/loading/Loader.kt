@@ -42,15 +42,17 @@ fun LoaderScreen(
     var epicycloids by remember { mutableStateOf(defaultsEpicycloids) }
     var currentEpicycloidPresetIndex by remember { mutableIntStateOf(0) }
 
-    val spirograph by remember { derivedStateOf {
-        Spirograph(epicycloid = epicycloids[currentEpicycloidPresetIndex])
-    } }
+    val spirograph by remember {
+        derivedStateOf {
+            Spirograph(epicycloid = epicycloids[currentEpicycloidPresetIndex])
+        }
+    }
 
     var showMenu by remember { mutableStateOf(false) }
 
     Scaffold(
         floatingActionButton = {
-            if (showMenu){
+            if (showMenu) {
                 IconButton(
                     modifier = Modifier.graphicsLayer { alpha = 0.2f },
                     onClick = { showMenu = false }
@@ -63,15 +65,18 @@ fun LoaderScreen(
             }
         }
     ) { innerPadding ->
-        Box(modifier = Modifier.padding(innerPadding)){
+        Box(modifier = Modifier.padding(innerPadding)) {
             if (showMenu) {
                 EpicycloidMenu(
                     modifier = Modifier.fillMaxSize(),
                     epicycloid = spirograph.epicycloid,
                     onSaveEpicycloid = { epicycloid ->
                         val newListOfEpicycloid = epicycloids.toMutableList()
-                        val exist: Epicycloid? = newListOfEpicycloid.firstOrNull {it.name == epicycloid.name}
-                        if (exist != null){ newListOfEpicycloid.remove(exist) }
+                        val exist: Epicycloid? =
+                            newListOfEpicycloid.firstOrNull { it.name == epicycloid.name }
+                        if (exist != null) {
+                            newListOfEpicycloid.remove(exist)
+                        }
                         //newListOfEpicycloid.add(epicycloid)
                         epicycloids = buildList {
                             add(epicycloid)
@@ -86,7 +91,8 @@ fun LoaderScreen(
                     modifier = modifier.fillMaxSize(),
                     spirograph = spirograph,
                     onNextSpirograph = {
-                        currentEpicycloidPresetIndex = (currentEpicycloidPresetIndex + 1) % epicycloids.size
+                        currentEpicycloidPresetIndex =
+                            (currentEpicycloidPresetIndex + 1) % epicycloids.size
                     },
                 )
             }
