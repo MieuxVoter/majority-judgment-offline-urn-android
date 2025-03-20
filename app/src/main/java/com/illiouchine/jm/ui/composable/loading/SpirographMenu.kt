@@ -1,5 +1,6 @@
 package com.illiouchine.jm.ui.composable.loading
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -120,6 +121,7 @@ fun EpicycloidMenu(
                             name = name,
                             compasses = compasses
                         )
+                        Log.d("WGU", newEpicycloid.toString())
                         onSaveEpicycloid(newEpicycloid)
                     }
                 ) {
@@ -156,7 +158,7 @@ fun CompassMenu(
         ) {
             Text("$compassIndex# - Compass")
             IconButton(
-                modifier = Modifier.graphicsLayer { alpha = 0.2f },
+                modifier = Modifier.graphicsLayer { alpha = 0.6f },
                 onClick = { onDeleteCompass() }
             ) { Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete", tint = Color.Red) }
         }
@@ -186,7 +188,8 @@ fun CompassMenu(
             Slider(
                 value = speed,
                 onValueChange = { speed = it },
-                valueRange = 0f..12f,
+                valueRange = -11f..11f,
+                steps = 21,
                 onValueChangeFinished = {
                     onChangeSpeed(speed.toDouble())
                 }
@@ -208,7 +211,6 @@ fun CompassMenu(
                 }
             )
         }
-
     }
 }
 
