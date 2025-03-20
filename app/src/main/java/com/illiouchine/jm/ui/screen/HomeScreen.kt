@@ -1,15 +1,14 @@
 package com.illiouchine.jm.ui.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -40,6 +39,7 @@ import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.Screens
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.PollDeletionConfirmationDialog
+import com.illiouchine.jm.ui.composable.PollRow
 import com.illiouchine.jm.ui.composable.PollSummary
 import com.illiouchine.jm.ui.theme.JmTheme
 
@@ -77,77 +77,55 @@ fun HomeScreen(
         }
     ) { innerPadding ->
 
-        val scrollState = rememberScrollState()
-
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(horizontal = 4.dp)
-                .verticalScroll(state = scrollState)
         ) {
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                fontSize = 32.sp,
-                lineHeight = 32.sp,
-                textAlign = TextAlign.Center,
-                text = stringResource(R.string.title_multiline_majority_judgment_urn),
-            )
-
-            if (homeViewState.polls.isEmpty()) {
-                Spacer(Modifier.size(36.dp))
+            item {
                 Text(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    fontSize = 32.sp,
+                    lineHeight = 32.sp,
                     textAlign = TextAlign.Center,
-                    text = stringResource(R.string.incitation_making_new_poll),
-                    fontStyle = FontStyle.Italic,
+                    text = stringResource(R.string.title_multiline_majority_judgment_urn),
                 )
             }
 
-            Spacer(Modifier.height(16.dp))
-
-            homeViewState.polls.reversed().forEach { poll ->
-
-                val showDeletionDialog = remember { mutableStateOf(false) }
-
-                PollSummary(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp),
-                    poll = poll,
-                    onSetupClonePoll = { onSetupClonePoll(it) },
-                    onResumePoll = { onResumePoll(it) },
-                    onShowResult = { onShowResult(it) },
-                    onDeletePoll = {
-                        showDeletionDialog.value = true
-                    },
-                )
-                Spacer(
-                    Modifier
-                        .height(1.dp)
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .background(Color.LightGray),
-                )
-
-                if (showDeletionDialog.value) {
-                    PollDeletionConfirmationDialog(
-                        poll = poll,
-                        onConfirm = {
-                            showDeletionDialog.value = false
-                            onDeletePoll(poll)
-                        },
-                        onDismiss = {
-                            showDeletionDialog.value = false
-                        },
+            if (homeViewState.polls.isEmpty()) {
+                item {
+                    Spacer(Modifier.size(36.dp))
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        text = stringResource(R.string.incitation_making_new_poll),
+                        fontStyle = FontStyle.Italic,
                     )
+                    Spacer(Modifier.height(16.dp))
                 }
             }
 
-            // Safe area : cause fab button
-            Spacer(Modifier.height(72.dp))
+            items(
+                items = homeViewState.polls.reversed(),
+                key = { poll -> poll.id }
+            ) { poll ->
+                PollRow(
+                    modifier = Modifier.animateItem(),
+                    onDeletePoll = { onDeletePoll(it) },
+                    onResumePoll = { onResumePoll(it) },
+                    onShowResult = { onShowResult(it) },
+                    onSetupClonePoll = { onSetupClonePoll(it) },
+                    poll = poll
+                )
+            }
+
+            item {
+                // Safe area : cause fab button
+                Spacer(Modifier.height(72.dp))
+            }
         }
     }
 }
