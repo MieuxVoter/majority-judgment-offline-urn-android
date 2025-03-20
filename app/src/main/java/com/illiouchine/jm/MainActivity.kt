@@ -30,9 +30,9 @@ import com.illiouchine.jm.logic.SettingsViewModel
 import com.illiouchine.jm.ui.NavigationAction
 import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.Screens
-import com.illiouchine.jm.ui.composable.loading.LoaderScreen
 import com.illiouchine.jm.ui.screen.AboutScreen
 import com.illiouchine.jm.ui.screen.HomeScreen
+import com.illiouchine.jm.ui.screen.LoaderScreen
 import com.illiouchine.jm.ui.screen.OnBoardingScreen
 import com.illiouchine.jm.ui.screen.PollSetupScreen
 import com.illiouchine.jm.ui.screen.PollVotingScreen
