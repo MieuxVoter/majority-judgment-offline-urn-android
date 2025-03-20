@@ -65,7 +65,7 @@ data class Point(
 }
 
 
-val epicycloids: List<Epicycloid> = listOf(
+val defaultsEpicycloids: List<Epicycloid> = listOf(
     Epicycloid(
         // i like this one
         name = "Crusty Juggler",
