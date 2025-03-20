@@ -2,6 +2,7 @@ package com.illiouchine.jm.ui.screen
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -52,6 +54,7 @@ fun AboutScreen(
     onContributeTranslations: () -> Unit = {},
     onOpenWebsite: () -> Unit = {},
 ) {
+
     Scaffold(
         modifier = modifier
             .fillMaxSize()
@@ -81,6 +84,11 @@ fun AboutScreen(
                     .fillMaxWidth()
             ) {
                 Image(
+                    modifier = Modifier.pointerInput(Unit){
+                        detectTapGestures {
+                            navController.navigate(Screens.Loader)
+                        }
+                    },
                     painter = painterResource(R.drawable.onboarding_3),
                     contentDescription = null,
                 )
