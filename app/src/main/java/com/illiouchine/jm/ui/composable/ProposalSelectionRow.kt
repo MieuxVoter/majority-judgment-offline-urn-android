@@ -34,8 +34,7 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.theme.JmTheme
 
 @Composable
-@Suppress("UnusedReceiverParameter")
-fun ColumnScope.ProposalSelectionRow(
+fun ProposalSelectionRow(
     modifier: Modifier = Modifier,
     proposal: String = "",
     onProposalChange: (String) -> Unit = {},

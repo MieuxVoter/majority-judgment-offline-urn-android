@@ -25,8 +25,7 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.theme.JmTheme
 
 @Composable
-@Suppress("UnusedReceiverParameter")
-fun ColumnScope.SubjectSelectionRow(
+fun SubjectSelectionRow(
     modifier: Modifier = Modifier,
     subject: String = "",
     subjectSuggestion: List<String> = emptyList(),

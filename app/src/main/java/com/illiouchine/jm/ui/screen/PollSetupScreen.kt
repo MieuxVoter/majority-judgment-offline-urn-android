@@ -2,14 +2,15 @@ package com.illiouchine.jm.ui.screen
 
 import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Scaffold
@@ -19,7 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -40,7 +40,6 @@ import com.illiouchine.jm.ui.composable.ProposalRow
 import com.illiouchine.jm.ui.composable.ProposalSelectionRow
 import com.illiouchine.jm.ui.composable.ScreenTitle
 import com.illiouchine.jm.ui.composable.SubjectSelectionRow
-import com.illiouchine.jm.ui.composable.ThemedHorizontalDivider
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.utils.displayed
 
@@ -97,100 +96,106 @@ fun PollSetupScreen(
         },
     ) { innerPadding ->
 
-        val scrollState = rememberScrollState()
+        //val scrollState = rememberScrollState()
         var proposal: String by remember { mutableStateOf("") }
 
-        Column(
+        LazyColumn(
             modifier = modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .padding(16.dp)
-                .verticalScroll(scrollState),
+                .padding(16.dp),
         ) {
-            ScreenTitle(text = stringResource(R.string.title_poll_setup))
+            item {
+                ScreenTitle(text = stringResource(R.string.title_poll_setup))
 
-            SubjectSelectionRow(
-                modifier = Modifier,
-                subject = pollSetupState.config.subject,
-                subjectSuggestion = pollSetupState.subjectSuggestion,
-                onSuggestionSelected = {
-                    onAddSubject(context, it)
-                    onGetSubjectSuggestion("")
-                },
-                onSubjectChange = {
-                    onAddSubject(context, it)
-                    if (it.length > 2) {
-                        onGetSubjectSuggestion(it)
-                    } else {
+                SubjectSelectionRow(
+                    modifier = Modifier,
+                    subject = pollSetupState.config.subject,
+                    subjectSuggestion = pollSetupState.subjectSuggestion,
+                    onSuggestionSelected = {
+                        onAddSubject(context, it)
+                        onGetSubjectSuggestion("")
+                    },
+                    onSubjectChange = {
+                        onAddSubject(context, it)
+                        if (it.length > 2) {
+                            onGetSubjectSuggestion(it)
+                        } else {
+                            onClearSubjectSuggestion()
+                        }
+                    },
+                    onClearSuggestion = {
                         onClearSubjectSuggestion()
-                    }
-                },
-                onClearSuggestion = {
-                    onClearSubjectSuggestion()
-                },
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+                    },
+                )
+                Spacer(modifier = Modifier.height(16.dp))
 
-            ProposalSelectionRow(
-                modifier = Modifier,
-                proposal = proposal,
-                onProposalChange = {
-                    proposal = it
-                    if (it.length > 1) {
-                        onGetProposalSuggestion(it)
-                    } else {
+                ProposalSelectionRow(
+                    modifier = Modifier,
+                    proposal = proposal,
+                    onProposalChange = {
+                        proposal = it
+                        if (it.length > 1) {
+                            onGetProposalSuggestion(it)
+                        } else {
+                            onClearProposalSuggestion()
+                        }
+                    },
+                    onAddProposal = {
+                        onAddProposal(context, it)
+                        proposal = ""
+                    },
+                    proposalSuggestion = pollSetupState.proposalSuggestion,
+                    onProposalSelected = {
+                        proposal = it
+                        onClearProposalSuggestion()
+                    },
+                    onClearSuggestion = {
                         onClearProposalSuggestion()
                     }
-                },
-                onAddProposal = {
-                    onAddProposal(context, it)
-                    proposal = ""
-                },
-                proposalSuggestion = pollSetupState.proposalSuggestion,
-                onProposalSelected = {
-                    proposal = it
-                    onClearProposalSuggestion()
-                },
-                onClearSuggestion = {
-                    onClearProposalSuggestion()
-                }
-            )
+                )
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
+            }
 
-            pollSetupState.config.proposals.reversed().forEachIndexed { propIndex, propName ->
-
-                if (propIndex > 0) {
-                    ThemedHorizontalDivider()
-                }
-
+            itemsIndexed(
+                items = pollSetupState.config.proposals.reversed(),
+                key = { propIndex, proposal -> proposal },
+            ) { propIndex, proposal ->
                 ProposalRow(
-                    modifier = Modifier,
-                    proposal = propName,
+                    modifier = Modifier.animateItem(),
+                    propIndex = propIndex,
+                    proposal = proposal,
                     onRemoveClicked = { onRemoveProposal(it) }
                 )
             }
 
-            GradingSelectionRow(
-                modifier = Modifier,
-                grading = pollSetupState.config.grading,
-                onGradingSelected = {
-                    onGradingSelected(it)
-                },
-            )
+            item {
+                GradingSelectionRow(
+                    modifier = Modifier,
+                    grading = pollSetupState.config.grading,
+                    onGradingSelected = {
+                        onGradingSelected(it)
+                    },
+                )
 
-            // Rule: A poll should have more than 1 proposal.
-            Button(
-                modifier = Modifier
-                    .testTag("setup_submit")
-                    .displayed { finishButtonVisibility = it }
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.62f)
-                    .padding(16.dp),
-                enabled = pollSetupState.config.proposals.size > 1,
-                onClick = { onSetupFinished(context) },
-            ) {
-                Text(stringResource(R.string.button_let_s_go))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    // Rule: A poll should have more than 1 proposal.
+                    Button(
+                        modifier = Modifier
+                            .testTag("setup_submit")
+                            .displayed { finishButtonVisibility = it }
+                            .fillMaxWidth(0.62f)
+                            .padding(16.dp),
+                        enabled = pollSetupState.config.proposals.size > 1,
+                        onClick = { onSetupFinished(context) },
+                    ) {
+                        Text(stringResource(R.string.button_let_s_go))
+                    }
+                }
             }
         }
     }

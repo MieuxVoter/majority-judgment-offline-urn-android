@@ -18,9 +18,13 @@ import com.illiouchine.jm.ui.theme.DeleteColor
 @Composable
 fun ProposalRow(
     modifier: Modifier = Modifier,
+    propIndex: Int,
     proposal: String,
     onRemoveClicked: (String) -> Unit = {}
 ) {
+    if (propIndex > 0) {
+        ThemedHorizontalDivider()
+    }
     Row(
         modifier = modifier.padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
