@@ -98,6 +98,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     }
+
                     composable<Screens.PollSetup> { backStackEntry ->
 
                         val pollSetupViewModel: PollSetupViewModel by viewModel()
@@ -124,6 +125,7 @@ class MainActivity : ComponentActivity() {
                             onClearProposalSuggestion = pollSetupViewModel::clearProposalSuggestion,
                         )
                     }
+
                     composable<Screens.PollVote> { backStackEntry ->
 
                         val pollVotingViewModel: PollVotingViewModel by viewModel()
@@ -157,6 +159,7 @@ class MainActivity : ComponentActivity() {
                             onTryToGoBack = pollVotingViewModel::tryToGoBack,
                         )
                     }
+
                     composable<Screens.PollResult> { backStackEntry ->
 
                         val pollResultViewModel: PollResultViewModel by viewModel()
@@ -180,7 +183,9 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     }
+
                     composable<Screens.Settings> {
+
                         val settingsViewModel: SettingsViewModel by viewModel()
                         val settingsViewState by settingsViewModel.settingsViewState.collectAsState()
 
@@ -197,7 +202,9 @@ class MainActivity : ComponentActivity() {
                             onDismissFeedback = {},
                         )
                     }
+
                     composable<Screens.About> {
+
                         AboutScreen(
                             modifier = Modifier,
                             navController = navController,
