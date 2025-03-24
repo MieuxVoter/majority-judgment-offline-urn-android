@@ -29,6 +29,7 @@ class PollVotingViewModel(
         val pollConfig: PollConfig = PollConfig(),
         val ballots: List<Ballot> = emptyList(),
         val currentBallot: Ballot? = null,
+        val amountOfBallotsCastThisSession: Int = 0,
         val currentProposalsOrder: List<Int> = emptyList(),
         val pinScreens: Boolean = false,
     ) {
@@ -58,6 +59,7 @@ class PollVotingViewModel(
                     pollId = pollId,
                     pollConfig = poll?.pollConfig ?: PollConfig(),
                     ballots = poll?.ballots ?: emptyList(),
+                    amountOfBallotsCastThisSession = 0,
                     currentBallot = null,
                     pinScreens = pinScreens,
                 )
@@ -98,6 +100,7 @@ class PollVotingViewModel(
             it.copy(
                 currentBallot = null,
                 ballots = it.ballots + ballot,
+                amountOfBallotsCastThisSession = _pollVotingViewState.value.amountOfBallotsCastThisSession + 1,
             )
         }
 

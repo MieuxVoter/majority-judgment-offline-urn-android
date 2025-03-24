@@ -1,6 +1,8 @@
 package com.illiouchine.jm.ui.screen
 
 import android.content.Context
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -172,14 +174,23 @@ fun PollVotingScreen(
         }
     }
 
+    // Rule: going BACK before starting any ballot goes back to the previous screen.
+    // Rule: going BACK after starting any ballot goes back to the previous screen.
     // Rule: going BACK cancels the last cast judgment, if any.
     // Rule: going BACK from the summary cancels the last cast judgment too.
     BackHandler(
-        enabled = true,
+        enabled = (pollVotingState.amountOfBallotsCastThisSession > 0),
     ) {
         if (pollVotingState.currentBallot != null) {
             if (pollVotingState.currentBallot.judgments.isNotEmpty()) {
                 onCancelLastJudgment()
+            } else {
+                onBallotCanceled()
+            }
+        }
+        else {
+            if (pollVotingState.ballots.isNotEmpty()) {
+                Toast.makeText(context, "You cannot go back from here, that would be cheating.", LENGTH_SHORT).show()
             }
         }
     }

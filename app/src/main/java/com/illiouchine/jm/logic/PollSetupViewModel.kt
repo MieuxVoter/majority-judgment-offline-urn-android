@@ -148,7 +148,9 @@ class PollSetupViewModel(
                 ballots = emptyList(),
             )
             val pollId = pollDataSource.savePoll(poll)
-            navigator.navigateTo(Screens.PollVote(id = pollId))
+            navigator.navigateTo(Screens.PollVote(id = pollId)) {
+                popUpTo(Screens.Home) { inclusive = false }
+            }
         }
     }
 
