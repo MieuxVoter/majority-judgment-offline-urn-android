@@ -1,0 +1,2 @@
+* Fix an issue with back navigation after poll setup
+* Fix an issue with keyboard focus on older devices

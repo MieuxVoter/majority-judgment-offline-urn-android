@@ -7,3 +7,8 @@ See:
 - https://f-droid.org/docs/All_About_Descriptions_Graphics_and_Screenshots/
 
 > Feel free to add more translations !  We welcome merge requests.
+
+
+## Notes
+
+- Changelogs may not exceed 500 characters.

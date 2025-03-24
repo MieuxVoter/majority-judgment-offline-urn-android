@@ -17,8 +17,8 @@ android {
         applicationId = "com.illiouchine.jm"
         minSdk = 27
         targetSdk = 35
-        versionCode = 6
-        versionName = "1.2.0"
+        versionCode = 7
+        versionName = "1.2.1"
 
         // Ideally we'd have both, but support for multiple runners look experimental
 //        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
