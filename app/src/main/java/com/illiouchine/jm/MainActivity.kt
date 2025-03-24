@@ -154,6 +154,7 @@ class MainActivity : ComponentActivity() {
                             onBallotCanceled = pollVotingViewModel::cancelBallot,
                             onCancelLastJudgment = pollVotingViewModel::cancelLastJudgment,
                             onFinish = pollVotingViewModel::finalizePoll,
+                            onTryToGoBack = pollVotingViewModel::tryToGoBack,
                         )
                     }
                     composable<Screens.PollResult> { backStackEntry ->

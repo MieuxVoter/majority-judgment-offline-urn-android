@@ -2,6 +2,8 @@ package com.illiouchine.jm.logic
 
 import android.content.Context
 import android.media.MediaPlayer
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.R
@@ -134,6 +136,18 @@ class PollVotingViewModel(
             )
             val newPollId = pollDataSource.savePoll(poll)
             navigator.navigateTo(Screens.PollResult(id = newPollId))
+        }
+    }
+
+    fun tryToGoBack(context: Context) {
+        viewModelScope.launch {
+            if (_pollVotingViewState.value.ballots.isNotEmpty()) {
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.toast_you_cannot_go_back_from_here),
+                    LENGTH_SHORT,
+                ).show()
+            }
         }
     }
 }
