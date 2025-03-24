@@ -3,6 +3,7 @@ package com.illiouchine.jm.model
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.Color
 import com.illiouchine.jm.R
+import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.model.Grading.Quality3Grading
 import com.illiouchine.jm.model.Grading.Quality5Grading
 import com.illiouchine.jm.model.Grading.Quality7Grading
@@ -135,7 +136,7 @@ sealed class Grading(
                 3 -> Quality3Grading
                 5 -> Quality5Grading
                 7 -> Quality7Grading
-                else -> Quality7Grading
+                else -> DEFAULT_GRADING_QUALITY_VALUE
             }
         }
     }

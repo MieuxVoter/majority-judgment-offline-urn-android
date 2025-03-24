@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.illiouchine.jm.R
+import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Grading
@@ -163,7 +164,7 @@ fun PreviewHomeScreen(modifier: Modifier = Modifier) {
                         pollConfig = PollConfig(
                             subject = "Prezidan ?",
                             proposals = listOf("Mario", "Bob", "JLM"),
-                            grading = Grading.Quality7Grading
+                            grading = DEFAULT_GRADING_QUALITY_VALUE,
                         ),
                         ballots = listOf(
                             Ballot(
@@ -187,7 +188,7 @@ fun PreviewHomeScreen(modifier: Modifier = Modifier) {
                                 "Un Sayan",
                                 "Merde !"
                             ),
-                            grading = Grading.Quality7Grading,
+                            grading = DEFAULT_GRADING_QUALITY_VALUE,
                         ),
                         ballots = listOf(
                             Ballot(
