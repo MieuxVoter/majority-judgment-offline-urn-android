@@ -48,7 +48,7 @@ fun ColumnScope.SubjectSelectionRow(
                         onClearSuggestion()
                     }
                 },
-            maxLines = 5,
+            singleLine = true,
             placeholder = {
                 Text(stringResource(R.string.poll_setup_subject_placeholder))
             },
