@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
+import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
@@ -106,7 +107,7 @@ fun PreviewBallotSummaryScreen(modifier: Modifier = Modifier) {
             pollConfig = PollConfig(
                 subject = "Prézidaaanh ?",
                 proposals = listOf("Tonio", "Bobby", "Mario"),
-                grading = Grading.Quality7Grading,
+                grading = DEFAULT_GRADING_QUALITY_VALUE,
             ),
             ballot = Ballot(
                 judgments = listOf(

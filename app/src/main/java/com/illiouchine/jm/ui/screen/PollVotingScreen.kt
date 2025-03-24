@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.R
+import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.logic.PollVotingViewModel
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Grading
@@ -202,7 +203,7 @@ fun PreviewVotingScreen(modifier: Modifier = Modifier) {
                 pollConfig = PollConfig(
                     subject = "Best Prezidan ?",
                     proposals = listOf("That candidate with a long name-san", "Mario", "JanBob"),
-                    grading = Grading.Quality7Grading,
+                    grading = DEFAULT_GRADING_QUALITY_VALUE,
                 ),
                 ballots = emptyList(),
                 currentBallot = null,
@@ -221,7 +222,7 @@ fun PreviewVotingScreenWithBallots(modifier: Modifier = Modifier) {
                 pollConfig = PollConfig(
                     subject = "Best Prezidan ?",
                     proposals = listOf("That candidate with a long name-san", "Mario", "JanBob"),
-                    grading = Grading.Quality7Grading,
+                    grading = DEFAULT_GRADING_QUALITY_VALUE,
                 ),
                 ballots = listOf(
                     Ballot(judgments = listOf(Judgment(1, grade = 3)))
@@ -242,7 +243,7 @@ fun PreviewVotingScreenWithCurrentBallots(modifier: Modifier = Modifier) {
                 pollConfig = PollConfig(
                     subject = "Best Prezidan ?",
                     proposals = listOf("That candidate with a long name-san", "Mario", "JanBob"),
-                    grading = Grading.Quality7Grading,
+                    grading = DEFAULT_GRADING_QUALITY_VALUE,
                 ),
                 ballots = listOf(
                     Ballot(

@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
+import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.theme.JmTheme
@@ -112,7 +113,7 @@ private fun Preview7GradeList() {
                 pollConfig = PollConfig(
                     subject = "toto ?",
                     proposals = listOf("A", "B", "C"),
-                    grading = Grading.Quality7Grading
+                    grading = DEFAULT_GRADING_QUALITY_VALUE,
                 ),
                 forProposalIndex = 2,
                 onGradeSelected = {}
@@ -130,7 +131,7 @@ private fun Preview5GradeList() {
                 pollConfig = PollConfig(
                     subject = "toto ?",
                     proposals = listOf("A", "B", "C"),
-                    grading = Grading.Quality5Grading
+                    grading = DEFAULT_GRADING_QUALITY_VALUE,
                 ),
                 forProposalIndex = 2,
                 onGradeSelected = {}

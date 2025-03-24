@@ -1,6 +1,7 @@
 package com.illiouchine.jm.logic
 
 import android.content.Context
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -12,10 +12,10 @@ class SettingsViewModel(
 ) : ViewModel() {
 
     data class SettingsViewState(
-        val showOnboarding: Boolean = true,
-        val playSound: Boolean = true,
-        val pinScreen: Boolean = false,
-        val defaultGrading: Grading = Grading.Quality7Grading,
+        val showOnboarding: Boolean = DEFAULT_SHOW_ONBOARDING_VALUE,
+        val playSound: Boolean = DEFAULT_PLAY_SOUND_VALUE,
+        val pinScreen: Boolean = DEFAULT_PIN_SCREEN_VALUE,
+        val defaultGrading: Grading = DEFAULT_GRADING_QUALITY_VALUE,
     )
 
     private val _settingsViewState = MutableStateFlow(SettingsViewState())

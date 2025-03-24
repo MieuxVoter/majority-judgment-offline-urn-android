@@ -2,7 +2,10 @@ package com.illiouchine.jm.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.illiouchine.jm.logic.SettingsViewModel
+import android.util.Log
+import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
+import com.illiouchine.jm.logic.DEFAULT_PLAY_SOUND_VALUE
+import com.illiouchine.jm.logic.DEFAULT_SHOW_ONBOARDING_VALUE
 import com.illiouchine.jm.model.Grading
 
 class SharedPrefsHelper(
@@ -22,7 +25,7 @@ class SharedPrefsHelper(
     fun getShowOnboarding(): Boolean {
         return sharedPreferences.getBoolean(
             SHOW_ONBOARDING_PREF_KEY,
-            true,
+            DEFAULT_SHOW_ONBOARDING_VALUE,
         )
     }
 
@@ -35,10 +38,7 @@ class SharedPrefsHelper(
     fun getPlaySound(): Boolean {
         return sharedPreferences.getBoolean(
             PLAY_SOUND_PREF_KEY,
-            true,
-            // TODO: We need a single source of truth for default values.
-            // The following works, but a view state should not be a source of truth for the app.
-            //SettingsViewModel.SettingsViewState().playSound,
+            DEFAULT_PLAY_SOUND_VALUE,
         )
     }
 
@@ -61,7 +61,7 @@ class SharedPrefsHelper(
     fun getDefaultGrading(): Grading {
         val defaultAmountOfGrading = sharedPreferences.getInt(
             DEFAULT_GRADING_PREF_KEY,
-            Grading.Quality7Grading.getAmountOfGrades(),
+            DEFAULT_GRADING_QUALITY_VALUE.getAmountOfGrades(),
         )
         return Grading.byAmountOfGrades(defaultAmountOfGrading)
     }

@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.R
+import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.gradings
 import com.illiouchine.jm.ui.theme.JmTheme
@@ -29,7 +30,7 @@ import com.illiouchine.jm.ui.theme.JmTheme
 @Composable
 fun GradingSelectionRow(
     modifier: Modifier = Modifier,
-    grading: Grading = Grading.Quality7Grading,
+    grading: Grading = DEFAULT_GRADING_QUALITY_VALUE,
     onGradingSelected: (Grading) -> Unit = {}
 ) {
     Row(
@@ -40,13 +41,12 @@ fun GradingSelectionRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         var expanded by remember { mutableStateOf(false) }
-        var selectedGrade: Grading by remember { mutableStateOf(grading) }
 
         Text(stringResource(R.string.label_grades))
         TextButton(
             onClick = { expanded = !expanded }
         ) {
-            Text(stringResource(selectedGrade.name))
+            Text(stringResource(grading.name))
             Icon(
                 imageVector = Icons.Default.ArrowDropDown,
                 contentDescription = "drop dowm arrow"
@@ -61,7 +61,6 @@ fun GradingSelectionRow(
                 DropdownMenuItem(
                     text = { Text(stringResource(grading.name)) },
                     onClick = {
-                        selectedGrade = grading
                         expanded = false
                         onGradingSelected(grading)
                     }
