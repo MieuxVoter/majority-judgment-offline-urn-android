@@ -45,23 +45,33 @@ fun ColumnScope.ProposalSelectionRow(
     onClearSuggestion: () -> Unit = {},
 ) {
     var textFieldHeight by remember { mutableIntStateOf(0) }
+
     // Helps us put the cursor at the end after selecting a suggestion.
-    var textFieldSelection by remember {
+    var textFieldValueState by remember {
         mutableStateOf(
-            TextRange(proposal.length)
+            TextFieldValue(
+                text = proposal,
+                selection = TextRange(proposal.length),
+            )
+        )
+    }
+    if (textFieldValueState.text != proposal) {
+        textFieldValueState = textFieldValueState.copy(
+            text = proposal,
+            selection = TextRange(proposal.length),
         )
     }
 
     Row {
         TextField(
-            value = TextFieldValue(
-                text = proposal,
-                selection = textFieldSelection,
-            ),
+            value = textFieldValueState,
             label = { Text(stringResource(R.string.label_poll_proposals)) },
             onValueChange = {
-                textFieldSelection = it.selection
-                onProposalChange(it.text)
+                // This callback is also fired when the cursor is moved.
+                textFieldValueState = it
+                if (it.text != proposal) {
+                    onProposalChange(it.text)
+                }
             },
             modifier = modifier
                 .fillMaxWidth()
@@ -111,10 +121,7 @@ fun ColumnScope.ProposalSelectionRow(
                 offset = IntOffset(0, textFieldHeight),
                 modifier = Modifier,
                 suggestions = proposalSuggestion.take(3),
-                onSuggestionSelected = {
-                    textFieldSelection = TextRange(it.length)
-                    onProposalSelected(it)
-                },
+                onSuggestionSelected = { onProposalSelected(it) },
                 onClearSuggestion = { onClearSuggestion() },
             )
         }
