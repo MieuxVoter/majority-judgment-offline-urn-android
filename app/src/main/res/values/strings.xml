@@ -84,4 +84,5 @@
     <string name="contestation">contestation</string>
     <string name="higher">higher</string>
     <string name="lower">lower</string>
+    <string name="toast_you_cannot_go_back_from_here">You cannot go back from here, that would be cheating.</string>
 </resources>

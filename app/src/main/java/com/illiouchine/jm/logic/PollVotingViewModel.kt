@@ -2,6 +2,8 @@ package com.illiouchine.jm.logic
 
 import android.content.Context
 import android.media.MediaPlayer
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.R
@@ -29,6 +31,7 @@ class PollVotingViewModel(
         val pollConfig: PollConfig = PollConfig(),
         val ballots: List<Ballot> = emptyList(),
         val currentBallot: Ballot? = null,
+        val amountOfBallotsCastThisSession: Int = 0,
         val currentProposalsOrder: List<Int> = emptyList(),
         val pinScreens: Boolean = false,
     ) {
@@ -58,6 +61,7 @@ class PollVotingViewModel(
                     pollId = pollId,
                     pollConfig = poll?.pollConfig ?: PollConfig(),
                     ballots = poll?.ballots ?: emptyList(),
+                    amountOfBallotsCastThisSession = 0,
                     currentBallot = null,
                     pinScreens = pinScreens,
                 )
@@ -98,6 +102,7 @@ class PollVotingViewModel(
             it.copy(
                 currentBallot = null,
                 ballots = it.ballots + ballot,
+                amountOfBallotsCastThisSession = _pollVotingViewState.value.amountOfBallotsCastThisSession + 1,
             )
         }
 
@@ -131,6 +136,18 @@ class PollVotingViewModel(
             )
             val newPollId = pollDataSource.savePoll(poll)
             navigator.navigateTo(Screens.PollResult(id = newPollId))
+        }
+    }
+
+    fun tryToGoBack(context: Context) {
+        viewModelScope.launch {
+            if (_pollVotingViewState.value.ballots.isNotEmpty()) {
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.toast_you_cannot_go_back_from_here),
+                    LENGTH_SHORT,
+                ).show()
+            }
         }
     }
 }

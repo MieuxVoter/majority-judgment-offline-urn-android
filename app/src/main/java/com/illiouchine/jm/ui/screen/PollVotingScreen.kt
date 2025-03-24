@@ -46,6 +46,7 @@ fun PollVotingScreen(
     onBallotConfirmed: (Context, Ballot) -> Unit = { _, _ -> },
     onBallotCanceled: () -> Unit = {},
     onCancelLastJudgment: () -> Unit = {},
+    onTryToGoBack: (Context) -> Unit = {},
     onFinish: () -> Unit = {},
     feedback: String? = "",
     onDismissFeedback: () -> Unit = {},
@@ -172,15 +173,21 @@ fun PollVotingScreen(
         }
     }
 
+    // Rule: going BACK before starting any ballot goes back to the previous screen.
+    // Rule: going BACK after starting any ballot goes back to the previous screen.
     // Rule: going BACK cancels the last cast judgment, if any.
     // Rule: going BACK from the summary cancels the last cast judgment too.
     BackHandler(
-        enabled = true,
+        enabled = (pollVotingState.amountOfBallotsCastThisSession > 0) || (pollVotingState.currentBallot != null),
     ) {
         if (pollVotingState.currentBallot != null) {
             if (pollVotingState.currentBallot.judgments.isNotEmpty()) {
                 onCancelLastJudgment()
+            } else {
+                onBallotCanceled()
             }
+        } else {
+            onTryToGoBack(context)
         }
     }
 }
