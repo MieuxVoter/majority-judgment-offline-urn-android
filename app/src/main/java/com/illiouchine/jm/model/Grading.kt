@@ -23,93 +23,35 @@ sealed class Grading(
     data object Quality7Grading : Grading(
         name = R.string.seven_grading,
         grades = listOf(
-            Grade(
-                name = R.string.grade_to_reject,
-                color = Color(0xff870714),
-                textColor = Color(0xffffb4a1),
-            ),
-            Grade(
-                name = R.string.grade_insufficient,
-                color = Color(0xffce202c),
-                textColor = Color(0xffffc394),
-            ),
-            Grade(
-                name = R.string.grade_passable,
-                color = Color(0xffe5542c),
-                textColor = Color(0xffffedb7),
-            ),
-            Grade(
-                name = R.string.grade_somewhat_good,
-                color = Color(0xffde9524),
-                textColor = Color(0xfffbe9a6),
-            ),
-            Grade(
-                name = R.string.grade_good,
-                color = Color(0xff7aa032),
-                textColor = Color(0xffd9f28c),
-            ),
-            Grade(
-                name = R.string.grade_very_good,
-                color = Color(0xff12894b),
-                textColor = Color(0xff90f8b2),
-            ),
-            Grade(
-                name = R.string.grade_excellent,
-                color = Color(0xff0a6043),
-                textColor = Color(0xffadf8d7),
-            ),
+            gradeToReject,
+            gradeInsufficient,
+            gradePassable,
+            gradeSomeWhatGood,
+            gradeGood,
+            gradeVeryGood,
+            gradeExcellent,
         ),
     )
+
     @Serializable
     data object Quality5Grading : Grading(
         name = R.string.five_grading,
         grades = listOf(
-            Grade(
-                name = R.string.grade_to_reject,
-                color = Color(0xff870714),
-                textColor = Color(0xffffb4a1),
-            ),
-            Grade(
-                name = R.string.grade_passable,
-                color = Color(0xffe5542c),
-                textColor = Color(0xffffedb7),
-            ),
-            Grade(
-                name = R.string.grade_somewhat_good,
-                color = Color(0xffde9524),
-                textColor = Color(0xfffbe9a6),
-            ),
-            Grade(
-                name = R.string.grade_good,
-                color = Color(0xff7aa032),
-                textColor = Color(0xffd9f28c),
-            ),
-            Grade(
-                name = R.string.grade_excellent,
-                color = Color(0xff0a6043),
-                textColor = Color(0xffadf8d7),
-            ),
+            gradeToReject,
+            gradePassable,
+            gradeSomeWhatGood,
+            gradeGood,
+            gradeExcellent,
         ),
     )
+
     @Serializable
     data object Quality3Grading : Grading(
         name = R.string.three_grading,
         grades = listOf(
-            Grade(
-                name = R.string.grade_to_reject,
-                color = Color(0xff870714),
-                textColor = Color(0xffffb4a1),
-            ),
-            Grade(
-                name = R.string.grade_somewhat_good,
-                color = Color(0xffde9524),
-                textColor = Color(0xfffbe9a6),
-            ),
-            Grade(
-                name = R.string.grade_excellent,
-                color = Color(0xff0a6043),
-                textColor = Color(0xffadf8d7),
-            ),
+            gradeToReject,
+            gradeSomeWhatGood,
+            gradeExcellent,
         ),
     )
 

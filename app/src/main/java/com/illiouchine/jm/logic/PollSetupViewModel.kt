@@ -1,7 +1,6 @@
 package com.illiouchine.jm.logic
 
 import android.content.Context
-import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -35,15 +34,28 @@ class PollSetupViewModel(
 
     private val _pollSetupViewState = MutableStateFlow(PollSetupViewState())
     val pollSetupViewState: StateFlow<PollSetupViewState> = _pollSetupViewState
+    private var lastId :Int? = null
 
     fun initialize(pollId: Int = 0) {
         viewModelScope.launch {
-            val poll = pollDataSource.getPollById(pollId = pollId)
-            val initialPoll =
-                poll?.pollConfig ?: PollConfig(grading = sharedPrefsHelper.getDefaultGrading())
-            _pollSetupViewState.update {
-                it.copy(config = initialPoll)
+            when(pollId){
+                lastId -> { /* Do nothing : Reload from configuration change */ }
+                0 -> {
+                    _pollSetupViewState.update {
+                        it.copy(config = PollConfig(grading = sharedPrefsHelper.getDefaultGrading()))
+                    }
+                }
+                else -> {
+                    val poll = pollDataSource.getPollById(pollId = pollId)
+                    val initialPoll =
+                        poll?.pollConfig ?: PollConfig(grading = sharedPrefsHelper.getDefaultGrading())
+
+                    _pollSetupViewState.update {
+                        it.copy(config = initialPoll)
+                    }
+                }
             }
+            lastId = pollId
         }
     }
 
@@ -153,6 +165,8 @@ class PollSetupViewModel(
                 popUpTo(Screens.Home) { inclusive = false }
             }
         }
+        // Reset poll id
+        lastId = null
     }
 
     private fun generateProposalName(context: Context): String {

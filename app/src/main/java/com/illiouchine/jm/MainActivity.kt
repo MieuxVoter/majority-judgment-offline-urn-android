@@ -100,18 +100,16 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable<Screens.PollSetup> { backStackEntry ->
-
                         val pollSetupViewModel: PollSetupViewModel by viewModel()
+                        val pollSetup = backStackEntry.toRoute<Screens.PollSetup>()
                         val pollSetupViewState by pollSetupViewModel.pollSetupViewState.collectAsState()
 
-                        val pollSetup = backStackEntry.toRoute<Screens.PollSetup>()
                         LaunchedEffect(pollSetup) {
                             pollSetupViewModel.initialize(pollId = pollSetup.id)
                         }
 
                         PollSetupScreen(
                             modifier = Modifier,
-                            navController = navController,
                             pollSetupState = pollSetupViewState,
                             onAddSubject = pollSetupViewModel::addSubject,
                             onAddProposal = pollSetupViewModel::addProposal,
