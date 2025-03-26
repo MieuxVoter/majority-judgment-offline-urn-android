@@ -48,24 +48,30 @@ class PollVotingViewModel(
     val pollVotingViewState: StateFlow<PollVotingViewState> = _pollVotingViewState
 
     private fun generateRandomOrder(size: Int): List<Int> = (0..<size).shuffled()
+    private var currentPollId: Int? = null
 
     fun initVotingSessionForPoll(
         pollId: Int,
     ) {
         viewModelScope.launch {
-            val pinScreens = sharedPrefsHelper.getPinScreen()
-            val poll = pollDataSource.getPollById(pollId)
+            if (currentPollId == pollId) {
+                /* Do nothing : Reload from configuration change */
+            } else {
+                val pinScreens = sharedPrefsHelper.getPinScreen()
+                val poll = pollDataSource.getPollById(pollId)
 
-            _pollVotingViewState.update {
-                it.copy(
-                    pollId = pollId,
-                    pollConfig = poll?.pollConfig ?: PollConfig(),
-                    ballots = poll?.ballots ?: emptyList(),
-                    amountOfBallotsCastThisSession = 0,
-                    currentBallot = null,
-                    pinScreens = pinScreens,
-                )
+                _pollVotingViewState.update {
+                    it.copy(
+                        pollId = pollId,
+                        pollConfig = poll?.pollConfig ?: PollConfig(),
+                        ballots = poll?.ballots ?: emptyList(),
+                        amountOfBallotsCastThisSession = 0,
+                        currentBallot = null,
+                        pinScreens = pinScreens,
+                    )
+                }
             }
+            currentPollId = pollId
         }
     }
 
@@ -136,6 +142,7 @@ class PollVotingViewModel(
             )
             val newPollId = pollDataSource.savePoll(poll)
             navigator.navigateTo(Screens.PollResult(id = newPollId))
+            currentPollId = null
         }
     }
 
