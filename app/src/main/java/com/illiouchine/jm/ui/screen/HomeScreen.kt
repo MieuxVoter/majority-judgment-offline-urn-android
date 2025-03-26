@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
@@ -28,34 +29,36 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.model.Ballot
-import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.ui.DefaultNavigator
+import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.Screens
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.PollDeletionConfirmationDialog
 import com.illiouchine.jm.ui.composable.PollSummary
 import com.illiouchine.jm.ui.theme.JmTheme
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     homeViewState: HomeViewModel.HomeViewState = HomeViewModel.HomeViewState(),
-    navController: NavController = rememberNavController(),
+    navigator: Navigator = DefaultNavigator(),
     onSetupBlankPoll: () -> Unit = {},
     onSetupClonePoll: (poll: Poll) -> Unit = {},
     onResumePoll: (poll: Poll) -> Unit = {},
     onShowResult: (poll: Poll) -> Unit = {},
     onDeletePoll: (poll: Poll) -> Unit = {},
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
         modifier = modifier
             .fillMaxSize()
@@ -63,7 +66,11 @@ fun HomeScreen(
         bottomBar = {
             MjuBottomBar(
                 selected = Screens.Home,
-                onItemSelected = { destination -> navController.navigate(destination) },
+                onItemSelected = { destination ->
+                    coroutineScope.launch {
+                        navigator.navigateTo(destination)
+                    }
+                },
             )
         },
         floatingActionButton = {
