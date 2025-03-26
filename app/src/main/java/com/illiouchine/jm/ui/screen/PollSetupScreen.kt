@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -98,7 +99,7 @@ fun PollSetupScreen(
     ) { innerPadding ->
 
         val scrollState = rememberScrollState()
-        var proposal: String by remember { mutableStateOf("") }
+        var proposal: String by rememberSaveable { mutableStateOf("") }
 
         Column(
             modifier = modifier
