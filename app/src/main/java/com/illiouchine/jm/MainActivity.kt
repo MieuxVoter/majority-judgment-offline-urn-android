@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity() {
                         } else {
                             HomeScreen(
                                 modifier = Modifier,
-                                navController = navController,
+                                navigator = navigator,
                                 homeViewState = homeViewState,
                                 onDeletePoll = homeViewModel::deletePoll,
                                 onSetupBlankPoll = homeViewModel::setupBlankPoll,
@@ -110,6 +110,7 @@ class MainActivity : ComponentActivity() {
 
                         PollSetupScreen(
                             modifier = Modifier,
+                            navigator = navigator,
                             pollSetupState = pollSetupViewState,
                             onAddSubject = pollSetupViewModel::addSubject,
                             onAddProposal = pollSetupViewModel::addProposal,

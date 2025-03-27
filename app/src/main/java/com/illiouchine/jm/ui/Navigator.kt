@@ -10,14 +10,19 @@ import kotlinx.serialization.Serializable
 sealed interface Screens {
     @Serializable
     data object Home : Screens
+
     @Serializable
     data object Settings : Screens
+
     @Serializable
     data object About : Screens
+
     @Serializable
     data class PollSetup(val id: Int = 0) : Screens
+
     @Serializable
     data class PollVote(val id: Int = 0) : Screens
+
     @Serializable
     data class PollResult(val id: Int = 0) : Screens
 }
@@ -44,7 +49,7 @@ interface Navigator {
 }
 
 class DefaultNavigator(
-    override val startDestination: Screens,
+    override val startDestination: Screens = Screens.Home,
 ) : Navigator {
     private val _navigationAction = Channel<NavigationAction>()
     override val navigationAction: Flow<NavigationAction> = _navigationAction.receiveAsFlow()
