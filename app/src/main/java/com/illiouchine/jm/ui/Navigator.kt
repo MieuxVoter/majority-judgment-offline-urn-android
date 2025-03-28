@@ -25,6 +25,8 @@ sealed interface Screens {
 
     @Serializable
     data class PollResult(val id: Int = 0) : Screens
+    @Serializable
+    data object Loader :Screens
 }
 
 sealed interface NavigationAction {
