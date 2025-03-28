@@ -1,5 +1,6 @@
 package com.illiouchine.jm.test
 
+import android.content.Context
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.SemanticsNodeInteractionCollection
@@ -9,28 +10,60 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import com.illiouchine.jm.MainActivity
+import com.illiouchine.jm.data.room.PollDataBase
+import io.cucumber.java.Before
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import io.cucumber.junit.WithJunitRule
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
+import org.koin.test.KoinTest
 
 
 @WithJunitRule
 class CucumberSteps(
     private val scenarioHolder: ActivityScenarioHolder,
     private val ruleHolder: ComposeRuleHolder,
-) : SemanticsNodeInteractionsProvider {
+    // Sadly, nope, we get:
+    // org.picocontainer.injectors.AbstractInjector$UnsatisfiableDependenciesException:
+    // com.illiouchine.jm.test.CucumberSteps has unsatisfied dependency
+    // 'interface com.illiouchine.jm.data.room.PollDao'
+    //private val pollDao: PollDao,
 
+) : KoinTest {
+
+    // We need a rule holder for scoping and bypassing the one-@Rule-per-class limitation.
     private val rule
         get() = ruleHolder.rule
 
+    private lateinit var pollDb: PollDataBase
+
+    private fun getAppContext(): Context {
+        return InstrumentationRegistry.getInstrumentation().targetContext
+    }
+
+    @Before
+    fun before() {
+        // I.a. Get the dep from Koin
+        // Not sure this is the instance that runs in the app, or another.
+        pollDb = getKoin().get<PollDataBase>()
+
+        // I.b. Or build it ourselves  (urgh ; works, but it's not the app's instance)
+//        pollDb = Room.databaseBuilder(
+//            context = getAppContext(),
+//            klass = PollDataBase::class.java,
+//            name = "PollDataBase",
+//        ).build()
+    }
+
     @Given("^I launch the app$")
     fun initializeApp() {
-        val instrumentation = InstrumentationRegistry.getInstrumentation()
-        // This is actually required for the rule to work, and I don't know how it's injected.
-        scenarioHolder.launch(MainActivity.create(instrumentation.targetContext))
+        // This is required for the rule to work.
+        scenarioHolder.launch(MainActivity.create(getAppContext()))
     }
 
     @When("^I wait for idle$")
@@ -67,6 +100,8 @@ class CucumberSteps(
     }
 
     // This is not useful, as it is dependant on the language of the emulator.
+    // But if we can manage to fetch a R.string.<something> from "something" as String… Might work.
+    // We might also be able to force the language of the emulator.  How, though ?
 //    @Then("^I should(?<negation> not|) see the node with text \"(?<text>.+)\"$")
 //    fun thenActorShouldSeeNodeByText(negation: String, text: String) {
 //        if (negation != "") {
@@ -83,10 +118,11 @@ class CucumberSteps(
 
     @When("^I scroll to the node tagged \"([^\"]+)\"\$")
     fun whenActorScrolls(tag: String) {
-        var current = rule.onNodeWithTag(tag)
+        var current = rule.onNodeWithTag(tag).assertExists()
         var scrolled = false
         var bestEffort = 64 // max depth, "just in case"©
 
+        // We're going to try every parent 'til one can scroll.
         while (0 < bestEffort--) {
             try {
                 current.performScrollToNode(
@@ -107,23 +143,12 @@ class CucumberSteps(
         assert(scrolled) { "Did not perform any scroll." }
     }
 
-    override fun onAllNodes(
-        matcher: SemanticsMatcher,
-        useUnmergedTree: Boolean,
-    ): SemanticsNodeInteractionCollection {
-        return rule.onAllNodes(
-            matcher = matcher,
-            useUnmergedTree = useUnmergedTree,
-        )
+    @Then("^there should be (?<amount>[0-9]+?) polls? in the database$")
+    fun thenThereShouldBePollsInDb(amount: Int) {
+        runTest {
+            val actual = pollDb.pollDao().loadPolls().size
+            assertEquals(amount, actual)
+        }
     }
 
-    override fun onNode(
-        matcher: SemanticsMatcher,
-        useUnmergedTree: Boolean,
-    ): SemanticsNodeInteraction {
-        return rule.onNode(
-            matcher = matcher,
-            useUnmergedTree = useUnmergedTree,
-        )
-    }
 }
