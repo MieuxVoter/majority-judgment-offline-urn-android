@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -38,7 +39,7 @@ fun SettingsScreen(
     navController: NavController = rememberNavController(),
     settingsState: SettingsViewModel.SettingsViewState = SettingsViewModel.SettingsViewState(),
     feedback: String? = "",
-    onShowOnboardingChange: (Boolean) -> Unit = {},
+    onShowOnBoardingRequested: () -> Unit = {},
     onPlaySoundChange: (Boolean) -> Unit = {},
     onPinScreenChange: (Boolean) -> Unit = {},
     onDefaultGradingSelected: (Grading) -> Unit = {},
@@ -78,12 +79,11 @@ fun SettingsScreen(
                 text = stringResource(R.string.settings_screen_title),
             )
 
-            SwitchSettingRow(
+            ShowOnboardingRow(
                 title = R.string.setting_show_onboarding,
-                checked = settingsState.showOnboarding,
-                onCheckedChange = {
-                    onShowOnboardingChange(it)
-                },
+                onRequestToShowOnboarding = {
+                    onShowOnBoardingRequested()
+                }
             )
 
             SwitchSettingRow(
@@ -107,6 +107,27 @@ fun SettingsScreen(
                 grading = settingsState.defaultGrading,
                 onGradingSelected = { onDefaultGradingSelected(it) }
             )
+        }
+    }
+}
+
+@Composable
+fun ShowOnboardingRow(
+    title: Int,
+    onRequestToShowOnboarding: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(stringResource(title))
+        Button(onClick = {
+            onRequestToShowOnboarding()
+        }) {
+            Text("Show")
         }
     }
 }

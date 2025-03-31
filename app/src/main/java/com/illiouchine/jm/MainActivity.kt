@@ -18,11 +18,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.illiouchine.jm.logic.HomeViewModel
+import com.illiouchine.jm.logic.OnBoardingViewModel
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.logic.PollVotingViewModel
@@ -82,23 +84,16 @@ class MainActivity : ComponentActivity() {
 
                         SideEffect { homeViewModel.initialize() }
 
-                        if (homeViewState.showOnboarding) {
-                            OnBoardingScreen(
-                                modifier = Modifier,
-                                onFinish = homeViewModel::finishOnboarding,
-                            )
-                        } else {
-                            HomeScreen(
-                                modifier = Modifier,
-                                navigator = navigator,
-                                homeViewState = homeViewState,
-                                onDeletePoll = homeViewModel::deletePoll,
-                                onSetupBlankPoll = homeViewModel::setupBlankPoll,
-                                onSetupClonePoll = homeViewModel::clonePoll,
-                                onResumePoll = homeViewModel::resumePoll,
-                                onShowResult = homeViewModel::showResult,
-                            )
-                        }
+                        HomeScreen(
+                            modifier = Modifier,
+                            navigator = navigator,
+                            homeViewState = homeViewState,
+                            onDeletePoll = homeViewModel::deletePoll,
+                            onSetupBlankPoll = homeViewModel::setupBlankPoll,
+                            onSetupClonePoll = homeViewModel::clonePoll,
+                            onResumePoll = homeViewModel::resumePoll,
+                            onShowResult = homeViewModel::showResult,
+                        )
                     }
 
                     composable<Screens.PollSetup> { backStackEntry ->
@@ -196,7 +191,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier,
                             navController = navController,
                             settingsState = settingsViewState,
-                            onShowOnboardingChange = settingsViewModel::updateShowOnboarding,
+                            onShowOnBoardingRequested = settingsViewModel::showOnBoarding,
                             onPlaySoundChange = settingsViewModel::updatePlaySound,
                             onPinScreenChange = settingsViewModel::updatePinScreen,
                             onDefaultGradingSelected = settingsViewModel::updateDefaultGrading,
@@ -205,7 +200,6 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable<Screens.About> {
-
                         AboutScreen(
                             modifier = Modifier,
                             navController = navController,
@@ -213,6 +207,12 @@ class MainActivity : ComponentActivity() {
                     }
                     composable<Screens.Loader> {
                         LoaderScreen(modifier = Modifier.fillMaxSize())
+                    }
+                    composable<Screens.OnBoarding> {
+                        val onBoardingViewModel: OnBoardingViewModel by viewModel()
+                        OnBoardingScreen(
+                            onFinish = onBoardingViewModel::finish
+                        )
                     }
                 }
             }

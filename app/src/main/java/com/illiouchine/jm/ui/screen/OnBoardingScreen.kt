@@ -1,5 +1,6 @@
 package com.illiouchine.jm.ui.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -55,6 +56,10 @@ fun OnBoardingScreen(
     modifier: Modifier = Modifier,
     onFinish: () -> Unit = {},
 ) {
+    BackHandler {
+        onFinish()
+    }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()

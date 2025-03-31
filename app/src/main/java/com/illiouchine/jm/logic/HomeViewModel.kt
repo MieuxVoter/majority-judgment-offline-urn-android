@@ -20,7 +20,6 @@ class HomeViewModel(
 
     data class HomeViewState(
         val polls: List<Poll> = emptyList(),
-        val showOnboarding: Boolean = false,
     )
 
     private val _homeViewState = MutableStateFlow<HomeViewState>(HomeViewState())
@@ -34,8 +33,13 @@ class HomeViewModel(
     private fun loadDefaultSettings() {
         viewModelScope.launch {
             val showOnboarding = sharedPrefsHelper.getShowOnboarding()
-            _homeViewState.update {
-                it.copy(showOnboarding = showOnboarding)
+            if (showOnboarding){
+                navigator.navigateTo(
+                    Screens.OnBoarding,
+                    navOptions = {
+                        launchSingleTop = true
+                    }
+                )
             }
         }
     }
@@ -77,17 +81,6 @@ class HomeViewModel(
     fun showResult(poll: Poll) {
         viewModelScope.launch {
             navigator.navigateTo(Screens.PollResult(id = poll.id))
-        }
-    }
-
-    fun finishOnboarding() {
-        viewModelScope.launch {
-            sharedPrefsHelper.editShowOnboarding(false)
-            _homeViewState.update {
-                it.copy(
-                    showOnboarding = false,
-                )
-            }
         }
     }
 }

@@ -8,6 +8,7 @@ import com.illiouchine.jm.data.SqlitePollDataSource
 import com.illiouchine.jm.data.room.PollDao
 import com.illiouchine.jm.data.room.PollDataBase
 import com.illiouchine.jm.logic.HomeViewModel
+import com.illiouchine.jm.logic.OnBoardingViewModel
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.logic.PollVotingViewModel
@@ -63,7 +64,12 @@ val module = module {
             sharedPrefsHelper = get()
         )
     }
-    viewModel { SettingsViewModel(sharedPreferences = get()) }
+    viewModel {
+        SettingsViewModel(
+            sharedPreferences = get(),
+            navigator = get()
+        )
+    }
     viewModel {
         PollSetupViewModel(
             sharedPrefsHelper = get(),
@@ -82,6 +88,12 @@ val module = module {
         PollResultViewModel(
             pollDataSource = get(),
             navigator = get(),
+        )
+    }
+    viewModel {
+        OnBoardingViewModel(
+            prefsHelper = get(),
+            navigator = get()
         )
     }
 }
