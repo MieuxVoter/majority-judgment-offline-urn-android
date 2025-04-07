@@ -127,7 +127,7 @@ fun ShowOnboardingRow(
         Button(onClick = {
             onRequestToShowOnboarding()
         }) {
-            Text("Show")
+            Text(stringResource(R.string.settings_show_onboarding_buton))
         }
     }
 }

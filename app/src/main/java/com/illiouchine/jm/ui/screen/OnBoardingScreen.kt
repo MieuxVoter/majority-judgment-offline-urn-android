@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -66,6 +67,7 @@ fun OnBoardingScreen(
             .testTag("onboarding_screen"),
     ) { innerPadding ->
         val pagerState = rememberPagerState(pageCount = { onBoardingPages.size })
+
         Column(
             modifier = modifier
                 .padding(innerPadding)
@@ -80,48 +82,13 @@ fun OnBoardingScreen(
                 contentPadding = PaddingValues(0.dp),
                 pageSpacing = 20.dp,
             ) { page ->
-                val onBoardingPage = onBoardingPages[page]
-                Box(
-                    modifier = modifier.graphicsLayer {
-                        // Calculate the absolute offset for the current page from the
-                        // scroll position. We use the absolute value which allows us to mirror
-                        // any effects for both directions
-                        val pageOffset = (
-                                (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
-                                ).absoluteValue
-                        alpha = lerp(
-                            start = 0.1f,
-                            stop = 1f,
-                            fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                        )
-                        scaleX = lerp(
-                            start = 0.3f,
-                            stop = 1f,
-                            fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                        )
-                        scaleY = lerp(
-                            start = 0.3f,
-                            stop = 1f,
-                            fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                        )
-                    },
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .padding(horizontal = 24.dp),
-                    ) {
-                        Image(
-                            painter = painterResource(onBoardingPage.image),
-                            contentDescription = null, // anything but silence would be noise
-                        )
-                        Spacer(Modifier.padding(16.dp))
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            text = stringResource(onBoardingPage.text),
-                        )
-                    }
+                with(onBoardingPages[page]){
+                    OnBoardingPage(
+                        modifier = Modifier,
+                        pagerState = pagerState,
+                        pageIndex = page,
+                        onBoardingPage = this
+                    )
                 }
             }
             OnBoardingBottomRow(
@@ -131,6 +98,60 @@ fun OnBoardingScreen(
             )
         }
     }
+}
+
+@Composable
+fun OnBoardingPage(
+    modifier: Modifier,
+    pagerState: PagerState,
+    pageIndex: Int,
+    onBoardingPage: OnBoardingPage
+){
+    Box(
+        modifier = modifier.graphicsLayer {
+            // Calculate the absolute offset for the current page from the
+            // scroll position. We use the absolute valu e which allows us to mirror
+            // any effects for both directions
+            val pageOffset = pagerState.calculateCurrentOffsetForPage(pageIndex).absoluteValue
+            alpha = lerp(
+                start = 0.1f,
+                stop = 1f,
+                fraction = 1f - pageOffset.coerceIn(0f, 1f)
+            )
+            scaleX = lerp(
+                start = 0.3f,
+                stop = 1f,
+                fraction = 1f - pageOffset.coerceIn(0f, 1f)
+            )
+            scaleY = lerp(
+                start = 0.3f,
+                stop = 1f,
+                fraction = 1f - pageOffset.coerceIn(0f, 1f)
+            )
+        },
+    ) {
+        Column(
+            modifier = modifier
+                .align(Alignment.Center)
+                .padding(horizontal = 24.dp),
+        ) {
+            Image(
+                painter = painterResource(onBoardingPage.image),
+                contentDescription = null, // anything but silence would be noise
+            )
+            Spacer(Modifier.padding(16.dp))
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = stringResource(onBoardingPage.text),
+            )
+        }
+    }
+}
+
+// extension method for current page offset
+fun PagerState.calculateCurrentOffsetForPage(page: Int): Float {
+    return (currentPage - page) + currentPageOffsetFraction
 }
 
 @Composable
@@ -144,13 +165,16 @@ fun OnBoardingBottomRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-
-        TextButton(
-            modifier = Modifier
-                .weight(0.7f)
-                .testTag("onboarding_screen_skip"),
-            onClick = { onFinish() },
-        ) { Text("Skip") }
+        if (pagerState.currentPage == onBoardingPages.lastIndex) {
+            Spacer(modifier = Modifier.weight(0.7f))
+        } else {
+            TextButton(
+                modifier = Modifier
+                    .weight(0.7f)
+                    .testTag("onboarding_screen_skip"),
+                onClick = { onFinish() },
+            ) { Text(stringResource(R.string.onboarding_skip)) }
+        }
 
         ViewPager(
             modifier = Modifier
@@ -160,8 +184,8 @@ fun OnBoardingBottomRow(
             currentPage = pagerState.currentPage,
         )
 
-        if (pagerState.currentPage == onBoardingPages.size - 1) {
-            TextButton(
+        if (pagerState.currentPage == onBoardingPages.lastIndex) {
+            Button(
                 modifier = Modifier
                     .weight(0.7f)
                     .testTag("onboarding_screen_finish"),
@@ -180,7 +204,6 @@ fun OnBoardingBottomRow(
             ) { Text(stringResource(R.string.button_next)) }
         }
     }
-
 }
 
 @Preview(showSystemUi = true)
