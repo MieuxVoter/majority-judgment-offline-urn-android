@@ -119,7 +119,6 @@ fun EpicycloidMenu(
                             name = name,
                             compasses = compasses
                         )
-                        Log.d("WGU", newEpicycloid.toString())
                         onSaveEpicycloid(newEpicycloid)
                     }
                 ) {

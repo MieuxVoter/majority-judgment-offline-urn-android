@@ -1,18 +1,22 @@
 package com.illiouchine.jm.logic
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.model.Grading
+import com.illiouchine.jm.ui.Navigator
+import com.illiouchine.jm.ui.Screens
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class SettingsViewModel(
     private val sharedPreferences: SharedPrefsHelper,
+    private val navigator: Navigator,
 ) : ViewModel() {
 
     data class SettingsViewState(
-        val showOnboarding: Boolean = DEFAULT_SHOW_ONBOARDING_VALUE,
         val playSound: Boolean = DEFAULT_PLAY_SOUND_VALUE,
         val pinScreen: Boolean = DEFAULT_PIN_SCREEN_VALUE,
         val defaultGrading: Grading = DEFAULT_GRADING_QUALITY_VALUE,
@@ -22,17 +26,9 @@ class SettingsViewModel(
     val settingsViewState: StateFlow<SettingsViewState> = _settingsViewState
 
     fun initialize() {
-        loadShowOnboarding()
         loadPlaySound()
         loadPinScreen()
         loadDefaultGrading()
-    }
-
-    private fun loadShowOnboarding() {
-        val showOnboarding = sharedPreferences.getShowOnboarding()
-        _settingsViewState.update {
-            it.copy(showOnboarding = showOnboarding)
-        }
     }
 
     private fun loadPlaySound() {
@@ -56,10 +52,14 @@ class SettingsViewModel(
         }
     }
 
-    fun updateShowOnboarding(visibility: Boolean) {
-        sharedPreferences.editShowOnboarding(visibility)
-        _settingsViewState.update {
-            it.copy(showOnboarding = visibility)
+    fun showOnBoarding() {
+        viewModelScope.launch {
+            navigator.navigateTo(
+                Screens.OnBoarding,
+                navOptions = {
+                    launchSingleTop = true
+                }
+            )
         }
     }
 
