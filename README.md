@@ -2,7 +2,7 @@
 
 [![Release](https://img.shields.io/github/v/release/MieuxVoter/majority-judgment-offline-urn-android?sort=semver&style=for-the-badge)](https://github.com/MieuxVoter/majority-judgment-offline-urn-android/releases)
 [![License](https://img.shields.io/github/license/MieuxVoter/majority-judgment-offline-urn-android?style=for-the-badge)](./LICENSE)
-[![GitHub Build Status](https://img.shields.io/github/actions/workflow/status/MieuxVoter/majority-judgment-offline-urn-android/android.yml?style=for-the-badge)](https://github.com/MieuxVoter/majority-judgment-offline-urn-android/actions/workflows/android.yml)
+[![GitHub Build Status](https://img.shields.io/github/actions/workflow/status/MieuxVoter/majority-judgment-offline-urn-android/android.yml?style=for-the-badge)](https://github.com/MieuxVoter/majority-judgment-offline-urn-android/actions/workflows/android_build.yml)
 [![Weblate project translated](https://img.shields.io/weblate/progress/majority-judgment-offline-urn-android?server=https%3A%2F%2Fhosted.weblate.org&style=for-the-badge)](https://hosted.weblate.org/projects/majority-judgment-offline-urn-android/application/)
 ![GitHub top language](https://img.shields.io/github/languages/top/MieuxVoter/majority-judgment-offline-urn-android?style=for-the-badge)
 [![F-Droid Version](https://img.shields.io/f-droid/v/com.illiouchine.jm?style=for-the-badge)](https://f-droid.org/en/packages/com.illiouchine.jm)
