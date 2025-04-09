@@ -1,5 +1,6 @@
 package com.illiouchine.jm.ui.screen
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -22,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -51,6 +53,8 @@ val onBoardingPages = listOf(
     OnBoardingPage(R.drawable.onboarding_1, R.string.onboarding_setup_a_poll_and_share_the_phone),
     OnBoardingPage(R.drawable.onboarding_2, R.string.onboarding_this_is_free_software),
 )
+private fun PagerState.isScrollOverLast(): Boolean =
+    (this.currentPage == this.pageCount -1 && this.currentPageOffsetFraction > 0)
 
 @Composable
 fun OnBoardingScreen(
@@ -68,6 +72,14 @@ fun OnBoardingScreen(
     ) { innerPadding ->
         val pagerState = rememberPagerState(pageCount = { onBoardingPages.size })
 
+        LaunchedEffect(
+            pagerState.isScrollInProgress,
+        ) {
+            if (pagerState.isScrollOverLast()) {
+                onFinish()
+            }
+        }
+
         Column(
             modifier = modifier
                 .padding(innerPadding)
@@ -82,7 +94,7 @@ fun OnBoardingScreen(
                 contentPadding = PaddingValues(0.dp),
                 pageSpacing = 20.dp,
             ) { page ->
-                with(onBoardingPages[page]){
+                with(onBoardingPages[page]) {
                     OnBoardingPage(
                         modifier = Modifier,
                         pagerState = pagerState,
@@ -106,11 +118,11 @@ fun OnBoardingPage(
     pagerState: PagerState,
     pageIndex: Int,
     onBoardingPage: OnBoardingPage
-){
+) {
     Box(
         modifier = modifier.graphicsLayer {
             // Calculate the absolute offset for the current page from the
-            // scroll position. We use the absolute valu e which allows us to mirror
+            // scroll position. We use the absolute value which allows us to mirror
             // any effects for both directions
             val pageOffset = pagerState.calculateCurrentOffsetForPage(pageIndex).absoluteValue
             alpha = lerp(
