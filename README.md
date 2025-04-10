@@ -43,9 +43,7 @@ This Android app is available on [F-Droid](https://f-droid.org/en/packages/com.i
 
 ### Google Play
 
-Google is asking for money (at least 25€), yet this project is done with recycled bits, strings, and love.
-
-We're looking for patrons.
+[Publication on Google Play](https://github.com/MieuxVoter/majority-judgment-offline-urn-android/issues/100) is in the works. 
 
 ### Direct Download
 
