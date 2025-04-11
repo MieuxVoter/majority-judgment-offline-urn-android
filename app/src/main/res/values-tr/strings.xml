@@ -83,4 +83,8 @@
     <string name="lower">düşük</string>
     <string name="ranking_explain_same_median">%1$s ve %2$s\'in her ikisi de %3$s ancak %5$s\'in %4$s grubu daha büyük ve bu nedenle belirleyici.</string>
     <string name="contestation">itiraz</string>
+    <string name="setting_show_onboarding_button">Göster</string>
+    <string name="onboarding_skip">atla</string>
+    <string name="setting_pin_screen_label">Seçmenlerin uygulamadan çıkmasını engelle</string>
+    <string name="setting_play_sound_label">Bir oy kullanıldığında herkese bildir</string>
 </resources>
