@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,7 +39,8 @@ fun BallotSummaryScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(16.dp)
+            .testTag("ballot_summary"),
     ) {
 
         Text(
@@ -76,6 +78,8 @@ fun BallotSummaryScreen(
         ) {
 
             TextButton(
+                modifier = Modifier
+                    .testTag("ballot_summary_rescind"),
                 onClick = onCancel,
             ) {
                 Text(
@@ -87,6 +91,8 @@ fun BallotSummaryScreen(
             Spacer(Modifier.weight(1f))
 
             Button(
+                modifier = Modifier
+                    .testTag("ballot_summary_confirm"),
                 onClick = onConfirm,
             ) {
                 Text(

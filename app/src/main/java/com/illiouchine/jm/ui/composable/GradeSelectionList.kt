@@ -30,8 +30,11 @@ import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.theme.JmTheme
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlin.time.Duration.Companion.milliseconds
 
 
 @Composable
@@ -87,15 +90,20 @@ fun GradeSelectionList(
                 .fillMaxWidth()
                 .testTag("grade_selection_$gradeIndex"),
             height = animatedHeight,
-            enabled =  ((selectedGradeIndex == null) || (selectedGradeIndex == gradeIndex)),
+            enabled = ((selectedGradeIndex == null) || (selectedGradeIndex == gradeIndex)),
             text = context.getString(pollConfig.grading.grades[gradeIndex].name).uppercase(),
             bgColor = pollConfig.grading.getGradeColor(gradeIndex),
             fgColor = pollConfig.grading.getGradeTextColor(gradeIndex)
         ) {
+            // onClick
             if (selectedGradeIndex == null) {
                 selectedGradeIndex = gradeIndex
                 coroutine.launch {
-                    delay(150)
+                    // https://github.com/Kotlin/kotlinx.coroutines/issues/3106
+//                    withContext(Dispatchers.Main) { // Nope
+                    withContext(Dispatchers.Default) { // Seems to work
+                        delay(150.milliseconds)
+                    }
                     onGradeSelected(gradeIndex)
                     selectedGradeIndex = null
                 }
@@ -116,7 +124,7 @@ private fun Preview7GradeList() {
                     grading = DEFAULT_GRADING_QUALITY_VALUE,
                 ),
                 forProposalIndex = 2,
-                onGradeSelected = {}
+                onGradeSelected = {},
             )
         }
     }

@@ -61,7 +61,7 @@ val module = module {
         HomeViewModel(
             pollDataSource = get(),
             navigator = get(),
-            sharedPrefsHelper = get()
+            sharedPrefsHelper = get(),
         )
     }
     viewModel {
