@@ -83,4 +83,8 @@
     <string name="poll_setup_subject_placeholder">Entrez le sujet du scrutin…</string>
     <string name="poll_setup_proposal_placeholder">Entrez une proposition…</string>
     <string name="toast_you_cannot_go_back_from_here">À ce point, vous ne pouvez pas revenir en arrière, ce serait tricher.</string>
+    <string name="setting_show_onboarding_button">Revoir</string>
+    <string name="setting_play_sound_label">Avertir les environs qu\'un nouveau vote a été finalisé</string>
+    <string name="setting_pin_screen_label">Empêcher les votants de quitter l\'application</string>
+    <string name="onboarding_skip">abréger</string>
 </resources>
