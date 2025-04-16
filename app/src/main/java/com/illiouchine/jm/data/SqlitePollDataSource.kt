@@ -63,7 +63,7 @@ class SqlitePollDataSource(
     }
 
     override suspend fun getAllPolls(): List<Poll> {
-        val loadBallot : suspend (pollId : Int) -> List<Ballot> = { pollId ->
+        val loadBallots : suspend (pollId : Int) -> List<Ballot> = { pollId ->
             pollDao
                 .loadBallots(pollId = pollId)
                 .toDomainObject()
@@ -72,7 +72,7 @@ class SqlitePollDataSource(
         return pollDao
             .loadPolls()
             .toDomainObject { pollId ->
-                loadBallot(pollId)
+                loadBallots(pollId)
             }
     }
 
