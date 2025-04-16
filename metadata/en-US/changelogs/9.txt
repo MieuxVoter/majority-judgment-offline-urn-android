@@ -1,1 +1,2 @@
 * Normalize the epicycloïds so they don't go off-screen
+* Fix an issue with long proposal names
