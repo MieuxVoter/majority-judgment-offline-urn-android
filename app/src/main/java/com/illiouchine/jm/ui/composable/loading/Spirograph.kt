@@ -3,6 +3,7 @@ package com.illiouchine.jm.ui.composable.loading
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import kotlin.math.PI
+import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -28,7 +29,7 @@ data class Spirograph(
         return p
     }
 
-    fun getPointOnCircle(
+    private fun getPointOnCircle(
         center: Point,
         position: Double,
         compass: Compass,
@@ -44,7 +45,31 @@ data class Spirograph(
 data class Epicycloid(
     val name: String = "",
     val compasses: List<Compass>,
-)
+) {
+    /**
+     * Ensure that the sum of the radii of compasses is 1.
+     */
+    fun normalized(scale: Double = 1.0): Epicycloid {
+        assert(scale > 0.0)
+        val normalizedCompasses = this.compasses.toMutableList()
+        var sumOfRadii = 0.0
+        this.compasses.forEach { compass: Compass ->
+            sumOfRadii += abs(compass.radius)
+        }
+        if (sumOfRadii > 0.0) {
+            this.compasses.forEachIndexed { index, compass: Compass ->
+                val normalizedCompass = compass.copy(
+                    radius = scale * compass.radius / sumOfRadii
+                )
+                normalizedCompasses[index] = normalizedCompass
+            }
+        }
+
+        return this.copy(
+            compasses = normalizedCompasses.toList(),
+        )
+    }
+}
 
 data class Compass(
     val radius: Double,

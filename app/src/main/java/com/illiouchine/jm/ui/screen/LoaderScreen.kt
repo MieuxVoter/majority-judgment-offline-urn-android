@@ -34,7 +34,7 @@ fun LoaderScreen(
 
     val spirograph by remember {
         derivedStateOf {
-            Spirograph(epicycloid = epicycloids[currentEpicycloidPresetIndex])
+            Spirograph(epicycloid = epicycloids[currentEpicycloidPresetIndex].normalized(0.93))
         }
     }
 
@@ -61,16 +61,15 @@ fun LoaderScreen(
                     modifier = Modifier.fillMaxSize(),
                     epicycloid = spirograph.epicycloid,
                     onSaveEpicycloid = { epicycloid ->
-                        val newListOfEpicycloid = epicycloids.toMutableList()
+                        val otherEpicycloids = epicycloids.toMutableList()
                         val exist: Epicycloid? =
-                            newListOfEpicycloid.firstOrNull { it.name == epicycloid.name }
+                            otherEpicycloids.firstOrNull { it.name == epicycloid.name }
                         if (exist != null) {
-                            newListOfEpicycloid.remove(exist)
+                            otherEpicycloids.remove(exist)
                         }
-                        //newListOfEpicycloid.add(epicycloid)
                         epicycloids = buildList {
                             add(epicycloid)
-                            addAll(newListOfEpicycloid)
+                            addAll(otherEpicycloids)
                         }
                         currentEpicycloidPresetIndex = 0
                         showMenu = false
