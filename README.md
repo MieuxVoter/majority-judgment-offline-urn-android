@@ -21,10 +21,10 @@ An application for Android 8.1 and greater that helps groups decide about things
 - *No anti-features*: no tracking, no ads.
 
 <p>
-  <img src="metadata/en-US/images/phoneScreenshots/1.png" alt="Screenshot of the onboarding screen of the application." />
-  <img src="metadata/en-US/images/phoneScreenshots/2.png" alt="Screenshot of the voting screen of the application." />
-  <img src="metadata/en-US/images/phoneScreenshots/3.png" alt="Screenshot of the results screen of the application." />
-  <img src="metadata/en-US/images/phoneScreenshots/4.png" alt="Screenshot of the home screen of the application, in dark theme." />
+  <img src="metadata/en-US/images/phoneScreenshots/1.png" alt="Screenshot of the onboarding screen of the application." width="270" />
+  <img src="metadata/en-US/images/phoneScreenshots/2.png" alt="Screenshot of the voting screen of the application." width="270" />
+  <img src="metadata/en-US/images/phoneScreenshots/3.png" alt="Screenshot of the results screen of the application." width="270" />
+  <img src="metadata/en-US/images/phoneScreenshots/4.png" alt="Screenshot of the home screen of the application, in dark theme." width="270" />
 </p>
 
 
