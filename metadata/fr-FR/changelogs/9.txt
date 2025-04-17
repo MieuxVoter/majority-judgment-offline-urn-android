@@ -1,0 +1,2 @@
+* Normalisation des épicycloïdes pour qu'ils restent dans l'écran
+* Correction d'un problème avec les noms de propositions très longs

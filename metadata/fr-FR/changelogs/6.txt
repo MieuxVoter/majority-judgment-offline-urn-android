@@ -1,0 +1,19 @@
+* Support pour les appareils à faible densité de pixels
+* Déverrouiller le clavier correctement sur certains appareils
+* Inverser l'ordre des propositions sur l'écran de création de scrutin
+* Mélanger les propositions pour chaque nouveau ballot
+* Documenter le sujet du scrutin
+* Suggérer un sujet pour le scrutin
+* Ajouter un lien vers MieuxVoter.fr dans la section À Propos
+* Ajouter d'autres liens dans la section À Propos
+* Utiliser un effet sonore moins violent
+* Demander confirmation avant de supprimer un scrutin
+* Épingler l'écran automatiquement
+* Plus d'infos sur l'écran de résultats
+* Animer les profils de mérite
+* Expliquer comment les propositions sont triées
+* Encadrer les groupes décisifs quand un duel est sélectionné
+* Configurer Weblate pour les traductions
+* Traduction préliminaire en espagnol
+* Suite de tests en Gherkin
+* Réduction de la taille de l'application
