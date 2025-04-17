@@ -1,0 +1,11 @@
+* Publication initiale
+* Créer un scrutin au Jugement Majoritaire en quelques secondes
+* Ordonner les propositions et observer leur profil de mérite
+* Dupliquer un scrutin
+* Reprendre un scrutin
+* Sauvegarder les scrutins
+* Thème Clair ou Sombre
+* Translation en anglais
+* Translation en français
+* Jouer un son quand un ballot est confirmé
+* Désactiver le son dans les Options

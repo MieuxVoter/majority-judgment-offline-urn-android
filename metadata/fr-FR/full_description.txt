@@ -2,4 +2,6 @@ Transformez votre téléphone en urne hors-ligne pour un scrutin au Jugement Maj
 
 Organisez un sondage en quelques secondes et faites tourner le téléphone.
 
+Cette application aide les groupes à se décider au sujet de quelque chose.
+
 Le Jugement Majoritaire est un système de scrutin utilisé historiquement dans les concours de pinard, où chaque participant peut juger chaque proposition, donc il n'y a pas de "vote utile".

@@ -1,0 +1,6 @@
+* Correction d'un problème avec la navigation arrière
+* Correction d'un problème avec le clavier sur les appareils plus anciens
+* Correction d'un problème avec l'abordage
+* Correction d'un problème avec la rotation d'écran
+* Correction d'un problème avec la configuration des mentions
+* Ajout d'un œuf de pâques
