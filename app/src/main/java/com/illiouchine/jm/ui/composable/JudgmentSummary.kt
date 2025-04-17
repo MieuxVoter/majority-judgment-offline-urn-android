@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.R
@@ -28,9 +29,17 @@ fun JudgmentSummary(
             modifier = Modifier.padding(8.dp),
             color = color,
         )
-        Text(proposal)
-        Text(" " + stringResource(R.string.verb_is) + " ")
-        Text(gradeString)
+        Text(
+            modifier = Modifier.weight(1.0f, fill = false),
+            textAlign = TextAlign.Center,
+            text = proposal,
+        )
+        Text(
+            text = " " + stringResource(R.string.verb_is) + " ",
+        )
+        Text(
+            text = gradeString,
+        )
     }
 }
 
@@ -41,6 +50,17 @@ private fun PreviewJudgmentSummary() {
         JudgmentSummary(
             modifier = Modifier,
             proposal = "Tonio",
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PreviewJudgmentSummaryLongName() {
+    JmTheme {
+        JudgmentSummary(
+            modifier = Modifier,
+            proposal = "That candidate with a long name, so long it eats the end of the sentence",
         )
     }
 }

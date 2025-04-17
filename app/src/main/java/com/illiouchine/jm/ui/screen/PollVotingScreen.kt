@@ -1,6 +1,7 @@
 package com.illiouchine.jm.ui.screen
 
 import android.content.Context
+import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -27,7 +28,6 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.logic.PollVotingViewModel
 import com.illiouchine.jm.model.Ballot
-import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.BallotCountRow
@@ -233,7 +233,37 @@ fun PreviewVotingScreenWithBallots(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
+@Composable
+fun PreviewVotingScreenConfirmation(modifier: Modifier = Modifier) {
+    JmTheme {
+        PollVotingScreen(
+            modifier = Modifier,
+            pollVotingState = PollVotingViewModel.PollVotingViewState(
+                pollConfig = PollConfig(
+                    subject = "Oh my gawd this poll has a very long title, much wow !!1!",
+                    proposals = listOf("That candidate with quite a long name-san", "Mario", "JanBob"),
+                    grading = DEFAULT_GRADING_QUALITY_VALUE,
+                ),
+                ballots = listOf(
+                    Ballot(judgments = listOf(Judgment(proposal = 1, grade = 3)))
+                ),
+                currentBallot = Ballot(
+                    judgments = listOf(
+                        Judgment(proposal = 0, grade = 0),
+                        Judgment(proposal = 1, grade = 3),
+                        Judgment(proposal = 2, grade = 2),
+                    ),
+                ),
+            ),
+        )
+    }
+}
+
+@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun PreviewVotingScreenWithCurrentBallots(modifier: Modifier = Modifier) {
     JmTheme {

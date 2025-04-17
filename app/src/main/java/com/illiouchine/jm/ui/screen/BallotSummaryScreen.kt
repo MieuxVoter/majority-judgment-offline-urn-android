@@ -1,5 +1,6 @@
 package com.illiouchine.jm.ui.screen
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -99,7 +100,10 @@ fun BallotSummaryScreen(
 }
 
 
-@Preview(showSystemUi = true)
+@Preview(
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
 @Composable
 fun PreviewBallotSummaryScreen(modifier: Modifier = Modifier) {
     JmTheme {
@@ -111,9 +115,9 @@ fun PreviewBallotSummaryScreen(modifier: Modifier = Modifier) {
             ),
             ballot = Ballot(
                 judgments = listOf(
-                    Judgment(0, 6),
+                    Judgment(0, 2),
                     Judgment(1, 1),
-                    Judgment(2, 5),
+                    Judgment(2, 0),
                 )
             ),
         )
