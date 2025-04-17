@@ -1,6 +1,7 @@
 package com.illiouchine.jm.ui.screen
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -146,11 +147,20 @@ fun SwitchSettingRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .clickable {
+                if (onCheckedChange != null) {
+                    onCheckedChange(!checked)
+                }
+            },
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Column {
+        Column(
+            modifier = Modifier
+                .padding(end = 4.dp)
+                .weight(1.0f),
+        ) {
             Text(stringResource(title))
             if (label != 0) {
                 Text(
