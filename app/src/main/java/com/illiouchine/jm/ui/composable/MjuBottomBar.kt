@@ -24,7 +24,7 @@ import com.illiouchine.jm.ui.composable.BottomBarItem.Info
 import com.illiouchine.jm.ui.composable.BottomBarItem.Settings
 import com.illiouchine.jm.ui.theme.JmTheme
 
-enum class BottomBarItem(
+private enum class BottomBarItem(
     val screen: Screens,
     val resId: Int,
     val icon: ImageVector,

@@ -195,10 +195,10 @@ fun PollVotingScreen(
 
 @Preview(showSystemUi = true)
 @Composable
-fun PreviewVotingScreen(modifier: Modifier = Modifier) {
+private fun PreviewVotingScreen(modifier: Modifier = Modifier) {
     JmTheme {
         PollVotingScreen(
-            modifier = Modifier,
+            modifier = modifier,
             pollVotingState = PollVotingViewModel.PollVotingViewState(
                 pollConfig = PollConfig(
                     subject = "Best Prezidan ?",
@@ -214,10 +214,10 @@ fun PreviewVotingScreen(modifier: Modifier = Modifier) {
 
 @Preview(showSystemUi = true)
 @Composable
-fun PreviewVotingScreenWithBallots(modifier: Modifier = Modifier) {
+private fun PreviewVotingScreenWithBallots(modifier: Modifier = Modifier) {
     JmTheme {
         PollVotingScreen(
-            modifier = Modifier,
+            modifier = modifier,
             pollVotingState = PollVotingViewModel.PollVotingViewState(
                 pollConfig = PollConfig(
                     subject = "Best Prezidan ?",
@@ -265,21 +265,25 @@ fun PreviewVotingScreenConfirmation(modifier: Modifier = Modifier) {
 
 @Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun PreviewVotingScreenWithCurrentBallots(modifier: Modifier = Modifier) {
+private fun PreviewVotingScreenWithCurrentBallots(modifier: Modifier = Modifier) {
     JmTheme {
         PollVotingScreen(
-            modifier = Modifier,
+            modifier = modifier,
             pollVotingState = PollVotingViewModel.PollVotingViewState(
                 pollConfig = PollConfig(
                     subject = "Best Prezidan ?",
-                    proposals = listOf("That candidate with a long name-san", "Mario", "JanBob"),
+                    proposals = listOf(
+                        "That candidate with quite a long name-san",
+                        "Mario",
+                        "JanBob",
+                    ),
                     grading = DEFAULT_GRADING_QUALITY_VALUE,
                 ),
                 ballots = listOf(
                     Ballot(
                         judgments = listOf(
                             Judgment(proposal = 0, grade = 2),
-                            Judgment(proposal = 1, grade = 6),
+                            Judgment(proposal = 1, grade = 2),
                             Judgment(proposal = 2, grade = 3),
                         )
                     )

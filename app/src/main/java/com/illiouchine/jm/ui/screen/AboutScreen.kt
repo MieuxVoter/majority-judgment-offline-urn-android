@@ -225,6 +225,8 @@ fun AboutScreen(
 @Composable
 fun PreviewAboutScreen(modifier: Modifier = Modifier) {
     JmTheme {
-        AboutScreen()
+        AboutScreen(
+            modifier = modifier,
+        )
     }
 }

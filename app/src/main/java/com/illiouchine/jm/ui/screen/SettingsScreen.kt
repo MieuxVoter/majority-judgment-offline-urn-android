@@ -181,7 +181,7 @@ fun SwitchSettingRow(
 
 @Preview(showSystemUi = true)
 @Composable
-private fun PreviewSettingsScreen() {
+fun PreviewSettingsScreen() {
     JmTheme {
         SettingsScreen()
     }
