@@ -29,7 +29,7 @@ fun ThemedHorizontalDivider(
     uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
 )
 @Composable
-private fun DarkTehemedHorizontalDivider() {
+private fun DarkThemedHorizontalDivider() {
     JmTheme {
         Box(modifier = Modifier.size(200.dp), contentAlignment = Alignment.Center) {
             ThemedHorizontalDivider()
@@ -42,7 +42,7 @@ private fun DarkTehemedHorizontalDivider() {
     showBackground = true
 )
 @Composable
-private fun LightTehemedHorizontalDivider() {
+private fun LightThemedHorizontalDivider() {
     JmTheme {
         Box(modifier = Modifier.size(200.dp), contentAlignment = Alignment.Center) {
             ThemedHorizontalDivider()

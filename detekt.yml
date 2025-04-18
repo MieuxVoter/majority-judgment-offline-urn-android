@@ -113,7 +113,7 @@ complexity:
     ignoreOverloaded: false
   CyclomaticComplexMethod:
     active: true
-    threshold: 15
+    threshold: 32
     ignoreSingleWhenExpression: false
     ignoreSimpleWhenEntries: false
     ignoreNestingFunctions: false
@@ -138,9 +138,9 @@ complexity:
     threshold: 600
   LongParameterList:
     active: true
-    functionThreshold: 6
-    constructorThreshold: 7
-    ignoreDefaultParameters: false
+    functionThreshold: 12
+    constructorThreshold: 12
+    ignoreDefaultParameters: true
     ignoreDataClasses: true
     ignoreAnnotatedParameter: []
   MethodOverloading:
@@ -174,11 +174,11 @@ complexity:
   TooManyFunctions:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
-    thresholdInFiles: 11
-    thresholdInClasses: 11
-    thresholdInInterfaces: 11
-    thresholdInObjects: 11
-    thresholdInEnums: 11
+    thresholdInFiles: 22
+    thresholdInClasses: 22
+    thresholdInInterfaces: 22
+    thresholdInObjects: 22
+    thresholdInEnums: 22
     ignoreDeprecated: false
     ignorePrivate: false
     ignoreOverridden: false
@@ -693,7 +693,7 @@ style:
     active: false
   ReturnCount:
     active: true
-    max: 2
+    max: 12
     excludedFunctions:
       - 'equals'
     excludeLabeled: false

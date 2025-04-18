@@ -9,4 +9,3 @@ data class PollEntity(
     val subject: String,
     val nbGrading: Int,
 )
-
