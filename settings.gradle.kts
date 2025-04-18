@@ -25,4 +25,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "Majority Urn"
 include(":app")
- 

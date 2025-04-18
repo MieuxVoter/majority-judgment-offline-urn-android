@@ -224,7 +224,11 @@ empty-blocks:
     active: true
   EmptyFunctionBlock:
     active: true
-    ignoreOverridden: false
+    ignoreOverridden: true
+    ignoreAnnotated:
+      - Given
+      - When
+      - Then
   EmptyIfBlock:
     active: true
   EmptyInitBlock:
