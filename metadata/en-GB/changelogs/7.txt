@@ -1,0 +1,6 @@
+* Fix an issue with back navigation after poll setup
+* Fix an issue with keyboard focus on older devices
+* Fix some issues with the welcome mat
+* Fix the state reset on screen rotation on some screens
+* Fix grades configuration being ignored
+* Add a brilliant easter egg (and a loader for later)

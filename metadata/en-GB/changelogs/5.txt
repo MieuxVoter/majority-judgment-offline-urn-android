@@ -1,0 +1,11 @@
+* Initial bloody release
+* Setup a local Majority Judgement poll in seconds
+* Rank proposals and show their merit profile
+* Clone a previous poll
+* Resume a previous poll
+* Persist polls to disk
+* Support for Dark/Light themes
+* Added English translation
+* Added French translation
+* Play a sound when a ballot is confirmed.
+* Sound effect can be disabled in the settings.
