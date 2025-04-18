@@ -15,8 +15,8 @@ on:
   # Triggers the workflow on push or pull request events but only for default and protected branches
 #  push:
 #    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+#  pull_request:
+#    branches: [ "main" ]
 #   schedule:
 #      - cron: '38 7 * * 0'
 
