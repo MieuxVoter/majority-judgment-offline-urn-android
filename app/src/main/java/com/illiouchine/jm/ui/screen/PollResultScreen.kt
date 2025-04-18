@@ -163,7 +163,6 @@ fun ResultScreen(
 
                         var explainRowModifier: Modifier = Modifier
                         if (!shouldShowExplanation) {
-                            // TODO: animate
                             explainRowModifier = explainRowModifier.height(0.dp)
                         }
 

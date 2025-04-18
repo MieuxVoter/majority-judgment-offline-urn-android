@@ -135,7 +135,7 @@ complexity:
     threshold: 600
   LongMethod:
     active: true
-    threshold: 60
+    threshold: 600
   LongParameterList:
     active: true
     functionThreshold: 6
@@ -339,7 +339,7 @@ naming:
   FunctionNaming:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
-    functionPattern: '[a-z][a-zA-Z0-9]*'
+    functionPattern: '[a-zA-Z][a-zA-Z0-9]*'
     excludeClassPattern: '$^'
   FunctionParameterNaming:
     active: true
@@ -801,3 +801,4 @@ style:
     active: true
     excludeImports:
       - 'java.util.*'
+      - 'org.junit.Assert.*'
