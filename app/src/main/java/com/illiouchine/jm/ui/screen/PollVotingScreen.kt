@@ -238,10 +238,10 @@ private fun PreviewVotingScreenWithBallots(modifier: Modifier = Modifier) {
     uiMode = Configuration.UI_MODE_NIGHT_YES,
 )
 @Composable
-fun PreviewVotingScreenConfirmation(modifier: Modifier = Modifier) {
+private fun PreviewVotingScreenConfirmation(modifier: Modifier = Modifier) {
     JmTheme {
         PollVotingScreen(
-            modifier = Modifier,
+            modifier = modifier,
             pollVotingState = PollVotingViewModel.PollVotingViewState(
                 pollConfig = PollConfig(
                     subject = "Oh my gawd this poll has a very long title, much wow !!1!",
