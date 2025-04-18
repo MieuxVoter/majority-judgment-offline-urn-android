@@ -1,0 +1,2 @@
+* Oi! Epicycloïds! Bloody stop going off-screen!
+* Fix an issue with long proposal names
