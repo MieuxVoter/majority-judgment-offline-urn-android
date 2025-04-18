@@ -47,11 +47,12 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        version="${DETEKT_RELEASE_TAG:1}"
         gh api graphql --field tagName=$DETEKT_RELEASE_TAG --raw-field query='
           query getReleaseAssetDownloadUrl($tagName: String!) {
             repository(name: "detekt", owner: "detekt") {
               release(tagName: $tagName) {
-                releaseAssets(name: "detekt-cli-1.23.8.zip",first: 1) {
+                releaseAssets(name: "detekt-cli-${version}.zip",first: 1) {
                   nodes {
                     downloadUrl
                   }
@@ -80,15 +81,19 @@ jobs:
     # Sets up the detekt cli
     - name: Setup Detekt
       run: |
+        version="${DETEKT_RELEASE_TAG:1}"
         dest=$( mktemp -d )
         curl --request GET \
           --url ${{ steps.detekt_info.outputs.download_url }} \
           --silent \
           --location \
-          --output $dest/detekt.zip
-        unzip $dest/detekt.zip -d $dest/
-        chmod a+x $dest/detekt
-        echo $dest >> $GITHUB_PATH
+          --output "${dest}/detekt.zip"
+        unzip "${dest}/detekt.zip" -d "${dest}/"
+        detekt_bin_dir="${dest}/detekt-cli-${version}/bin"
+        chmod a+x "${detekt_bin_dir}/detekt-cli"
+        mv "${detekt_bin_dir}/detekt-cli" "${detekt_bin_dir}/detekt"
+        echo -e "GITHUB_PATH=$GITHUB_PATH"
+        echo "${detekt_bin_dir}" >> $GITHUB_PATH
 
     # Performs static analysis using Detekt
     - name: Run Detekt
