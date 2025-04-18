@@ -120,7 +120,7 @@ detekt {
     config.setFrom("../detekt.yml")
 
     // Applies the config files on top of detekt's default config file. `false` by default.
-    buildUponDefaultConfig = false
+    buildUponDefaultConfig = true
 
     // Turns on all the rules. `false` by default.
     allRules = false

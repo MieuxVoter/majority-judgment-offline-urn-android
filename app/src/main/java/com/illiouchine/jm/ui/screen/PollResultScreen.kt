@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -26,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
@@ -54,7 +54,9 @@ fun ResultScreen(
     val grading = poll.pollConfig.grading
 
     var isAnyProfileSelected by remember { mutableStateOf(false) }
-    val selectedProfile = remember { mutableStateOf(0) } // index
+    var selectedProfileIndex by remember { mutableIntStateOf(0) }
+    // Not all these groups belong to the selected profile ; they belong to a duel
+    val decisiveGroupsForSelectedProfile = state.groups[selectedProfileIndex].groups
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -108,11 +110,11 @@ fun ResultScreen(
                                     displayIndex
                                 }
                                 // Behaves like an exclusive toggle
-                                if (isAnyProfileSelected && selectedProfile.value == clickedIndex) {
+                                if (isAnyProfileSelected && selectedProfileIndex == clickedIndex) {
                                     isAnyProfileSelected = false
                                 } else {
                                     isAnyProfileSelected = true
-                                    selectedProfile.value = clickedIndex
+                                    selectedProfileIndex = clickedIndex
                                 }
                             }
                             .alpha(
@@ -150,7 +152,9 @@ fun ResultScreen(
                                 tally = tally,
                                 proposalResult = proposalResult,
                                 grading = grading,
-                                decisiveGroups = state.groups[selectedProfile.value].groups.filter { pga -> pga.participant == displayIndex },
+                                decisiveGroups = decisiveGroupsForSelectedProfile.filter { group ->
+                                    group.participant == displayIndex
+                                },
                                 showDecisiveGroups = isAnyProfileSelected,
                             )
                         }
@@ -159,11 +163,10 @@ fun ResultScreen(
 
                         // Ux: Explanations are shown one at a time (exclusive toggle)
                         val shouldShowExplanation = isAnyProfileSelected
-                                && selectedProfile.value == displayIndex
+                                && selectedProfileIndex == displayIndex
 
                         var explainRowModifier: Modifier = Modifier
                         if (!shouldShowExplanation) {
-                            // TODO: animate
                             explainRowModifier = explainRowModifier.height(0.dp)
                         }
 
@@ -196,11 +199,11 @@ fun ResultScreen(
     }
 }
 
-
+/*
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
-    /*
+
     val poll = Poll(
         pollConfig = PollConfig(
             subject = "Who for Prézidaaanh ?",
@@ -243,5 +246,5 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
             state = state,
         )
     }
-    */
 }
+*/

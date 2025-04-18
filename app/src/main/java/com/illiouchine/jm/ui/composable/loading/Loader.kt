@@ -99,7 +99,7 @@ private fun PreviewLoader() {
         LoaderScreen(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight()
+                .fillMaxHeight(),
         )
     }
 }

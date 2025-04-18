@@ -1,6 +1,5 @@
 package com.illiouchine.jm.ui.composable.loading
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -62,7 +61,7 @@ fun EpicycloidMenu(
         }
 
 
-        itemsIndexed(compasses, key = { index, compass -> compass.hashCode() }) { index, compass ->
+        itemsIndexed(compasses, key = { _, compass -> compass.hashCode() }) { index, compass ->
             CompassMenu(
                 modifier = Modifier.animateItem(),
                 compassIndex = index,

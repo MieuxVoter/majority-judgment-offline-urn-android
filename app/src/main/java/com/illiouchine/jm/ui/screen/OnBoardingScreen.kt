@@ -42,17 +42,7 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
-data class OnBoardingPage(
-    @DrawableRes val image: Int,
-    @StringRes val text: Int,
-)
 
-@Stable
-val onBoardingPages = listOf(
-    OnBoardingPage(R.drawable.onboarding_0, R.string.onboarding_welcome_to_your_offline_poll_app),
-    OnBoardingPage(R.drawable.onboarding_1, R.string.onboarding_setup_a_poll_and_share_the_phone),
-    OnBoardingPage(R.drawable.onboarding_2, R.string.onboarding_this_is_free_software),
-)
 private fun PagerState.isScrollOverLast(): Boolean =
     (this.currentPage == this.pageCount -1 && this.currentPageOffsetFraction > 0)
 
@@ -111,6 +101,18 @@ fun OnBoardingScreen(
         }
     }
 }
+
+data class OnBoardingPage(
+    @DrawableRes val image: Int,
+    @StringRes val text: Int,
+)
+
+@Stable
+val onBoardingPages = listOf(
+    OnBoardingPage(R.drawable.onboarding_0, R.string.onboarding_welcome_to_your_offline_poll_app),
+    OnBoardingPage(R.drawable.onboarding_1, R.string.onboarding_setup_a_poll_and_share_the_phone),
+    OnBoardingPage(R.drawable.onboarding_2, R.string.onboarding_this_is_free_software),
+)
 
 @Composable
 fun OnBoardingPage(
@@ -221,5 +223,9 @@ fun OnBoardingBottomRow(
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewOnBoarding(modifier: Modifier = Modifier) {
-    JmTheme { OnBoardingScreen() }
+    JmTheme {
+        OnBoardingScreen(
+            modifier = modifier,
+        )
+    }
 }

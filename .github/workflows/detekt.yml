@@ -26,7 +26,7 @@ on:
 env:
   # Release tag associated with version of Detekt to be installed
   # SARIF support (required for this workflow) was introduced in Detekt v1.15.0
-  DETEKT_RELEASE_TAG: v1.15.0
+  DETEKT_RELEASE_TAG: v1.23.8
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -47,11 +47,15 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        gh api graphql --field tagName=$DETEKT_RELEASE_TAG --raw-field query='
-          query getReleaseAssetDownloadUrl($tagName: String!) {
+        version="${DETEKT_RELEASE_TAG:1}"
+        echo -e "version=$version"
+        release_name="detekt-cli-${version}.zip"
+        echo -e "release_name=$release_name\n"
+        gh api graphql --field tagName=$DETEKT_RELEASE_TAG --field releaseName=$release_name --raw-field query='
+          query getReleaseAssetDownloadUrl($tagName: String!, $releaseName: String!) {
             repository(name: "detekt", owner: "detekt") {
               release(tagName: $tagName) {
-                releaseAssets(name: "detekt", first: 1) {
+                releaseAssets(name: $releaseName, first: 1) {
                   nodes {
                     downloadUrl
                   }
@@ -63,28 +67,37 @@ jobs:
             }
           }
         ' 1> gh_response.json
+        
+        cat gh_response.json
+        echo -e ""
 
         DETEKT_RELEASE_SHA=$(jq --raw-output '.data.repository.release.tagCommit.oid' gh_response.json)
-        if [ $DETEKT_RELEASE_SHA != "37f0a1d006977512f1f216506cd695039607c3e5" ]; then
+        if [ $DETEKT_RELEASE_SHA != "046263730eb5368cb344489ac36543294e8e87bd" ]; then
           echo -e "Release tag doesn't match expected commit SHA"
           echo -e "Found DETEKT_RELEASE_SHA=$DETEKT_RELEASE_SHA"
           exit 1
         fi
 
         DETEKT_DOWNLOAD_URL=$(jq --raw-output '.data.repository.release.releaseAssets.nodes[0].downloadUrl' gh_response.json)
+        echo -e "download_url=$DETEKT_DOWNLOAD_URL"
         echo "download_url=$DETEKT_DOWNLOAD_URL" >> $GITHUB_OUTPUT
 
     # Sets up the detekt cli
     - name: Setup Detekt
       run: |
+        version="${DETEKT_RELEASE_TAG:1}"
         dest=$( mktemp -d )
         curl --request GET \
           --url ${{ steps.detekt_info.outputs.download_url }} \
           --silent \
           --location \
-          --output $dest/detekt
-        chmod a+x $dest/detekt
-        echo $dest >> $GITHUB_PATH
+          --output "${dest}/detekt.zip"
+        unzip "${dest}/detekt.zip" -d "${dest}/"
+        detekt_bin_dir="${dest}/detekt-cli-${version}/bin"
+        chmod a+x "${detekt_bin_dir}/detekt-cli"
+        mv "${detekt_bin_dir}/detekt-cli" "${detekt_bin_dir}/detekt"
+        echo -e "GITHUB_PATH=$GITHUB_PATH"
+        echo "${detekt_bin_dir}" >> $GITHUB_PATH
 
     # Performs static analysis using Detekt
     - name: Run Detekt

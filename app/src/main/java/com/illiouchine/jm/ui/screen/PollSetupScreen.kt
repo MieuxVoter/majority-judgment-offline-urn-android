@@ -209,7 +209,7 @@ fun PollSetupScreen(
 fun PreviewSetupSurveyScreen(modifier: Modifier = Modifier) {
     JmTheme {
         PollSetupScreen(
-            modifier = Modifier,
+            modifier = modifier,
         )
     }
 }
@@ -219,7 +219,7 @@ fun PreviewSetupSurveyScreen(modifier: Modifier = Modifier) {
 fun PreviewSetupSurveyScreenWithHugeNames(modifier: Modifier = Modifier) {
     JmTheme {
         PollSetupScreen(
-            modifier = Modifier,
+            modifier = modifier,
             pollSetupState = PollSetupViewModel.PollSetupViewState(
                 config = PollConfig(
                     subject = "Repas de ce soir, le Banquet Républicain de l'avènement du Jugement Majoritaire",
@@ -237,10 +237,10 @@ fun PreviewSetupSurveyScreenWithHugeNames(modifier: Modifier = Modifier) {
 
 @Preview(showSystemUi = true)
 @Composable
-fun PreviewSetupSurveyScreenWithLotsOfPropals(modifier: Modifier = Modifier) {
+fun PreviewSetupSurveyScreenWithLotsOfProposals(modifier: Modifier = Modifier) {
     JmTheme {
         PollSetupScreen(
-            modifier = Modifier,
+            modifier = modifier,
             pollSetupState = PollSetupViewModel.PollSetupViewState(
                 config = PollConfig(
                     subject = "Repas de ce soir, le Banquet Républicain de l'avènement du Jugement Majoritaire",
@@ -250,8 +250,8 @@ fun PreviewSetupSurveyScreenWithLotsOfPropals(modifier: Modifier = Modifier) {
                         "Du riche",
                         "Des Spaghetti Carbonara",
                         "Poulet Tikka Masala",
-                        "Sushi",
-                        "Tacos au Bœuf"
+                        "Sushis Vegans",
+                        "Tacos au Bœuf",
                     ),
                 ),
             ),

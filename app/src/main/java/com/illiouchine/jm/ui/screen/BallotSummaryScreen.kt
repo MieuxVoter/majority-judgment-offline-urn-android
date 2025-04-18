@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.model.Ballot
-import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.JudgmentSummary
@@ -108,6 +107,7 @@ fun BallotSummaryScreen(
 fun PreviewBallotSummaryScreen(modifier: Modifier = Modifier) {
     JmTheme {
         BallotSummaryScreen(
+            modifier = modifier,
             pollConfig = PollConfig(
                 subject = "Prézidaaanh ?",
                 proposals = listOf("Tonio", "Bobby", "Mario"),

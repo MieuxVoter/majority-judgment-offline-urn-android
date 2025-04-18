@@ -165,6 +165,7 @@ fun HomeScreen(
 fun PreviewHomeScreen(modifier: Modifier = Modifier) {
     JmTheme {
         HomeScreen(
+            modifier = modifier,
             homeViewState = HomeViewModel.HomeViewState(
                 polls = listOf(
                     Poll(
@@ -224,6 +225,7 @@ fun PreviewHomeScreen(modifier: Modifier = Modifier) {
 fun PreviewHomeScreenWithEmptyPoll(modifier: Modifier = Modifier) {
     JmTheme {
         HomeScreen(
+            modifier = modifier,
             homeViewState = HomeViewModel.HomeViewState(
                 polls = emptyList(),
             )

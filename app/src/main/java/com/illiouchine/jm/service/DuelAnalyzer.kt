@@ -218,7 +218,7 @@ class DuelAnalyzer(
         return stylist.resolve(context.getString(R.string.wip_stay_tuned))
     }
 
-    // There's no logic to this.  Only madness.
+    // There's no logic to this.  Only madness.  Plz rewrite.
     fun generateGroups(): List<ParticipantGroupAnalysis> {
         val groups: MutableList<ParticipantGroupAnalysis> = mutableListOf()
 
@@ -254,10 +254,11 @@ class DuelAnalyzer(
             val otherGroup = otherGroups[i]
 
             if (baseGroup.type == Type.Median || otherGroup.type == Type.Median) {
-                if (baseGroup.type != Type.Median || otherGroup.type != Type.Median) {
-                    continue // we should raise here, as something is VERY WRONG
-                }
-                // The median grades are the same, go deeper
+                assert(baseGroup.type == Type.Median && otherGroup.type == Type.Median)
+//                if (baseGroup.type != Type.Median || otherGroup.type != Type.Median) {
+//                    continue // we should raise here, as something is VERY WRONG
+//                }
+                // The median grades are the same → go deeper
                 if (baseGroup.grade == otherGroup.grade) {
                     continue
                 }

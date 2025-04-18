@@ -115,7 +115,11 @@ fun AboutScreen(
                 text = stringResource(R.string.button_ask_a_question),
                 onClick = {
                     onDiscuss()
-                    uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android/discussions")
+                    uriHandler.openUri("https://github.com" +
+                            "/MieuxVoter" +
+                            "/majority-judgment-offline-urn-android" +
+                            "/discussions"
+                    )
                 },
             )
 
@@ -127,7 +131,10 @@ fun AboutScreen(
                 text = stringResource(R.string.button_browse_the_source),
                 onClick = {
                     onBrowseSource()
-                    uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android")
+                    uriHandler.openUri("https://github.com" +
+                            "/MieuxVoter" +
+                            "/majority-judgment-offline-urn-android"
+                    )
                 },
             )
 
@@ -139,7 +146,13 @@ fun AboutScreen(
                 text = stringResource(R.string.button_report_bug),
                 onClick = {
                     onReportBug()
-                    uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android/issues/new?template=bug_report.md")
+                    uriHandler.openUri("https://github.com" +
+                            "/MieuxVoter" +
+                            "/majority-judgment-offline-urn-android" +
+                            "/issues" +
+                            "/new" +
+                            "?template=bug_report.md"
+                    )
                 },
             )
 
@@ -151,7 +164,13 @@ fun AboutScreen(
                 text = stringResource(R.string.button_suggest_improvement),
                 onClick = {
                     onSuggestImprovement()
-                    uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android/issues/new?template=feature_request.md")
+                    uriHandler.openUri("https://github.com" +
+                            "/MieuxVoter" +
+                            "/majority-judgment-offline-urn-android" +
+                            "/issues" +
+                            "/new" +
+                            "?template=feature_request.md"
+                    )
                 },
             )
 
@@ -163,7 +182,12 @@ fun AboutScreen(
                 text = stringResource(R.string.button_translate_app),
                 onClick = {
                     onContributeTranslations()
-                    uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android/wiki/How-to-Translate-the-App")
+                    uriHandler.openUri("https://github.com" +
+                            "/MieuxVoter" +
+                            "/majority-judgment-offline-urn-android" +
+                            "/wiki" +
+                            "/How-to-Translate-the-App"
+                    )
                 },
             )
 
@@ -201,6 +225,8 @@ fun AboutScreen(
 @Composable
 fun PreviewAboutScreen(modifier: Modifier = Modifier) {
     JmTheme {
-        AboutScreen()
+        AboutScreen(
+            modifier = modifier,
+        )
     }
 }

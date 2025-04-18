@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
-import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.theme.JmTheme
 import kotlinx.coroutines.delay
