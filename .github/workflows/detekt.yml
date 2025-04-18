@@ -51,7 +51,7 @@ jobs:
           query getReleaseAssetDownloadUrl($tagName: String!) {
             repository(name: "detekt", owner: "detekt") {
               release(tagName: $tagName) {
-                releaseAssets(first: 2) {
+                releaseAssets(name: "detekt-cli-1.23.8.zip",first: 1) {
                   nodes {
                     downloadUrl
                   }
@@ -74,7 +74,7 @@ jobs:
         fi
 
         DETEKT_DOWNLOAD_URL=$(jq --raw-output '.data.repository.release.releaseAssets.nodes[1].downloadUrl' gh_response.json)
-        echo "download_url=$DETEKT_DOWNLOAD_URL"
+        echo -e "download_url=$DETEKT_DOWNLOAD_URL"
         echo "download_url=$DETEKT_DOWNLOAD_URL" >> $GITHUB_OUTPUT
 
     # Sets up the detekt cli
