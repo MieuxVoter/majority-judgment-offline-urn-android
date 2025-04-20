@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.illiouchine.jm.R
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.service.DuelAnalyzer
@@ -47,7 +48,8 @@ class PollResultViewModel(
             val poll = pollDataSource!!.getPollById(pollId)
 
             if (poll == null) {
-                Toast.makeText(context, "The poll was not found.", Toast.LENGTH_LONG).show()
+                Toast.makeText(context,
+                    context.getString(R.string.toast_that_poll_does_not_exist), Toast.LENGTH_LONG).show()
                 navigator.navigateTo(destination = Screens.Home)
             } else {
                 initializePollResult(context, poll)
