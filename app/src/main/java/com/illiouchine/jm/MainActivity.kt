@@ -163,7 +163,7 @@ class MainActivity : ComponentActivity() {
                         val context = LocalContext.current
                         val pollResult: Screens.PollResult = backStackEntry.toRoute()
                         LaunchedEffect(pollResult) {
-                            pollResultViewModel.initializePollResult(
+                            pollResultViewModel.initializePollResultById(
                                 context = context,
                                 pollId = pollResult.id,
                             )
