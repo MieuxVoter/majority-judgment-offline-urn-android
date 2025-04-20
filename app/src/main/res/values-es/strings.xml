@@ -5,6 +5,7 @@
     <string name="button_add">Agregar</string>
     <string name="button_finish">Finalizar</string>
     <string name="button_next">siguiente</string>
+    <string name="button_skip">saltar</string>
     <string name="button_let_s_go">Vamos !</string>
     <string name="proposal">Propuesta</string>
     <string name="poll_of">Encuesta de</string>
@@ -84,7 +85,6 @@
     <string name="setting_show_onboarding_button">Ver de nuevo</string>
     <string name="setting_play_sound_label">Señalar a todos que se ha enviado una boleta</string>
     <string name="setting_pin_screen_label">Evitar que les votantes abandonen la aplicación</string>
-    <string name="onboarding_skip">saltar</string>
     <string name="poll_setup_subject_placeholder">Introduzca el tema de la encuesta…</string>
     <string name="poll_setup_proposal_placeholder">Introduce una propuesta…</string>
 </resources>
