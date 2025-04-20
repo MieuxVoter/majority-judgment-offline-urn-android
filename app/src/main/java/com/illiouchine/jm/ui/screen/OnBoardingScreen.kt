@@ -1,6 +1,5 @@
 package com.illiouchine.jm.ui.screen
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -187,7 +186,7 @@ fun OnBoardingBottomRow(
                     .weight(0.7f)
                     .testTag("onboarding_screen_skip"),
                 onClick = { onFinish() },
-            ) { Text(stringResource(R.string.onboarding_skip)) }
+            ) { Text(stringResource(R.string.button_skip)) }
         }
 
         ViewPager(

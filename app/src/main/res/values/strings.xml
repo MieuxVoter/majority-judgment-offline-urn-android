@@ -9,7 +9,7 @@
     <string name="button_add">Add</string>
     <string name="button_finish">Finish</string>
     <string name="button_next">next</string>
-    <string name="onboarding_skip">skip</string>
+    <string name="button_skip">skip</string>
     <string name="button_let_s_go">Let\'s go !</string>
     <string name="proposal">Proposal</string>
     <string name="poll_of">Poll of</string>
