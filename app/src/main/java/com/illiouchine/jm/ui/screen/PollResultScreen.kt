@@ -276,6 +276,7 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
 
     JmTheme {
         ResultScreen(
+            modifier = modifier,
             state = state,
         )
     }
