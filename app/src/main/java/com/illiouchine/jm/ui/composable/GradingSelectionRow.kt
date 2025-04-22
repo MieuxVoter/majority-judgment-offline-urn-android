@@ -1,6 +1,8 @@
 package com.illiouchine.jm.ui.composable
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -67,11 +70,19 @@ fun GradingSelectionRow(
                     )
                 }
             }
-            if (expanded) {
-                Row {
+
+            AnimatedVisibility(expanded) {
+                Row(
+                    modifier = Modifier
+                ) {
                     LazyRow {
                         items(gradings.size) {
+                            var thumbnailModifier: Modifier = Modifier
+                            if (grading == gradings[it]) {
+                                thumbnailModifier = thumbnailModifier.background(Color.LightGray)
+                            }
                             GradingThumbnail(
+                                modifier = thumbnailModifier,
                                 grading = gradings[it],
                                 onClicked = { clickedGrading ->
                                     expanded = false
@@ -96,7 +107,7 @@ fun GradingThumbnail(
 
     Column(
         modifier = modifier
-            .padding(horizontal = 6.dp)
+            .padding(horizontal = 6.dp, vertical = 4.dp)
             .clickable(
                 enabled = true,
                 onClickLabel = "Select" + " " + stringResource(grading.name),
@@ -150,13 +161,13 @@ fun GradingThumbnail(
                     modifier = Modifier
                         .padding(
                             top = 0.dp, bottom = 0.dp,
-                            start = 4.dp, end = 4.dp,
+                            start = 6.dp, end = 6.dp,
                         ),
                     text = stringResource(grade.name),
                     textAlign = TextAlign.Center,
                     fontSize = 12.sp,
                     color = grade.textColor,
-                    lineHeight = 16.sp,
+                    lineHeight = 18.sp,
                 )
             }
         }
