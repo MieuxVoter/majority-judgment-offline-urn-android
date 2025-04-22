@@ -17,17 +17,16 @@ val gradings: List<Grading> = listOf(
     Quality3Grading,
 )
 
-// FIXME: assert unique id
-
 /**
  * The grades must be unambiguously sorted for MJ to work.
  */
 @Serializable
 sealed class Grading(
-    val uid: Int,
+    val uid: Int, // make sure those are really unique, and DON'T edit them afterwards
     @StringRes val name: Int,
     val grades: List<Grade>,
 ) {
+
     @Serializable
     data object Quality7Grading : Grading(
         uid = 7,
