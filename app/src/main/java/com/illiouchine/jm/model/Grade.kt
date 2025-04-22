@@ -49,7 +49,7 @@ val gradePassable = Grade(
     color = Color(0xffe5542c),
     textColor = Color(0xffffedb7),
 )
-val gradeSomeWhatGood = Grade(
+val gradeSomewhatGood = Grade(
     name = R.string.grade_somewhat_good,
     color = Color(0xffde9524),
     textColor = Color(0xfffbe9a6),

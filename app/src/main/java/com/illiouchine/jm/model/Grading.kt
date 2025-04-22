@@ -21,12 +21,12 @@ sealed class Grading(
 ) {
     @Serializable
     data object Quality7Grading : Grading(
-        name = R.string.seven_grading,
+        name = R.string.seven_quality_grades,
         grades = listOf(
             gradeToReject,
             gradeInsufficient,
             gradePassable,
-            gradeSomeWhatGood,
+            gradeSomewhatGood,
             gradeGood,
             gradeVeryGood,
             gradeExcellent,
@@ -35,11 +35,11 @@ sealed class Grading(
 
     @Serializable
     data object Quality5Grading : Grading(
-        name = R.string.five_grading,
+        name = R.string.five_quality_grades,
         grades = listOf(
             gradeToReject,
             gradePassable,
-            gradeSomeWhatGood,
+            gradeSomewhatGood,
             gradeGood,
             gradeExcellent,
         ),
@@ -47,10 +47,10 @@ sealed class Grading(
 
     @Serializable
     data object Quality3Grading : Grading(
-        name = R.string.three_grading,
+        name = R.string.three_quality_grades,
         grades = listOf(
             gradeToReject,
-            gradeSomeWhatGood,
+            gradeSomewhatGood,
             gradeExcellent,
         ),
     )

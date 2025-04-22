@@ -29,9 +29,9 @@
     <string name="label_poll_subject">Asunto de la Encuesta</string>
     <string name="grade_somewhat_good">bastante bien</string>
     <string name="button_next_participant">Siguiente participante</string>
-    <string name="seven_grading">Siete grados</string>
-    <string name="five_grading">Cinco grados</string>
-    <string name="three_grading">Tres grados</string>
+    <string name="seven_quality_grades">Siete grados</string>
+    <string name="five_quality_grades">Cinco grados</string>
+    <string name="three_quality_grades">Tres grados</string>
     <string name="setting_show_onboarding">Mostrar la introducción nuevamente</string>
     <string name="settings_screen_title">Ajustes</string>
     <string name="incitation_making_new_poll">Prueba a hacer una nueva encuesta, ¡es gratis!</string>
