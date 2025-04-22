@@ -2,7 +2,6 @@ package com.illiouchine.jm.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.logic.DEFAULT_PLAY_SOUND_VALUE
 import com.illiouchine.jm.logic.DEFAULT_SHOW_ONBOARDING_VALUE
@@ -59,16 +58,16 @@ class SharedPrefsHelper(
     }
 
     fun getDefaultGrading(): Grading {
-        val defaultAmountOfGrading = sharedPreferences.getInt(
+        val defaultGradingUid = sharedPreferences.getInt(
             DEFAULT_GRADING_PREF_KEY,
-            DEFAULT_GRADING_QUALITY_VALUE.getAmountOfGrades(),
+            DEFAULT_GRADING_QUALITY_VALUE.uid,
         )
-        return Grading.byAmountOfGrades(defaultAmountOfGrading)
+        return Grading.byUid(defaultGradingUid)
     }
 
     fun editDefaultGrading(grading: Grading) {
         sharedPreferences.edit()
-            .putInt(DEFAULT_GRADING_PREF_KEY, grading.getAmountOfGrades())
+            .putInt(DEFAULT_GRADING_PREF_KEY, grading.uid)
             .apply()
     }
 }

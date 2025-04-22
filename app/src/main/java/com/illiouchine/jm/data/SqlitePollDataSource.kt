@@ -50,7 +50,7 @@ class SqlitePollDataSource(
                 pollConfig = PollConfig(
                     subject = pnp.poll.subject,
                     proposals = pnp.proposals.map { e -> e.name },
-                    grading = Grading.byAmountOfGrades(amount = pnp.poll.nbGrading)
+                    grading = Grading.byUid(uid = pnp.poll.nbGrading)
                 ),
                 ballots = ballots,
             )

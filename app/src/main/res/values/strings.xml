@@ -30,9 +30,10 @@
     <string name="all_things_considered_i_think">All things considered, I think</string>
     <string name="verb_is">is</string>
     <string name="toast_proposal_name_already_exists">A proposal with this name already exists.</string>
-    <string name="seven_quality_grades">Seven grades</string>
-    <string name="five_quality_grades">Five grades</string>
-    <string name="three_quality_grades">Three grades</string>
+    <string name="seven_quality_grades">Seven quality grades</string>
+    <string name="five_quality_grades">Five quality grades</string>
+    <string name="five_positive_quality_grades">Five positive quality grades</string>
+    <string name="three_quality_grades">Three quality grades</string>
     <string name="settings_screen_title">Settings</string>
     <string name="incitation_making_new_poll">Try making a new poll, it\'s free !</string>
     <string name="title_multiline_majority_judgment_urn">Majority\nJudgment\nUrn</string>

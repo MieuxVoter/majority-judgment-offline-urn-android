@@ -6,21 +6,31 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.model.Grading.Quality3Grading
 import com.illiouchine.jm.model.Grading.Quality5Grading
+import com.illiouchine.jm.model.Grading.PositiveQuality5Grading
 import com.illiouchine.jm.model.Grading.Quality7Grading
 import kotlinx.serialization.Serializable
 
-val gradings: List<Grading> = listOf(Quality7Grading, Quality5Grading, Quality3Grading)
+val gradings: List<Grading> = listOf(
+    Quality7Grading,
+    Quality5Grading,
+    PositiveQuality5Grading,
+    Quality3Grading,
+)
+
+// FIXME: assert unique id
 
 /**
  * The grades must be unambiguously sorted for MJ to work.
  */
 @Serializable
 sealed class Grading(
+    val uid: Int,
     @StringRes val name: Int,
     val grades: List<Grade>,
 ) {
     @Serializable
     data object Quality7Grading : Grading(
+        uid = 7,
         name = R.string.seven_quality_grades,
         grades = listOf(
             gradeToReject,
@@ -35,6 +45,7 @@ sealed class Grading(
 
     @Serializable
     data object Quality5Grading : Grading(
+        uid = 5,
         name = R.string.five_quality_grades,
         grades = listOf(
             gradeToReject,
@@ -46,7 +57,21 @@ sealed class Grading(
     )
 
     @Serializable
+    data object PositiveQuality5Grading : Grading(
+        uid = 55,
+        name = R.string.five_positive_quality_grades,
+        grades = listOf(
+            gradePassable,
+            gradeSomewhatGood,
+            gradeGood,
+            gradeVeryGood,
+            gradeExcellent,
+        ),
+    )
+
+    @Serializable
     data object Quality3Grading : Grading(
+        uid = 3,
         name = R.string.three_quality_grades,
         grades = listOf(
             gradeToReject,
@@ -73,13 +98,14 @@ sealed class Grading(
     }
 
     companion object {
-        fun byAmountOfGrades(amount: Int): Grading {
-            return when (amount) {
-                3 -> Quality3Grading
-                5 -> Quality5Grading
-                7 -> Quality7Grading
-                else -> DEFAULT_GRADING_QUALITY_VALUE
+        fun byUid(uid: Int): Grading {
+            gradings.forEach {
+                if (it.uid == uid) {
+                    return it
+                }
             }
+            // We should probably throw here instead
+            return DEFAULT_GRADING_QUALITY_VALUE
         }
     }
 }

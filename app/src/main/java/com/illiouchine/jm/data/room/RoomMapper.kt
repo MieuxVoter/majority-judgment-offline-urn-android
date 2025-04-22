@@ -14,7 +14,7 @@ import com.illiouchine.jm.model.PollConfig
 fun Poll.toPollEntity(): PollEntity = PollEntity(
     uid = this.id,
     subject = this.pollConfig.subject,
-    nbGrading = this.pollConfig.grading.grades.size,
+    nbGrading = this.pollConfig.grading.uid,
 )
 
 fun Poll.toProposalsEntity(): List<ProposalEntity> {
@@ -70,7 +70,7 @@ suspend fun List<PollWithProposals>.toDomainObject(
             pollConfig = PollConfig(
                 subject = poll.poll.subject,
                 proposals = poll.proposals.map { it.name },
-                grading = Grading.byAmountOfGrades(amount = poll.poll.nbGrading),
+                grading = Grading.byUid(uid = poll.poll.nbGrading),
             ),
             ballots = ballots
         )

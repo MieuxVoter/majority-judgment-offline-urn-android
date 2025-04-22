@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class PollEntity(
     @PrimaryKey(autoGenerate = true) val uid: Int = 0,
     val subject: String,
-    val nbGrading: Int,
+    val nbGrading: Int, // this is the Grading's uid now — see com/illiouchine/jm/model/Grading.kt
 )
