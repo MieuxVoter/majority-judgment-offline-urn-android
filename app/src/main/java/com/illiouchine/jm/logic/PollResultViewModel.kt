@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 
 class PollResultViewModel(
     private val navigator: Navigator,
-    private val pollDataSource: PollDataSource? = null,
+    private val pollDataSource: PollDataSource,
 ) : ViewModel() {
 
     data class PollResultViewState(
@@ -45,7 +45,7 @@ class PollResultViewModel(
 
     fun initializePollResultById(context: Context, pollId: Int) {
         viewModelScope.launch {
-            val poll = pollDataSource!!.getPollById(pollId)
+            val poll = pollDataSource.getPollById(pollId)
 
             if (poll == null) {
                 Toast.makeText(context,

@@ -34,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
+import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Grading
@@ -270,6 +271,7 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
     )
     val pollResultViewModel = PollResultViewModel(
         navigator = DefaultNavigator(),
+        pollDataSource = InMemoryPollDataSource(), // dummy
     )
     pollResultViewModel.initializePollResult(LocalContext.current, poll)
     val state = pollResultViewModel.pollResultViewState.collectAsState().value
