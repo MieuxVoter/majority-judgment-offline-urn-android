@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Urne</string>
+    <string name="majority_judgment">Jugement Majoritaire</string>
     <string name="button_finish">terminer</string>
     <string name="button_next">suivant</string>
+    <string name="button_skip">abréger</string>
+    <string name="button_let_s_go">C\'est parti !</string>
     <string name="label_poll_subject">Sujet du Scrutin</string>
     <string name="label_poll_proposals">Propositions</string>
-    <string name="majority_judgment">Jugement Majoritaire</string>
-    <string name="button_let_s_go">C\'est parti !</string>
     <string name="proposal">Proposition</string>
     <string name="button_add">Ajouter</string>
     <string name="poll_of">Scrutin du</string>
@@ -86,5 +87,4 @@
     <string name="setting_show_onboarding_button">Revoir</string>
     <string name="setting_play_sound_label">Avertir les environs qu\'un nouveau vote a été finalisé</string>
     <string name="setting_pin_screen_label">Empêcher les votants de quitter l\'application</string>
-    <string name="onboarding_skip">abréger</string>
 </resources>

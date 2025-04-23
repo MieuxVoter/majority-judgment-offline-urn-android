@@ -1,5 +1,6 @@
 package com.illiouchine.jm.ui.screen
 
+import android.content.res.Configuration
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
@@ -17,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -25,16 +27,26 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
+import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.logic.PollResultViewModel
+import com.illiouchine.jm.model.Ballot
+import com.illiouchine.jm.model.Grading
+import com.illiouchine.jm.model.Judgment
+import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.ui.DefaultNavigator
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
+import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.utils.smoothStep
 import java.math.BigInteger
 import kotlin.math.max
@@ -99,7 +111,7 @@ fun ResultScreen(
 
             val amountOfProposals = result.proposalResultsRanked.size
             result.proposalResultsRanked.forEachIndexed { displayIndex, proposalResult ->
-                if (proposalResult.analysis.totalSize.compareTo(BigInteger.ZERO) > 0) {
+                if (proposalResult.analysis.totalSize > BigInteger.ZERO) {
                     Column(
                         modifier = Modifier
                             .clickable {
@@ -180,7 +192,7 @@ fun ResultScreen(
                                     state.explanations[displayIndex]
                                 } else {
                                     AnnotatedString("\uD83D\uDC1E")
-                                }
+                                },
                             )
                         }
 
@@ -199,17 +211,36 @@ fun ResultScreen(
     }
 }
 
-/*
-@Preview(showSystemUi = true)
+// To correctly preview this, you need to Start Interactive Mode.
+// This is the cost of animating the apparition of the merit profiles.
+@Preview(
+    name = "Phone (Portrait)",
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 1.0f,
+)
+@Preview(
+    name = "Phone (Portrait, Big Font)",
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 2.0f,
+)
+@Preview(
+    name = "Tablet",
+    device = "spec:width=1280dp,height=800dp,dpi=240",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showSystemUi = true,
+)
+//@PreviewScreenSizes // my eyes hurt
 @Composable
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
 
     val poll = Poll(
         pollConfig = PollConfig(
-            subject = "Who for Prézidaaanh ?",
+            subject = "Epic Plumbers",
             proposals = listOf(
-                "Luigi the green plumber with a mustache and a long name",
-                "Bobby",
+                "Luigi the green plumber with a mustache and a long name, mamma mia !",
+                "Bob",
                 "Mario",
             ),
             grading = Grading.Quality7Grading,
@@ -233,18 +264,22 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
                 judgments = listOf(
                     Judgment(0, 5),
                     Judgment(1, 5),
-                    Judgment(2, 6),
+                    Judgment(2, 5),
                 )
             ),
         ),
     )
-    val pollResultViewModel = PollResultViewModel(Navigator())
+    val pollResultViewModel = PollResultViewModel(
+        navigator = DefaultNavigator(),
+        pollDataSource = InMemoryPollDataSource(), // dummy
+    )
     pollResultViewModel.initializePollResult(LocalContext.current, poll)
     val state = pollResultViewModel.pollResultViewState.collectAsState().value
+
     JmTheme {
         ResultScreen(
+            modifier = modifier,
             state = state,
         )
     }
 }
-*/

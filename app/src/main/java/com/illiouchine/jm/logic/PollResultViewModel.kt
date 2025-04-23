@@ -1,9 +1,11 @@
 package com.illiouchine.jm.logic
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.illiouchine.jm.R
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.service.DuelAnalyzer
@@ -22,8 +24,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PollResultViewModel(
-    private val pollDataSource: PollDataSource,
     private val navigator: Navigator,
+    private val pollDataSource: PollDataSource,
 ) : ViewModel() {
 
     data class PollResultViewState(
@@ -41,67 +43,72 @@ class PollResultViewModel(
     private val _pollResultViewState = MutableStateFlow(PollResultViewState())
     val pollResultViewState: StateFlow<PollResultViewState> = _pollResultViewState
 
-    fun initializePollResult(context: Context, pollId: Int) {
+    fun initializePollResultById(context: Context, pollId: Int) {
         viewModelScope.launch {
             val poll = pollDataSource.getPollById(pollId)
 
             if (poll == null) {
-                // TODO : Add error message
+                Toast.makeText(context,
+                    context.getString(R.string.toast_that_poll_does_not_exist), Toast.LENGTH_LONG).show()
                 navigator.navigateTo(destination = Screens.Home)
             } else {
-                val amountOfProposals = poll.pollConfig.proposals.size
-                val amountOfGrades = poll.pollConfig.grading.getAmountOfGrades()
-                val deliberation: DeliberatorInterface = MajorityJudgmentDeliberator()
-                val tally = CollectedTally(amountOfProposals, amountOfGrades)
-
-                poll.pollConfig.proposals.forEachIndexed { proposalIndex, _ ->
-                    val voteResult = poll.judgments.filter { it.proposal == proposalIndex }
-                    voteResult.forEach { judgment ->
-                        tally.collect(proposalIndex, judgment.grade)
-                    }
-                }
-
-                val result: ResultInterface = deliberation.deliberate(tally)
-
-                val stylist = TextStylist()
-                val groups: MutableList<DuelGroups> = mutableListOf()
-                val explanations: MutableList<AnnotatedString> = mutableListOf()
-                result.proposalResultsRanked.forEachIndexed { displayIndex, _ ->
-                    val otherIndex = if (displayIndex < amountOfProposals - 1) {
-                        displayIndex + 1
-                    } else {
-                        displayIndex - 1
-                    }
-                    val duelAnalyzer = DuelAnalyzer(
-                        poll = poll,
-                        tally = tally,
-                        result = result,
-                        baseIndex = displayIndex,
-                        otherIndex = otherIndex,
-                    )
-                    explanations.add(
-                        duelAnalyzer.generateDuelExplanation(
-                            context = context,
-                            stylist = stylist,
-                        )
-                    )
-                    groups.add(
-                        DuelGroups(
-                            groups = duelAnalyzer.generateGroups(),
-                        )
-                    )
-                }
-
-                _pollResultViewState.update {
-                    it.copy(
-                        poll = poll,
-                        tally = tally,
-                        result = result,
-                        explanations = explanations,
-                        groups = groups,
-                    )
-                }
+                initializePollResult(context, poll)
             }
+        }
+    }
+
+    fun initializePollResult(context: Context, poll: Poll) {
+        val amountOfProposals = poll.pollConfig.proposals.size
+        val amountOfGrades = poll.pollConfig.grading.getAmountOfGrades()
+        val deliberation: DeliberatorInterface = MajorityJudgmentDeliberator()
+        val tally = CollectedTally(amountOfProposals, amountOfGrades)
+
+        poll.pollConfig.proposals.forEachIndexed { proposalIndex, _ ->
+            val voteResult = poll.judgments.filter { it.proposal == proposalIndex }
+            voteResult.forEach { judgment ->
+                tally.collect(proposalIndex, judgment.grade)
+            }
+        }
+
+        val result: ResultInterface = deliberation.deliberate(tally)
+
+        val stylist = TextStylist()
+        val groups: MutableList<DuelGroups> = mutableListOf()
+        val explanations: MutableList<AnnotatedString> = mutableListOf()
+        result.proposalResultsRanked.forEachIndexed { displayIndex, _ ->
+            val otherIndex = if (displayIndex < amountOfProposals - 1) {
+                displayIndex + 1
+            } else {
+                displayIndex - 1
+            }
+            val duelAnalyzer = DuelAnalyzer(
+                poll = poll,
+                tally = tally,
+                result = result,
+                baseIndex = displayIndex,
+                otherIndex = otherIndex,
+            )
+            explanations.add(
+                duelAnalyzer.generateDuelExplanation(
+                    context = context,
+                    stylist = stylist,
+                )
+            )
+            groups.add(
+                DuelGroups(
+                    groups = duelAnalyzer.generateGroups(),
+                )
+            )
+        }
+
+        _pollResultViewState.update {
+            it.copy(
+                poll = poll,
+                tally = tally,
+                result = result,
+                explanations = explanations,
+                groups = groups,
+            )
         }
     }
 
