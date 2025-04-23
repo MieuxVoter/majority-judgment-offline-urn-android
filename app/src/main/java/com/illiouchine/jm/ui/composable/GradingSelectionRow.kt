@@ -10,12 +10,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -72,24 +74,28 @@ fun GradingSelectionRow(
             }
 
             AnimatedVisibility(expanded) {
-                Row(
-                    modifier = Modifier
+
+                val lazyListState = rememberLazyListState()
+                LaunchedEffect(expanded) {
+                    lazyListState.animateScrollToItem(index = gradings.indexOf(grading))
+                }
+
+                LazyRow(
+                    state = lazyListState,
                 ) {
-                    LazyRow {
-                        items(gradings.size) {
-                            var thumbnailModifier: Modifier = Modifier
-                            if (grading == gradings[it]) {
-                                thumbnailModifier = thumbnailModifier.background(Color.LightGray)
-                            }
-                            GradingThumbnail(
-                                modifier = thumbnailModifier,
-                                grading = gradings[it],
-                                onClicked = { clickedGrading ->
-                                    expanded = false
-                                    onGradingSelected(clickedGrading)
-                                },
-                            )
+                    items(gradings.size) {
+                        var thumbnailModifier: Modifier = Modifier
+                        if (grading == gradings[it]) {
+                            thumbnailModifier = thumbnailModifier.background(Color.LightGray)
                         }
+                        GradingThumbnail(
+                            modifier = thumbnailModifier,
+                            grading = gradings[it],
+                            onClicked = { clickedGrading ->
+                                expanded = false
+                                onGradingSelected(clickedGrading)
+                            },
+                        )
                     }
                 }
             }
@@ -140,10 +146,10 @@ fun GradingThumbnail(
                     topLeft = Offset(x = 0f, y = 0f + verticalPad),
                     size = Size(
                         width = columnSize.width.toFloat(),
-                        height = boxSize.height.toFloat() - verticalPad*2f,
+                        height = boxSize.height.toFloat() - verticalPad * 2f,
                     ),
                     cornerRadius = CornerRadius(
-                        32f*0.618f, 32f,
+                        32f * 0.618f, 32f,
                     ),
                 )
             }
