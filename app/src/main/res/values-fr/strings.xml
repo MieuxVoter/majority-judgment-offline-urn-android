@@ -29,9 +29,9 @@
     <string name="verb_is">est</string>
     <string name="toast_proposal_name_already_exists">Une autre proposition existe déjà avec ce nom.</string>
     <string name="button_report_bug">Rapport de Bogue</string>
-    <string name="seven_grading">Sept mentions</string>
-    <string name="five_grading">Cinq mentions</string>
-    <string name="three_grading">Trois mentions</string>
+    <string name="seven_quality_grades">Sept mentions</string>
+    <string name="five_quality_grades">Cinq mentions</string>
+    <string name="three_quality_grades">Trois mentions</string>
     <string name="setting_show_onboarding">Montrer l\'intro à nouveau</string>
     <string name="settings_screen_title">Options</string>
     <string name="incitation_making_new_poll">Créez un nouveau scrutin, c\'est gratis !</string>

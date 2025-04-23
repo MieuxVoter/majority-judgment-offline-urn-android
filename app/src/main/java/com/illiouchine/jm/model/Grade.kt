@@ -31,41 +31,63 @@ object ColorSerializer : KSerializer<Color> {
         val longValue = value.value.toLong()
         encoder.encodeLong(longValue)
     }
-
 }
+
+val grade0BgColor = Color(0xff870714)
+val grade0FgColor = Color(0xffffb4a1)
+
+val grade1BgColor = Color(0xffce202c)
+val grade1FgColor = Color(0xffffedb7)
+
+val grade2BgColor = Color(0xffe5542c)
+val grade2FgColor = Color(0xffffedb7)
+
+val grade3BgColor = Color(0xffde9524)
+val grade3FgColor = Color(0xfffbe9a6)
+
+val grade4BgColor = Color(0xff7aa032)
+val grade4FgColor = Color(0xffd9f28c)
+
+val grade5BgColor = Color(0xff12894b)
+val grade5FgColor = Color(0xff90f8b2)
+
+val grade6BgColor = Color(0xff0a6043)
+val grade6FgColor = Color(0xffadf8d7)
+
+// QUALITY GRADES
 
 val gradeToReject = Grade(
     name = R.string.grade_to_reject,
-    color = Color(0xff870714),
-    textColor = Color(0xffffb4a1),
+    color = grade0BgColor,
+    textColor = grade0FgColor,
 )
 val gradeInsufficient = Grade(
     name = R.string.grade_insufficient,
-    color = Color(0xffce202c),
-    textColor = Color(0xffffc394),
+    color = grade1BgColor,
+    textColor = grade1FgColor,
 )
 val gradePassable = Grade(
     name = R.string.grade_passable,
-    color = Color(0xffe5542c),
-    textColor = Color(0xffffedb7),
+    color = grade2BgColor,
+    textColor = grade2FgColor,
 )
-val gradeSomeWhatGood = Grade(
+val gradeSomewhatGood = Grade(
     name = R.string.grade_somewhat_good,
-    color = Color(0xffde9524),
-    textColor = Color(0xfffbe9a6),
+    color = grade3BgColor,
+    textColor = grade3FgColor,
 )
 val gradeGood = Grade(
     name = R.string.grade_good,
-    color = Color(0xff7aa032),
-    textColor = Color(0xffd9f28c),
+    color = grade4BgColor,
+    textColor = grade4FgColor,
 )
 val gradeVeryGood = Grade(
     name = R.string.grade_very_good,
-    color = Color(0xff12894b),
-    textColor = Color(0xff90f8b2),
+    color = grade5BgColor,
+    textColor = grade5FgColor,
 )
 val gradeExcellent = Grade(
     name = R.string.grade_excellent,
-    color = Color(0xff0a6043),
-    textColor = Color(0xffadf8d7),
+    color = grade6BgColor,
+    textColor = grade6FgColor,
 )
