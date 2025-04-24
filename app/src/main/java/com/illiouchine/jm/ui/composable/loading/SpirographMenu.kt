@@ -36,6 +36,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.ui.theme.JmTheme
+import com.illiouchine.jm.ui.theme.Theme
+import com.illiouchine.jm.ui.theme.spacing
 
 
 @Composable
@@ -93,7 +95,7 @@ fun EpicycloidMenu(
         }
         item {
             TextButton(
-                modifier = Modifier.padding(8.dp),
+                modifier = Modifier.padding(Theme.spacing.small),
                 onClick = {
                     // Initialize new compass
                     val newCompasses = compasses.toMutableList()
@@ -152,7 +154,7 @@ fun CompassMenu(
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text("$compassIndex# - Compass")
             IconButton(
@@ -162,33 +164,33 @@ fun CompassMenu(
                 Icon(
                     imageVector = Icons.Filled.Delete,
                     contentDescription = "Delete",
-                    tint = Color.Red
+                    tint = Color.Red,
                 )
             }
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text("Radius")
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(Theme.spacing.small))
             Slider(
                 value = radius,
                 onValueChange = { radius = it },
                 valueRange = 0f..1f,
                 onValueChangeFinished = {
                     onChangeRadius(radius.toDouble())
-                }
+                },
             )
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text("Speed")
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(Theme.spacing.small))
             Slider(
                 value = speed,
                 onValueChange = { speed = it },
@@ -196,23 +198,23 @@ fun CompassMenu(
                 steps = 21,
                 onValueChangeFinished = {
                     onChangeSpeed(speed.toDouble())
-                }
+                },
             )
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text("Phase")
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(Theme.spacing.small))
             Slider(
                 value = phase,
                 onValueChange = { phase = it },
                 valueRange = 0f..1f,
                 onValueChangeFinished = {
                     onChangePhase(phase.toDouble())
-                }
+                },
             )
         }
     }
@@ -226,7 +228,7 @@ private fun EpicycloidMenuPreview() {
         EpicycloidMenu(
             modifier = Modifier.fillMaxSize(),
             epicycloid = defaultsEpicycloids.first(),
-            onSaveEpicycloid = {}
+            onSaveEpicycloid = {},
         )
     }
 }

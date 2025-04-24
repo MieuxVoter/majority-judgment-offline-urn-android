@@ -47,6 +47,8 @@ import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
+import com.illiouchine.jm.ui.theme.Theme
+import com.illiouchine.jm.ui.theme.spacing
 import com.illiouchine.jm.ui.utils.smoothStep
 import java.math.BigInteger
 import kotlin.math.max
@@ -88,10 +90,10 @@ fun ResultScreen(
         Column(
             modifier = modifier
                 .padding(innerPadding)
-                .padding(horizontal = 8.dp)
+                .padding(horizontal = Theme.spacing.small)
                 .fillMaxSize()
                 .verticalScroll(state = scrollState)
-                .padding(8.dp),
+                .padding(Theme.spacing.small),
         ) {
             PollSubject(
                 subject = poll.pollConfig.subject,
@@ -196,12 +198,12 @@ fun ResultScreen(
                             )
                         }
 
-                        Spacer(Modifier.padding(vertical = 2.dp))
+                        Spacer(Modifier.padding(vertical = Theme.spacing.tiny))
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.padding(8.dp))
+            Spacer(modifier = Modifier.padding(Theme.spacing.small))
 
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),

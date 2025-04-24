@@ -12,17 +12,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.ui.theme.DeleteColor
+import com.illiouchine.jm.ui.theme.Theme
+import com.illiouchine.jm.ui.theme.spacing
 
 @Composable
 fun ProposalRow(
     modifier: Modifier = Modifier,
     proposal: String,
-    onRemoveClicked: (String) -> Unit = {}
+    onRemoveClicked: (String) -> Unit = {},
 ) {
     Row(
-        modifier = modifier.padding(vertical = 8.dp),
+        modifier = modifier.padding(vertical = Theme.spacing.small),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
@@ -33,8 +34,8 @@ fun ProposalRow(
         )
         Spacer(
             Modifier
-                .height(16.dp)
-                .padding(8.dp)
+                .height(Theme.spacing.medium)
+                .padding(Theme.spacing.small)
         )
         IconButton(
             onClick = { onRemoveClicked(proposal) }

@@ -10,9 +10,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.theme.JmTheme
+import com.illiouchine.jm.ui.theme.Theme
+import com.illiouchine.jm.ui.theme.spacing
 
 @Composable
 fun JudgmentSummary(
@@ -26,7 +27,7 @@ fun JudgmentSummary(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         JudgmentBall(
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier.padding(Theme.spacing.small),
             color = color,
         )
         Text(
