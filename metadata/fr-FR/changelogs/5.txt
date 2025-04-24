@@ -8,4 +8,4 @@
 * Translation en anglais
 * Translation en français
 * Jouer un son quand un ballot est confirmé
-* Désactiver le son dans les Options
+* Désactiver le son dans les Options.
