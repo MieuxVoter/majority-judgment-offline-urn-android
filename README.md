@@ -75,11 +75,11 @@ Run them from _Android Studio_, or with:
 
 ### Translations
 
-We're using the amazing _Weblate_ for translations : https://hosted.weblate.org/projects/majority-judgment-offline-urn-android/application/
+We're using the amazing _Weblate_ for translations : https://hosted.weblate.org/engage/majority-judgment-offline-urn-android/
 
 > You can add a new language or edit existing translations without ever touching any code.
 
-If you're a nerd and do want to handle code, the `XML` translation files are in `app/src/main/res/values-<language>`.
+![Plot of the translations completions by language](https://hosted.weblate.org/widget/majority-judgment-offline-urn-android/multi-auto.svg)
 
 
 ## Inspiration
