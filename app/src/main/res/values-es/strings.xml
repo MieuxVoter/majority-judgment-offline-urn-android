@@ -30,9 +30,9 @@
     <string name="label_poll_subject">Asunto de la Encuesta</string>
     <string name="grade_somewhat_good">bastante bien</string>
     <string name="button_next_participant">Siguiente participante</string>
-    <string name="seven_quality_grades">Siete grados</string>
-    <string name="five_quality_grades">Cinco grados</string>
-    <string name="three_quality_grades">Tres grados</string>
+    <string name="seven_quality_grades">Siete grados cualitativo</string>
+    <string name="five_quality_grades">Cinco grados cualitativo</string>
+    <string name="three_quality_grades">Tres grados cualitativo</string>
     <string name="setting_show_onboarding">Mostrar la introducción nuevamente</string>
     <string name="settings_screen_title">Ajustes</string>
     <string name="incitation_making_new_poll">Prueba a hacer una nueva encuesta, ¡es gratis!</string>
@@ -87,4 +87,6 @@
     <string name="setting_pin_screen_label">Evitar que les votantes abandonen la aplicación</string>
     <string name="poll_setup_subject_placeholder">Introduzca el tema de la encuesta…</string>
     <string name="poll_setup_proposal_placeholder">Introduce una propuesta…</string>
+    <string name="five_positive_quality_grades">Cinco grados cualitativo y positivo</string>
+    <string name="toast_that_poll_does_not_exist">Esa encuesta ya no existe.</string>
 </resources>
