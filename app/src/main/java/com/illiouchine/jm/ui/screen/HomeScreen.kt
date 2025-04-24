@@ -1,5 +1,6 @@
 package com.illiouchine.jm.ui.screen
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -90,7 +91,7 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(horizontal = 4.dp)
+                .padding(horizontal = 8.dp)
                 .verticalScroll(state = scrollState)
         ) {
             Text(
@@ -136,7 +137,6 @@ fun HomeScreen(
                     Modifier
                         .height(1.dp)
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
                         .background(Color.LightGray),
                 )
 
@@ -160,7 +160,10 @@ fun HomeScreen(
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
 @Composable
 fun PreviewHomeScreen(modifier: Modifier = Modifier) {
     JmTheme {

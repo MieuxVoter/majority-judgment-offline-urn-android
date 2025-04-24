@@ -1,14 +1,20 @@
 package com.illiouchine.jm.ui.composable
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -24,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -50,7 +57,7 @@ fun GradingSelectionRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(0.dp),
     ) {
         var expanded by remember { mutableStateOf(false) }
 
@@ -58,16 +65,25 @@ fun GradingSelectionRow(
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(stringResource(R.string.label_grades))
                 TextButton(
                     onClick = { expanded = !expanded },
                 ) {
-                    Text(stringResource(grading.name))
+                    Text(
+                        modifier = Modifier.weight(1.0f),
+                        textAlign = TextAlign.End,
+                        text = stringResource(grading.name),
+                    )
+
+                    val dropDownArrowAngle by animateFloatAsState(
+                        targetValue = if (expanded) 180f else 0f,
+                    )
+
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
+                        modifier = Modifier.rotate(dropDownArrowAngle),
                         contentDescription = "drop down arrow",
                     )
                 }
@@ -81,7 +97,9 @@ fun GradingSelectionRow(
                 }
 
                 LazyRow(
+                    modifier = Modifier,
                     state = lazyListState,
+
                 ) {
                     items(gradings.size) {
                         var thumbnailModifier: Modifier = Modifier
@@ -184,6 +202,11 @@ fun GradingThumbnail(
     showBackground = true,
     // Hmm ; nope, but why ?
     //uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
+@Preview(
+    name = "French",
+    showBackground = true,
+    locale = "fr",
 )
 @Composable
 private fun PreviewGradingSelectionRow() {

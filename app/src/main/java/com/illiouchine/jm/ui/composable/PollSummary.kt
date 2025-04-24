@@ -32,9 +32,9 @@ fun PollSummary(
     onDeletePoll: (poll: Poll) -> Unit = {},
 ) {
     Row(
-        modifier = modifier
+        modifier = modifier,
     ) {
-        Column(modifier = Modifier.padding(8.dp)) {
+        Column {
             Text(
                 modifier = Modifier,
                 text = poll.pollConfig.subject,
