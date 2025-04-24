@@ -79,7 +79,7 @@ We're using the amazing _Weblate_ for translations : https://hosted.weblate.org/
 
 > You can add a new language or edit existing translations without ever touching any code.
 
-![Plot of the translations completions by language](https://hosted.weblate.org/widget/majority-judgment-offline-urn-android/multi-auto.svg)
+[![Plot of the translations completions by language](https://hosted.weblate.org/widget/majority-judgment-offline-urn-android/multi-auto.svg)](https://hosted.weblate.org/engage/majority-judgment-offline-urn-android/)
 
 
 ## Inspiration
