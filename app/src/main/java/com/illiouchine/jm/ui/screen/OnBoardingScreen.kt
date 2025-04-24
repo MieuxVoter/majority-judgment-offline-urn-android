@@ -38,6 +38,8 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.composable.ScreenTitle
 import com.illiouchine.jm.ui.composable.ViewPager
 import com.illiouchine.jm.ui.theme.JmTheme
+import com.illiouchine.jm.ui.theme.Theme
+import com.illiouchine.jm.ui.theme.spacing
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
@@ -72,7 +74,7 @@ fun OnBoardingScreen(
         Column(
             modifier = modifier
                 .padding(innerPadding)
-                .padding(16.dp),
+                .padding(Theme.spacing.medium),
         ) {
             ScreenTitle(text = stringResource(R.string.majority_judgment))
             HorizontalPager(
@@ -88,14 +90,14 @@ fun OnBoardingScreen(
                         modifier = Modifier,
                         pagerState = pagerState,
                         pageIndex = page,
-                        onBoardingPage = this
+                        onBoardingPage = this,
                     )
                 }
             }
             OnBoardingBottomRow(
                 modifier = Modifier.fillMaxWidth(),
                 pagerState = pagerState,
-                onFinish = { onFinish() }
+                onFinish = { onFinish() },
             )
         }
     }
@@ -146,13 +148,13 @@ fun OnBoardingPage(
         Column(
             modifier = modifier
                 .align(Alignment.Center)
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = Theme.spacing.medium + Theme.spacing.small),
         ) {
             Image(
                 painter = painterResource(onBoardingPage.image),
                 contentDescription = null, // anything but silence would be noise
             )
-            Spacer(Modifier.padding(16.dp))
+            Spacer(Modifier.padding(Theme.spacing.medium))
             Text(
                 modifier = Modifier
                     .fillMaxWidth(),

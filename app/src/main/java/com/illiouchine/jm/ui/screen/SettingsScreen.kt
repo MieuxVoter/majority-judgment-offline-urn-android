@@ -21,7 +21,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -34,6 +33,8 @@ import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.ScreenTitle
 import com.illiouchine.jm.ui.theme.JmTheme
+import com.illiouchine.jm.ui.theme.Theme
+import com.illiouchine.jm.ui.theme.spacing
 
 
 @Composable
@@ -83,7 +84,7 @@ fun SettingsScreen(
             )
 
             ShowOnboardingRow(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(Theme.spacing.medium),
                 title = R.string.setting_show_onboarding,
                 onRequestToShowOnboarding = {
                     onShowOnBoardingRequested()
@@ -91,7 +92,7 @@ fun SettingsScreen(
             )
 
             SwitchSettingRow(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(Theme.spacing.medium),
                 title = R.string.setting_play_sound,
                 label = R.string.setting_play_sound_label,
                 checked = settingsState.playSound,
@@ -101,7 +102,7 @@ fun SettingsScreen(
             )
 
             SwitchSettingRow(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(Theme.spacing.medium),
                 title = R.string.setting_pin_screen,
                 label = R.string.setting_pin_screen_label,
                 checked = settingsState.pinScreen,
@@ -161,7 +162,7 @@ fun SwitchSettingRow(
     ) {
         Column(
             modifier = Modifier
-                .padding(end = 4.dp)
+                .padding(end = Theme.spacing.extraSmall)
                 .weight(1.0f),
         ) {
             Text(stringResource(title))

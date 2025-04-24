@@ -13,12 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.ui.theme.DeleteColor
+import com.illiouchine.jm.ui.theme.Theme
+import com.illiouchine.jm.ui.theme.spacing
 
 @Composable
 fun PollDeletionConfirmationDialog(
@@ -35,13 +36,13 @@ fun PollDeletionConfirmationDialog(
         ) {
             Column(
                 modifier = Modifier.padding(
-                    top = 16.dp,
-                    start = 16.dp,
-                    end = 16.dp,
+                    top = Theme.spacing.medium,
+                    start = Theme.spacing.medium,
+                    end = Theme.spacing.medium,
                 ),
             ) {
                 Text(
-                    modifier = Modifier.padding(bottom = 16.dp),
+                    modifier = Modifier.padding(bottom = Theme.spacing.medium),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     text = stringResource(R.string.dialog_are_you_sure),
@@ -52,7 +53,7 @@ fun PollDeletionConfirmationDialog(
                     text = poll.pollConfig.subject,
                 )
                 Text(
-                    modifier = Modifier.padding(top = 16.dp),
+                    modifier = Modifier.padding(top = Theme.spacing.medium),
                     fontSize = 12.sp,
                     text = stringResource(R.string.dialog_operation_cannot_be_undone),
                 )

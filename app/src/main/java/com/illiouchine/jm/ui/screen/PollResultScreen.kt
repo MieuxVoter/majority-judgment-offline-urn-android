@@ -1,6 +1,7 @@
 package com.illiouchine.jm.ui.screen
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
@@ -31,7 +32,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.InMemoryPollDataSource
@@ -95,7 +95,9 @@ fun ResultScreen(
                 .verticalScroll(state = scrollState)
                 .padding(Theme.spacing.small),
         ) {
+
             PollSubject(
+                modifier = Modifier.padding(bottom = Theme.spacing.small + Theme.spacing.medium),
                 subject = poll.pollConfig.subject,
             )
 
@@ -104,7 +106,7 @@ fun ResultScreen(
                 ballots = poll.ballots,
             )
 
-            Spacer(Modifier.padding(vertical = 8.dp))
+            Spacer(Modifier.padding(vertical = Theme.spacing.small))
 
             val appearAnimation = remember { Animatable(0f) }
             LaunchedEffect("waterfall") {
@@ -149,7 +151,8 @@ fun ResultScreen(
                             val medianGradeName =
                                 stringResource(poll.pollConfig.grading.getGradeName(medianGrade))
                             Text(
-                                modifier = Modifier.padding(end = 12.dp),
+                                modifier = Modifier
+                                    .padding(end = Theme.spacing.extraSmall + Theme.spacing.small),
                                 fontSize = 24.sp,
                                 text = "#$rank",
                             )
@@ -162,7 +165,7 @@ fun ResultScreen(
                             LinearMeritProfileCanvas(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(24.dp),
+                                    .height(Theme.spacing.medium + Theme.spacing.small),
                                 tally = tally,
                                 proposalResult = proposalResult,
                                 grading = grading,
@@ -173,29 +176,26 @@ fun ResultScreen(
                             )
                         }
 
-                        Spacer(Modifier.padding(vertical = 10.dp))
+                        Spacer(Modifier.padding(
+                            vertical = Theme.spacing.small + Theme.spacing.tiny,
+                        ))
 
                         // Ux: Explanations are shown one at a time (exclusive toggle)
                         val shouldShowExplanation = isAnyProfileSelected
                                 && selectedProfileIndex == displayIndex
 
-                        var explainRowModifier: Modifier = Modifier
-                        if (!shouldShowExplanation) {
-                            explainRowModifier = explainRowModifier.height(0.dp)
-                        }
-
-                        Row(
-                            modifier = explainRowModifier,
-                        ) {
-                            Text(
-                                fontSize = 14.sp,
-                                text =
-                                if (state.explanations.size > displayIndex) {
-                                    state.explanations[displayIndex]
-                                } else {
-                                    AnnotatedString("\uD83D\uDC1E")
-                                },
-                            )
+                        AnimatedVisibility(shouldShowExplanation) {
+                            Row {
+                                Text(
+                                    fontSize = 14.sp,
+                                    text =
+                                    if (state.explanations.size > displayIndex) {
+                                        state.explanations[displayIndex]
+                                    } else {
+                                        AnnotatedString("\uD83D\uDC1E")
+                                    },
+                                )
+                            }
                         }
 
                         Spacer(Modifier.padding(vertical = Theme.spacing.tiny))

@@ -32,6 +32,8 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.theme.JmTheme
+import com.illiouchine.jm.ui.theme.Theme
+import com.illiouchine.jm.ui.theme.spacing
 
 @Composable
 @Suppress("UnusedReceiverParameter")
@@ -136,7 +138,7 @@ private fun PreviewProposalSelectionRow() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 40.dp)
-                .padding(16.dp)
+                .padding(Theme.spacing.medium)
         ) {
             ProposalSelectionRow(
                 modifier = Modifier,

@@ -27,7 +27,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.model.Grading
@@ -44,6 +43,8 @@ import com.illiouchine.jm.ui.composable.ScreenTitle
 import com.illiouchine.jm.ui.composable.SubjectSelectionRow
 import com.illiouchine.jm.ui.composable.ThemedHorizontalDivider
 import com.illiouchine.jm.ui.theme.JmTheme
+import com.illiouchine.jm.ui.theme.Theme
+import com.illiouchine.jm.ui.theme.spacing
 import com.illiouchine.jm.ui.utils.displayed
 import kotlinx.coroutines.launch
 
@@ -96,7 +97,7 @@ fun PollSetupScreen(
                 visible = pollSetupState.config.proposals.size > 1 && !finishButtonVisibility,
             ) {
                 ExtendedFloatingActionButton(
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.padding(Theme.spacing.medium),
                     onClick = { onSetupFinished(context) },
                     icon = { },
                     text = { Text(stringResource(R.string.button_let_s_go)) },
@@ -112,7 +113,7 @@ fun PollSetupScreen(
             modifier = modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(Theme.spacing.medium)
                 .verticalScroll(scrollState),
         ) {
             ScreenTitle(text = stringResource(R.string.title_poll_setup))
@@ -137,7 +138,7 @@ fun PollSetupScreen(
                     onClearSubjectSuggestion()
                 },
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(Theme.spacing.medium))
 
             ProposalSelectionRow(
                 modifier = Modifier,
@@ -164,7 +165,7 @@ fun PollSetupScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(Theme.spacing.small))
 
             pollSetupState.config.proposals.reversed().forEachIndexed { propIndex, propName ->
 
@@ -194,7 +195,7 @@ fun PollSetupScreen(
                     .displayed { finishButtonVisibility = it }
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(0.62f)
-                    .padding(16.dp),
+                    .padding(Theme.spacing.medium),
                 enabled = pollSetupState.config.proposals.size > 1,
                 onClick = { onSetupFinished(context) },
             ) {

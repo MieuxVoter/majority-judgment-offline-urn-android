@@ -23,6 +23,8 @@ import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.theme.JmTheme
+import com.illiouchine.jm.ui.theme.Theme
+import com.illiouchine.jm.ui.theme.spacing
 
 @Composable
 fun JudgmentBalls(
@@ -33,7 +35,7 @@ fun JudgmentBalls(
     val currentBalls = ballot.judgments.size
     Row(
         modifier = modifier
-            .padding(16.dp),
+            .padding(Theme.spacing.medium),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -53,14 +55,13 @@ fun JudgmentBalls(
                     16.dp
                 }
             )
-            Spacer(modifier = Modifier.size(4.dp))
+            Spacer(modifier = Modifier.size(Theme.spacing.extraSmall))
             JudgmentBall(
                 modifier = Modifier,
                 color = animatedColor,
-                size = animatedSize
-
+                size = animatedSize,
             )
-            Spacer(modifier = Modifier.size(4.dp))
+            Spacer(modifier = Modifier.size(Theme.spacing.extraSmall))
         }
     }
 }

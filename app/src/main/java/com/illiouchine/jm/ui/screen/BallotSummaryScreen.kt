@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
@@ -25,6 +24,8 @@ import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.JudgmentSummary
 import com.illiouchine.jm.ui.theme.DeleteColor
 import com.illiouchine.jm.ui.theme.JmTheme
+import com.illiouchine.jm.ui.theme.Theme
+import com.illiouchine.jm.ui.theme.spacing
 
 
 @Composable
@@ -38,7 +39,7 @@ fun BallotSummaryScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(Theme.spacing.medium),
     ) {
 
         Text(
@@ -47,7 +48,7 @@ fun BallotSummaryScreen(
             fontSize = 32.sp,
         )
 
-        Spacer(Modifier.height(32.dp))
+        Spacer(Modifier.height(Theme.spacing.large))
 
         ballot.judgments.forEach { judgment ->
             val gradeIndex = judgment.grade
@@ -55,15 +56,15 @@ fun BallotSummaryScreen(
             JudgmentSummary(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(4.dp),
+                    .padding(Theme.spacing.extraSmall),
                 proposal = proposal,
                 gradeString = stringResource(pollConfig.grading.getGradeName(gradeIndex)),
                 color = pollConfig.grading.getGradeColor(gradeIndex),
             )
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(Theme.spacing.small))
         }
 
-        Spacer(Modifier.height(32.dp))
+        Spacer(Modifier.height(Theme.spacing.large))
 
         Text(
             text = stringResource(R.string.summary_is_that_accurate),
@@ -72,7 +73,7 @@ fun BallotSummaryScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp),
+                .padding(vertical = Theme.spacing.medium),
         ) {
 
             TextButton(
@@ -109,8 +110,8 @@ fun PreviewBallotSummaryScreen(modifier: Modifier = Modifier) {
         BallotSummaryScreen(
             modifier = modifier,
             pollConfig = PollConfig(
-                subject = "Prézidaaanh ?",
-                proposals = listOf("Tonio", "Bobby", "Mario"),
+                subject = "Emperor ?",
+                proposals = listOf("Dominus", "Dump", "Dive"),
                 grading = DEFAULT_GRADING_QUALITY_VALUE,
             ),
             ballot = Ballot(

@@ -18,6 +18,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.ui.theme.JmTheme
+import com.illiouchine.jm.ui.theme.Theme
+import com.illiouchine.jm.ui.theme.spacing
 
 
 @Composable
@@ -29,7 +31,7 @@ fun ViewPager(
 
     Row(
         modifier = modifier
-            .padding(16.dp),
+            .padding(Theme.spacing.medium),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
     ) {
@@ -46,14 +48,14 @@ fun ViewPager(
             } else {
                 Color.LightGray
             }
-            Spacer(modifier = Modifier.size(4.dp))
+            Spacer(modifier = Modifier.size(Theme.spacing.extraSmall))
             Box(
                 modifier = Modifier
                     .size(animatedSize)
                     .clip(shape = RoundedCornerShape(14.dp))
                     .background(color)
             )
-            Spacer(modifier = Modifier.size(4.dp))
+            Spacer(modifier = Modifier.size(Theme.spacing.extraSmall))
         }
     }
 }

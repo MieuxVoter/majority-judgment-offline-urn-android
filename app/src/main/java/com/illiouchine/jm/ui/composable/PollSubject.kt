@@ -20,7 +20,7 @@ fun PollSubject(
         modifier = Modifier.fillMaxWidth(),
     ) {
         Text(
-            modifier = modifier.padding(bottom = 24.dp),
+            modifier = modifier,
             text = "❝ $subject ❞",
             fontSize = 24.sp,
         )
