@@ -30,9 +30,9 @@
     <string name="verb_is">est</string>
     <string name="toast_proposal_name_already_exists">Une autre proposition existe déjà avec ce nom.</string>
     <string name="button_report_bug">Rapport de Bogue</string>
-    <string name="seven_quality_grades">Sept mentions</string>
-    <string name="five_quality_grades">Cinq mentions</string>
-    <string name="three_quality_grades">Trois mentions</string>
+    <string name="seven_quality_grades">Sept mentions qualitatives</string>
+    <string name="five_quality_grades">Cinq mentions qualitatives</string>
+    <string name="three_quality_grades">Trois mentions qualitatives</string>
     <string name="setting_show_onboarding">Montrer l\'intro à nouveau</string>
     <string name="settings_screen_title">Options</string>
     <string name="incitation_making_new_poll">Créez un nouveau scrutin, c\'est gratis !</string>
@@ -87,4 +87,6 @@
     <string name="setting_show_onboarding_button">Revoir</string>
     <string name="setting_play_sound_label">Avertir les environs qu\'un nouveau vote a été finalisé</string>
     <string name="setting_pin_screen_label">Empêcher les votants de quitter l\'application</string>
+    <string name="five_positive_quality_grades">Cinq mentions qualitatives et positives</string>
+    <string name="toast_that_poll_does_not_exist">Ce scrutin n\'existe plus.</string>
 </resources>
