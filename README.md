@@ -75,6 +75,8 @@ Run them from _Android Studio_, or with:
 
 ### Translations
 
+[![Weblate Statistics about this project](https://hosted.weblate.org/widget/majority-judgment-offline-urn-android/287x66-black.png)](https://hosted.weblate.org/engage/majority-judgment-offline-urn-android)
+
 We're using the amazing _Weblate_ for translations : https://hosted.weblate.org/engage/majority-judgment-offline-urn-android/
 
 > You can add a new language or edit existing translations without ever touching any code.
