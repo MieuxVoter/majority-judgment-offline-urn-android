@@ -20,6 +20,7 @@ An application for Android 8.1 and greater that helps groups decide about things
 - *Libre Software*: We accept merge requests.
 - *No anti-features*: no tracking, no ads.
 
+<!--suppress CheckImageSize -->
 <p>
   <img src="metadata/en-US/images/phoneScreenshots/1.png" alt="Screenshot of the onboarding screen of the application." width="270" />
   <img src="metadata/en-US/images/phoneScreenshots/2.png" alt="Screenshot of the voting screen of the application." width="270" />
@@ -44,6 +45,8 @@ This Android app is available on [F-Droid](https://f-droid.org/en/packages/com.i
 ### Google Play
 
 [Publication on Google Play](https://github.com/MieuxVoter/majority-judgment-offline-urn-android/issues/100) is in the works. 
+
+[Try the open beta](https://play.google.com/apps/testing/fr.mieuxvoter.urn).
 
 ### Direct Download
 
