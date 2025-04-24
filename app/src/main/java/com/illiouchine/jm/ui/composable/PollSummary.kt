@@ -50,7 +50,7 @@ fun PollSummary(
                 }
 
                 Text(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).padding(top = 4.dp),
                     text = sequenceOfProposals.toString(),
                 )
 
