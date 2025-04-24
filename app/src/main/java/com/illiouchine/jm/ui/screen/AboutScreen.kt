@@ -41,6 +41,8 @@ import com.illiouchine.jm.ui.composable.IconTextButton
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.ScreenTitle
 import com.illiouchine.jm.ui.theme.JmTheme
+import com.illiouchine.jm.ui.theme.Theme
+import com.illiouchine.jm.ui.theme.spacing
 
 
 @Composable
@@ -109,7 +111,7 @@ fun AboutScreen(
 
             IconTextButton(
                 modifier = Modifier
-                    .padding(bottom = 8.dp)
+                    .padding(Theme.spacing.small)
                     .align(Alignment.CenterHorizontally),
                 icon = Icons.Filled.Person,
                 text = stringResource(R.string.button_ask_a_question),
