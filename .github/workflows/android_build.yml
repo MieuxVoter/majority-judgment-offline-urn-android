@@ -32,7 +32,7 @@ jobs:
     - name: Decode the store key file
       run: base64 --decode /tmp/skf64 > /tmp/skf.jks
 
-    - name: Sign the Release APK
+    - name: Make and Sign the Release APK (F-Droid)
       env:
         STORE_PASSWORD: "${{ secrets.STORE_PASSWORD }}"
         STORE_KEY_PASSWORD: "${{ secrets.STORE_KEY_PASSWORD }}"
@@ -40,6 +40,20 @@ jobs:
         STORE_KEY_ALIAS: "${{ secrets.STORE_KEY_ALIAS }}"
       run: |
         ./gradlew assembleRelease \
+        -Pandroid.injected.signing.store.file="$STORE_KEY_FILE_PATH" \
+        -Pandroid.injected.signing.store.password="$STORE_PASSWORD" \
+        -Pandroid.injected.signing.key.alias="$STORE_KEY_ALIAS" \
+        -Pandroid.injected.signing.key.password="$STORE_KEY_PASSWORD"
+
+    - name: Make and Sign the Release AAB (Google Play)
+      env:
+        GOOGLE: "true"
+        STORE_PASSWORD: "${{ secrets.STORE_PASSWORD }}"
+        STORE_KEY_PASSWORD: "${{ secrets.STORE_KEY_PASSWORD }}"
+        STORE_KEY_FILE_PATH: /tmp/skf.jks
+        STORE_KEY_ALIAS: "${{ secrets.STORE_KEY_ALIAS }}"
+      run: |
+        ./gradlew bundleRelease \
         -Pandroid.injected.signing.store.file="$STORE_KEY_FILE_PATH" \
         -Pandroid.injected.signing.store.password="$STORE_PASSWORD" \
         -Pandroid.injected.signing.key.alias="$STORE_KEY_ALIAS" \
@@ -54,6 +68,9 @@ jobs:
     - name: Check Release APK
       run: ls app/build/outputs/apk/release/app-release.apk
 
+    - name: Check Release AAB
+      run: ls app/build/outputs/bundle/release/app-release.aab
+
       # Upload the APKs to the Releases if there is a git tag
       # Docs: https://github.com/softprops/action-gh-release
     - name: Release
@@ -63,3 +80,4 @@ jobs:
         files: |
           app/build/outputs/apk/debug/app-debug.apk
           app/build/outputs/apk/release/app-release.apk
+          app/build/outputs/bundle/release/app-release.aab

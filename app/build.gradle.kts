@@ -8,19 +8,30 @@ plugins {
     id("io.gitlab.arturbosch.detekt") version "1.23.8"
 }
 
+// Bit of a self-made hack, this, but flavors don't run smoothly.
+val isGoogleFlavor = providers
+    .environmentVariable("GOOGLE")
+    .getOrElse("false") == "true"
 
 android {
     namespace = "com.illiouchine.jm"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.illiouchine.jm"
+        applicationId = if (isGoogleFlavor) {
+            // We have to use another applicationId for Google, as Google says
+            // "com.illiouchine.jm.androidx-startup is already in use" (???)
+            "fr.mieuxvoter.urn"
+        } else {
+            // But we've already registered this app on F-Droid with this applicationId:
+            "com.illiouchine.jm"
+        }
         minSdk = 27
         targetSdk = 35
-        versionCode = 9
-        versionName = "1.3.1"
+        versionCode = 11
+        versionName = "1.3.2"
 
-        // Ideally we'd have both, but support for multiple runners look experimental
+        // Ideally we'd have both, but support for multiple runners looks experimental
 //        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunner = "io.cucumber.android.runner.CucumberAndroidJUnitRunner"
     }
@@ -46,20 +57,41 @@ android {
         compose = true
     }
 
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
+
     // We find that there is a DependencyInfoBlock in our APK. It's a Signing block added by AGP
-    // and encrypted with the Google public key so it can't be read by anyone else except Google.
+    // and encrypted with the Google public key so it can't be read by anyone else but Google.
     // We need to remove it before we publish to F-Droid, as it's a security hole.
     // https://gitlab.com/fdroid/fdroiddata/-/merge_requests/19981
     dependenciesInfo {
         // Disables dependency metadata when building APKs.
-        includeInApk = false
+        includeInApk = !isGoogleFlavor
         // Disables dependency metadata when building Android App Bundles.
-        includeInBundle = false
+        includeInBundle = !isGoogleFlavor
     }
 
-    room {
-        schemaDirectory("$projectDir/schemas")
-    }
+    // NOPE: Cannot locate tasks that match ':app:assembleDebugUnitTest' as task 'assembleDebugUnitTest' is ambiguous in project ':app'. Candidates are: 'assembleFdroidDebugUnitTest', 'assembleGoogleDebugUnitTest'.
+//    flavorDimensions += "store"
+//    productFlavors {
+//        create("fdroid") {
+//            dimension = "store"
+//            // We find that there is a DependencyInfoBlock in our APK. It's a Signing block added by AGP
+//            // and encrypted with the Google public key so it can't be read by anyone else but Google.
+//            // We need to remove it before we publish to F-Droid, as it's a security hole.
+//            // https://gitlab.com/fdroid/fdroiddata/-/merge_requests/19981
+//            dependenciesInfo {
+//                // Disables dependency metadata when building APKs.
+//                includeInApk = false
+//                // Disables dependency metadata when building Android App Bundles.
+//                includeInBundle = false
+//            }
+//        }
+//        create("google") {
+//            dimension = "store"
+//        }
+//    }
 }
 
 dependencies {
@@ -83,7 +115,7 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.android)
 
-    // Room
+    // Room (DB)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
@@ -154,5 +186,6 @@ detekt {
     // Android: Don't create tasks for the specified build variants (e.g. "productionRelease")
     ignoredVariants = listOf("productionRelease")
 
+    // This never worked for me ._.
     autoCorrect = true
 }
