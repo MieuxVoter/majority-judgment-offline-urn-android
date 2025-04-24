@@ -91,7 +91,7 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(horizontal = 8.dp)
+                .padding(horizontal = 16.dp)
                 .verticalScroll(state = scrollState)
         ) {
             Text(
@@ -135,6 +135,7 @@ fun HomeScreen(
                 )
                 Spacer(
                     Modifier
+                        .padding(bottom = 48.dp)
                         .height(1.dp)
                         .fillMaxWidth()
                         .background(Color.LightGray),

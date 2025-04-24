@@ -83,6 +83,7 @@ fun SettingsScreen(
             )
 
             ShowOnboardingRow(
+                modifier = Modifier.padding(16.dp),
                 title = R.string.setting_show_onboarding,
                 onRequestToShowOnboarding = {
                     onShowOnBoardingRequested()
@@ -90,6 +91,7 @@ fun SettingsScreen(
             )
 
             SwitchSettingRow(
+                modifier = Modifier.padding(16.dp),
                 title = R.string.setting_play_sound,
                 label = R.string.setting_play_sound_label,
                 checked = settingsState.playSound,
@@ -99,6 +101,7 @@ fun SettingsScreen(
             )
 
             SwitchSettingRow(
+                modifier = Modifier.padding(16.dp),
                 title = R.string.setting_pin_screen,
                 label = R.string.setting_pin_screen_label,
                 checked = settingsState.pinScreen,
@@ -119,12 +122,12 @@ fun SettingsScreen(
 @Composable
 fun ShowOnboardingRow(
     title: Int,
+    modifier: Modifier = Modifier,
     onRequestToShowOnboarding: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
+        modifier = modifier
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -139,15 +142,15 @@ fun ShowOnboardingRow(
 
 @Composable
 fun SwitchSettingRow(
+    modifier: Modifier = Modifier,
     @StringRes title: Int,
     @StringRes label: Int = 0,
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)
             .clickable {
                 if (onCheckedChange != null) {
                     onCheckedChange(!checked)
