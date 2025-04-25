@@ -36,6 +36,8 @@ import com.illiouchine.jm.ui.composable.JudgmentBalls
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.theme.JmTheme
+import com.illiouchine.jm.ui.theme.Theme
+import com.illiouchine.jm.ui.theme.spacing
 import kotlinx.coroutines.launch
 
 @Composable
@@ -73,23 +75,24 @@ fun PollVotingScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
                 .verticalScroll(state = scrollState)
-                .padding(16.dp),
+                .padding(Theme.spacing.medium),
         ) {
 
             PollSubject(
+                modifier = Modifier.padding(bottom = Theme.spacing.small + Theme.spacing.medium),
                 subject = pollVotingState.pollConfig.subject,
             )
 
             if (pollVotingState.isInStateReady()) {
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(Theme.spacing.large))
 
                 // State: READY, waiting for new participant.
                 if (pollVotingState.ballots.isNotEmpty()) {
                     Text(stringResource(R.string.help_your_participation_was_a_success))
                 }
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(Theme.spacing.large))
 
                 if (pollVotingState.ballots.isEmpty()) {
                     Button(
@@ -112,7 +115,7 @@ fun PollVotingScreen(
                         }
                     )
                 }
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(Theme.spacing.large))
                 OutlinedButton(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     enabled = pollVotingState.ballots.isNotEmpty(),

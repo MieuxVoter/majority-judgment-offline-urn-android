@@ -44,6 +44,8 @@ import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.PollDeletionConfirmationDialog
 import com.illiouchine.jm.ui.composable.PollSummary
 import com.illiouchine.jm.ui.theme.JmTheme
+import com.illiouchine.jm.ui.theme.Theme
+import com.illiouchine.jm.ui.theme.spacing
 import kotlinx.coroutines.launch
 
 
@@ -77,7 +79,7 @@ fun HomeScreen(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(Theme.spacing.medium)
                     .testTag("home_fab"),
                 onClick = { onSetupBlankPoll() },
                 icon = { Icon(Icons.Filled.Add, "") },
@@ -91,13 +93,13 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = Theme.spacing.medium)
                 .verticalScroll(state = scrollState)
         ) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                    .padding(bottom = Theme.spacing.medium),
                 fontSize = 32.sp,
                 lineHeight = 32.sp,
                 textAlign = TextAlign.Center,
@@ -115,7 +117,7 @@ fun HomeScreen(
                 )
             }
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(Theme.spacing.medium))
 
             homeViewState.polls.reversed().forEach { poll ->
 
@@ -124,7 +126,7 @@ fun HomeScreen(
                 PollSummary(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 8.dp),
+                        .padding(top = Theme.spacing.small),
                     poll = poll,
                     onSetupClonePoll = { onSetupClonePoll(it) },
                     onResumePoll = { onResumePoll(it) },
@@ -174,7 +176,7 @@ fun PreviewHomeScreen(modifier: Modifier = Modifier) {
                 polls = listOf(
                     Poll(
                         pollConfig = PollConfig(
-                            subject = "Prezidan ?",
+                            subject = "President ?",
                             proposals = listOf("Mario", "Bob", "JLM"),
                             grading = DEFAULT_GRADING_QUALITY_VALUE,
                         ),
@@ -206,13 +208,13 @@ fun PreviewHomeScreen(modifier: Modifier = Modifier) {
                             Ballot(
                                 judgments = listOf(
                                     Judgment(proposal = 0, 2),
-                                    Judgment(proposal = 1, 7),
+                                    Judgment(proposal = 1, 4),
                                 ),
                             ),
                             Ballot(
                                 judgments = listOf(
                                     Judgment(proposal = 0, 1),
-                                    Judgment(proposal = 1, 6),
+                                    Judgment(proposal = 1, 3),
                                 ),
                             ),
                         )

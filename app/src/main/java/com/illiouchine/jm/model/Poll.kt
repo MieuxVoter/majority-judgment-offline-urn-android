@@ -11,7 +11,7 @@ data class Poll(
     val judgments: List<Judgment>
         get() = getAllJudgments()
 
-    val collectedJudgments: List<Judgment> = collectAllJudgments()
+    private val collectedJudgments: List<Judgment> = collectAllJudgments()
 
     private fun getAllJudgments(): List<Judgment> {
         return collectedJudgments

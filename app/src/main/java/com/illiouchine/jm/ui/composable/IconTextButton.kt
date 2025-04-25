@@ -7,7 +7,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
+import com.illiouchine.jm.ui.theme.Theme
+import com.illiouchine.jm.ui.theme.spacing
 
 
 @Composable
@@ -24,8 +25,8 @@ fun IconTextButton(
         if (null != icon) {
             Icon(
                 imageVector = icon,
-                contentDescription = "", // aria-ignore (cosmetic)
-                modifier = Modifier.padding(end = 8.dp),
+                contentDescription = null, // aria-ignore (icon is cosmetic)
+                modifier = Modifier.padding(end = Theme.spacing.small),
             )
         }
         Text(

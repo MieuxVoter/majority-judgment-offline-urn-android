@@ -32,7 +32,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.illiouchine.jm.R
@@ -107,11 +106,11 @@ fun AboutScreen(
                 text = stringResource(R.string.about_help_us_make_it_better),
             )
 
-            Spacer(Modifier.padding(8.dp))
+            Spacer(Modifier.padding(Theme.spacing.small))
 
             IconTextButton(
                 modifier = Modifier
-                    .padding(Theme.spacing.small)
+                    .padding(vertical = Theme.spacing.small)
                     .align(Alignment.CenterHorizontally),
                 icon = Icons.Filled.Person,
                 text = stringResource(R.string.button_ask_a_question),
@@ -127,7 +126,7 @@ fun AboutScreen(
 
             IconTextButton(
                 modifier = Modifier
-                    .padding(bottom = 8.dp)
+                    .padding(bottom = Theme.spacing.small)
                     .align(Alignment.CenterHorizontally),
                 icon = Icons.Filled.Build,
                 text = stringResource(R.string.button_browse_the_source),
@@ -142,7 +141,7 @@ fun AboutScreen(
 
             IconTextButton(
                 modifier = Modifier
-                    .padding(bottom = 8.dp)
+                    .padding(bottom = Theme.spacing.small)
                     .align(Alignment.CenterHorizontally),
                 icon = Icons.Filled.Notifications,
                 text = stringResource(R.string.button_report_bug),
@@ -160,7 +159,7 @@ fun AboutScreen(
 
             IconTextButton(
                 modifier = Modifier
-                    .padding(bottom = 8.dp)
+                    .padding(bottom = Theme.spacing.small)
                     .align(Alignment.CenterHorizontally),
                 icon = Icons.Filled.Done,
                 text = stringResource(R.string.button_suggest_improvement),
@@ -178,7 +177,7 @@ fun AboutScreen(
 
             IconTextButton(
                 modifier = Modifier
-                    .padding(bottom = 8.dp)
+                    .padding(bottom = Theme.spacing.small)
                     .align(Alignment.CenterHorizontally),
                 icon = Icons.Filled.LocationOn,
                 text = stringResource(R.string.button_translate_app),
@@ -195,7 +194,7 @@ fun AboutScreen(
 
             IconTextButton(
                 modifier = Modifier
-                    .padding(bottom = 8.dp)
+                    .padding(bottom = Theme.spacing.small)
                     .align(Alignment.CenterHorizontally),
                 icon = Icons.Filled.Info,
                 text = stringResource(R.string.button_more_about_majority_judgment),
@@ -207,7 +206,7 @@ fun AboutScreen(
 
             IconTextButton(
                 modifier = Modifier
-                    .padding(bottom = 8.dp)
+                    .padding(bottom = Theme.spacing.small)
                     .align(Alignment.CenterHorizontally),
                 icon = Icons.Filled.ThumbUp,
                 text = stringResource(R.string.button_try_online_webapp),

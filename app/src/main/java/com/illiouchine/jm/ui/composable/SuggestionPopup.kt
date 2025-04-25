@@ -11,8 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import com.illiouchine.jm.ui.theme.Theme
+import com.illiouchine.jm.ui.theme.spacing
 
 @Composable
 fun SuggestionPopup(
@@ -29,7 +30,7 @@ fun SuggestionPopup(
     ) {
         LazyColumn(
             modifier = modifier
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = Theme.spacing.medium)
                 .background(MaterialTheme.colorScheme.primary),
             horizontalAlignment = Alignment.CenterHorizontally,
             userScrollEnabled = false,
@@ -43,7 +44,7 @@ fun SuggestionPopup(
                 Text(
                     modifier = Modifier
                         .fillParentMaxWidth()
-                        .padding(16.dp)
+                        .padding(Theme.spacing.medium)
                         .clickable {
                             onSuggestionSelected(suggestion)
                         },
