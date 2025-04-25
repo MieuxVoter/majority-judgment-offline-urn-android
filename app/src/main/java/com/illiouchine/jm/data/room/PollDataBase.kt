@@ -15,7 +15,7 @@ import com.illiouchine.jm.data.room.entity.ProposalEntity
         JudgmentEntity::class,
     ],
     version = 1,
-    exportSchema = false, // don't want to keep history of versions now
+    exportSchema = true,
 )
 abstract class PollDataBase : RoomDatabase() {
     abstract fun pollDao(): PollDao
