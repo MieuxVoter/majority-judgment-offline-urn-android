@@ -8,13 +8,18 @@ import com.illiouchine.jm.model.Grading.Quality3Grading
 import com.illiouchine.jm.model.Grading.Quality5Grading
 import com.illiouchine.jm.model.Grading.PositiveQuality5Grading
 import com.illiouchine.jm.model.Grading.Quality7Grading
+import com.illiouchine.jm.model.Grading.Urgency5Grading
 import kotlinx.serialization.Serializable
 
+/**
+ * The available gradings in the application.
+ */
 val gradings: List<Grading> = listOf(
     Quality7Grading,
     Quality5Grading,
     PositiveQuality5Grading,
     Quality3Grading,
+    Urgency5Grading,
 )
 
 /**
@@ -76,6 +81,19 @@ sealed class Grading(
             gradeToReject,
             gradeSomewhatGood,
             gradeExcellent,
+        ),
+    )
+
+    @Serializable
+    data object Urgency5Grading : Grading(
+        uid = 105,
+        name = R.string.five_urgency_grades,
+        grades = listOf(
+            gradeNotUrgent,
+            gradeNeutral,
+            gradeUrgent,
+            gradeVeryUrgent,
+            gradeExtremelyUrgent,
         ),
     )
 
