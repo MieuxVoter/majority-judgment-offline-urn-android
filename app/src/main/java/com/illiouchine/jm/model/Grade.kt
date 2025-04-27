@@ -92,7 +92,7 @@ val gradeExcellent = Grade(
     textColor = grade6FgColor,
 )
 
-// URGENCY GRADE
+// URGENCY GRADES
 
 val gradeNotUrgent = Grade(
     name = R.string.grade_not_urgent,
@@ -116,6 +116,34 @@ val gradeVeryUrgent = Grade(
 )
 val gradeExtremelyUrgent = Grade(
     name = R.string.grade_extremely_urgent,
+    color = grade0BgColor,
+    textColor = grade0FgColor,
+)
+
+// PRIORITY GRADES
+
+val gradeTopPriority = Grade(
+    name = R.string.grade_top_priority,
+    color = grade6BgColor,
+    textColor = grade6FgColor,
+)
+val gradeHighPriority = Grade(
+    name = R.string.grade_high_priority,
+    color = grade5BgColor,
+    textColor = grade5FgColor,
+)
+val gradePriority = Grade(
+    name = R.string.grade_priority,
+    color = grade3BgColor,
+    textColor = grade3FgColor,
+)
+val gradeNeutralPriority = Grade(
+    name = R.string.grade_neutral,
+    color = grade2BgColor,
+    textColor = grade2FgColor,
+)
+val gradeNoPriority = Grade(
+    name = R.string.grade_no_priority,
     color = grade0BgColor,
     textColor = grade0FgColor,
 )

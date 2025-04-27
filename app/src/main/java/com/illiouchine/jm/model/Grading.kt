@@ -9,6 +9,7 @@ import com.illiouchine.jm.model.Grading.Quality5Grading
 import com.illiouchine.jm.model.Grading.PositiveQuality5Grading
 import com.illiouchine.jm.model.Grading.Quality7Grading
 import com.illiouchine.jm.model.Grading.Urgency5Grading
+import com.illiouchine.jm.model.Grading.Priority5Grading
 import kotlinx.serialization.Serializable
 
 /**
@@ -19,11 +20,12 @@ val gradings: List<Grading> = listOf(
     Quality5Grading,
     PositiveQuality5Grading,
     Quality3Grading,
+    Priority5Grading,
     Urgency5Grading,
 )
 
 /**
- * The grades must be unambiguously sorted for MJ to work.
+ * The grades must be unambiguously ordered for MJ to work.
  */
 @Serializable
 sealed class Grading(
@@ -94,6 +96,19 @@ sealed class Grading(
             gradeUrgent,
             gradeVeryUrgent,
             gradeExtremelyUrgent,
+        ),
+    )
+
+    @Serializable
+    data object Priority5Grading : Grading(
+        uid = 205,
+        name = R.string.five_priority_grades,
+        grades = listOf(
+            gradeNoPriority,
+            gradeNeutralPriority,
+            gradePriority,
+            gradeHighPriority,
+            gradeTopPriority,
         ),
     )
 
