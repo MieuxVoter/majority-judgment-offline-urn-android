@@ -1,0 +1,208 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "5d9afa0588112c8c3ca3ff09943f14c7",
+    "entities": [
+      {
+        "tableName": "poll",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `subject` TEXT NOT NULL, `gradingUid` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "uid",
+            "columnName": "uid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "subject",
+            "columnName": "subject",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gradingUid",
+            "columnName": "gradingUid",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "uid"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "proposal",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `pollId` INTEGER NOT NULL, `name` TEXT NOT NULL, FOREIGN KEY(`pollId`) REFERENCES `poll`(`uid`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "uid",
+            "columnName": "uid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pollId",
+            "columnName": "pollId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "uid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_proposal_pollId",
+            "unique": false,
+            "columnNames": [
+              "pollId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_proposal_pollId` ON `${TABLE_NAME}` (`pollId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "poll",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "pollId"
+            ],
+            "referencedColumns": [
+              "uid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "ballot",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `pollId` INTEGER NOT NULL, FOREIGN KEY(`pollId`) REFERENCES `poll`(`uid`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "uid",
+            "columnName": "uid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pollId",
+            "columnName": "pollId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "uid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_ballot_pollId",
+            "unique": false,
+            "columnNames": [
+              "pollId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ballot_pollId` ON `${TABLE_NAME}` (`pollId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "poll",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "pollId"
+            ],
+            "referencedColumns": [
+              "uid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Judgment",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ballotId` INTEGER NOT NULL, `proposalIndex` INTEGER NOT NULL, `gradeIndex` INTEGER NOT NULL, FOREIGN KEY(`ballotId`) REFERENCES `ballot`(`uid`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "uid",
+            "columnName": "uid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ballotId",
+            "columnName": "ballotId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "proposalIndex",
+            "columnName": "proposalIndex",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gradeIndex",
+            "columnName": "gradeIndex",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "uid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_Judgment_ballotId",
+            "unique": false,
+            "columnNames": [
+              "ballotId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Judgment_ballotId` ON `${TABLE_NAME}` (`ballotId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "ballot",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "ballotId"
+            ],
+            "referencedColumns": [
+              "uid"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5d9afa0588112c8c3ca3ff09943f14c7')"
+    ]
+  }
+}
