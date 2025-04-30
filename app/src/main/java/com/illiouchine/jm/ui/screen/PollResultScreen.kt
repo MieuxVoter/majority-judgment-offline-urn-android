@@ -77,8 +77,7 @@ fun ResultScreen(
     // WIP
     val gaugeHandsAlgo = GaugeHands()
     val gaugeHandsProportions = gaugeHandsAlgo.computeProportionalRepresentation(
-        ballots = poll.ballots,
-        acceptationGradeThreshold = 1,
+        poll = poll,
     )
     //////
 

@@ -1,7 +1,7 @@
 package com.illiouchine.jm.service
 
 import android.util.Log
-import com.illiouchine.jm.model.Ballot
+import com.illiouchine.jm.model.Poll
 import kotlin.math.max
 
 /**
@@ -13,10 +13,10 @@ import kotlin.math.max
 class GaugeHands {
 
     fun computeProportionalRepresentation(
-        ballots: List<Ballot>,
-//        amountOfGrades: Int,
-        acceptationGradeThreshold: Int,
+        poll: Poll,
     ): List<Double> {
+        val ballots = poll.ballots
+        val acceptationGradeThreshold = poll.pollConfig.grading.acceptationThreshold
 
         if (ballots.isEmpty()) {
             return emptyList()
