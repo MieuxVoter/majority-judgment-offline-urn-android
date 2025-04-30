@@ -9,20 +9,22 @@ import kotlin.math.max
  *
  * This code can be heavily optimized ; this is an initial draft.
  * The goal for now is to be as explicit and clear as possible.  Optimization will come later.
+ *
+ * Prefer the OsmosisRepartitor (which is the v2 of this -- same general logic though)
  */
-class GaugeHands {
+class GaugeHandsRepartitor {
 
-    fun computeProportionalRepresentation(
-        poll: Poll,
-    ): List<Double> {
+    fun computeProportionalRepresentation(poll: Poll): List<Double> {
+
         val ballots = poll.ballots
-        val acceptationGradeThreshold = poll.pollConfig.grading.acceptationThreshold
 
         if (ballots.isEmpty()) {
             return emptyList()
         }
+
         val amountOfProposals = ballots.first().judgments.size
         val amountOfBallots = ballots.size
+        val acceptationGradeThreshold = poll.pollConfig.grading.acceptationThreshold
 
         ballots.forEach { ballot ->
             if (ballot.judgments.size != amountOfProposals) {

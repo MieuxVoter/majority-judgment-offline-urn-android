@@ -25,9 +25,9 @@ data class Ballot(
     }
 
     fun gradeOf(proposalIndex: Int): Int {
-        return judgments.indexOfFirst { judgment ->
+        return judgments.find({ judgment ->
             judgment.proposal == proposalIndex
-        }
+        })!!.grade
     }
 
     fun getHighestGrade(): Int {

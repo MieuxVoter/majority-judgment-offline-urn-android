@@ -41,7 +41,7 @@ import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.service.GaugeHands
+import com.illiouchine.jm.service.OsmosisRepartitor
 import com.illiouchine.jm.ui.DefaultNavigator
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
@@ -74,12 +74,10 @@ fun ResultScreen(
     // Not all these groups belong to the selected profile ; they belong to a duel
     val decisiveGroupsForSelectedProfile = state.groups[selectedProfileIndex].groups
 
-    // WIP
-    val gaugeHandsAlgo = GaugeHands()
-    val gaugeHandsProportions = gaugeHandsAlgo.computeProportionalRepresentation(
-        poll = poll,
-    )
-    //////
+    // WIP: move to ViewModel yadda yadda
+    val repartitor = OsmosisRepartitor()
+    val repartitionProportions = repartitor.computeProportionalRepresentation(poll)
+    /////////////////////////////////////
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -169,7 +167,7 @@ fun ResultScreen(
                                 text = "$proposalName   ($medianGradeName)" + String.format(
                                     Locale.FRANCE,
                                     " [%.1f%%]",
-                                    100 * gaugeHandsProportions[proposalResult.index],
+                                    100 * repartitionProportions[proposalResult.index],
                                 ),
                             )
                         }
