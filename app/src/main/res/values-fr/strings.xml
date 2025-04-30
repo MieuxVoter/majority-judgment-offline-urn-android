@@ -89,4 +89,15 @@
     <string name="setting_pin_screen_label">Empêcher les votants de quitter l\'application</string>
     <string name="five_positive_quality_grades">Cinq mentions qualitatives et positives</string>
     <string name="toast_that_poll_does_not_exist">Ce scrutin n\'existe plus.</string>
+    <string name="grade_very_urgent">très urgent</string>
+    <string name="grade_not_urgent">pas urgent</string>
+    <string name="grade_top_priority">priorité absolue</string>
+    <string name="grade_high_priority">très prioritaire</string>
+    <string name="grade_priority">prioritaire</string>
+    <string name="grade_no_priority">pas prioritaire</string>
+    <string name="grade_neutral">neutre</string>
+    <string name="five_urgency_grades">Cinq mentions d\'urgence</string>
+    <string name="grade_extremely_urgent">extrêmement urgent</string>
+    <string name="grade_urgent">urgent</string>
+    <string name="five_priority_grades">Cinq mentions de priorité</string>
 </resources>
