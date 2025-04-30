@@ -41,6 +41,7 @@ import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.service.GaugeHands
 import com.illiouchine.jm.ui.DefaultNavigator
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
@@ -51,6 +52,7 @@ import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import com.illiouchine.jm.ui.utils.smoothStep
 import java.math.BigInteger
+import java.util.Locale
 import kotlin.math.max
 import kotlin.math.min
 
@@ -71,6 +73,14 @@ fun ResultScreen(
     var selectedProfileIndex by remember { mutableIntStateOf(0) }
     // Not all these groups belong to the selected profile ; they belong to a duel
     val decisiveGroupsForSelectedProfile = state.groups[selectedProfileIndex].groups
+
+    // WIP
+    val gaugeHandsAlgo = GaugeHands()
+    val gaugeHandsProportions = gaugeHandsAlgo.computeProportionalRepresentation(
+        ballots = poll.ballots,
+        acceptationGradeThreshold = 1,
+    )
+    //////
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -157,7 +167,11 @@ fun ResultScreen(
                                 text = "#$rank",
                             )
                             Text(
-                                text = "$proposalName   ($medianGradeName)",
+                                text = "$proposalName   ($medianGradeName)" + String.format(
+                                    Locale.FRANCE,
+                                    " [%.1f%%]",
+                                    100 * gaugeHandsProportions[proposalResult.index],
+                                ),
                             )
                         }
 
