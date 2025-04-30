@@ -20,7 +20,9 @@ android {
     defaultConfig {
         applicationId = if (isGoogleFlavor) {
             // We have to use another applicationId for Google, as Google says
-            // "com.illiouchine.jm.androidx-startup is already in use" (???)
+            // "com.illiouchine.jm.androidx-startup is already in use"
+            // This is because a malicious actor published a malware-riddled version of our app on
+            // Google Play, pretending to be us.  …   There's always bad apples.
             "fr.mieuxvoter.urn"
         } else {
             // But we've already registered this app on F-Droid with this applicationId:
@@ -28,8 +30,8 @@ android {
         }
         minSdk = 27
         targetSdk = 35
-        versionCode = 11
-        versionName = "1.3.2"
+        versionCode = 12
+        versionName = "1.4.0"
 
         // Ideally we'd have both, but support for multiple runners looks experimental
 //        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
