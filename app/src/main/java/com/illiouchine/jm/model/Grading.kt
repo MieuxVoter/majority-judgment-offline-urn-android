@@ -10,6 +10,7 @@ import com.illiouchine.jm.model.Grading.PositiveQuality5Grading
 import com.illiouchine.jm.model.Grading.Quality7Grading
 import com.illiouchine.jm.model.Grading.Urgency5Grading
 import com.illiouchine.jm.model.Grading.Priority5Grading
+import com.illiouchine.jm.model.Grading.Enthusiasm6Grading
 import kotlinx.serialization.Serializable
 
 /**
@@ -22,6 +23,7 @@ val gradings: List<Grading> = listOf(
     Quality3Grading,
     Priority5Grading,
     Urgency5Grading,
+    Enthusiasm6Grading,
 )
 
 /**
@@ -109,6 +111,20 @@ sealed class Grading(
             gradePriority,
             gradeHighPriority,
             gradeTopPriority,
+        ),
+    )
+
+    @Serializable
+    data object Enthusiasm6Grading : Grading(
+        uid = 306,
+        name = R.string.six_enthusiasm_grades,
+        grades = listOf(
+            gradeDisgust,
+            gradeReluctance,
+            gradeAtaraxia,
+            gradeEnthusiasm,
+            gradeGreatEnthusiasm,
+            gradeElation,
         ),
     )
 
