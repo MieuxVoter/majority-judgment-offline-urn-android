@@ -2,6 +2,7 @@ package com.illiouchine.jm.service
 
 import com.illiouchine.jm.model.Poll
 
+
 /**
  * Computes a proportional representation of the proposals/candidates.
  * The returned list of proportions is normalized, that is its sum will always be 1.
@@ -16,7 +17,7 @@ import com.illiouchine.jm.model.Poll
  * - exact: no approximation
  *
  * Known Issues:
- * - not isomorphic with MJ ; can be mitigated using the DecreasingConstrictor
+ * - not isomorphic with MJ ; can be mitigated using the DecreasingListConstrictor
  * - requires access to the individual ballots and not just the merit profiles (/!\ coercion /!\)
  * - might be ever so slightly numerically unstable since we're handling floats
  */
@@ -27,7 +28,10 @@ class OsmosisRepartitor {
         val ballots = poll.ballots
 
         if (ballots.isEmpty()) {
-            return emptyList()
+            return List(
+                size = poll.pollConfig.proposals.size,
+                init = { 0.0 },
+            )
         }
 
         val amountOfProposals = ballots.first().judgments.size
@@ -61,14 +65,10 @@ class OsmosisRepartitor {
             },
         )
 
-        val finalProportions: MutableList<Double> = MutableList(
-            size = amountOfProposals,
-            init = {
-                initialProportions[it]
-            },
-        )
+        val finalProportions: MutableList<Double> = initialProportions.toMutableList()
 
         // Step 3: For each pair of proposals, seep representation by osmosis.
+        val seepingNormalization = amountOfBallots * (amountOfProposals - 1)
         for (proposalIndexA in (0..<amountOfProposals - 1)) {
             for (proposalIndexB in (proposalIndexA + 1..<amountOfProposals)) {
 
@@ -94,11 +94,8 @@ class OsmosisRepartitor {
                     }
                 }
 
-                val seepingIntent: Double = (
-                        (preferenceForB - preferenceForA).toDouble()
-                                /
-                                (amountOfBallots * (amountOfProposals - 1))
-                        )
+                val seepingIntent: Double = ((preferenceForB - preferenceForA).toDouble()
+                        / seepingNormalization)
                 var seepingAmount = 0.0
                 if (seepingIntent > 0) {
                     seepingAmount = initialProportions[proposalIndexA] * seepingIntent
@@ -106,6 +103,7 @@ class OsmosisRepartitor {
                 if (seepingIntent < 0) {
                     seepingAmount = initialProportions[proposalIndexB] * seepingIntent
                 }
+
                 finalProportions[proposalIndexB] += seepingAmount
                 finalProportions[proposalIndexA] -= seepingAmount
 
