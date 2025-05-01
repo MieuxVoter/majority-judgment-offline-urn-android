@@ -41,6 +41,8 @@ import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.service.DecreasingListConstraint
+import com.illiouchine.jm.service.DecreasingListConstrictorStrategies
 import com.illiouchine.jm.service.OsmosisRepartitor
 import com.illiouchine.jm.ui.DefaultNavigator
 import com.illiouchine.jm.ui.composable.BallotCountRow
@@ -76,7 +78,14 @@ fun ResultScreen(
 
     // WIP: move to ViewModel yadda yadda
     val repartitor = OsmosisRepartitor()
+    val constraint = DecreasingListConstraint(
+        strategy = DecreasingListConstrictorStrategies.MEAN_DESCENDING,
+    )
     val repartitionProportions = repartitor.computeProportionalRepresentation(poll)
+    val mjSortedProportions = result.proposalResultsRanked.map { proposalResult ->
+        repartitionProportions[proposalResult.index]
+    }
+    val constrainedProportions = constraint.apply(mjSortedProportions)
     /////////////////////////////////////
 
     Scaffold(
@@ -166,8 +175,9 @@ fun ResultScreen(
                             Text(
                                 text = "$proposalName   ($medianGradeName)" + String.format(
                                     Locale.FRANCE,
-                                    " [%.1f%%]",
-                                    100 * repartitionProportions[proposalResult.index],
+                                    "   %.1f%%",
+//                                    100 * repartitionProportions[proposalResult.index],
+                                    100 * constrainedProportions[displayIndex],
                                 ),
                             )
                         }
