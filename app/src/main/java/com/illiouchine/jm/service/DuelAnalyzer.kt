@@ -19,12 +19,13 @@ data class ParticipantGroupAnalysis(
 )
 
 @Suppress("CanBeParameter")
+// There's no logic to this.  Only madness.  Plz rewrite.
 class DuelAnalyzer(
     private val poll: Poll,
     private val tally: TallyInterface,
     private val result: ResultInterface,
-    private val baseIndex: Int, // profile that was clicked
-    private val otherIndex: Int, // neighbor profile
+    private val baseIndex: Int, // profile that was selected
+    private val otherIndex: Int, // neighbor, dueling profile
 ) {
 
     private val base: ProposalResultInterface = result.proposalResultsRanked[baseIndex]
@@ -218,7 +219,7 @@ class DuelAnalyzer(
         return stylist.resolve(context.getString(R.string.wip_stay_tuned))
     }
 
-    // There's no logic to this.  Only madness.  Plz rewrite.
+
     fun generateGroups(): List<ParticipantGroupAnalysis> {
         val groups: MutableList<ParticipantGroupAnalysis> = mutableListOf()
 
@@ -255,9 +256,6 @@ class DuelAnalyzer(
 
             if (baseGroup.type == Type.Median || otherGroup.type == Type.Median) {
                 assert(baseGroup.type == Type.Median && otherGroup.type == Type.Median)
-//                if (baseGroup.type != Type.Median || otherGroup.type != Type.Median) {
-//                    continue // we should raise here, as something is VERY WRONG
-//                }
                 // The median grades are the same → go deeper
                 if (baseGroup.grade == otherGroup.grade) {
                     continue

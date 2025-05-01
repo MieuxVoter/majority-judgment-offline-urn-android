@@ -3,12 +3,22 @@ package com.illiouchine.jm.service
 import com.illiouchine.jm.model.Poll
 
 /**
+ * Computes a proportional representation of the proposals/candidates.
+ * The returned list of proportions is normalized, that is its sum will always be 1.
+ *
  * This code can be heavily optimized ; this is an initial draft.
  * The goal for now is to be as explicit and clear as possible.  Optimization will come later.
  *
+ * Qualities:
  * - robust: disincentivizes polarized voting (ie. "cheating"), just like MJ
- * - holistic: uses all judgments, one way or another
+ * - holistic: uses all cast judgments, one way or another
  * - deterministic: no random
+ * - exact: no approximation
+ *
+ * Known Issues:
+ * - not isomorphic with MJ ; can be mitigated using the DecreasingConstrictor
+ * - requires access to the individual ballots and not just the merit profiles (/!\ coercion /!\)
+ * - might be ever so slightly numerically unstable since we're handling floats
  */
 class OsmosisRepartitor {
 
@@ -24,31 +34,21 @@ class OsmosisRepartitor {
         val amountOfBallots = ballots.size
         val acceptationGradeThreshold = poll.pollConfig.grading.acceptationThreshold
 
-        // Not sure whether we should check this here ; the algo will already crash if unbalanced
-//        ballots.forEach { ballot ->
-//            if (ballot.judgments.size != amountOfProposals) {
-//                throw UnbalancedBallotsException()
-//            }
-//        }
-
         // Step 1: For each proposal, count the positive judgments they received
         //         that were the highest judgments of their respective ballots.
         val favoritism: List<Int> = List(
             size = amountOfProposals,
             init = { proposalIndex ->
-                var points = 0
-
-                ballots.forEach { ballot ->
+                ballots.fold(0) { points, ballot ->
                     val proposalGrade = ballot.gradeOf(proposalIndex)
                     val highestGradeGiven = ballot.getHighestGrade()
-                    if (highestGradeGiven >= acceptationGradeThreshold) {
-                        if (proposalGrade == highestGradeGiven) {
-                            points++
-                        }
+                    val isBallotRejection = highestGradeGiven < acceptationGradeThreshold
+                    points + if (!isBallotRejection && proposalGrade == highestGradeGiven) {
+                        1
+                    } else {
+                        0
                     }
                 }
-
-                points
             },
         )
 
@@ -82,15 +82,8 @@ class OsmosisRepartitor {
                     val isBallotFavoritism = proposalGradeA == highestGrade
                             || proposalGradeB == highestGrade
                     val isBallotRejection = highestGrade < acceptationGradeThreshold
-                    val shouldCount = (!isBallotFavoritism) || isBallotRejection
 
-//                    Log.i(
-//                        "MJ", """
-//                        Ballot should count = ${shouldCount} ; favorite = ${isBallotFavoritism} ; rejection = ${isBallotRejection}
-//                    """.trimIndent()
-//                    )
-
-                    if (!shouldCount) {
+                    if (isBallotFavoritism && !isBallotRejection) {
                         continue
                     }
                     if (proposalGradeA > proposalGradeB) {
@@ -101,17 +94,17 @@ class OsmosisRepartitor {
                     }
                 }
 
-                val delta: Double = (
+                val seepingIntent: Double = (
                         (preferenceForB - preferenceForA).toDouble()
                                 /
                                 (amountOfBallots * (amountOfProposals - 1))
                         )
                 var seepingAmount = 0.0
-                if (delta > 0) {
-                    seepingAmount = initialProportions[proposalIndexA] * delta
+                if (seepingIntent > 0) {
+                    seepingAmount = initialProportions[proposalIndexA] * seepingIntent
                 }
-                if (delta < 0) {
-                    seepingAmount = initialProportions[proposalIndexB] * delta
+                if (seepingIntent < 0) {
+                    seepingAmount = initialProportions[proposalIndexB] * seepingIntent
                 }
                 finalProportions[proposalIndexB] += seepingAmount
                 finalProportions[proposalIndexA] -= seepingAmount
@@ -120,7 +113,7 @@ class OsmosisRepartitor {
 //                    "MJ", """
 //                    A = ${proposalIndexA}    B = ${proposalIndexB}
 //                    PA = ${preferenceForA}  PB = ${preferenceForB}
-//                    delta = ${delta}
+//                    delta = ${seepingIntent}
 //                    seeping = ${seepingAmount}
 //                """.trimIndent()
 //                )
