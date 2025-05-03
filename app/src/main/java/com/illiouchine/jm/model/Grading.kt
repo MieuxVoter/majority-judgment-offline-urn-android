@@ -135,6 +135,7 @@ sealed class Grading(
             gradeGreatEnthusiasm,
             gradeElation,
         ),
+        acceptationThreshold = 2,
     )
 
     fun getAmountOfGrades(): Int = grades.size

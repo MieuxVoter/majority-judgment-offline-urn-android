@@ -3,9 +3,18 @@ package com.illiouchine.jm.service
 import com.illiouchine.jm.service.DecreasingListConstrictorStrategies.MEAN_DESCENDING
 
 class DecreasingListConstraint(
-    strategy: DecreasingListConstrictorStrategies = MEAN_DESCENDING,
+    private val strategy: DecreasingListConstrictorStrategies = MEAN_DESCENDING,
 ) {
+    
     fun apply(input: List<Double>): List<Double> {
+        if (this.strategy == MEAN_DESCENDING) {
+            return applyMeanDescending(input)
+        }
+        return input
+    }
+
+    // Note: this algo is quite inefficient, 'cause it's applying the mean by pairs only.
+    private fun applyMeanDescending(input: List<Double>): List<Double> {
         val output = input.toMutableList()
         var violationIndex: Int? = getFirstViolationIndex(output)
         //System.out.println("Applying constraint on ${output}")
@@ -38,5 +47,7 @@ class DecreasingListConstraint(
 }
 
 enum class DecreasingListConstrictorStrategies {
+    @Suppress("unused")
+    DISABLED,
     MEAN_DESCENDING,
 }
