@@ -147,3 +147,36 @@ val gradeNoPriority = Grade(
     color = grade0BgColor,
     textColor = grade0FgColor,
 )
+
+// ENTHUSIASM GRADES
+
+val gradeDisgust = Grade(
+    name = R.string.grade_disgust,
+    color = grade0BgColor,
+    textColor = grade0FgColor,
+)
+val gradeReluctance = Grade(
+    name = R.string.grade_reluctance,
+    color = grade1BgColor,
+    textColor = grade1FgColor,
+)
+val gradeAtaraxia = Grade(
+    name = R.string.grade_ataraxia,
+    color = grade2BgColor,
+    textColor = grade2FgColor,
+)
+val gradeEnthusiasm = Grade(
+    name = R.string.grade_enthusiasm,
+    color = grade3BgColor,
+    textColor = grade3FgColor,
+)
+val gradeGreatEnthusiasm = Grade(
+    name = R.string.grade_great_enthusiasm,
+    color = grade5BgColor,
+    textColor = grade5FgColor,
+)
+val gradeElation = Grade(
+    name = R.string.grade_elation,
+    color = grade6BgColor,
+    textColor = grade6FgColor,
+)
