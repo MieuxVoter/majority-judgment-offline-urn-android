@@ -100,4 +100,5 @@
     <string name="grade_extremely_urgent">extrêmement urgent</string>
     <string name="grade_urgent">urgent</string>
     <string name="five_priority_grades">Cinq mentions de priorité</string>
+    <string name="six_enthusiasm_grades">Six mentions d\'enthousiasme</string>
 </resources>
