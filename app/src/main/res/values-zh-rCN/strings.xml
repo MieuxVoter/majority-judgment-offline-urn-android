@@ -75,4 +75,6 @@
     <string name="onboarding_welcome_to_your_offline_poll_app">欢迎来到使用Majority Judgment方法进行投票的离线应用。</string>
     <string name="onboarding_setup_a_poll_and_share_the_phone">设置投票并且在投票者之间传递手机。</string>
     <string name="setting_show_onboarding">再次显示应用介绍</string>
+    <string name="five_quality_grades">五个级别</string>
+    <string name="seven_quality_grades">七个级别</string>
 </resources>
