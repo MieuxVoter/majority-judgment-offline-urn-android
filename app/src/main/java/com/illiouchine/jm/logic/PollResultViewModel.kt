@@ -9,6 +9,7 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.service.DuelAnalyzer
+import com.illiouchine.jm.service.OsmosisRepartitor
 import com.illiouchine.jm.service.ParticipantGroupAnalysis
 import com.illiouchine.jm.service.TextStylist
 import com.illiouchine.jm.ui.Navigator
@@ -34,6 +35,7 @@ class PollResultViewModel(
         val result: ResultInterface? = null,
         val explanations: List<AnnotatedString> = emptyList(),
         val groups: List<DuelGroups> = emptyList(),
+        val osmosisProportions: List<Double> = emptyList(),
     )
 
     data class DuelGroups(
@@ -101,6 +103,16 @@ class PollResultViewModel(
             )
         }
 
+        val osmosisProportions = OsmosisRepartitor().computeProportionalRepresentation(poll)
+        val mjSortedOsmosisProportions = result.proposalResultsRanked.map { proposalResult ->
+            osmosisProportions[proposalResult.index]
+        }
+        // Perhaps we should add the constrained proportions as well
+//        val constraint = DecreasingListConstraint(
+//            strategy = DecreasingListConstrictorStrategies.MEAN_DESCENDING,
+//        )
+//        val constrainedOsmosisProportions = constraint.apply(mjSortedProportions)
+
         _pollResultViewState.update {
             it.copy(
                 poll = poll,
@@ -108,6 +120,7 @@ class PollResultViewModel(
                 result = result,
                 explanations = explanations,
                 groups = groups,
+                osmosisProportions = mjSortedOsmosisProportions,
             )
         }
     }

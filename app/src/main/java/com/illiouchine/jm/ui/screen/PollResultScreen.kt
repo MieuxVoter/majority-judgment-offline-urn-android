@@ -76,18 +76,6 @@ fun ResultScreen(
     // Not all these groups belong to the selected profile ; they belong to a duel
     val decisiveGroupsForSelectedProfile = state.groups[selectedProfileIndex].groups
 
-    // WIP: move to ViewModel yadda yadda
-    val repartitor = OsmosisRepartitor()
-    val constraint = DecreasingListConstraint(
-        strategy = DecreasingListConstrictorStrategies.MEAN_DESCENDING,
-    )
-    val repartitionProportions = repartitor.computeProportionalRepresentation(poll)
-    val mjSortedProportions = result.proposalResultsRanked.map { proposalResult ->
-        repartitionProportions[proposalResult.index]
-    }
-    val constrainedProportions = constraint.apply(mjSortedProportions)
-    /////////////////////////////////////
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = {
@@ -176,8 +164,7 @@ fun ResultScreen(
                                 text = "$proposalName   ($medianGradeName)" + String.format(
                                     Locale.FRANCE,
                                     "   %.1f%%",
-//                                    100 * repartitionProportions[proposalResult.index],
-                                    100 * constrainedProportions[displayIndex],
+                                    100 * state.osmosisProportions[displayIndex],
                                 ),
                             )
                         }
