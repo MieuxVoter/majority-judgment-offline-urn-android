@@ -78,6 +78,7 @@
     <string name="help_your_participation_was_a_success">Your participation was a success !\nYou can now pass this device to the next participant.</string>
     <string name="button_be_the_first_to_vote">Be the first to vote</string>
     <string name="label_grades">Grades</string>
+    <string name="label_show_proportions">Show Proportions</string>
     <string name="setting_show_onboarding">Show onboarding again</string>
     <string name="setting_show_onboarding_button">Show</string>
     <string name="setting_play_sound">Play sounds</string>
@@ -105,6 +106,9 @@
     <string name="ranking_explain_double_majority">Double majority !  The %1$s group of %2$s is just as big as the %3$s group of %4$s.  Both mean that %5$s should be %6$s than %7$s.</string>
     <string name="ranking_explain_no_more_groups">The %1$s group of %2$s is the biggest and is therefore decisive in the duel with %3$s.</string>
     <string name="wip_stay_tuned">Work in Progress.\nStay tuned for updates via F-Droid.</string>
+    <string name="proportional_algorithm_none">None</string>
+    <string name="proportional_algorithm_mj_score">MJ-Score</string>
+    <string name="proportional_algorithm_favoritism">Favoritism</string>
     <string name="toast_you_cannot_go_back_from_here">You cannot go back from here, that would be cheating.</string>
     <string name="toast_that_poll_does_not_exist">That poll does not exist anymore.</string>
 </resources>

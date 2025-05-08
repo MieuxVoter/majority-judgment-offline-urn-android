@@ -9,7 +9,6 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.service.DuelAnalyzer
-import com.illiouchine.jm.service.OsmosisRepartitor
 import com.illiouchine.jm.service.ParticipantGroupAnalysis
 import com.illiouchine.jm.service.TextStylist
 import com.illiouchine.jm.ui.Navigator
@@ -35,7 +34,7 @@ class PollResultViewModel(
         val result: ResultInterface? = null,
         val explanations: List<AnnotatedString> = emptyList(),
         val groups: List<DuelGroups> = emptyList(),
-        val osmosisProportions: List<Double> = emptyList(),
+        val proportions: Map<ProportionalAlgorithms, List<Double>> = emptyMap(),
     )
 
     data class DuelGroups(
@@ -50,8 +49,11 @@ class PollResultViewModel(
             val poll = pollDataSource.getPollById(pollId)
 
             if (poll == null) {
-                Toast.makeText(context,
-                    context.getString(R.string.toast_that_poll_does_not_exist), Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.toast_that_poll_does_not_exist),
+                    Toast.LENGTH_LONG,
+                ).show()
                 navigator.navigateTo(destination = Screens.Home)
             } else {
                 initializePollResult(context, poll)
@@ -103,15 +105,12 @@ class PollResultViewModel(
             )
         }
 
-        val osmosisProportions = OsmosisRepartitor().computeProportionalRepresentation(poll)
-        val mjSortedOsmosisProportions = result.proposalResultsRanked.map { proposalResult ->
-            osmosisProportions[proposalResult.index]
+        val proportions = mutableMapOf<ProportionalAlgorithms, List<Double>>()
+        for (proportionalAlgorithm in ProportionalAlgorithms.entries) {
+            if (proportionalAlgorithm.isAvailable()) {
+                proportions[proportionalAlgorithm] = proportionalAlgorithm.compute(poll, result)
+            }
         }
-        // Perhaps we should add the constrained proportions as well
-//        val constraint = DecreasingListConstraint(
-//            strategy = DecreasingListConstrictorStrategies.MEAN_DESCENDING,
-//        )
-//        val constrainedOsmosisProportions = constraint.apply(mjSortedProportions)
 
         _pollResultViewState.update {
             it.copy(
@@ -120,7 +119,7 @@ class PollResultViewModel(
                 result = result,
                 explanations = explanations,
                 groups = groups,
-                osmosisProportions = mjSortedOsmosisProportions,
+                proportions = proportions,
             )
         }
     }

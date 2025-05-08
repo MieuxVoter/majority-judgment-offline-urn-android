@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,8 +16,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -36,14 +40,12 @@ import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.logic.PollResultViewModel
+import com.illiouchine.jm.logic.ProportionalAlgorithms
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.service.DecreasingListConstraint
-import com.illiouchine.jm.service.DecreasingListConstrictorStrategies
-import com.illiouchine.jm.service.OsmosisRepartitor
 import com.illiouchine.jm.ui.DefaultNavigator
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
@@ -75,6 +77,9 @@ fun ResultScreen(
     var selectedProfileIndex by remember { mutableIntStateOf(0) }
     // Not all these groups belong to the selected profile ; they belong to a duel
     val decisiveGroupsForSelectedProfile = state.groups[selectedProfileIndex].groups
+
+    var proportionalDropdownExpanded by remember { mutableStateOf(false) }
+    var proportionalAlgorithm by remember { mutableStateOf(ProportionalAlgorithms.NONE) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -160,12 +165,19 @@ fun ResultScreen(
                                 fontSize = 24.sp,
                                 text = "#$rank",
                             )
+                            var proportionAsText = ""
+                            if (proportionalAlgorithm != ProportionalAlgorithms.NONE) {
+                                val shownProportions = state.proportions[proportionalAlgorithm]
+                                if (shownProportions != null) {
+                                    proportionAsText = String.format(
+                                        Locale.FRANCE,
+                                        "   %.1f%%",
+                                        100 * shownProportions[proposalResult.index],
+                                    )
+                                }
+                            }
                             Text(
-                                text = "$proposalName   ($medianGradeName)" + String.format(
-                                    Locale.FRANCE,
-                                    "   %.1f%%",
-                                    100 * state.osmosisProportions[displayIndex],
-                                ),
+                                text = "$proposalName   ($medianGradeName)$proportionAsText",
                             )
                         }
 
@@ -184,9 +196,11 @@ fun ResultScreen(
                             )
                         }
 
-                        Spacer(Modifier.padding(
-                            vertical = Theme.spacing.small + Theme.spacing.tiny,
-                        ))
+                        Spacer(
+                            Modifier.padding(
+                                vertical = Theme.spacing.small + Theme.spacing.tiny,
+                            )
+                        )
 
                         // Ux: Explanations are shown one at a time (exclusive toggle)
                         val shouldShowExplanation = isAnyProfileSelected
@@ -207,6 +221,42 @@ fun ResultScreen(
                         }
 
                         Spacer(Modifier.padding(vertical = Theme.spacing.tiny))
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.padding(Theme.spacing.small))
+
+            Row {
+
+                Text(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    text = stringResource(R.string.label_show_proportions) + ":",
+                )
+
+                Box {
+                    TextButton(
+                        onClick = {
+                            proportionalDropdownExpanded = !proportionalDropdownExpanded
+                        },
+                    ) {
+                        Text(proportionalAlgorithm.getName(LocalContext.current))
+                    }
+
+                    DropdownMenu(
+                        expanded = proportionalDropdownExpanded,
+                        onDismissRequest = { proportionalDropdownExpanded = false }
+                    ) {
+                        for (algo in ProportionalAlgorithms.entries) {
+                            DropdownMenuItem(
+                                enabled = algo.isAvailable(),
+                                text = { Text(algo.getName(LocalContext.current)) },
+                                onClick = {
+                                    proportionalAlgorithm = algo
+                                    proportionalDropdownExpanded = false
+                                },
+                            )
+                        }
                     }
                 }
             }
@@ -241,7 +291,7 @@ fun ResultScreen(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     showSystemUi = true,
 )
-//@PreviewScreenSizes // my eyes hurt
+//@PreviewScreenSizes // my eyes hurt ← no dark mode
 @Composable
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
 
