@@ -56,23 +56,26 @@ fun ProportionsHelpScreen(
                 .padding(horizontal = Theme.spacing.small)
         ) {
 
-            ScreenTitle(text = "Proportional\nRepresentation")
+            ScreenTitle(text = stringResource(R.string.title_proportional_representation))
 
             Text(
-                text = "The purpose of proportional representation is to share amongst candidates a finite resource such as time, assembly seats, money…",
+                text = stringResource(R.string.proportions_help_paragraph_1),
                 textAlign = TextAlign.Justify,
             )
 
             Spacer(Modifier.padding(vertical = Theme.spacing.small))
 
             Text(
-                text = "There are many algorithms that can compute a proportional representation, each with its own virtues and issues.",
+                text = stringResource(R.string.proportions_help_paragraph_2),
                 textAlign = TextAlign.Justify,
             )
 
             Spacer(Modifier.padding(vertical = Theme.spacing.small))
 
-            Text("Choose wisely.")
+            Text(
+                text = stringResource(R.string.proportions_help_paragraph_3),
+                textAlign = TextAlign.Justify,
+            )
 
             for (algo in ProportionalAlgorithms.entries) {
                 if (algo == ProportionalAlgorithms.NONE) continue
@@ -88,7 +91,7 @@ fun ProportionsHelpScreen(
                 if (!algo.isAvailable()) {
                     Text(
                         modifier = Modifier.padding(vertical = Theme.spacing.small),
-                        text = "(not available — work in progress)",
+                        text = "(unavailable — work in progress)",
                     )
                 }
 
@@ -98,7 +101,7 @@ fun ProportionsHelpScreen(
                     textAlign = TextAlign.Justify,
                 )
                 Text(
-                    modifier = Modifier.padding(top=Theme.spacing.medium),
+                    modifier = Modifier.padding(top = Theme.spacing.medium),
                     text = algo.getFeatures(LocalContext.current),
                 )
             }
@@ -111,7 +114,7 @@ fun ProportionsHelpScreen(
                     uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android/wiki/Judgments-&-Proportional-Representation")
                 },
             ) {
-                Text("\uD83D\uDCDA " + "Learn more on the Wiki")
+                Text("\uD83D\uDCDA " + stringResource(R.string.button_learn_more_on_the_wiki))
             }
 
             Spacer(Modifier.padding(vertical = Theme.spacing.medium))

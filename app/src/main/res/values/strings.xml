@@ -106,14 +106,19 @@
     <string name="ranking_explain_different_sub_groups">The %1$s group of %2$s says %3$s, which is %4$s than the %5$s group of %6$s saying %7$s.</string>
     <string name="ranking_explain_double_majority">Double majority !  The %1$s group of %2$s is just as big as the %3$s group of %4$s.  Both mean that %5$s should be %6$s than %7$s.</string>
     <string name="ranking_explain_no_more_groups">The %1$s group of %2$s is the biggest and is therefore decisive in the duel with %3$s.</string>
-    <string name="wip_stay_tuned">Work in Progress.\nStay tuned for updates via F-Droid.</string>
+    <string name="wip_stay_tuned">Work in Progress.\nStay tuned for updates.</string>
     <string name="proportional_algorithm_none">None</string>
     <string name="proportional_algorithm_mj_score">MJ-Score</string>
     <string name="proportional_algorithm_osmotic_favoritism">Osmotic Favoritism</string>
-    <string name="toast_you_cannot_go_back_from_here">You cannot go back from here, that would be cheating.</string>
-    <string name="toast_that_poll_does_not_exist">That poll does not exist anymore.</string>
+    <string name="title_proportional_representation">Proportional\nRepresentation</string>
+    <string name="proportions_help_paragraph_1">The purpose of proportional representation is to share amongst candidates a finite resource such as time, assembly seats, money…</string>
+    <string name="proportions_help_paragraph_2">There are many algorithms that can compute a proportional representation, each with its own virtues and issues.</string>
+    <string name="proportions_help_paragraph_3">Choose wisely.</string>
     <string name="proportional_algorithm_mj_score_description">"This algorithm was discovered by Marc Paraire in 2024 and computes a unique score for each possible merit profile.            "</string>
     <string name="proportional_algorithm_mj_score_features">"It is:\n✅ Isomorphic to Majority Judgment\n✅ Best when voters are candid\n❌ Not resilient to polarized voting            "</string>
     <string name="proportional_algorithm_osmotic_favoritism_description">This algorithm was discovered by Dominique Merle in 2025 with the express intent of computing a proportional representation that disincentivizes polarized voting, just like Majority Judgment does.</string>
     <string name="proportional_algorithm_osmotic_favoritism_features">It is:\n✅ Resilient to polarized voting\n✅ Best when voters are opinionated\n❌ Not isomorphic to Majority Judgment</string>
+    <string name="toast_you_cannot_go_back_from_here">You cannot go back from here, that would be cheating.</string>
+    <string name="toast_that_poll_does_not_exist">That poll does not exist anymore.</string>
+    <string name="button_learn_more_on_the_wiki">Learn more on the Wiki</string>
 </resources>
