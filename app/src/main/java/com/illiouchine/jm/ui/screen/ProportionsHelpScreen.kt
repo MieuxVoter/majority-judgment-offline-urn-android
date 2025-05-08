@@ -84,6 +84,14 @@ fun ProportionsHelpScreen(
                     text = algo.getName(LocalContext.current),
                     fontSize = 24.sp,
                 )
+
+                if (!algo.isAvailable()) {
+                    Text(
+                        modifier = Modifier.padding(vertical = Theme.spacing.small),
+                        text = "(not available — work in progress)",
+                    )
+                }
+
                 Text(
                     modifier = Modifier,
                     text = algo.getDescription(LocalContext.current),
