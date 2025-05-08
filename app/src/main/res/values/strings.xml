@@ -47,6 +47,7 @@
     <string name="button_let_s_go">Let\'s go !</string>
     <string name="button_next_participant">Next participant</string>
     <string name="button_end_the_poll">End the Poll</string>
+    <string name="button_back">Back</string>
     <string name="all_things_considered_i_think">All things considered, I think</string>
     <string name="verb_is">is</string>
     <string name="toast_proposal_name_already_exists">A proposal with this name already exists.</string>
@@ -115,5 +116,4 @@
     <string name="proportional_algorithm_mj_score_features">"It is:\n✅ Isomorphic to Majority Judgment\n✅ Best when voters are candid\n❌ Not resilient to polarized voting            "</string>
     <string name="proportional_algorithm_osmotic_favoritism_description">This algorithm was discovered by Dominique Merle in 2025 with the express intent of computing a proportional representation that disincentivizes polarized voting, just like Majority Judgment does.</string>
     <string name="proportional_algorithm_osmotic_favoritism_features">It is:\n✅ Resilient to polarized voting\n✅ Best when voters are opinionated\n❌ Not isomorphic to Majority Judgment</string>
-    <string name="button_back">Back</string>
 </resources>
