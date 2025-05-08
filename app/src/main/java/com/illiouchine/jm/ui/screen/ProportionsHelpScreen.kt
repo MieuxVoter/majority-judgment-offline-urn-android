@@ -10,11 +10,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -45,7 +47,7 @@ fun ProportionsHelpScreen(
 
         val scrollState = rememberScrollState()
         val coroutineScope = rememberCoroutineScope()
-//        val uriHandler = LocalUriHandler.current
+        val uriHandler = LocalUriHandler.current
 
         Column(
             modifier = Modifier
@@ -94,6 +96,17 @@ fun ProportionsHelpScreen(
             }
 
             Spacer(Modifier.padding(vertical = Theme.spacing.large))
+
+            TextButton(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                onClick = {
+                    uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android/wiki/Judgments-&-Proportional-Representation")
+                },
+            ) {
+                Text("\uD83D\uDCDA " + "Learn more on the Wiki")
+            }
+
+            Spacer(Modifier.padding(vertical = Theme.spacing.medium))
 
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
