@@ -27,6 +27,9 @@ sealed interface Screens {
     data class PollResult(val id: Int = 0) : Screens
 
     @Serializable
+    data object ProportionsHelp : Screens
+
+    @Serializable
     data object Loader : Screens
 
     @Serializable
@@ -67,7 +70,7 @@ class DefaultNavigator(
         _navigationAction.send(
             NavigationAction.Navigate(
                 destination = destination,
-                navOptions = navOptions
+                navOptions = navOptions,
             )
         )
     }

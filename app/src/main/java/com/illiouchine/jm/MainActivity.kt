@@ -38,6 +38,7 @@ import com.illiouchine.jm.ui.screen.LoaderScreen
 import com.illiouchine.jm.ui.screen.OnBoardingScreen
 import com.illiouchine.jm.ui.screen.PollSetupScreen
 import com.illiouchine.jm.ui.screen.PollVotingScreen
+import com.illiouchine.jm.ui.screen.ProportionsHelpScreen
 import com.illiouchine.jm.ui.screen.ResultScreen
 import com.illiouchine.jm.ui.screen.SettingsScreen
 import com.illiouchine.jm.ui.theme.JmTheme
@@ -175,6 +176,7 @@ class MainActivity : ComponentActivity() {
                             if (pollResultViewState.poll != null) {
                                 ResultScreen(
                                     modifier = Modifier,
+                                    navigator = navigator,
                                     state = pollResultViewState,
                                     onFinish = pollResultViewModel::onFinish,
                                 )
@@ -206,9 +208,20 @@ class MainActivity : ComponentActivity() {
                                 navController = navController,
                             )
                         }
+
                         composable<Screens.Loader> {
-                            LoaderScreen(modifier = Modifier.fillMaxSize())
+                            LoaderScreen(
+                                modifier = Modifier.fillMaxSize(),
+                            )
                         }
+
+                        composable<Screens.ProportionsHelp> {
+                            ProportionsHelpScreen(
+                                modifier = Modifier.fillMaxSize(),
+                                navigator = navigator,
+                            )
+                        }
+
                         composable<Screens.OnBoarding> {
                             val onBoardingViewModel: OnBoardingViewModel by viewModel()
                             OnBoardingScreen(

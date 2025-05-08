@@ -15,9 +15,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -28,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,6 +52,8 @@ import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.DefaultNavigator
+import com.illiouchine.jm.ui.Navigator
+import com.illiouchine.jm.ui.Screens
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.MjuSnackbar
@@ -55,6 +62,7 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import com.illiouchine.jm.ui.utils.smoothStep
+import kotlinx.coroutines.launch
 import java.math.BigInteger
 import java.util.Locale
 import kotlin.math.max
@@ -64,6 +72,7 @@ import kotlin.math.min
 fun ResultScreen(
     modifier: Modifier = Modifier,
     state: PollResultViewModel.PollResultViewState,
+    navigator: Navigator = DefaultNavigator(),
     onFinish: () -> Unit = {},
     feedback: String? = "",
     onDismissFeedback: () -> Unit = {},
@@ -95,6 +104,7 @@ fun ResultScreen(
     ) { innerPadding ->
 
         val scrollState = rememberScrollState()
+        val coroutineScope = rememberCoroutineScope()
 
         Column(
             modifier = modifier
@@ -258,6 +268,24 @@ fun ResultScreen(
                             )
                         }
                     }
+                }
+
+                IconButton(
+                    onClick = {
+                        coroutineScope.launch {
+                            navigator.navigateTo(
+                                destination = Screens.ProportionsHelp,
+                                navOptions = {
+                                    restoreState = true
+                                }
+                            )
+                        }
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Info,
+                        contentDescription = "More Info",
+                    )
                 }
             }
 

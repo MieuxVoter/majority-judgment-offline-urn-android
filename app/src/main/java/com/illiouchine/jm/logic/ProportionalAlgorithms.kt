@@ -15,6 +15,14 @@ enum class ProportionalAlgorithms {
             return context.getString(R.string.proportional_algorithm_none)
         }
 
+        override fun getDescription(context: Context): String {
+            return ""
+        }
+
+        override fun getFeatures(context: Context): String {
+            return ""
+        }
+
         override fun isAvailable(): Boolean {
             return true
         }
@@ -39,6 +47,14 @@ enum class ProportionalAlgorithms {
             return context.getString(R.string.proportional_algorithm_mj_score)
         }
 
+        override fun getDescription(context: Context): String {
+            return context.getString(R.string.proportional_algorithm_mj_score_description)
+        }
+
+        override fun getFeatures(context: Context): String {
+            return context.getString(R.string.proportional_algorithm_mj_score_features)
+        }
+
         override fun isAvailable(): Boolean {
             return false
         }
@@ -48,9 +64,17 @@ enum class ProportionalAlgorithms {
         }
     },
 
-    FAVORITISM {
+    OSMOTIC_FAVORITISM {
         override fun getName(context: Context): String {
-            return context.getString(R.string.proportional_algorithm_favoritism)
+            return context.getString(R.string.proportional_algorithm_osmotic_favoritism)
+        }
+
+        override fun getDescription(context: Context): String {
+            return context.getString(R.string.proportional_algorithm_osmotic_favoritism_description)
+        }
+
+        override fun getFeatures(context: Context): String {
+            return context.getString(R.string.proportional_algorithm_osmotic_favoritism_features)
         }
 
         override fun isAvailable(): Boolean {
@@ -68,6 +92,13 @@ enum class ProportionalAlgorithms {
      * The short name of the proportional algorithm.
      */
     abstract fun getName(context: Context): String
+
+    /**
+     * Long description for the algorithm, shown on the help screen.
+     */
+    abstract fun getDescription(context: Context): String
+
+    abstract fun getFeatures(context: Context): String
 
     /**
      * Whether or not this algorithm is available.
