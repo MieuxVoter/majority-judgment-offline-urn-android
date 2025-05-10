@@ -80,7 +80,7 @@
     <string name="contestation">de contestation</string>
     <string name="higher">plus haut</string>
     <string name="lower">plus bas</string>
-    <string name="wip_stay_tuned">Travaux en cours.\nSoyez aux aguets d\'une mise à jour via F-Droid.</string>
+    <string name="wip_stay_tuned">Travaux en cours.\nSoyez aux aguets d\'une mise à jour.</string>
     <string name="poll_setup_subject_placeholder">Entrez le sujet du scrutin…</string>
     <string name="poll_setup_proposal_placeholder">Entrez une proposition…</string>
     <string name="toast_you_cannot_go_back_from_here">À ce point, vous ne pouvez pas revenir en arrière, ce serait tricher.</string>
@@ -101,4 +101,18 @@
     <string name="grade_urgent">urgent</string>
     <string name="five_priority_grades">Cinq mentions de priorité</string>
     <string name="six_enthusiasm_grades">Six mentions d\'enthousiasme</string>
+    <string name="proportional_algorithm_mj_score">JM-Score</string>
+    <string name="proportions_help_paragraph_2">Il existe de multiple algorithmes qui permettent de calculer une représentation proportionnelle, chacun ayant ses vertus et ses vices.</string>
+    <string name="proportions_help_paragraph_1">Le but d\'une représentation proportionnelle est de partager entre les candidats une ressource limitée comme le temps, l\'argent, ou des sièges dans une assemblée…</string>
+    <string name="button_back">Retour</string>
+    <string name="label_show_proportions">Proportionnelle</string>
+    <string name="proportional_algorithm_none">Aucune</string>
+    <string name="title_proportional_representation">Représentation\nProportionnelle</string>
+    <string name="proportions_help_paragraph_3">Choisissez avec soin.</string>
+    <string name="proportional_algorithm_mj_score_description">Cet algorithme a été découvert par Marc Paraire en 2024 et calcule un score unique pour chaque profil de mérite possible.</string>
+    <string name="button_learn_more_on_the_wiki">En savoir plus sur le Wiki</string>
+    <string name="proportional_algorithm_osmotic_favoritism">Favoritisme Osmotique</string>
+    <string name="proportional_algorithm_osmotic_favoritism_features">Il est :\n✅ Résistant aux votes polarisés\n✅ Idéal quand les votants ont des opinions fortes\n❌ Pas isomorphe au Jugement Majoritaire</string>
+    <string name="proportional_algorithm_mj_score_features">Il est :\n✅ Isomorphe au Jugement Majoritaire\n✅ Idéal quand les votants sont candides\n❌ Sensible aux votes polarisés</string>
+    <string name="proportional_algorithm_osmotic_favoritism_description">Cet algorithme a été découvert par Dominique Merle en 2025, avec comme objectif de calculer une représentation proportionnelle qui soit insensible aux tentatives de manipulation par votes polarisés, tout comme l\'est le Jugement Majoritaire.</string>
 </resources>
