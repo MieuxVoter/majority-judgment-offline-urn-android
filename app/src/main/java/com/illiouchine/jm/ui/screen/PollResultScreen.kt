@@ -40,6 +40,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
@@ -238,10 +239,13 @@ fun ResultScreen(
             Spacer(modifier = Modifier.padding(Theme.spacing.small))
 
             Row {
-
                 Text(
-                    modifier = Modifier.align(Alignment.CenterVertically),
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .weight(1f),
+                    textAlign = TextAlign.End,
                     text = stringResource(R.string.label_show_proportions) + ":",
+
                 )
 
                 Box {
@@ -275,9 +279,6 @@ fun ResultScreen(
                         coroutineScope.launch {
                             navigator.navigateTo(
                                 destination = Screens.ProportionsHelp,
-                                navOptions = {
-                                    restoreState = true
-                                }
                             )
                         }
                     },

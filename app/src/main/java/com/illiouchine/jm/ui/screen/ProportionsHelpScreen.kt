@@ -82,7 +82,7 @@ fun ProportionsHelpScreen(
                 Text(
                     modifier = Modifier.padding(
                         top = Theme.spacing.large,
-                        bottom = Theme.spacing.medium
+                        bottom = Theme.spacing.medium,
                     ),
                     text = algo.getName(LocalContext.current),
                     fontSize = 24.sp,

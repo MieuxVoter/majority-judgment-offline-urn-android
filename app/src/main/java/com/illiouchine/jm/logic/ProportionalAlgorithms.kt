@@ -56,11 +56,16 @@ enum class ProportionalAlgorithms {
         }
 
         override fun isAvailable(): Boolean {
-            return false
+            return true
         }
 
         override fun compute(poll: Poll, result: ResultInterface): List<Double> {
-            throw NotImplementedError() // TODO
+            return List(
+                size = result.proposalResults.size,
+                init = {
+                    result.proposalResults[it].relativeMerit
+                },
+            )
         }
     },
 

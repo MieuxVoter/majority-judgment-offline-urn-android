@@ -1,2 +1,3 @@
 * Fix the white flash on navigation
 * Add more gradings
+* Add proportional representation
