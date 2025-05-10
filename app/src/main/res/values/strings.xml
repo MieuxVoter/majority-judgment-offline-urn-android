@@ -114,8 +114,8 @@
     <string name="proportions_help_paragraph_1">The purpose of proportional representation is to share amongst candidates a finite resource such as time, assembly seats, money…</string>
     <string name="proportions_help_paragraph_2">There are many algorithms that can compute a proportional representation, each with its own virtues and issues.</string>
     <string name="proportions_help_paragraph_3">Choose wisely.</string>
-    <string name="proportional_algorithm_mj_score_description">"This algorithm was discovered by Marc Paraire in 2024 and computes a unique score for each possible merit profile.            "</string>
-    <string name="proportional_algorithm_mj_score_features">"It is:\n✅ Isomorphic to Majority Judgment\n✅ Best when voters are candid\n❌ Not resilient to polarized voting            "</string>
+    <string name="proportional_algorithm_mj_score_description">This algorithm was discovered by Marc Paraire in 2024 and computes a unique score for each possible merit profile.</string>
+    <string name="proportional_algorithm_mj_score_features">It is:\n✅ Isomorphic to Majority Judgment\n✅ Best when voters are candid\n❌ Not resilient to polarized voting</string>
     <string name="proportional_algorithm_osmotic_favoritism_description">This algorithm was discovered by Dominique Merle in 2025 with the express intent of computing a proportional representation that disincentivizes polarized voting, just like Majority Judgment does.</string>
     <string name="proportional_algorithm_osmotic_favoritism_features">It is:\n✅ Resilient to polarized voting\n✅ Best when voters are opinionated\n❌ Not isomorphic to Majority Judgment</string>
     <string name="toast_you_cannot_go_back_from_here">You cannot go back from here, that would be cheating.</string>
