@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,9 +15,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -24,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,17 +40,21 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.logic.PollResultViewModel
+import com.illiouchine.jm.logic.ProportionalAlgorithms
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.DefaultNavigator
+import com.illiouchine.jm.ui.Navigator
+import com.illiouchine.jm.ui.Screens
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.MjuSnackbar
@@ -50,7 +63,9 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import com.illiouchine.jm.ui.utils.smoothStep
+import kotlinx.coroutines.launch
 import java.math.BigInteger
+import java.util.Locale
 import kotlin.math.max
 import kotlin.math.min
 
@@ -58,6 +73,7 @@ import kotlin.math.min
 fun ResultScreen(
     modifier: Modifier = Modifier,
     state: PollResultViewModel.PollResultViewState,
+    navigator: Navigator = DefaultNavigator(),
     onFinish: () -> Unit = {},
     feedback: String? = "",
     onDismissFeedback: () -> Unit = {},
@@ -71,6 +87,9 @@ fun ResultScreen(
     var selectedProfileIndex by remember { mutableIntStateOf(0) }
     // Not all these groups belong to the selected profile ; they belong to a duel
     val decisiveGroupsForSelectedProfile = state.groups[selectedProfileIndex].groups
+
+    var proportionalDropdownExpanded by remember { mutableStateOf(false) }
+    var proportionalAlgorithm by remember { mutableStateOf(ProportionalAlgorithms.NONE) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -86,6 +105,7 @@ fun ResultScreen(
     ) { innerPadding ->
 
         val scrollState = rememberScrollState()
+        val coroutineScope = rememberCoroutineScope()
 
         Column(
             modifier = modifier
@@ -156,8 +176,19 @@ fun ResultScreen(
                                 fontSize = 24.sp,
                                 text = "#$rank",
                             )
+                            var proportionAsText = ""
+                            if (proportionalAlgorithm != ProportionalAlgorithms.NONE) {
+                                val shownProportions = state.proportions[proportionalAlgorithm]
+                                if (shownProportions != null) {
+                                    proportionAsText = String.format(
+                                        Locale.FRANCE,
+                                        "   %.1f%%",
+                                        100 * shownProportions[proposalResult.index],
+                                    )
+                                }
+                            }
                             Text(
-                                text = "$proposalName   ($medianGradeName)",
+                                text = "$proposalName   ($medianGradeName)$proportionAsText",
                             )
                         }
 
@@ -176,9 +207,11 @@ fun ResultScreen(
                             )
                         }
 
-                        Spacer(Modifier.padding(
-                            vertical = Theme.spacing.small + Theme.spacing.tiny,
-                        ))
+                        Spacer(
+                            Modifier.padding(
+                                vertical = Theme.spacing.small + Theme.spacing.tiny,
+                            )
+                        )
 
                         // Ux: Explanations are shown one at a time (exclusive toggle)
                         val shouldShowExplanation = isAnyProfileSelected
@@ -200,6 +233,60 @@ fun ResultScreen(
 
                         Spacer(Modifier.padding(vertical = Theme.spacing.tiny))
                     }
+                }
+            }
+
+            Spacer(modifier = Modifier.padding(Theme.spacing.small))
+
+            Row {
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .weight(1f),
+                    textAlign = TextAlign.End,
+                    text = stringResource(R.string.label_show_proportions) + ":",
+
+                )
+
+                Box {
+                    TextButton(
+                        onClick = {
+                            proportionalDropdownExpanded = !proportionalDropdownExpanded
+                        },
+                    ) {
+                        Text(proportionalAlgorithm.getName(LocalContext.current))
+                    }
+
+                    DropdownMenu(
+                        expanded = proportionalDropdownExpanded,
+                        onDismissRequest = { proportionalDropdownExpanded = false }
+                    ) {
+                        for (algo in ProportionalAlgorithms.entries) {
+                            DropdownMenuItem(
+                                enabled = algo.isAvailable(),
+                                text = { Text(algo.getName(LocalContext.current)) },
+                                onClick = {
+                                    proportionalAlgorithm = algo
+                                    proportionalDropdownExpanded = false
+                                },
+                            )
+                        }
+                    }
+                }
+
+                IconButton(
+                    onClick = {
+                        coroutineScope.launch {
+                            navigator.navigateTo(
+                                destination = Screens.ProportionsHelp,
+                            )
+                        }
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Info,
+                        contentDescription = "More Info",
+                    )
                 }
             }
 
@@ -233,7 +320,7 @@ fun ResultScreen(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     showSystemUi = true,
 )
-//@PreviewScreenSizes // my eyes hurt
+//@PreviewScreenSizes // my eyes hurt ← no dark mode
 @Composable
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
 

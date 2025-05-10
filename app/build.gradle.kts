@@ -8,7 +8,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt") version "1.23.8"
 }
 
-// Bit of a self-made hack, this, but flavors don't run smoothly.
+// Bit of a self-made hack, this, but product flavors don't run smoothly.
 val isGoogleFlavor = providers
     .environmentVariable("GOOGLE")
     .getOrElse("false") == "true"
@@ -21,8 +21,8 @@ android {
         applicationId = if (isGoogleFlavor) {
             // We have to use another applicationId for Google, as Google says
             // "com.illiouchine.jm.androidx-startup is already in use"
-            // This is because a malicious actor published a malware-riddled version of our app on
-            // Google Play, pretending to be us.  …   There's always bad apples.
+            // This is because a malicious actor published a malware-riddled version of our app
+            // on Google Play, pretending to be us.  …   There's always bad apples.  -_-
             "fr.mieuxvoter.urn"
         } else {
             // But we've already registered this app on F-Droid with this applicationId:
@@ -74,6 +74,7 @@ android {
         includeInBundle = !isGoogleFlavor
     }
 
+    // The "proper" way of having multiple builds seems to be using product flavors.
     // NOPE: Cannot locate tasks that match ':app:assembleDebugUnitTest' as task 'assembleDebugUnitTest' is ambiguous in project ':app'. Candidates are: 'assembleFdroidDebugUnitTest', 'assembleGoogleDebugUnitTest'.
 //    flavorDimensions += "store"
 //    productFlavors {

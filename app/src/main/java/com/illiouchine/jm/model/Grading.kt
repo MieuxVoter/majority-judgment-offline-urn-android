@@ -34,6 +34,9 @@ sealed class Grading(
     val uid: Int, // make sure those are really unique, and DON'T edit them afterwards
     @StringRes val name: Int,
     val grades: List<Grade>,
+    // This grade and all the grades above it are considered acceptation grades.
+    // This is usually the index of the "Passable" grade.
+    val acceptationThreshold: Int,
 ) {
 
     @Serializable
@@ -49,6 +52,7 @@ sealed class Grading(
             gradeVeryGood,
             gradeExcellent,
         ),
+        acceptationThreshold = 2,
     )
 
     @Serializable
@@ -62,6 +66,7 @@ sealed class Grading(
             gradeGood,
             gradeExcellent,
         ),
+        acceptationThreshold = 1,
     )
 
     @Serializable
@@ -75,6 +80,7 @@ sealed class Grading(
             gradeVeryGood,
             gradeExcellent,
         ),
+        acceptationThreshold = 0,
     )
 
     @Serializable
@@ -86,6 +92,7 @@ sealed class Grading(
             gradeSomewhatGood,
             gradeExcellent,
         ),
+        acceptationThreshold = 1,
     )
 
     @Serializable
@@ -99,6 +106,7 @@ sealed class Grading(
             gradeVeryUrgent,
             gradeExtremelyUrgent,
         ),
+        acceptationThreshold = 1,
     )
 
     @Serializable
@@ -112,6 +120,7 @@ sealed class Grading(
             gradeHighPriority,
             gradeTopPriority,
         ),
+        acceptationThreshold = 1,
     )
 
     @Serializable
@@ -126,6 +135,7 @@ sealed class Grading(
             gradeGreatEnthusiasm,
             gradeElation,
         ),
+        acceptationThreshold = 2,
     )
 
     fun getAmountOfGrades(): Int = grades.size

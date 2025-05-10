@@ -34,6 +34,7 @@ class PollResultViewModel(
         val result: ResultInterface? = null,
         val explanations: List<AnnotatedString> = emptyList(),
         val groups: List<DuelGroups> = emptyList(),
+        val proportions: Map<ProportionalAlgorithms, List<Double>> = emptyMap(),
     )
 
     data class DuelGroups(
@@ -48,8 +49,11 @@ class PollResultViewModel(
             val poll = pollDataSource.getPollById(pollId)
 
             if (poll == null) {
-                Toast.makeText(context,
-                    context.getString(R.string.toast_that_poll_does_not_exist), Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.toast_that_poll_does_not_exist),
+                    Toast.LENGTH_LONG,
+                ).show()
                 navigator.navigateTo(destination = Screens.Home)
             } else {
                 initializePollResult(context, poll)
@@ -101,6 +105,13 @@ class PollResultViewModel(
             )
         }
 
+        val proportions = mutableMapOf<ProportionalAlgorithms, List<Double>>()
+        for (proportionalAlgorithm in ProportionalAlgorithms.entries) {
+            if (proportionalAlgorithm.isAvailable()) {
+                proportions[proportionalAlgorithm] = proportionalAlgorithm.compute(poll, result)
+            }
+        }
+
         _pollResultViewState.update {
             it.copy(
                 poll = poll,
@@ -108,6 +119,7 @@ class PollResultViewModel(
                 result = result,
                 explanations = explanations,
                 groups = groups,
+                proportions = proportions,
             )
         }
     }
