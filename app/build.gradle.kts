@@ -30,8 +30,8 @@ android {
         }
         minSdk = 27
         targetSdk = 35
-        versionCode = 12
-        versionName = "1.4.0"
+        versionCode = 13
+        versionName = "1.4.1"
 
         // Ideally we'd have both, but support for multiple runners looks experimental
 //        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -69,9 +69,9 @@ android {
     // https://gitlab.com/fdroid/fdroiddata/-/merge_requests/19981
     dependenciesInfo {
         // Disables dependency metadata when building APKs.
-        includeInApk = !isGoogleFlavor
+        includeInApk = isGoogleFlavor
         // Disables dependency metadata when building Android App Bundles.
-        includeInBundle = !isGoogleFlavor
+        includeInBundle = isGoogleFlavor
     }
 
     // The "proper" way of having multiple builds seems to be using product flavors.
