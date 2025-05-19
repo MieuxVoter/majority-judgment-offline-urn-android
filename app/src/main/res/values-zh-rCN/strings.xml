@@ -65,7 +65,7 @@
     <string name="lower">低于</string>
     <string name="setting_show_onboarding_button">显示</string>
     <string name="setting_pin_screen_label">阻止投票者离开应用</string>
-    <string name="summary_is_that_accurate">这是您正确的投票吗？</string>
+    <string name="summary_is_that_accurate">这是您的观点吗？</string>
     <string name="grade_somewhat_good">稍微好点</string>
     <string name="grade_extremely_urgent">极端紧急</string>
     <string name="grade_not_urgent">不紧急</string>
