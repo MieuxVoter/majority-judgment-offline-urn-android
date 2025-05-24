@@ -1,0 +1,3 @@
+* Corrige the flash blanc quand on navigue en mode sombre
+* Ajoute d'autres mentions
+* Ajoute la représentation proportionnelle
