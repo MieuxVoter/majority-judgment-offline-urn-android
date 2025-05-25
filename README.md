@@ -17,8 +17,9 @@ An application for Android 8.1 and greater that helps groups decide about things
 - *Mobile Urn*: Set up a local, offline poll on your phone.
 - *Vote with Subtlety*: Grade each proposal and so never throw a vote away.
 - *Majority Judgment*: One of the most elegant ranking systems out there.
+- *Proportional Representation*: Compute a percentage for each proposal.
 - *Libre Software*: We accept merge requests.
-- *No anti-features*: no tracking, no ads.
+- *No anti-features*: no tracking, no ads, no permissions required.
 
 <!--suppress CheckImageSize -->
 <p>
