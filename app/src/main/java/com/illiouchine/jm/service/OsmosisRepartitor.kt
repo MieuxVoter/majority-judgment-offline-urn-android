@@ -11,34 +11,36 @@ import com.illiouchine.jm.model.Poll
  * The goal for now is to be as explicit and clear as possible.  Optimization will come later.
  *
  * Qualities:
- * - robust: disincentivizes polarized voting (ie. "cheating"), just like MJ
+ * - backwards-compatible: identity with uninominal in case of extreme polarization
+ * - robust: disincentivizes polarized voting (ie. "cheating"), just like Majority Judgment
  * - holistic: uses all cast judgments, one way or another
  * - deterministic: no random
  * - exact: no approximation
+ * - scalable: reasonably computable for billions of judges
+ * - simple: elementary arithmetic
  *
  * Known Issues:
- * - not isomorphic with MJ ; can be mitigated using the DecreasingListConstrictor
- * - requires access to the individual ballots and not just the merit profiles (/!\ coercion /!\)
- * - might be ever so slightly numerically unstable since we're handling floats
+ * - not isomorphic with MJ ; could be mitigated using the DecreasingListConstrictor
+ * - might be ever so slightly numerically unstable since we're handling IEE754 floats
  */
-class OsmosisRepartitor {
+class OsmosisRepartitor { // FavorityJudgmentRepartitor?  (still workshopping the name)
 
     fun computeProportionalRepresentation(poll: Poll): List<Double> {
 
         val ballots = poll.ballots
+        val amountOfProposals = poll.pollConfig.proposals.size
 
         if (ballots.isEmpty()) {
             return List(
-                size = poll.pollConfig.proposals.size,
+                size = amountOfProposals,
                 init = { 0.0 },
             )
         }
 
-        val amountOfProposals = ballots.first().judgments.size
         val amountOfBallots = ballots.size
         val acceptationGradeThreshold = poll.pollConfig.grading.acceptationThreshold
 
-        // Step 1: For each proposal, count the positive judgments they received
+        // Step 1: For each proposal, count the acceptation judgments they received
         //         that were the highest judgments of their respective ballots.
         val favoritism: List<Int> = List(
             size = amountOfProposals,
@@ -106,15 +108,6 @@ class OsmosisRepartitor {
 
                 finalProportions[proposalIndexB] += seepingAmount
                 finalProportions[proposalIndexA] -= seepingAmount
-
-//                Log.i(
-//                    "MJ", """
-//                    A = ${proposalIndexA}    B = ${proposalIndexB}
-//                    PA = ${preferenceForA}  PB = ${preferenceForB}
-//                    delta = ${seepingIntent}
-//                    seeping = ${seepingAmount}
-//                """.trimIndent()
-//                )
             }
         }
 
