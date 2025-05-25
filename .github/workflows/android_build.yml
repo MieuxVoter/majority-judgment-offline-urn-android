@@ -3,7 +3,7 @@ name: Android Build CI
 on:
   push:
     branches: [ "main" ]
-    tags: ['v*']
+    tags: [ "v*" ]
 
 jobs:
   build:
@@ -19,9 +19,10 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: Grant execution permission for gradlew
-      run: chmod +x gradlew
-    - name: Build with Gradle
+    - name: Grant execution permission to gradlew
+      run: chmod +x ./gradlew
+
+    - name: Build the Debug APK with Gradle
       run: ./gradlew build
 
     - name: Write the encoded store key file from secrets
@@ -34,6 +35,7 @@ jobs:
 
     - name: Make and Sign the Release APK (F-Droid)
       env:
+        GOOGLE: "false"
         STORE_PASSWORD: "${{ secrets.STORE_PASSWORD }}"
         STORE_KEY_PASSWORD: "${{ secrets.STORE_KEY_PASSWORD }}"
         STORE_KEY_FILE_PATH: /tmp/skf.jks
@@ -71,13 +73,15 @@ jobs:
     - name: Check Release AAB
       run: ls app/build/outputs/bundle/release/app-release.aab
 
-      # Upload the APKs to the Releases if there is a git tag
-      # Docs: https://github.com/softprops/action-gh-release
+    # Upload the APKs to the Releases if there is a git tag.
+    # Docs: https://github.com/softprops/action-gh-release
     - name: Release
       uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/')
       with:
+        generate_release_notes: true
+        append_body: true
+        preserve_order: true
         files: |
-          app/build/outputs/apk/debug/app-debug.apk
           app/build/outputs/apk/release/app-release.apk
           app/build/outputs/bundle/release/app-release.aab
