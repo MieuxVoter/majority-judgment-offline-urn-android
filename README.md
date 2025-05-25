@@ -31,7 +31,7 @@ An application for Android 8.1 and greater that helps groups decide about things
 
 ## Tips
 
-Since Android 11, you may use [app pinning](https://support.google.com/android/answer/9455138?hl=en) with this app if participants are expected to have gorilla fingers or sneaky paws.
+Since Android 11, you may enable [app pinning](https://support.google.com/android/answer/9455138?hl=en) with this app if participants are expected to have gorilla fingers or sneaky paws.
 
 
 ## Download
@@ -62,6 +62,20 @@ You can also download the debug `apk` from [the releases](https://github.com/Mie
 > Follow the usual _git_ flow:
 > Fork, clone, branch, hack, push and create a merge request.
 
+
+### Translations
+
+[![Weblate Statistics about this project](https://hosted.weblate.org/widget/majority-judgment-offline-urn-android/287x66-black.png)](https://hosted.weblate.org/engage/majority-judgment-offline-urn-android)
+
+We're using the amazing _Weblate_ for translations : https://hosted.weblate.org/engage/majority-judgment-offline-urn-android/
+
+> 💬 You can add a new language or edit existing translations without ever touching any code.
+
+[![Plot of the translations completions by language](https://hosted.weblate.org/widget/majority-judgment-offline-urn-android/multi-auto.svg)](https://hosted.weblate.org/engage/majority-judgment-offline-urn-android/)
+
+> 💡 If you see a sub-100% language you're comfortable with, please consider helping with translations.
+> You don't have to do everything.  Every little bit helps.  🥜🐜🐜🐜
+
 ### Code
 
 This is an unremarkable _Android_ project in _Kotlin_, made with _Jetpack Compose_.
@@ -73,22 +87,12 @@ Run them from _Android Studio_, or with:
 
     ./gradlew clean connectedCheck
 
-### Translations
-
-[![Weblate Statistics about this project](https://hosted.weblate.org/widget/majority-judgment-offline-urn-android/287x66-black.png)](https://hosted.weblate.org/engage/majority-judgment-offline-urn-android)
-
-We're using the amazing _Weblate_ for translations : https://hosted.weblate.org/engage/majority-judgment-offline-urn-android/
-
-> You can add a new language or edit existing translations without ever touching any code.
-
-[![Plot of the translations completions by language](https://hosted.weblate.org/widget/majority-judgment-offline-urn-android/multi-auto.svg)](https://hosted.weblate.org/engage/majority-judgment-offline-urn-android/)
-
 
 ## Inspiration
 
 There used to be a similar app called _"Le Choix Commun"_.
 
-The [comic by Marjolaine Leray](https://marjolaineleray.com/wp-content/uploads/2023/04/BD-MajorityJudgment-MarjolaineLeray-EN.pdf) is a good read about Majority Judgment.
+The [Majority Judgment comic]((https://marjolaineleray.com/wp-content/uploads/2023/04/BD-MajorityJudgment-MarjolaineLeray-EN.pdf)) by [Marjolaine Leray](https://marjolaineleray.com/) is a good read about Majority Judgment.
 
 
 ## Additional info
