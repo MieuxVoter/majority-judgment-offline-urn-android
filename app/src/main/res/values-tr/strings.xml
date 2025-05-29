@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="label_poll_subject">Anketin Konusu</string>
-    <string name="label_poll_proposals">Teklifler</string>
+    <string name="label_poll_proposals">Adaylar</string>
     <string name="button_add">Ekle</string>
     <string name="app_name">Urn</string>
-    <string name="poll_setup_proposal_placeholder">Bir teklif ekleyin…</string>
+    <string name="poll_setup_proposal_placeholder">Bir aday ekleyin…</string>
     <string name="majority_judgment">Dereceli Oylama</string>
     <string name="button_finish">Bitir</string>
     <string name="button_next">ileri</string>
-    <string name="proposal">Teklif</string>
+    <string name="proposal">Aday</string>
     <string name="ballots">oy</string>
     <string name="ballot">oy</string>
     <string name="grade_to_reject">KABUL EDİLEMEZ</string>
@@ -56,7 +56,7 @@
     <string name="votes">oy</string>
     <string name="dialog_operation_cannot_be_undone">Bu işlem geri alınamaz.</string>
     <string name="about_this_app_is_libre_software">Bu uygulama bir özgür yazılımdır.</string>
-    <string name="toast_proposal_name_already_exists">Bu isimde bir teklif zaten mevcut.</string>
+    <string name="toast_proposal_name_already_exists">Bu isimde bir aday zaten mevcut.</string>
     <string name="settings_screen_title">Ayarlar</string>
     <string name="summary_button_no_rescind">Hayır, geri al</string>
     <string name="toast_you_cannot_go_back_from_here">Buradan geri dönemezsiniz, bu hile olur.</string>
