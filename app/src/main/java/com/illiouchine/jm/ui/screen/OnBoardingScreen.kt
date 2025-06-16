@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -31,6 +32,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
@@ -120,7 +122,7 @@ fun OnBoardingPage(
     modifier: Modifier,
     pagerState: PagerState,
     pageIndex: Int,
-    onBoardingPage: OnBoardingPage
+    onBoardingPage: OnBoardingPage,
 ) {
     Box(
         modifier = modifier.graphicsLayer {
@@ -178,14 +180,15 @@ fun OnBoardingBottomRow(
     val coroutineScope = rememberCoroutineScope()
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceEvenly
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         if (pagerState.currentPage == onBoardingPages.lastIndex) {
-            Spacer(modifier = Modifier.weight(0.7f))
+            Spacer(modifier = Modifier.weight(0.8f))
         } else {
             TextButton(
                 modifier = Modifier
-                    .weight(0.7f)
+                    .weight(0.8f)
                     .testTag("onboarding_screen_skip"),
                 onClick = { onFinish() },
             ) { Text(stringResource(R.string.button_skip)) }
@@ -193,23 +196,25 @@ fun OnBoardingBottomRow(
 
         ViewPager(
             modifier = Modifier
-                .weight(1f)
+                .weight(0.9f)
                 .wrapContentSize(),
             pageSize = onBoardingPages.size,
             currentPage = pagerState.currentPage,
         )
 
         if (pagerState.currentPage == onBoardingPages.lastIndex) {
-            Button(
+            TextButton(
                 modifier = Modifier
-                    .weight(0.7f)
+                    .weight(0.8f)
+                    .wrapContentSize()
                     .testTag("onboarding_screen_finish"),
                 onClick = { onFinish() },
             ) { Text(stringResource(R.string.button_finish)) }
         } else {
             TextButton(
                 modifier = Modifier
-                    .weight(0.7f)
+                    .weight(0.8f)
+                    .wrapContentSize()
                     .testTag("onboarding_screen_next"),
                 onClick = {
                     coroutineScope.launch {
@@ -224,6 +229,21 @@ fun OnBoardingBottomRow(
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewOnBoarding(modifier: Modifier = Modifier) {
+    JmTheme {
+        OnBoardingScreen(
+            modifier = modifier,
+        )
+    }
+}
+
+@Preview(
+    showSystemUi = true,
+    device = "spec:width=330dp,height=691dp",
+//    widthDp = 330,
+    locale = "fr",
+)
+@Composable
+fun PreviewOnBoardingLastPageFr(modifier: Modifier = Modifier) {
     JmTheme {
         OnBoardingScreen(
             modifier = modifier,
