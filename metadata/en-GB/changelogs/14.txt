@@ -1,0 +1,3 @@
+* Fix a button's width
+* Rename Marc's Proportional Algo
+* Add more community translations

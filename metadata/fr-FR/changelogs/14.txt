@@ -1,0 +1,3 @@
+* Corrige la largeur d'un bouton
+* Renomme l'algo de proportionnelle de Marc
+* Ajoute des traductions fournies par la communauté
