@@ -101,7 +101,7 @@
     <string name="grade_urgent">urgent</string>
     <string name="five_priority_grades">Cinq mentions de priorité</string>
     <string name="six_enthusiasm_grades">Six mentions d\'enthousiasme</string>
-    <string name="proportional_algorithm_mj_score">JM-Score</string>
+    <string name="proportional_algorithm_mj_score">Score Majoritaire</string>
     <string name="proportions_help_paragraph_2">Il existe de multiple algorithmes qui permettent de calculer une représentation proportionnelle, chacun ayant ses vertus et ses vices.</string>
     <string name="proportions_help_paragraph_1">Le but d\'une représentation proportionnelle est de partager entre les candidats une ressource limitée comme le temps, l\'argent, ou des sièges dans une assemblée…</string>
     <string name="button_back">Retour</string>

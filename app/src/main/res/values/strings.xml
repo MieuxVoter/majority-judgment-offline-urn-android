@@ -108,7 +108,7 @@
     <string name="ranking_explain_no_more_groups">The %1$s group of %2$s is the biggest and is therefore decisive in the duel with %3$s.</string>
     <string name="wip_stay_tuned">Work in Progress.\nStay tuned for updates.</string>
     <string name="proportional_algorithm_none">None</string>
-    <string name="proportional_algorithm_mj_score">MJ-Score</string>
+    <string name="proportional_algorithm_mj_score">Majority Score</string>
     <string name="proportional_algorithm_osmotic_favoritism">Osmotic Favoritism</string>
     <string name="title_proportional_representation">Proportional\nRepresentation</string>
     <string name="proportions_help_paragraph_1">The purpose of proportional representation is to share amongst candidates a finite resource such as time, assembly seats, money…</string>
