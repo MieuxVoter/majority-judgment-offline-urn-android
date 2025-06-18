@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,7 +33,12 @@ fun PollSummary(
     onDeletePoll: (poll: Poll) -> Unit = {},
 ) {
     Row(
-        modifier = modifier,
+        modifier = modifier
+            // TalkBack accessibility
+            .semantics(
+                mergeDescendants = true,
+                properties = {},
+            ),
     ) {
         Column {
             Text(
@@ -67,7 +73,8 @@ fun PollSummary(
                 )
             }
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 TextButton(

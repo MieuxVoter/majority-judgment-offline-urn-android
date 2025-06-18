@@ -19,6 +19,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.invisibleToUser
+import androidx.compose.ui.semantics.isShowingTextSubstitution
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
@@ -132,10 +137,25 @@ fun ShowOnboardingRow(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(stringResource(title))
-        OutlinedButton(onClick = {
-            onRequestToShowOnboarding()
-        }) {
+        val titleText = stringResource(title)
+        Text(
+            modifier = Modifier.semantics {
+                invisibleToUser()
+            },
+            text = titleText,
+        )
+        OutlinedButton(
+            modifier = Modifier
+                .semantics {
+                    onClick(
+                        label = titleText,
+                        action = null,
+                    )
+                },
+            onClick = {
+                onRequestToShowOnboarding()
+            },
+        ) {
             Text(stringResource(R.string.setting_show_onboarding_button))
         }
     }
@@ -149,6 +169,8 @@ fun SwitchSettingRow(
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
 ) {
+    val activateText = stringResource(R.string.tts_activate)
+    val deactivateText = stringResource(R.string.tts_deactivate)
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -156,6 +178,17 @@ fun SwitchSettingRow(
                 if (onCheckedChange != null) {
                     onCheckedChange(!checked)
                 }
+            }
+            .semantics(mergeDescendants = true) {
+                contentDescription = "setting"
+                onClick(
+                    label = if (checked) {
+                        deactivateText
+                    } else {
+                        activateText
+                    },
+                    action = null,
+                )
             },
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -175,7 +208,9 @@ fun SwitchSettingRow(
             }
         }
         Switch(
-            modifier = Modifier,
+            modifier = Modifier.semantics {
+                invisibleToUser()
+            },
             checked = checked,
             onCheckedChange = onCheckedChange,
         )

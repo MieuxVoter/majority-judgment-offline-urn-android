@@ -100,6 +100,7 @@
     <string name="button_translate_app">Translate the App</string>
     <string name="button_more_about_majority_judgment">More about Majority Judgment</string>
     <string name="button_try_online_webapp">Try the Online WebApp</string>
+    <string name="button_learn_more_on_the_wiki">Learn more on the Wiki</string>
     <string name="ranking_explain_perfectly_equal">%1$s and %2$s are perfectly equal.</string>
     <string name="ranking_explain_different_median">The median grade of %1$s is %2$s and therefore %3$s than %4$s whose median grade is %5$s.</string>
     <string name="ranking_explain_same_median">%1$s and %2$s are both %3$s, but the %4$s group of %5$s is bigger and therefore decisive.</string>
@@ -120,5 +121,6 @@
     <string name="proportional_algorithm_osmotic_favoritism_features">It is:\n✅ Resilient to polarized voting\n✅ Best when voters are opinionated\n❌ Not isomorphic to Majority Judgment</string>
     <string name="toast_you_cannot_go_back_from_here">You cannot go back from here, that would be cheating.</string>
     <string name="toast_that_poll_does_not_exist">That poll does not exist anymore.</string>
-    <string name="button_learn_more_on_the_wiki">Learn more on the Wiki</string>
+    <string name="tts_activate">activate</string>
+    <string name="tts_deactivate">deactivate</string>
 </resources>
