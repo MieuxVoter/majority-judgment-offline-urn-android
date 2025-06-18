@@ -169,6 +169,7 @@ fun SwitchSettingRow(
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
 ) {
+    val settingText = stringResource(R.string.tts_setting)
     val activateText = stringResource(R.string.tts_activate)
     val deactivateText = stringResource(R.string.tts_deactivate)
     Row(
@@ -180,7 +181,7 @@ fun SwitchSettingRow(
                 }
             }
             .semantics(mergeDescendants = true) {
-                contentDescription = "setting"
+                contentDescription = settingText
                 onClick(
                     label = if (checked) {
                         deactivateText

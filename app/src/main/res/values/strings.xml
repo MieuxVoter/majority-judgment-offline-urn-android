@@ -123,4 +123,5 @@
     <string name="toast_that_poll_does_not_exist">That poll does not exist anymore.</string>
     <string name="tts_activate">activate</string>
     <string name="tts_deactivate">deactivate</string>
+    <string name="tts_setting">setting</string>
 </resources>
