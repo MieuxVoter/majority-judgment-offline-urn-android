@@ -13,6 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -21,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -117,7 +119,7 @@ fun HomeScreen(
             )
 
             if (homeViewState.polls.isEmpty()) {
-                Spacer(Modifier.size(36.dp))
+                Spacer(Modifier.size(Theme.spacing.large))
                 Text(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -125,6 +127,16 @@ fun HomeScreen(
                     text = stringResource(R.string.incitation_making_new_poll),
                     fontStyle = FontStyle.Italic,
                 )
+            }
+
+            // Not sure how to access the FAB with TalkBack
+            Spacer(Modifier.height(Theme.spacing.medium))
+            Button(
+                modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+                onClick = { onSetupBlankPoll() },
+            ) {
+                Icon(Icons.Filled.Add, null)
+                Text(stringResource(R.string.button_new_poll))
             }
 
             Spacer(Modifier.height(Theme.spacing.medium))
