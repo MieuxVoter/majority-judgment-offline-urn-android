@@ -23,8 +23,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -61,6 +63,7 @@ fun HomeScreen(
     onShowResult: (poll: Poll) -> Unit = {},
     onDeletePoll: (poll: Poll) -> Unit = {},
 ) {
+    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
@@ -83,8 +86,8 @@ fun HomeScreen(
                     .padding(Theme.spacing.medium)
                     .testTag("home_fab"),
                 onClick = { onSetupBlankPoll() },
-                icon = { Icon(Icons.Filled.Add, "") },
-                text = { Text(text = stringResource(R.string.button_new_poll)) },
+                icon = { Icon(Icons.Filled.Add, null) },
+                text = { Text(stringResource(R.string.button_new_poll)) },
             )
         }
     ) { innerPadding ->
@@ -100,7 +103,13 @@ fun HomeScreen(
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = Theme.spacing.medium),
+                    .padding(bottom = Theme.spacing.medium)
+                    .semantics {
+                        contentDescription = (context.getString(R.string.majority_judgment)
+                                + " "
+                                + context.getString(R.string.menu_home)
+                                )
+                    },
                 fontSize = 32.sp,
                 lineHeight = 32.sp,
                 textAlign = TextAlign.Center,
@@ -169,6 +178,7 @@ fun HomeScreen(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
 )
 @Composable
+@Suppress("SpellCheckingInspection")
 fun PreviewHomeScreen(modifier: Modifier = Modifier) {
     JmTheme {
         HomeScreen(
