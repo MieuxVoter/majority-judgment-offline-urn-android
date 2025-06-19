@@ -73,7 +73,7 @@
     <string name="action_inspect">Inspect</string>
     <string name="action_cancel">Cancel</string>
     <string name="title_about">About</string>
-    <string name="title_poll_setup">Poll</string>
+    <string name="title_poll_setup">New Poll</string>
     <string name="about_help_us_make_it_better">Help us make it better !</string>
     <string name="about_this_app_is_libre_software">This app is libre software.</string>
     <string name="help_your_participation_was_a_success">Your participation was a success !\nYou can now pass this device to the next participant.</string>
@@ -126,4 +126,7 @@
     <string name="tts_setting">setting</string>
     <string name="tts_show_explanation">show explanation</string>
     <string name="tts_more_information_about_proportional_algorithms">More information about proportional algorithms</string>
+    <string name="tts_remove_the_proposal">remove the proposal</string>
+    <string name="tts_add_the_proposal">add the proposal</string>
+    <string name="tts_judge_proposal_as_grade">judge %s as %s</string>
 </resources>
