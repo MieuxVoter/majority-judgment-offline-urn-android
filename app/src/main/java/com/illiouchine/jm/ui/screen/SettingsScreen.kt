@@ -19,11 +19,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.invisibleToUser
-import androidx.compose.ui.semantics.isShowingTextSubstitution
 import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.toggleableState
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
@@ -169,6 +173,8 @@ fun SwitchSettingRow(
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
 ) {
+    val titleText = stringResource(title)
+    val labelText = stringResource(label)
     val settingText = stringResource(R.string.tts_setting)
     val activateText = stringResource(R.string.tts_activate)
     val deactivateText = stringResource(R.string.tts_deactivate)
@@ -180,15 +186,17 @@ fun SwitchSettingRow(
                     onCheckedChange(!checked)
                 }
             }
-            .semantics(mergeDescendants = true) {
-                contentDescription = settingText
+            .clearAndSetSemantics {
+                contentDescription = "$settingText: $titleText, $labelText"
+                role = Role.Switch
+                toggleableState = if (checked) ToggleableState.On else ToggleableState.Off
                 onClick(
                     label = if (checked) {
                         deactivateText
                     } else {
                         activateText
                     },
-                    action = null,
+                    action = { true },
                 )
             },
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -209,9 +217,6 @@ fun SwitchSettingRow(
             }
         }
         Switch(
-            modifier = Modifier.semantics {
-                invisibleToUser()
-            },
             checked = checked,
             onCheckedChange = onCheckedChange,
         )
