@@ -124,4 +124,6 @@
     <string name="tts_activate">activate</string>
     <string name="tts_deactivate">deactivate</string>
     <string name="tts_setting">setting</string>
+    <string name="tts_show_explanation">show explanation</string>
+    <string name="tts_more_information_about_proportional_algorithms">More information about proportional algorithms</string>
 </resources>
