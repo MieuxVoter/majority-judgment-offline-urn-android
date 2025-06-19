@@ -12,6 +12,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.semantics
+import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.theme.DeleteColor
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -22,6 +26,8 @@ fun ProposalRow(
     proposal: String,
     onRemoveClicked: (String) -> Unit = {},
 ) {
+    val context = LocalContext.current
+
     Row(
         modifier = modifier.padding(vertical = Theme.spacing.small),
         verticalAlignment = Alignment.CenterVertically,
@@ -37,13 +43,21 @@ fun ProposalRow(
                 .height(Theme.spacing.medium)
                 .padding(Theme.spacing.small)
         )
+        val removeText = context.getString(R.string.tts_remove_the_proposal) + " " + proposal
         IconButton(
-            onClick = { onRemoveClicked(proposal) }
+            modifier = Modifier
+                .semantics(mergeDescendants = true) {
+                    onClick(
+                        label = removeText,
+                        action = null,
+                    )
+                },
+            onClick = { onRemoveClicked(proposal) },
         ) {
             Icon(
                 modifier = Modifier,
                 imageVector = Icons.Outlined.Delete,
-                contentDescription = "",
+                contentDescription = removeText,
                 tint = DeleteColor,
             )
         }

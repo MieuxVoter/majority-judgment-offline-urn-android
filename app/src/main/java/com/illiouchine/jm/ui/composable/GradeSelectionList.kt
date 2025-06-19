@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,6 +41,8 @@ fun GradeSelectionList(
     forProposalIndex: Int,
     onGradeSelected: (Int) -> Unit = {},
 ) {
+    val forProposalName = pollConfig.proposals[forProposalIndex]
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
@@ -54,7 +58,7 @@ fun GradeSelectionList(
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = pollConfig.proposals[forProposalIndex],
+            text = forProposalName,
             textAlign = TextAlign.Center,
             fontSize = 24.sp,
             lineHeight = 24.sp,
@@ -81,13 +85,26 @@ fun GradeSelectionList(
         val animatedHeight by animateDpAsState(
             targetValue = if (interactionSourceIsPressed) 80.dp else 64.dp
         )
+
+        val gradeName = context.getString(pollConfig.grading.grades[gradeIndex].name)
+
         GradeSelectionButton(
             modifier = Modifier
                 .fillMaxWidth()
-                .testTag("grade_selection_$gradeIndex"),
+                .testTag("grade_selection_$gradeIndex")
+                .semantics {
+                    onClick(
+                        label = context.getString(
+                            R.string.tts_judge_proposal_as_grade,
+                            forProposalName,
+                            gradeName,
+                        ),
+                        action = null,
+                    )
+                },
             height = animatedHeight,
             enabled =  ((selectedGradeIndex == null) || (selectedGradeIndex == gradeIndex)),
-            text = context.getString(pollConfig.grading.grades[gradeIndex].name).uppercase(),
+            text = gradeName.uppercase(),
             bgColor = pollConfig.grading.getGradeColor(gradeIndex),
             fgColor = pollConfig.grading.getGradeTextColor(gradeIndex)
         ) {
