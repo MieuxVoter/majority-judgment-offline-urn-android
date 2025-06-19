@@ -39,6 +39,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -82,6 +87,8 @@ fun ResultScreen(
     val result = state.result!!
     val tally = state.tally!!
     val grading = poll.pollConfig.grading
+
+    val context = LocalContext.current
 
     var isAnyProfileSelected by remember { mutableStateOf(false) }
     var selectedProfileIndex by remember { mutableIntStateOf(0) }
@@ -136,32 +143,44 @@ fun ResultScreen(
             val amountOfProposals = result.proposalResultsRanked.size
             result.proposalResultsRanked.forEachIndexed { displayIndex, proposalResult ->
                 if (proposalResult.analysis.totalSize > BigInteger.ZERO) {
+                    // Clicking on the last is clicking on the penultimate.
+                    val clickedIndex =
+                        if (displayIndex == amountOfProposals - 1) {
+                            displayIndex - 1
+                        } else {
+                            displayIndex
+                        }
+                    // Behaves like an exclusive toggle
+                    val currentlySelected =
+                        isAnyProfileSelected && selectedProfileIndex == clickedIndex
                     Column(
                         modifier = Modifier
-                            .clickable {
-                                // Clicking on the last is clicking on the penultimate.
-                                val clickedIndex = if (displayIndex == amountOfProposals - 1) {
-                                    displayIndex - 1
-                                } else {
-                                    displayIndex
-                                }
-                                // Behaves like an exclusive toggle
-                                if (isAnyProfileSelected && selectedProfileIndex == clickedIndex) {
-                                    isAnyProfileSelected = false
-                                } else {
-                                    isAnyProfileSelected = true
-                                    selectedProfileIndex = clickedIndex
-                                }
-                            }
                             .alpha(
                                 smoothStep(
                                     max(0f, 0.85f * displayIndex / amountOfProposals),
                                     min(1f, 1.15f * (displayIndex + 1) / amountOfProposals),
                                     appearAnimation.value,
                                 )
-                            ),
-
-                        ) {
+                            )
+                            .clickable {
+                                if (currentlySelected) {
+                                    isAnyProfileSelected = false
+                                } else {
+                                    isAnyProfileSelected = true
+                                    selectedProfileIndex = clickedIndex
+                                }
+                            }
+                            .semantics {
+                                if (currentlySelected) {
+                                    // Bit of a hack to force reading the explanations that show up.
+                                    // NOTE: does not work well on the last merit profile.
+                                    liveRegion = LiveRegionMode.Assertive
+                                }
+                                onClick(label = context.getString(R.string.tts_show_explanation)) {
+                                    true
+                                }
+                            },
+                    ) {
                         Row(
                             verticalAlignment = Alignment.Bottom,
                         ) {
@@ -245,16 +264,19 @@ fun ResultScreen(
                         .weight(1f),
                     textAlign = TextAlign.End,
                     text = stringResource(R.string.label_show_proportions) + ":",
-
                 )
 
                 Box {
                     TextButton(
+                        modifier = Modifier
+                            .semantics {
+                                onClick(label = "choose a proportional algorithm", action = null)
+                            },
                         onClick = {
                             proportionalDropdownExpanded = !proportionalDropdownExpanded
                         },
                     ) {
-                        Text(proportionalAlgorithm.getName(LocalContext.current))
+                        Text(proportionalAlgorithm.getName(context))
                     }
 
                     DropdownMenu(
@@ -263,8 +285,11 @@ fun ResultScreen(
                     ) {
                         for (algo in ProportionalAlgorithms.entries) {
                             DropdownMenuItem(
+                                modifier = Modifier.semantics {
+                                    contentDescription = "Proportional Algorithm"
+                                },
                                 enabled = algo.isAvailable(),
-                                text = { Text(algo.getName(LocalContext.current)) },
+                                text = { Text(algo.getName(context)) },
                                 onClick = {
                                     proportionalAlgorithm = algo
                                     proportionalDropdownExpanded = false
@@ -285,7 +310,9 @@ fun ResultScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Info,
-                        contentDescription = "More Info",
+                        contentDescription = stringResource(
+                            R.string.tts_more_information_about_proportional_algorithms
+                        ),
                     )
                 }
             }
