@@ -72,8 +72,10 @@ import com.illiouchine.jm.ui.utils.smoothStep
 import kotlinx.coroutines.launch
 import java.math.BigInteger
 import java.util.Locale
+import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.pow
 
 @Composable
 fun ResultScreen(
@@ -200,11 +202,10 @@ fun ResultScreen(
                             if (proportionalAlgorithm != ProportionalAlgorithms.NONE) {
                                 val shownProportions = state.proportions[proportionalAlgorithm]
                                 if (shownProportions != null) {
-                                    proportionAsText = String.format(
-                                        Locale.FRANCE,
-                                        "   %.1f%%",
-                                        100 * shownProportions[proposalResult.index],
-                                    )
+                                    proportionAsText = "   " + formatAmount(
+                                        amount = 100 * shownProportions[proposalResult.index],
+                                        maxDecimals = 3,
+                                    ) + "%"
                                 }
                             }
                             Text(
@@ -331,6 +332,18 @@ fun ResultScreen(
             ) { Text(stringResource(R.string.button_finish)) }
         }
     }
+}
+
+fun formatAmount(amount: Double, maxDecimals: Int = 2, locale: Locale = Locale.FRANCE): String {
+    var decimals = 0
+    while (
+        decimals < maxDecimals
+        &&
+        floor(amount * 10.0.pow(decimals)) != amount * 10.0.pow(decimals)
+    ) {
+        decimals += 1
+    }
+    return String.format(locale, "%.${decimals}f", amount)
 }
 
 // To correctly preview this, you need to Start Interactive Mode.
