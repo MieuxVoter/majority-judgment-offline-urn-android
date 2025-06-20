@@ -11,7 +11,11 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -32,13 +36,44 @@ fun PollSummary(
     onShowResult: (poll: Poll) -> Unit = {},
     onDeletePoll: (poll: Poll) -> Unit = {},
 ) {
+    val context = LocalContext.current
     Row(
         modifier = modifier
             // TalkBack accessibility
             .semantics(
                 mergeDescendants = true,
-                properties = {},
-            ),
+            ) {
+                customActions = listOf(
+                    CustomAccessibilityAction(
+                        label = context.getString(R.string.action_delete),
+                        action = {
+                            onDeletePoll(poll)
+                            true
+                        }
+                    ),
+                    CustomAccessibilityAction(
+                        label = context.getString(R.string.action_clone),
+                        action = {
+                            onSetupClonePoll(poll)
+                            true
+                        }
+                    ),
+                    CustomAccessibilityAction(
+                        label = context.getString(R.string.action_resume),
+                        action = {
+                            onResumePoll(poll)
+                            true
+                        }
+                    ),
+                    CustomAccessibilityAction(
+                        label = context.getString(R.string.action_inspect),
+                        action = {
+                            onShowResult(poll)
+                            true
+                        }
+                    ),
+                )
+            },
     ) {
         Column {
             Text(
@@ -74,7 +109,9 @@ fun PollSummary(
             }
             Row(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    // Disable the buttons for TalkBack, we're using accessibility actions instead.
+                    .clearAndSetSemantics {},
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 TextButton(
