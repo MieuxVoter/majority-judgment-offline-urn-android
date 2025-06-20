@@ -45,16 +45,9 @@ fun PollSummary(
             ) {
                 customActions = listOf(
                     CustomAccessibilityAction(
-                        label = context.getString(R.string.action_delete),
+                        label = context.getString(R.string.action_inspect),
                         action = {
-                            onDeletePoll(poll)
-                            true
-                        }
-                    ),
-                    CustomAccessibilityAction(
-                        label = context.getString(R.string.action_clone),
-                        action = {
-                            onSetupClonePoll(poll)
+                            onShowResult(poll)
                             true
                         }
                     ),
@@ -66,9 +59,16 @@ fun PollSummary(
                         }
                     ),
                     CustomAccessibilityAction(
-                        label = context.getString(R.string.action_inspect),
+                        label = context.getString(R.string.action_clone),
                         action = {
-                            onShowResult(poll)
+                            onSetupClonePoll(poll)
+                            true
+                        }
+                    ),
+                    CustomAccessibilityAction(
+                        label = context.getString(R.string.action_delete),
+                        action = {
+                            onDeletePoll(poll)
                             true
                         }
                     ),
