@@ -33,6 +33,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -96,7 +97,7 @@ fun ResultScreen(
     val decisiveGroupsForSelectedProfile = state.groups[selectedProfileIndex].groups
 
     var proportionalDropdownExpanded by remember { mutableStateOf(false) }
-    var proportionalAlgorithm by remember { mutableStateOf(ProportionalAlgorithms.NONE) }
+    var proportionalAlgorithm by rememberSaveable { mutableStateOf(ProportionalAlgorithms.NONE) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -270,7 +271,12 @@ fun ResultScreen(
                     TextButton(
                         modifier = Modifier
                             .semantics {
-                                onClick(label = "choose a proportional algorithm", action = null)
+                                onClick(
+                                    label = context.getString(
+                                        R.string.tts_choose_a_proportional_algorithm
+                                    ),
+                                    action = null,
+                                )
                             },
                         onClick = {
                             proportionalDropdownExpanded = !proportionalDropdownExpanded
