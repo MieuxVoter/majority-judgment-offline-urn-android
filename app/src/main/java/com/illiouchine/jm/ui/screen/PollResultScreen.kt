@@ -33,12 +33,18 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -66,8 +72,10 @@ import com.illiouchine.jm.ui.utils.smoothStep
 import kotlinx.coroutines.launch
 import java.math.BigInteger
 import java.util.Locale
+import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.pow
 
 @Composable
 fun ResultScreen(
@@ -83,13 +91,15 @@ fun ResultScreen(
     val tally = state.tally!!
     val grading = poll.pollConfig.grading
 
+    val context = LocalContext.current
+
     var isAnyProfileSelected by remember { mutableStateOf(false) }
     var selectedProfileIndex by remember { mutableIntStateOf(0) }
     // Not all these groups belong to the selected profile ; they belong to a duel
     val decisiveGroupsForSelectedProfile = state.groups[selectedProfileIndex].groups
 
     var proportionalDropdownExpanded by remember { mutableStateOf(false) }
-    var proportionalAlgorithm by remember { mutableStateOf(ProportionalAlgorithms.NONE) }
+    var proportionalAlgorithm by rememberSaveable { mutableStateOf(ProportionalAlgorithms.NONE) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -136,32 +146,44 @@ fun ResultScreen(
             val amountOfProposals = result.proposalResultsRanked.size
             result.proposalResultsRanked.forEachIndexed { displayIndex, proposalResult ->
                 if (proposalResult.analysis.totalSize > BigInteger.ZERO) {
+                    // Clicking on the last is clicking on the penultimate.
+                    val clickedIndex =
+                        if (displayIndex == amountOfProposals - 1) {
+                            displayIndex - 1
+                        } else {
+                            displayIndex
+                        }
+                    // Behaves like an exclusive toggle
+                    val currentlySelected =
+                        isAnyProfileSelected && selectedProfileIndex == clickedIndex
                     Column(
                         modifier = Modifier
-                            .clickable {
-                                // Clicking on the last is clicking on the penultimate.
-                                val clickedIndex = if (displayIndex == amountOfProposals - 1) {
-                                    displayIndex - 1
-                                } else {
-                                    displayIndex
-                                }
-                                // Behaves like an exclusive toggle
-                                if (isAnyProfileSelected && selectedProfileIndex == clickedIndex) {
-                                    isAnyProfileSelected = false
-                                } else {
-                                    isAnyProfileSelected = true
-                                    selectedProfileIndex = clickedIndex
-                                }
-                            }
                             .alpha(
                                 smoothStep(
                                     max(0f, 0.85f * displayIndex / amountOfProposals),
                                     min(1f, 1.15f * (displayIndex + 1) / amountOfProposals),
                                     appearAnimation.value,
                                 )
-                            ),
-
-                        ) {
+                            )
+                            .clickable {
+                                if (currentlySelected) {
+                                    isAnyProfileSelected = false
+                                } else {
+                                    isAnyProfileSelected = true
+                                    selectedProfileIndex = clickedIndex
+                                }
+                            }
+                            .semantics {
+                                if (currentlySelected) {
+                                    // Bit of a hack to force reading the explanations that show up.
+                                    // NOTE: does not work well on the last merit profile.
+                                    liveRegion = LiveRegionMode.Assertive
+                                }
+                                onClick(label = context.getString(R.string.tts_show_explanation)) {
+                                    true
+                                }
+                            },
+                    ) {
                         Row(
                             verticalAlignment = Alignment.Bottom,
                         ) {
@@ -180,11 +202,10 @@ fun ResultScreen(
                             if (proportionalAlgorithm != ProportionalAlgorithms.NONE) {
                                 val shownProportions = state.proportions[proportionalAlgorithm]
                                 if (shownProportions != null) {
-                                    proportionAsText = String.format(
-                                        Locale.FRANCE,
-                                        "   %.1f%%",
-                                        100 * shownProportions[proposalResult.index],
-                                    )
+                                    proportionAsText = "   " + formatAmount(
+                                        amount = 100 * shownProportions[proposalResult.index],
+                                        maxDecimals = 3,
+                                    ) + "%"
                                 }
                             }
                             Text(
@@ -245,16 +266,24 @@ fun ResultScreen(
                         .weight(1f),
                     textAlign = TextAlign.End,
                     text = stringResource(R.string.label_show_proportions) + ":",
-
                 )
 
                 Box {
                     TextButton(
+                        modifier = Modifier
+                            .semantics {
+                                onClick(
+                                    label = context.getString(
+                                        R.string.tts_choose_a_proportional_algorithm
+                                    ),
+                                    action = null,
+                                )
+                            },
                         onClick = {
                             proportionalDropdownExpanded = !proportionalDropdownExpanded
                         },
                     ) {
-                        Text(proportionalAlgorithm.getName(LocalContext.current))
+                        Text(proportionalAlgorithm.getName(context))
                     }
 
                     DropdownMenu(
@@ -263,8 +292,11 @@ fun ResultScreen(
                     ) {
                         for (algo in ProportionalAlgorithms.entries) {
                             DropdownMenuItem(
+                                modifier = Modifier.semantics {
+                                    contentDescription = "Proportional Algorithm"
+                                },
                                 enabled = algo.isAvailable(),
-                                text = { Text(algo.getName(LocalContext.current)) },
+                                text = { Text(algo.getName(context)) },
                                 onClick = {
                                     proportionalAlgorithm = algo
                                     proportionalDropdownExpanded = false
@@ -285,7 +317,9 @@ fun ResultScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Info,
-                        contentDescription = "More Info",
+                        contentDescription = stringResource(
+                            R.string.tts_more_information_about_proportional_algorithms
+                        ),
                     )
                 }
             }
@@ -298,6 +332,18 @@ fun ResultScreen(
             ) { Text(stringResource(R.string.button_finish)) }
         }
     }
+}
+
+fun formatAmount(amount: Double, maxDecimals: Int = 2, locale: Locale = Locale.FRANCE): String {
+    var decimals = 0
+    while (
+        decimals < maxDecimals
+        &&
+        floor(amount * 10.0.pow(decimals)) != amount * 10.0.pow(decimals)
+    ) {
+        decimals += 1
+    }
+    return String.format(locale, "%.${decimals}f", amount)
 }
 
 // To correctly preview this, you need to Start Interactive Mode.

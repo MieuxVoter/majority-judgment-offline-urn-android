@@ -66,8 +66,8 @@ fun PollSetupScreen(
     onClearProposalSuggestion: () -> Unit = {},
 ) {
 
-    var finishButtonVisibility by remember { mutableStateOf(true) }
     val context = LocalContext.current
+    var finishButtonVisibility by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
@@ -176,16 +176,14 @@ fun PollSetupScreen(
                 ProposalRow(
                     modifier = Modifier,
                     proposal = propName,
-                    onRemoveClicked = { onRemoveProposal(it) }
+                    onRemoveClicked = { onRemoveProposal(it) },
                 )
             }
 
             GradingSelectionRow(
                 modifier = Modifier,
                 grading = pollSetupState.config.grading,
-                onGradingSelected = {
-                    onGradingSelected(it)
-                },
+                onGradingSelected = { onGradingSelected(it) },
             )
 
             // Rule: A poll should have more than 1 proposal.
