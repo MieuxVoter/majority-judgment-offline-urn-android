@@ -89,4 +89,27 @@
     <string name="poll_setup_proposal_placeholder">Introduce una propuesta…</string>
     <string name="five_positive_quality_grades">Cinco grados cualitativo y positivo</string>
     <string name="toast_that_poll_does_not_exist">Esa encuesta ya no existe.</string>
+    <string name="five_urgency_grades">Cinco grados de urgencia</string>
+    <string name="five_priority_grades">Cinco grados de prioridad</string>
+    <string name="button_back">Atrás</string>
+    <string name="label_show_proportions">Proporcional</string>
+    <string name="proportional_algorithm_none">Ninguno</string>
+    <string name="proportional_algorithm_osmotic_favoritism">Favoritismo Osmótico</string>
+    <string name="title_proportional_representation">Representación\nProporcional</string>
+    <string name="proportions_help_paragraph_2">Hay muchos algoritmos que pueden calcular una representación proporcional, cada uno con sus propias virtudes y problemas.</string>
+    <string name="six_enthusiasm_grades">Seis grados de entusiasmo</string>
+    <string name="proportions_help_paragraph_3">Elige sabiamente.</string>
+    <string name="grade_extremely_urgent">extremadamente urgente</string>
+    <string name="grade_very_urgent">muy urgente</string>
+    <string name="grade_urgent">urgente</string>
+    <string name="grade_neutral">neutral</string>
+    <string name="grade_not_urgent">no urgente</string>
+    <string name="grade_top_priority">máxima prioridad</string>
+    <string name="grade_high_priority">alta prioridad</string>
+    <string name="grade_priority">prioridad</string>
+    <string name="grade_no_priority">sin prioridad</string>
+    <string name="proportional_algorithm_osmotic_favoritism_description">Este algoritmo fue descubierto por Dominique Merle en 2025 con la intención expresa de calcular una representación proporcional que desincentive el voto polarizado, tal como lo hace Majority Judgment.</string>
+    <string name="proportions_help_paragraph_1">El propósito de la representación proporcional es compartir entre los candidatos un recurso finito como el tiempo, los escaños en la asamblea, el dinero…</string>
+    <string name="button_learn_more_on_the_wiki">Obtenga más información en la Wiki</string>
+    <string name="proportional_algorithm_mj_score_description">Este algoritmo fue descubierto por Marc Paraire en 2024 y calcula una puntuación única para cada perfil de mérito posible.</string>
 </resources>
