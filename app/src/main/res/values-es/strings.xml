@@ -45,7 +45,7 @@
     <string name="action_clone">Clonar</string>
     <string name="action_resume">Reanudar</string>
     <string name="action_inspect">Ver</string>
-    <string name="title_poll_setup">Encuesta</string>
+    <string name="title_poll_setup">Nueva Encuesta</string>
     <string name="button_browse_the_source">Explorar la Fuente</string>
     <string name="about_help_us_make_it_better">¡Ayúdanos a hacerlo mejor!</string>
     <string name="about_this_app_is_libre_software">Esta aplicación es software libre.</string>
@@ -78,7 +78,7 @@
     <string name="higher">mayor</string>
     <string name="lower">menor</string>
     <string name="adhesion">adhesión</string>
-    <string name="wip_stay_tuned">En progreso.\nManténgase al tanto de las actualizaciones a través de F-Droid.</string>
+    <string name="wip_stay_tuned">En progreso.\nManténgase al tanto de las actualizaciones.</string>
     <string name="ranking_explain_double_majority">¡ Doble mayoría ! El grupo de %1$s de %2$s es tan grande como el grupo de %3$s de %4$s. Ambos significan que %5$s debería ser %6$s que %7$s.</string>
     <string name="contestation">lucha</string>
     <string name="toast_you_cannot_go_back_from_here">Desde aquí no puedes volver atrás, eso sería hacer trampa.</string>
@@ -112,4 +112,16 @@
     <string name="proportions_help_paragraph_1">El propósito de la representación proporcional es compartir entre los candidatos un recurso finito como el tiempo, los escaños en la asamblea, el dinero…</string>
     <string name="button_learn_more_on_the_wiki">Obtenga más información en la Wiki</string>
     <string name="proportional_algorithm_mj_score_description">Este algoritmo fue descubierto por Marc Paraire en 2024 y calcula una puntuación única para cada perfil de mérito posible.</string>
+    <string name="proportional_algorithm_mj_score_features">Es:\n✅ Isomorfo a la Sentencia Mayoritaria\n✅ Mejor cuando los votantes son sinceros\n❌ Poco resistente al voto polarizado</string>
+    <string name="proportional_algorithm_mj_score">Mérito de la Mayoría</string>
+    <string name="proportional_algorithm_osmotic_favoritism_features">Es:\n✅ Resistente al voto polarizado\n✅ Mejor cuando los votantes tienen opiniones firmes\n❌ No es isomorfo a la Sentencia Mayoritaria</string>
+    <string name="tts_activate">activar</string>
+    <string name="tts_deactivate">desactivar</string>
+    <string name="tts_setting">configuración</string>
+    <string name="tts_show_explanation">mostrar explicación</string>
+    <string name="tts_more_information_about_proportional_algorithms">Más información sobre algoritmos de proporcion</string>
+    <string name="tts_remove_the_proposal">eliminar la propuesta</string>
+    <string name="tts_add_the_proposal">añadir la propuesta</string>
+    <string name="tts_judge_proposal_as_grade">juzgar %s como %s</string>
+    <string name="tts_choose_a_proportional_algorithm">elige un algoritmo de proporcion</string>
 </resources>
