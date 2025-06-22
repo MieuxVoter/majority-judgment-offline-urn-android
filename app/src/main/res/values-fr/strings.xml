@@ -49,7 +49,7 @@
     <string name="action_inspect">Voir</string>
     <string name="action_cancel">Annuler</string>
     <string name="title_about">À Propos</string>
-    <string name="title_poll_setup">Sondage</string>
+    <string name="title_poll_setup">Nouveau Sondage</string>
     <string name="button_browse_the_source">Voir la Source</string>
     <string name="about_help_us_make_it_better">Aidez-nous à le rendre meilleur !</string>
     <string name="about_this_app_is_libre_software">Ce logiciel est libre et gratuit.</string>
@@ -115,4 +115,13 @@
     <string name="proportional_algorithm_osmotic_favoritism_features">Il est :\n✅ Résistant aux votes polarisés\n✅ Idéal quand les votants ont des opinions fortes\n❌ Pas isomorphe au Jugement Majoritaire</string>
     <string name="proportional_algorithm_mj_score_features">Il est :\n✅ Isomorphe au Jugement Majoritaire\n✅ Idéal quand les votants sont candides\n❌ Sensible aux votes polarisés</string>
     <string name="proportional_algorithm_osmotic_favoritism_description">Cet algorithme a été découvert par Dominique Merle en 2025, avec comme objectif de calculer une représentation proportionnelle qui soit insensible aux tentatives de manipulation par votes polarisés, tout comme l\'est le Jugement Majoritaire.</string>
+    <string name="tts_activate">activer</string>
+    <string name="tts_deactivate">désactiver</string>
+    <string name="tts_setting">option</string>
+    <string name="tts_show_explanation">voir les explications</string>
+    <string name="tts_more_information_about_proportional_algorithms">Plus d\'informations au sujet des algorithmes de proportionnelle</string>
+    <string name="tts_remove_the_proposal">supprimer la proposition</string>
+    <string name="tts_add_the_proposal">ajouter la proposition</string>
+    <string name="tts_judge_proposal_as_grade">juger %s comme %s</string>
+    <string name="tts_choose_a_proportional_algorithm">choisir un algorithme de proportionnelle</string>
 </resources>
