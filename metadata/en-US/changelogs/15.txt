@@ -1,0 +1,3 @@
+* Fix a lot of accessibility issues with TalkBack
+* Remember the selected proportional algorithm
+* Tweak the amount of shown decimals in the proportions

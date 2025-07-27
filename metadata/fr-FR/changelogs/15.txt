@@ -1,0 +1,3 @@
+* Correction de nombreux problèmes d'accessibilité
+* Persistence du choix de l'algorithme de proportionnelle
+* Ajustement du nombre de décimales affichées dans les proportions
