@@ -62,8 +62,7 @@ fun EpicycloidMenu(
             )
         }
 
-
-        itemsIndexed(compasses, key = { _, compass -> compass.hashCode() }) { index, compass ->
+        itemsIndexed(compasses, key = { _, compass -> compass.id }) { index, compass ->
             CompassMenu(
                 modifier = Modifier.animateItem(),
                 compassIndex = index,
@@ -99,7 +98,7 @@ fun EpicycloidMenu(
                 onClick = {
                     // Initialize new compass
                     val newCompasses = compasses.toMutableList()
-                    val newCompass = Compass(0.0)
+                    val newCompass = Compass(radius = 0.0)
                     newCompasses.add(newCompass)
                     compasses = newCompasses.toList()
                 }
