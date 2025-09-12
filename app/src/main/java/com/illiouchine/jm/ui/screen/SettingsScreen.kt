@@ -142,12 +142,19 @@ fun ShowOnboardingRow(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         val titleText = stringResource(title)
-        Text(
-            modifier = Modifier.semantics {
-                invisibleToUser()
-            },
-            text = titleText,
-        )
+        Column(
+            modifier = Modifier
+                .padding(end = Theme.spacing.extraSmall)
+                .weight(1.0f),
+        ) {
+            Text(
+                modifier = Modifier
+                    .semantics {
+                        invisibleToUser()
+                    },
+                text = titleText,
+            )
+        }
         OutlinedButton(
             modifier = Modifier
                 .semantics {
@@ -160,7 +167,9 @@ fun ShowOnboardingRow(
                 onRequestToShowOnboarding()
             },
         ) {
-            Text(stringResource(R.string.setting_show_onboarding_button))
+            Text(
+                text = stringResource(R.string.setting_show_onboarding_button),
+            )
         }
     }
 }

@@ -2,6 +2,8 @@ package com.illiouchine.jm.ui.composable
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -27,14 +29,15 @@ import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.theme.DeleteColor
 import com.illiouchine.jm.ui.theme.JmTheme
 
+@OptIn(ExperimentalLayoutApi::class) // for FlowRow
 @Composable
 fun PollSummary(
     modifier: Modifier = Modifier,
     poll: Poll = Poll(pollConfig = PollConfig(), ballots = emptyList()),
-    onSetupClonePoll: (poll: Poll) -> Unit = {},
-    onResumePoll: (poll: Poll) -> Unit = {},
-    onShowResult: (poll: Poll) -> Unit = {},
     onDeletePoll: (poll: Poll) -> Unit = {},
+    onResumePoll: (poll: Poll) -> Unit = {},
+    onSetupClonePoll: (poll: Poll) -> Unit = {},
+    onShowResult: (poll: Poll) -> Unit = {},
 ) {
     val context = LocalContext.current
     Row(
@@ -107,7 +110,7 @@ fun PollSummary(
                     text = "(${poll.ballots.size} " + votesString + ")",
                 )
             }
-            Row(
+            FlowRow(
                 modifier = Modifier
                     .fillMaxWidth()
                     // Disable the buttons for TalkBack, we're using accessibility actions instead.
