@@ -47,6 +47,7 @@ import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
@@ -265,6 +266,8 @@ fun ResultScreen(
                         .align(Alignment.CenterVertically)
                         .weight(1f),
                     textAlign = TextAlign.End,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     text = stringResource(R.string.label_show_proportions) + ":",
                 )
 
