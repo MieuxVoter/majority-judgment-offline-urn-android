@@ -77,4 +77,5 @@
     <string name="setting_show_onboarding">再次显示应用介绍</string>
     <string name="five_quality_grades">五个级别</string>
     <string name="seven_quality_grades">七个级别</string>
+    <string name="grade_high_priority">高优先级</string>
 </resources>
