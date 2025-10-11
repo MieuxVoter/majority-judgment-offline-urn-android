@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -60,6 +61,7 @@ fun HomeScreen(
     homeViewState: HomeViewModel.HomeViewState = HomeViewModel.HomeViewState(),
     navigator: Navigator = DefaultNavigator(),
     onSetupBlankPoll: () -> Unit = {},
+    onSetupTemplatePoll: (templateSlug: String) -> Unit = {},
     onSetupClonePoll: (poll: Poll) -> Unit = {},
     onResumePoll: (poll: Poll) -> Unit = {},
     onShowResult: (poll: Poll) -> Unit = {},
@@ -179,8 +181,22 @@ fun HomeScreen(
                 }
             }
 
-            // Safe area : cause fab button
-            Spacer(Modifier.height(72.dp))
+            Spacer(Modifier.height(Theme.spacing.medium))
+
+            Text(stringResource(R.string.home_try_poll_templates))
+            homeViewState.templates.forEach { template ->
+                OutlinedButton(
+                    onClick = {
+                        onSetupTemplatePoll(template.slug)
+                    },
+                ) {
+                    Text(template.config.subject)
+                }
+                Spacer(Modifier.height(Theme.spacing.extraSmall))
+            }
+
+            // Leave room for the floating action button
+            Spacer(Modifier.height(Theme.spacing.large * 3))
         }
     }
 }

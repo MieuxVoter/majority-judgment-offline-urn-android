@@ -1,11 +1,14 @@
 package com.illiouchine.jm.logic
 
+import android.app.Application
 import android.content.Context
 import androidx.annotation.StringRes
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.util.appendPlaceholders
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.PollDataSource
+import com.illiouchine.jm.data.PollTemplateDataSource
 import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Poll
@@ -20,10 +23,12 @@ import java.text.DateFormat
 import java.util.Calendar
 
 class PollSetupViewModel(
-    private val sharedPrefsHelper: SharedPrefsHelper,
+    private val sharedPrefs: SharedPrefsHelper,
     private val pollDataSource: PollDataSource,
+    private val pollTemplateDataSource: PollTemplateDataSource,
     private val navigator: Navigator,
-) : ViewModel() {
+    application: Application,
+) : AndroidViewModel(application) {
 
     data class PollSetupViewState(
         val config: PollConfig = PollConfig(),
@@ -34,28 +39,38 @@ class PollSetupViewModel(
 
     private val _pollSetupViewState = MutableStateFlow(PollSetupViewState())
     val pollSetupViewState: StateFlow<PollSetupViewState> = _pollSetupViewState
-    private var lastId :Int? = null
+    private var lastId: Int? = null
 
-    fun initialize(pollId: Int = 0) {
+    fun initialize(cloneablePollId: Int = 0, pollTemplateSlug: String = "") {
         viewModelScope.launch {
-            when(pollId){
-                lastId -> { /* Do nothing : Reload from configuration change */ }
+            when (cloneablePollId) {
+                lastId -> { /* Do nothing : Reload from configuration change */
+                }
+
                 0 -> {
                     _pollSetupViewState.update {
-                        it.copy(config = PollConfig(grading = sharedPrefsHelper.getDefaultGrading()))
+                        var newConfig = PollConfig(grading = sharedPrefs.getDefaultGrading())
+                        if ("" != pollTemplateSlug) {
+                            newConfig = pollTemplateDataSource.getBySlug(
+                                slug = pollTemplateSlug,
+                                context = getApplication<Application>().applicationContext,
+                            )
+                        }
+                        it.copy(config = newConfig)
                     }
                 }
+
                 else -> {
-                    val poll = pollDataSource.getPollById(pollId = pollId)
-                    val initialPoll =
-                        poll?.pollConfig ?: PollConfig(grading = sharedPrefsHelper.getDefaultGrading())
+                    val poll = pollDataSource.getPollById(pollId = cloneablePollId)
+                    val initialPollConfig =
+                        poll?.pollConfig ?: PollConfig(grading = sharedPrefs.getDefaultGrading())
 
                     _pollSetupViewState.update {
-                        it.copy(config = initialPoll)
+                        it.copy(config = initialPollConfig)
                     }
                 }
             }
-            lastId = pollId
+            lastId = cloneablePollId
         }
     }
 

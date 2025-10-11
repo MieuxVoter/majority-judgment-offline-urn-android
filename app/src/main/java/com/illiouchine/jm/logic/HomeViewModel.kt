@@ -1,10 +1,13 @@
 package com.illiouchine.jm.logic
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.data.PollDataSource
+import com.illiouchine.jm.data.PollTemplateDataSource
 import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.model.PollTemplate
 import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.Screens
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,19 +17,23 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val pollDataSource: PollDataSource,
+    private val pollTemplateDataSource: PollTemplateDataSource,
     private val sharedPrefsHelper: SharedPrefsHelper,
     private val navigator: Navigator,
-) : ViewModel() {
+    application: Application,
+) : AndroidViewModel(application) {
 
     data class HomeViewState(
         val polls: List<Poll> = emptyList(),
+        val templates: List<PollTemplate> = emptyList(),
     )
 
-    private val _homeViewState = MutableStateFlow<HomeViewState>(HomeViewState())
+    private val _homeViewState = MutableStateFlow(HomeViewState())
     val homeViewState: StateFlow<HomeViewState> = _homeViewState
 
     fun initialize() {
         loadPolls()
+        loadPollTemplates()
         loadDefaultSettings()
     }
 
@@ -53,6 +60,42 @@ class HomeViewModel(
         }
     }
 
+    private fun loadPollTemplates() {
+        viewModelScope.launch {
+            val slugs = pollTemplateDataSource.getAvailableSlugs()
+            val templates = List(
+                size = slugs.size,
+                init = {
+                    PollTemplate(
+                        slug = slugs[it],
+                        config = pollTemplateDataSource.getBySlug(
+                            slugs[it],
+                            getApplication<Application>().applicationContext,
+                        ),
+                    )
+                },
+            )
+            _homeViewState.update {
+                it.copy(templates = templates)
+            }
+        }
+    }
+
+    fun setupBlankPoll() {
+        viewModelScope.launch {
+            navigator.navigateTo(Screens.PollSetup(cloneablePollId = 0))
+        }
+    }
+
+    fun setupPollFromTemplate(pollTemplateSlug: String) {
+        viewModelScope.launch {
+            navigator.navigateTo(Screens.PollSetup(
+                cloneablePollId = 0,
+                pollTemplateSlug = pollTemplateSlug,
+            ))
+        }
+    }
+
     fun deletePoll(poll: Poll) {
         viewModelScope.launch {
             pollDataSource.deletePoll(poll)
@@ -60,15 +103,9 @@ class HomeViewModel(
         }
     }
 
-    fun setupBlankPoll() {
-        viewModelScope.launch {
-            navigator.navigateTo(Screens.PollSetup(0))
-        }
-    }
-
     fun clonePoll(poll: Poll) {
         viewModelScope.launch {
-            navigator.navigateTo(Screens.PollSetup(id = poll.id))
+            navigator.navigateTo(Screens.PollSetup(cloneablePollId = poll.id))
         }
     }
 

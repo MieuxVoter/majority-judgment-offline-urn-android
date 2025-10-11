@@ -2,7 +2,9 @@ package com.illiouchine.jm
 
 import android.app.Application
 import androidx.room.Room
+import com.illiouchine.jm.data.HardcodedPollTemplateDataSource
 import com.illiouchine.jm.data.PollDataSource
+import com.illiouchine.jm.data.PollTemplateDataSource
 import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.data.SqlitePollDataSource
 import com.illiouchine.jm.data.room.PollDao
@@ -51,7 +53,7 @@ val module = module {
     single { SharedPrefsHelper(get()) }
     //single<PollDataSource>(named("inMemory") { InMemoryPollDataSource() }
     single<PollDataSource> { SqlitePollDataSource(get()) }
-
+    single<PollTemplateDataSource> { HardcodedPollTemplateDataSource() }
 
     // Navigation
     single<Navigator> { DefaultNavigator(Screens.Home) }
@@ -60,21 +62,25 @@ val module = module {
     viewModel {
         HomeViewModel(
             pollDataSource = get(),
+            pollTemplateDataSource = get(),
             navigator = get(),
-            sharedPrefsHelper = get()
+            sharedPrefsHelper = get(),
+            application = get(),
         )
     }
     viewModel {
         SettingsViewModel(
             sharedPreferences = get(),
-            navigator = get()
+            navigator = get(),
         )
     }
     viewModel {
         PollSetupViewModel(
-            sharedPrefsHelper = get(),
+            sharedPrefs = get(),
             pollDataSource = get(),
+            pollTemplateDataSource = get(),
             navigator = get(),
+            application = get(),
         )
     }
     viewModel {
@@ -93,7 +99,7 @@ val module = module {
     viewModel {
         OnBoardingViewModel(
             prefsHelper = get(),
-            navigator = get()
+            navigator = get(),
         )
     }
 }
