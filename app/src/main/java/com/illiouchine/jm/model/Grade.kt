@@ -19,8 +19,10 @@ data class Grade(
 )
 
 object ColorSerializer : KSerializer<Color> {
-    override val descriptor: SerialDescriptor =
-        PrimitiveSerialDescriptor("com.illiouchine.jm.Color", PrimitiveKind.LONG)
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(
+        serialName = "com.illiouchine.jm.Color",
+        kind = PrimitiveKind.LONG,
+    )
 
     override fun deserialize(decoder: Decoder): Color {
         val longValue = decoder.decodeLong()

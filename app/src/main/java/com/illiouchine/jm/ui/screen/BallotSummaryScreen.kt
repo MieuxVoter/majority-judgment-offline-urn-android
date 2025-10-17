@@ -2,13 +2,15 @@ package com.illiouchine.jm.ui.screen
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -28,6 +30,7 @@ import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun BallotSummaryScreen(
     modifier: Modifier = Modifier,
@@ -44,8 +47,18 @@ fun BallotSummaryScreen(
 
         Text(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(R.string.summary_are_you_sure),
+            text = stringResource(R.string.summary_you_are_almost_done),
             fontSize = 32.sp,
+            lineHeight = 32.sp,
+        )
+
+        Spacer(Modifier.height(Theme.spacing.medium))
+
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(R.string.summary_please_confirm_your_vote),
+            fontSize = 24.sp,
+            lineHeight = 24.sp,
         )
 
         Spacer(Modifier.height(Theme.spacing.large))
@@ -57,7 +70,7 @@ fun BallotSummaryScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(Theme.spacing.extraSmall),
-                proposal = proposal,
+                proposalName = proposal,
                 gradeString = stringResource(pollConfig.grading.getGradeName(gradeIndex)),
                 color = pollConfig.grading.getGradeColor(gradeIndex),
             )
@@ -70,7 +83,7 @@ fun BallotSummaryScreen(
             text = stringResource(R.string.summary_is_that_accurate),
         )
 
-        Row(
+        FlowRow(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = Theme.spacing.medium),
@@ -107,20 +120,59 @@ fun BallotSummaryScreen(
 @Composable
 fun PreviewBallotSummaryScreen(modifier: Modifier = Modifier) {
     JmTheme {
-        BallotSummaryScreen(
-            modifier = modifier,
-            pollConfig = PollConfig(
-                subject = "Emperor ?",
-                proposals = listOf("Dominus", "Dump", "Dive"),
-                grading = DEFAULT_GRADING_QUALITY_VALUE,
-            ),
-            ballot = Ballot(
-                judgments = listOf(
-                    Judgment(0, 2),
-                    Judgment(1, 1),
-                    Judgment(2, 0),
-                )
-            ),
-        )
+        Scaffold { innerPadding ->
+            BallotSummaryScreen(
+                modifier = modifier.padding(innerPadding),
+                pollConfig = PollConfig(
+                    subject = "Emperor ?",
+                    proposals = listOf(
+                        "Dominus The Emperor With a Long Name",
+                        "Dump",
+                        "Augustin",
+                    ),
+                    grading = DEFAULT_GRADING_QUALITY_VALUE,
+                ),
+                ballot = Ballot(
+                    judgments = listOf(
+                        Judgment(0, 2),
+                        Judgment(1, 1),
+                        Judgment(2, 0),
+                    )
+                ),
+            )
+        }
+    }
+}
+
+
+@Preview(
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 2.0f,
+)
+@Composable
+fun PreviewBallotSmallSummaryScreen(modifier: Modifier = Modifier) {
+    JmTheme {
+        Scaffold { innerPadding ->
+            BallotSummaryScreen(
+                modifier = modifier.padding(innerPadding),
+                pollConfig = PollConfig(
+                    subject = "Emperor ?",
+                    proposals = listOf(
+                        "AnteDominus The Anarchist With a Long Name",
+                        "Tronald Dump",
+                        "Augustinus",
+                    ),
+                    grading = DEFAULT_GRADING_QUALITY_VALUE,
+                ),
+                ballot = Ballot(
+                    judgments = listOf(
+                        Judgment(0, 2),
+                        Judgment(1, 1),
+                        Judgment(2, 0),
+                    )
+                ),
+            )
+        }
     }
 }

@@ -87,6 +87,8 @@
     <string name="setting_play_sound_label">Signal everyone that a ballot has been submitted</string>
     <string name="setting_pin_screen">Pin screen automatically</string>
     <string name="setting_pin_screen_label">Prevent voters from leaving the app</string>
+    <string name="summary_you_are_almost_done">You\'re almost done !</string>
+    <string name="summary_please_confirm_your_vote">Please confirm your vote:</string>
     <string name="summary_are_you_sure">Are you sure ?</string>
     <string name="summary_is_that_accurate">Is that accurate ?</string>
     <string name="summary_button_no_rescind">No, rescind</string>

@@ -1,1 +1,2 @@
 * Fix some issues on very small screens
+* Add poll templates

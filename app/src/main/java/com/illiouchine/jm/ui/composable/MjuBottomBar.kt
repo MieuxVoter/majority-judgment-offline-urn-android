@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.Screens
 import com.illiouchine.jm.ui.composable.BottomBarItem.Home
-import com.illiouchine.jm.ui.composable.BottomBarItem.Info
+import com.illiouchine.jm.ui.composable.BottomBarItem.About
 import com.illiouchine.jm.ui.composable.BottomBarItem.Settings
 import com.illiouchine.jm.ui.theme.JmTheme
 
@@ -31,31 +31,27 @@ private enum class BottomBarItem(
 ) {
     Home(screen = Screens.Home, resId = R.string.menu_home, icon = Icons.Default.Home),
     Settings(screen = Screens.Settings, resId = R.string.menu_settings, icon = Icons.Default.Settings),
-    Info(screen = Screens.About, resId = R.string.menu_about, icon = Icons.Default.Info);
+    About(screen = Screens.About, resId = R.string.menu_about, icon = Icons.Default.Info);
 }
 
 private fun Screens.toBottomBarItem() : BottomBarItem {
     return when (this) {
         Screens.Home -> Home
         Screens.Settings -> Settings
-        Screens.About -> Info
+        Screens.About -> About
         else -> Home
     }
 }
 
 private fun BottomBarItem.toScreen(): Screens {
-    return when (this) {
-        Home -> Screens.Home
-        Settings -> Screens.Settings
-        Info -> Screens.About
-    }
+    return this.screen
 }
 
 @Composable
 fun MjuBottomBar(
     modifier: Modifier = Modifier,
     selected: Screens = Screens.Home,
-    onItemSelected: (Screens) -> Unit = {}
+    onItemSelected: (Screens) -> Unit = {},
 ) {
     NavigationBar (modifier) {
         BottomBarItem.entries.forEach {

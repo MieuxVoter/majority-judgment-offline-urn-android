@@ -78,16 +78,18 @@ fun PollVotingScreen(
                 .padding(Theme.spacing.medium),
         ) {
 
-            PollSubject(
-                modifier = Modifier.padding(bottom = Theme.spacing.small + Theme.spacing.medium),
-                subject = pollVotingState.pollConfig.subject,
-            )
+            if ( ! pollVotingState.isInStateSummary()) {
+                PollSubject(
+                    modifier = Modifier.padding(bottom = Theme.spacing.small + Theme.spacing.medium),
+                    subject = pollVotingState.pollConfig.subject,
+                )
+            }
 
             if (pollVotingState.isInStateReady()) {
+                // State: READY, waiting for new participant.
 
                 Spacer(modifier = Modifier.height(Theme.spacing.large))
 
-                // State: READY, waiting for new participant.
                 if (pollVotingState.ballots.isNotEmpty()) {
                     Text(stringResource(R.string.help_your_participation_was_a_success))
                 }
@@ -121,50 +123,48 @@ fun PollVotingScreen(
                     enabled = pollVotingState.ballots.isNotEmpty(),
                     onClick = { onFinish() },
                 ) { Text(stringResource(R.string.button_end_the_poll)) }
-            } else {
 
-                if (pollVotingState.isInStateVoting()) {
+            } else if (pollVotingState.isInStateVoting()) {
+                // State: VOTING, filling the ballot with judgments.
 
-                    val scrollCoroutine = rememberCoroutineScope()
+                val scrollCoroutine = rememberCoroutineScope()
 
-                    // State: VOTING, filling the ballot with judgments.
-                    val currentProposalIndex =
-                        pollVotingState.currentProposalsOrder[pollVotingState.currentBallot!!.judgments.size]
-                    GradeSelectionList(
-                        pollConfig = pollVotingState.pollConfig,
-                        forProposalIndex = currentProposalIndex,
-                        onGradeSelected = { result ->
-                            val judgment = Judgment(
-                                proposal = currentProposalIndex,
-                                grade = result,
-                            )
-                            onJudgmentCast(judgment)
-                            scrollCoroutine.launch {
-                                scrollState.scrollTo(67)
-                            }
+                val currentProposalIndex =
+                    pollVotingState.currentProposalsOrder[pollVotingState.currentBallot!!.judgments.size]
+                GradeSelectionList(
+                    pollConfig = pollVotingState.pollConfig,
+                    forProposalIndex = currentProposalIndex,
+                    onGradeSelected = { result ->
+                        val judgment = Judgment(
+                            proposal = currentProposalIndex,
+                            grade = result,
+                        )
+                        onJudgmentCast(judgment)
+                        scrollCoroutine.launch {
+                            scrollState.scrollTo(67)
                         }
-                    )
-                    JudgmentBalls(
-                        modifier = Modifier.fillMaxWidth(),
-                        pollConfig = pollVotingState.pollConfig,
-                        ballot = pollVotingState.currentBallot,
-                    )
-                } else {
+                    }
+                )
+                JudgmentBalls(
+                    modifier = Modifier.fillMaxWidth(),
+                    pollConfig = pollVotingState.pollConfig,
+                    ballot = pollVotingState.currentBallot,
+                )
 
-                    // State: SUMMARY, awaiting confirmation, back or redo.
-                    BallotSummaryScreen(
-                        pollConfig = pollVotingState.pollConfig,
-                        ballot = pollVotingState.currentBallot!!,
-                        onConfirm = {
-                            onBallotConfirmed(context, pollVotingState.currentBallot)
-                        },
-                        onCancel = {
-                            onBallotCanceled()
-                        },
-                    )
-                }
+            } else {
+                // State: SUMMARY, awaiting confirmation, back or redo.
+
+                BallotSummaryScreen(
+                    pollConfig = pollVotingState.pollConfig,
+                    ballot = pollVotingState.currentBallot!!,
+                    onConfirm = {
+                        onBallotConfirmed(context, pollVotingState.currentBallot)
+                    },
+                    onCancel = {
+                        onBallotCanceled()
+                    },
+                )
             }
-
 
             Spacer(
                 modifier = Modifier.padding(12.dp),
@@ -247,12 +247,16 @@ private fun PreviewVotingScreenConfirmation(modifier: Modifier = Modifier) {
             modifier = modifier,
             pollVotingState = PollVotingViewModel.PollVotingViewState(
                 pollConfig = PollConfig(
-                    subject = "Oh my gawd this poll has a very long title, much wow !!1!",
-                    proposals = listOf("That candidate with quite a long name-san", "Mario", "JanBob"),
+                    subject = "Oh my gawd this poll has a very long title !",
+                    proposals = listOf(
+                        "That candidate with quite a long name-san",
+                        "Mario",
+                        "JanBob",
+                    ),
                     grading = DEFAULT_GRADING_QUALITY_VALUE,
                 ),
                 ballots = listOf(
-                    Ballot(judgments = listOf(Judgment(proposal = 1, grade = 3)))
+                    //Ballot(judgments = listOf(Judgment(proposal = 1, grade = 3)))
                 ),
                 currentBallot = Ballot(
                     judgments = listOf(
@@ -266,9 +270,47 @@ private fun PreviewVotingScreenConfirmation(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 2.0f,
+)
 @Composable
-private fun PreviewVotingScreenWithCurrentBallots(modifier: Modifier = Modifier) {
+private fun PreviewVotingSmallScreenConfirmation(modifier: Modifier = Modifier) {
+    JmTheme {
+        PollVotingScreen(
+            modifier = modifier,
+            pollVotingState = PollVotingViewModel.PollVotingViewState(
+                pollConfig = PollConfig(
+                    subject = "Oh my gawd this poll has a very long title !",
+                    proposals = listOf(
+                        "That candidate with quite a long name-san",
+                        "Mario",
+                        "JanBob",
+                    ),
+                    grading = DEFAULT_GRADING_QUALITY_VALUE,
+                ),
+                ballots = listOf(
+                    //Ballot(judgments = listOf(Judgment(proposal = 1, grade = 3)))
+                ),
+                currentBallot = Ballot(
+                    judgments = listOf(
+                        Judgment(proposal = 0, grade = 0),
+                        Judgment(proposal = 1, grade = 3),
+                        Judgment(proposal = 2, grade = 2),
+                    ),
+                ),
+            ),
+        )
+    }
+}
+
+@Preview(
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
+@Composable
+private fun PreviewVotingScreenWithoutCurrentBallot(modifier: Modifier = Modifier) {
     JmTheme {
         PollVotingScreen(
             modifier = modifier,
