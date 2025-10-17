@@ -90,11 +90,12 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier,
                                 navigator = navigator,
                                 homeViewState = homeViewState,
-                                onDeletePoll = homeViewModel::deletePoll,
                                 onSetupBlankPoll = homeViewModel::setupBlankPoll,
+                                onSetupTemplatePoll = homeViewModel::setupPollFromTemplate,
                                 onSetupClonePoll = homeViewModel::clonePoll,
                                 onResumePoll = homeViewModel::resumePoll,
                                 onShowResult = homeViewModel::showResult,
+                                onDeletePoll = homeViewModel::deletePoll,
                             )
                         }
 
@@ -104,7 +105,10 @@ class MainActivity : ComponentActivity() {
                             val pollSetupViewState by pollSetupViewModel.pollSetupViewState.collectAsState()
 
                             LaunchedEffect(pollSetup) {
-                                pollSetupViewModel.initialize(pollId = pollSetup.id)
+                                pollSetupViewModel.initialize(
+                                    cloneablePollId = pollSetup.cloneablePollId,
+                                    pollTemplateSlug = pollSetup.pollTemplateSlug,
+                                )
                             }
 
                             PollSetupScreen(
