@@ -42,6 +42,10 @@ class PollVotingViewModel(
         fun isInStateVoting(): Boolean {
             return (null != currentBallot) && (currentBallot.judgments.size < pollConfig.proposals.size)
         }
+
+        fun isInStateSummary(): Boolean {
+            return (null != currentBallot) && (currentBallot.judgments.size == pollConfig.proposals.size)
+        }
     }
 
     private val _pollVotingViewState = MutableStateFlow(PollVotingViewState())

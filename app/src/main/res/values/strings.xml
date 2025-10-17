@@ -151,4 +151,6 @@
     <string name="poll_template_project_proposal_build_a_toolkit">Build a Toolkit</string>
     <string name="poll_template_project_proposal_call_for_allies">Call for Allies</string>
     <string name="poll_template_project_proposal_craft_a_solution">Craft a Solution</string>
+    <string name="summary_you_are_almost_done">You\'re almost done !</string>
+    <string name="summary_please_confirm_your_vote">Please confirm your vote:</string>
 </resources>

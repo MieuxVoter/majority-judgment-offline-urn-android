@@ -19,8 +19,8 @@ import com.illiouchine.jm.ui.theme.spacing
 @Composable
 fun JudgmentSummary(
     modifier: Modifier = Modifier,
-    proposal: String = "Tonio",
-    gradeString: String = "Excellent",
+    proposalName: String = "Tonio",
+    gradeString: String = "excellent",
     color: Color = Color.Green,
 ) {
     Row(
@@ -32,16 +32,18 @@ fun JudgmentSummary(
             modifier = Modifier.padding(Theme.spacing.small),
             color = color,
         )
+
+        // NOPE: This is quite glitchy on tiny screens
+//        Text(
+//            modifier = Modifier.weight(1.0f, fill = false),
+//            textAlign = TextAlign.Center,
+//            text = proposalName,
+//        )
+//        Text(" " + stringResource(R.string.verb_is) + " ")
+//        Text(gradeString)
+
         Text(
-            modifier = Modifier.weight(1.0f, fill = false),
-            textAlign = TextAlign.Center,
-            text = proposal,
-        )
-        Text(
-            text = " " + stringResource(R.string.verb_is) + " ",
-        )
-        Text(
-            text = gradeString,
+            text = proposalName + " " + stringResource(R.string.verb_is) + " " + gradeString,
         )
     }
 }
@@ -52,7 +54,7 @@ private fun PreviewJudgmentSummary() {
     JmTheme {
         JudgmentSummary(
             modifier = Modifier,
-            proposal = "Tonio",
+            proposalName = "Tonio",
         )
     }
 }
@@ -63,7 +65,8 @@ private fun PreviewJudgmentSummaryLongName() {
     JmTheme {
         JudgmentSummary(
             modifier = Modifier,
-            proposal = "That candidate with a long name, so long it eats the end of the sentence",
+            proposalName = "That candidate with a long name, so long it eats the end of the sentence",
+            gradeString = "somewhat good",
         )
     }
 }
