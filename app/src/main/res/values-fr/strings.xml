@@ -124,4 +124,27 @@
     <string name="tts_add_the_proposal">ajouter la proposition</string>
     <string name="tts_judge_proposal_as_grade">juger %s comme %s</string>
     <string name="tts_choose_a_proportional_algorithm">choisir un algorithme de proportionnelle</string>
+    <string name="home_try_poll_templates">Ou lancez rapidement un de ces modèles de scrutin :</string>
+    <string name="summary_you_are_almost_done">C\'est presque fini !</string>
+    <string name="summary_please_confirm_your_vote">Veuillez confirmer votre vote :</string>
+    <string name="poll_template_meal_subject">Repas du Soir</string>
+    <string name="poll_template_meal_proposal_pizza">Pizza</string>
+    <string name="poll_template_meal_proposal_pasta">Pâtes</string>
+    <string name="poll_template_meal_proposal_rice">Riz</string>
+    <string name="poll_template_meal_proposal_veggies">Légumes</string>
+    <string name="poll_template_meal_proposal_bread">Pain</string>
+    <string name="poll_template_meal_proposal_soup">Soupe</string>
+    <string name="poll_template_holiday_subject">Destination de Vacances</string>
+    <string name="poll_template_holiday_proposal_mountain">Montagne</string>
+    <string name="poll_template_holiday_proposal_forest">Forêt</string>
+    <string name="poll_template_holiday_proposal_ocean">Océan</string>
+    <string name="poll_template_holiday_proposal_theme_park">Parc d\'Attraction</string>
+    <string name="poll_template_holiday_proposal_metropolis">Métropole</string>
+    <string name="poll_template_holiday_proposal_moon">La Lune</string>
+    <string name="poll_template_project_subject">Projet de l\'Année</string>
+    <string name="poll_template_project_proposal_raise_awareness">Conscientiser</string>
+    <string name="poll_template_project_proposal_levy_funds">Lever des Fonds</string>
+    <string name="poll_template_project_proposal_build_a_toolkit">Outiller</string>
+    <string name="poll_template_project_proposal_call_for_allies">Rallier</string>
+    <string name="poll_template_project_proposal_craft_a_solution">Solutionner</string>
 </resources>
