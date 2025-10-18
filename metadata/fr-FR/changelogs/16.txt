@@ -1,1 +1,2 @@
 * Correction de problèmes sur les tout petits écrans
+* Ajout de modèles de scrutins
