@@ -63,7 +63,10 @@ fun EpicycloidMenu(
         }
 
 
-        itemsIndexed(compasses, key = { _, compass -> compass.hashCode() }) { index, compass ->
+        itemsIndexed(
+            items = compasses,
+            key = { k, compass -> compass.hashCode().toString() + "_" + k.toString() },
+        ) { index, compass ->
             CompassMenu(
                 modifier = Modifier.animateItem(),
                 compassIndex = index,
@@ -102,9 +105,9 @@ fun EpicycloidMenu(
                     val newCompass = Compass(0.0)
                     newCompasses.add(newCompass)
                     compasses = newCompasses.toList()
-                }
+                },
             ) {
-                Icon(Icons.Filled.Add, "Add Compass")
+                Icon(Icons.Filled.Add, null)
                 Text("Add Compass")
             }
         }
@@ -121,9 +124,9 @@ fun EpicycloidMenu(
                             compasses = compasses
                         )
                         onSaveEpicycloid(newEpicycloid)
-                    }
+                    },
                 ) {
-                    Icon(Icons.Filled.Done, "Save")
+                    Icon(Icons.Filled.Done, null)
                     Text("Save")
                 }
             }
@@ -228,7 +231,6 @@ private fun EpicycloidMenuPreview() {
         EpicycloidMenu(
             modifier = Modifier.fillMaxSize(),
             epicycloid = defaultsEpicycloids.first(),
-            onSaveEpicycloid = {},
         )
     }
 }
