@@ -90,6 +90,7 @@ fun BallotSummaryScreen(
         ) {
 
             TextButton(
+                modifier = Modifier.padding(bottom = Theme.spacing.medium),
                 onClick = onCancel,
             ) {
                 Text(
