@@ -215,7 +215,10 @@ private fun PreviewVotingScreen(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
 @Composable
 private fun PreviewVotingScreenWithBallots(modifier: Modifier = Modifier) {
     JmTheme {
@@ -223,7 +226,7 @@ private fun PreviewVotingScreenWithBallots(modifier: Modifier = Modifier) {
             modifier = modifier,
             pollVotingState = PollVotingViewModel.PollVotingViewState(
                 pollConfig = PollConfig(
-                    subject = "Best Prezidan ?",
+                    subject = "Who let the dogs out in the cold of winter ?",
                     proposals = listOf("That candidate with a long name-san", "Mario", "JanBob"),
                     grading = DEFAULT_GRADING_QUALITY_VALUE,
                 ),
@@ -273,6 +276,7 @@ private fun PreviewVotingScreenConfirmation(modifier: Modifier = Modifier) {
 @Preview(
     showSystemUi = true,
     uiMode = Configuration.UI_MODE_NIGHT_YES,
+    locale = "fr",
     fontScale = 2.0f,
 )
 @Composable
