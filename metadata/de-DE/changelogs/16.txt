@@ -1,0 +1,2 @@
+* manche Probleme mit sehr schmalen Bildschirmen behoben
+* Umfragenvorlagen hinzugefügt

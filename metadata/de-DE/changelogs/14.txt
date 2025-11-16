@@ -1,0 +1,3 @@
+* Breite eines Knopfes behoben
+* Marc’s Proportional Algo umbenannt
+* weitere Übersetzungen der Community hinzugefügt
