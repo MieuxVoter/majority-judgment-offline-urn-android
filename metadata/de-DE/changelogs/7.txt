@@ -1,0 +1,6 @@
+* Behebung eines Problems bei der Rücknavigation nach der Umfrageeinrichtung
+* Behebung eines Problems mit dem Tastaturfokus auf älteren Geräten
+* Behebung einiger Probleme im Onboarding
+* Behebung des Zustandsverlusts bei Bildschirmrotation auf bestimmten Screens
+* Behebung der ignorierten Noten-Konfiguration
+* Ein Easter Egg hinzufügen (sowie einen Loader für zukünftige Inhalte)

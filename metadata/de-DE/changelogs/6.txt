@@ -1,0 +1,19 @@
+* Anpassung an Geräte mit niedriger Pixeldichte
+* Behebung des blockierten Tastaturfokus bei Vorschlägen
+* Umkehrung der Reihenfolge der Vorschläge im Einrichtungsbildschirm
+* Zufällige Reihenfolge der Vorschläge im Abstimmungsbildschirm
+* Platzhalter für das Thema der Umfrage hinzufügen
+* Thema und Vorschläge der Umfrage anhand früherer Daten vorschlagen
+* Link zu MieuxVoter.fr im Info-Bildschirm einfügen
+* Weitere Links im Info-Bildschirm ergänzen
+* Sanfteren Soundeffekt für die Stimmabgabe verwenden
+* Vor dem Löschen einer Umfrage um Bestätigung bitten
+* Automatisches Fixieren des Bildschirms (opt-in)
+* Mehr Informationen im Ergebnisbildschirm anzeigen
+* Ergebnisprofile animieren
+* Kurz erklären, wie die Vorschläge gereiht werden
+* Entscheidende Gruppen hervorheben, wenn ein Duell ausgewählt wird
+* Weblate für community-basierte Übersetzungen einrichten
+* Spanische Sprache hinzufügen
+* Einfachen Test-Satz in Gherkin integrieren
+* App-Größe deutlich reduzieren

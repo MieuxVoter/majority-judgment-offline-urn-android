@@ -1,0 +1,4 @@
+* Epizykloiden normalisieren, damit sie nicht außerhalb des Bildschirms liegen
+* Problem mit langen Vorschlagsnamen beheben
+* Auswahl der Bewertung für eine Umfrage neu gestalten
+* Unterstützung für größere Systemschriftgrößen verbessern

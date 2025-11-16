@@ -1,0 +1,4 @@
+* Weitere Probleme im Onboarding beheben
+* Einige Einstellungen erläutern
+* Türkische Übersetzung hinzufügen (Danke an @Kamilkampfwagen-II)
+* Eine Datenschutzerklärung hinzufügen
