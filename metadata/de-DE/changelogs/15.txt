@@ -1,0 +1,3 @@
+* viele Probleme mit der Barrierefreiheit mit TalkBack behoben
+* merke den zuletzt gewählten Proportionalalgorithmus
+* Anzahl der angezeigten Dezimalstellen in Verhältnissen angepasst

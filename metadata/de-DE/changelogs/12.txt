@@ -1,0 +1,3 @@
+* weißes Aufblitzen bei Navigation behoben
+* mehr Bewertungsoptionen hinzugefügt
+* verhältnismäßige Darstellung hinzugefügt

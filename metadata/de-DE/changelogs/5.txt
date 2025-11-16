@@ -1,0 +1,11 @@
+* initale Veröffentlichung
+* eine lokale Mehreintsentscheidung erstellen
+* Vorschläge bewerten und ihr Bewertungsverteilnung ansehen
+* Duplizieren einer vorherigen Umfrage
+* eine angefangene Umfrage fortsetzen
+* Umfrage in Datei speichern
+* Hell/Dunkel Thema unterstützt
+* Englische Übersetzung hinzugefügt
+* Französische Übersetzung hinzugefügt
+* Ton abspielen, wenn Stimme bestätigt
+* Ton kann in den Einstellungen ausgestellt werden
