@@ -1,3 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Urne</string>
+    <string name="majority_judgment">Mehrheitsurteil</string>
+    <string name="label_poll_subject">Thema der Umfrage</string>
+    <string name="label_poll_proposals">Vorschläge</string>
+    <string name="poll_setup_subject_placeholder">Gib den Titel der Umfrage ein…</string>
+    <string name="poll_setup_proposal_placeholder">Gib einen Vorschlag ein…</string>
+    <string name="proposal">Vorschlag</string>
+    <string name="poll_of">Umfrage vom</string>
+    <string name="ballots">Stimmen</string>
+    <string name="ballot">Stimme</string>
+    <string name="in_the_urn">in der Urne</string>
 </resources>
