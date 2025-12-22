@@ -15,7 +15,7 @@ val isGoogleFlavor = providers
 
 android {
     namespace = "com.illiouchine.jm"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = if (isGoogleFlavor) {
@@ -108,8 +108,12 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.navigation)
     implementation(libs.serialization.json)
+
+    implementation(libs.navigation3.ui)
+    implementation(libs.navigation3.runtime)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.androidx.material3.adaptive.navigation3)
 
     // Majority Judgment
     implementation(libs.majority.judgment.library.java)
