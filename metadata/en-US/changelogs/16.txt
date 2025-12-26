@@ -1,2 +1,5 @@
 * Fix some issues on very small screens
 * Add poll templates
+* Add a monochrome launcher icon
+* Improve the design of titles
+* Add german translations (thanks @Fadikkop)
