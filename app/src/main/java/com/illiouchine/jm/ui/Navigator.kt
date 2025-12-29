@@ -7,6 +7,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
+import kotlin.collections.first
+import kotlin.collections.removeLastOrNull
 
 sealed interface Screens: NavKey {
     @Serializable
@@ -43,28 +45,28 @@ sealed interface Screens: NavKey {
     data object OnBoarding : Screens
 }
 
-interface NavigationAction{
+sealed interface NavigationAction{
     data class To(val destination: NavKey) : NavigationAction
     data object Up: NavigationAction
     data class Switch(val destination: NavKey) : NavigationAction
     data object Clear : NavigationAction
 }
 
-class TopLevelBackStack<T: NavKey>(startKey: T) {
-    private var topLevelBackStacks: HashMap<T, SnapshotStateList<T>> = hashMapOf(
+class TopLevelBackStack(startKey: NavKey) {
+    private var topLevelBackStacks: HashMap<NavKey, SnapshotStateList<NavKey>> = hashMapOf(
         startKey to mutableStateListOf(startKey)
     )
 
     var topLevelKey by mutableStateOf(startKey)
         private set
-    val backStack = mutableStateListOf<T>(startKey)
+    val backStack = mutableStateListOf<NavKey>(startKey)
 
     private fun updateBackStack(){
         backStack.clear()
         backStack.addAll(topLevelBackStacks[topLevelKey] ?: emptyList())
     }
 
-    fun switchTopLevel(key: T) {
+    fun switchTopLevel(key: NavKey) {
         if (topLevelBackStacks[key] == null){
             topLevelBackStacks[key] = mutableStateListOf(key)
         }
@@ -72,7 +74,7 @@ class TopLevelBackStack<T: NavKey>(startKey: T) {
         updateBackStack()
     }
 
-    fun add(key: T){
+    fun add(key: NavKey){
         topLevelBackStacks[topLevelKey]?.add(key)
         updateBackStack()
     }
@@ -82,7 +84,7 @@ class TopLevelBackStack<T: NavKey>(startKey: T) {
         updateBackStack()
     }
 
-    fun replaceStack(vararg keys: T){
+    fun replaceStack(vararg keys: NavKey){
         topLevelBackStacks[topLevelKey] = mutableStateListOf(*keys)
         updateBackStack()
     }
@@ -98,9 +100,9 @@ class TopLevelBackStack<T: NavKey>(startKey: T) {
 
     fun catch(navigationAction : NavigationAction){
         when(navigationAction){
-            is NavigationAction.To -> add(navigationAction.destination as T)
+            is NavigationAction.To -> add(navigationAction.destination)
             NavigationAction.Up -> removeLast()
-            is NavigationAction.Switch -> switchTopLevel(navigationAction.destination as T)
+            is NavigationAction.Switch -> switchTopLevel(navigationAction.destination)
             is NavigationAction.Clear -> {
                 clearCurrentStack()
             }
