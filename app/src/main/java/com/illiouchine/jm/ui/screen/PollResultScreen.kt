@@ -50,6 +50,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavKey
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.logic.PollResultViewModel
@@ -59,9 +61,6 @@ import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.DefaultNavigator
-import com.illiouchine.jm.ui.Navigator
-import com.illiouchine.jm.ui.Screens
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.MjuSnackbar
@@ -82,7 +81,7 @@ import kotlin.math.pow
 fun ResultScreen(
     modifier: Modifier = Modifier,
     state: PollResultViewModel.PollResultViewState,
-    navigator: Navigator = DefaultNavigator(),
+    onShowProportionsHelp: () -> Unit = {},
     onFinish: () -> Unit = {},
     feedback: String? = "",
     onDismissFeedback: () -> Unit = {},
@@ -157,6 +156,7 @@ fun ResultScreen(
                     // Behaves like an exclusive toggle
                     val currentlySelected =
                         isAnyProfileSelected && selectedProfileIndex == clickedIndex
+                    val ttsShowExplanation = stringResource(R.string.tts_show_explanation)
                     Column(
                         modifier = Modifier
                             .alpha(
@@ -180,7 +180,7 @@ fun ResultScreen(
                                     // NOTE: does not work well on the last merit profile.
                                     liveRegion = LiveRegionMode.Assertive
                                 }
-                                onClick(label = context.getString(R.string.tts_show_explanation)) {
+                                onClick(label = ttsShowExplanation) {
                                     true
                                 }
                             },
@@ -272,13 +272,14 @@ fun ResultScreen(
                 )
 
                 Box {
+                    val ttsChooseAProportionalAlgorithm = stringResource(
+                        R.string.tts_choose_a_proportional_algorithm
+                    )
                     TextButton(
                         modifier = Modifier
                             .semantics {
                                 onClick(
-                                    label = context.getString(
-                                        R.string.tts_choose_a_proportional_algorithm
-                                    ),
+                                    label = ttsChooseAProportionalAlgorithm,
                                     action = null,
                                 )
                             },
@@ -312,9 +313,7 @@ fun ResultScreen(
                 IconButton(
                     onClick = {
                         coroutineScope.launch {
-                            navigator.navigateTo(
-                                destination = Screens.ProportionsHelp,
-                            )
+                            onShowProportionsHelp()
                         }
                     },
                 ) {
@@ -407,10 +406,12 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
             ),
         ),
     )
-    val pollResultViewModel = PollResultViewModel(
-        navigator = DefaultNavigator(),
-        pollDataSource = InMemoryPollDataSource(), // dummy
-    )
+
+    val pollResultViewModel = viewModel {
+        PollResultViewModel(
+            pollDataSource = InMemoryPollDataSource(), // dummy
+        )
+    }
     pollResultViewModel.initializePollResult(LocalContext.current, poll)
     val state = pollResultViewModel.pollResultViewState.collectAsState().value
 

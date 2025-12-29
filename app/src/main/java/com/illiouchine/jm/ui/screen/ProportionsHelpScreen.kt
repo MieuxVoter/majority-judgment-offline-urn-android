@@ -24,8 +24,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.ProportionalAlgorithms
-import com.illiouchine.jm.ui.DefaultNavigator
-import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.composable.ScreenTitle
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
@@ -36,7 +34,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ProportionsHelpScreen(
     modifier: Modifier = Modifier,
-    navigator: Navigator = DefaultNavigator(),
+    onNavigateUp: () -> Unit = {},
 ) {
 
     Scaffold(
@@ -123,7 +121,7 @@ fun ProportionsHelpScreen(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = {
                     coroutineScope.launch {
-                        navigator.navigateUp()
+                        onNavigateUp()
                     }
                 },
             ) {
