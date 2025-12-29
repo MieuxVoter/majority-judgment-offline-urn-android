@@ -19,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
-import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
@@ -54,7 +53,7 @@ class MainActivity : ComponentActivity() {
             // Therefore, we clear the flag here and set it on in the appropriate screens.
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-            val topLevelBackStack = remember { TopLevelBackStack<NavKey>(Screens.Home) }
+            val topLevelBackStack = remember { TopLevelBackStack(Screens.Home) }
 
             JmTheme {
                 NavDisplay(
