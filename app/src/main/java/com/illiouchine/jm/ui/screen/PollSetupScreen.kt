@@ -27,12 +27,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation3.runtime.NavKey
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.DefaultNavigator
-import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.Screens
 import com.illiouchine.jm.ui.composable.GradingSelectionRow
 import com.illiouchine.jm.ui.composable.MjuBottomBar
@@ -52,7 +51,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun PollSetupScreen(
     modifier: Modifier = Modifier,
-    navigator: Navigator = DefaultNavigator(),
+    onBottomBarItemSelected: (item: NavKey) -> Unit = {},
     pollSetupState: PollSetupViewModel.PollSetupViewState = PollSetupViewModel.PollSetupViewState(),
     onAddSubject: (Context, String) -> Unit = { _, _ -> },
     onAddProposal: (Context, String) -> Unit = { _, _ -> },
@@ -87,7 +86,7 @@ fun PollSetupScreen(
                 selected = Screens.Home,
                 onItemSelected = { destination ->
                     coroutineScope.launch {
-                        navigator.navigateTo(destination)
+                        onBottomBarItemSelected(destination)
                     }
                 },
             )

@@ -36,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation3.runtime.NavKey
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.logic.HomeViewModel
@@ -43,8 +44,6 @@ import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.DefaultNavigator
-import com.illiouchine.jm.ui.Navigator
 import com.illiouchine.jm.ui.Screens
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.PollDeletionConfirmationDialog
@@ -59,7 +58,7 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     modifier: Modifier = Modifier,
     homeViewState: HomeViewModel.HomeViewState = HomeViewModel.HomeViewState(),
-    navigator: Navigator = DefaultNavigator(),
+    onBottomBarItemSelected: (item: NavKey) -> Unit = {},
     onSetupBlankPoll: () -> Unit = {},
     onSetupTemplatePoll: (templateSlug: String) -> Unit = {},
     onSetupClonePoll: (poll: Poll) -> Unit = {},
@@ -79,7 +78,7 @@ fun HomeScreen(
                 selected = Screens.Home,
                 onItemSelected = { destination ->
                     coroutineScope.launch {
-                        navigator.navigateTo(destination)
+                        onBottomBarItemSelected(destination)
                     }
                 },
             )

@@ -1,13 +1,14 @@
 package com.illiouchine.jm.ui
 
-import androidx.navigation.NavOptionsBuilder
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.receiveAsFlow
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
-
-sealed interface Screens {
+sealed interface Screens: NavKey {
     @Serializable
     data object Home : Screens
 
@@ -42,46 +43,67 @@ sealed interface Screens {
     data object OnBoarding : Screens
 }
 
-sealed interface NavigationAction {
-    data class Navigate(
-        val destination: Screens,
-        val navOptions: NavOptionsBuilder.() -> Unit = {}
-    ) : NavigationAction
-
-    data object NavigateUp : NavigationAction
+interface NavigationAction{
+    data class To(val destination: NavKey) : NavigationAction
+    data object Up: NavigationAction
+    data class Switch(val destination: NavKey) : NavigationAction
+    data object Clear : NavigationAction
 }
 
-interface Navigator {
-    val startDestination: Screens
-    val navigationAction: Flow<NavigationAction>
-
-    suspend fun navigateTo(
-        destination: Screens,
-        navOptions: NavOptionsBuilder.() -> Unit = {}
+class TopLevelBackStack<T: NavKey>(startKey: T) {
+    private var topLevelBackStacks: HashMap<T, SnapshotStateList<T>> = hashMapOf(
+        startKey to mutableStateListOf(startKey)
     )
 
-    suspend fun navigateUp()
-}
+    var topLevelKey by mutableStateOf(startKey)
+        private set
+    val backStack = mutableStateListOf<T>(startKey)
 
-class DefaultNavigator(
-    override val startDestination: Screens = Screens.Home,
-) : Navigator {
-    private val _navigationAction = Channel<NavigationAction>()
-    override val navigationAction: Flow<NavigationAction> = _navigationAction.receiveAsFlow()
-
-    override suspend fun navigateTo(
-        destination: Screens,
-        navOptions: NavOptionsBuilder.() -> Unit
-    ) {
-        _navigationAction.send(
-            NavigationAction.Navigate(
-                destination = destination,
-                navOptions = navOptions,
-            )
-        )
+    private fun updateBackStack(){
+        backStack.clear()
+        backStack.addAll(topLevelBackStacks[topLevelKey] ?: emptyList())
     }
 
-    override suspend fun navigateUp() {
-        _navigationAction.send(NavigationAction.NavigateUp)
+    fun switchTopLevel(key: T) {
+        if (topLevelBackStacks[key] == null){
+            topLevelBackStacks[key] = mutableStateListOf(key)
+        }
+        topLevelKey = key
+        updateBackStack()
+    }
+
+    fun add(key: T){
+        topLevelBackStacks[topLevelKey]?.add(key)
+        updateBackStack()
+    }
+
+    fun removeLast(){
+        topLevelBackStacks[topLevelKey]?.removeLastOrNull()
+        updateBackStack()
+    }
+
+    fun replaceStack(vararg keys: T){
+        topLevelBackStacks[topLevelKey] = mutableStateListOf(*keys)
+        updateBackStack()
+    }
+
+    fun clearCurrentStack(){
+        val firstEntry = topLevelBackStacks[topLevelKey]?.first()
+        firstEntry?.let { entry ->
+            topLevelBackStacks.clear()
+            topLevelBackStacks[topLevelKey] = mutableStateListOf(topLevelKey)
+        }
+        updateBackStack()
+    }
+
+    fun catch(navigationAction : NavigationAction){
+        when(navigationAction){
+            is NavigationAction.To -> add(navigationAction.destination as T)
+            NavigationAction.Up -> removeLast()
+            is NavigationAction.Switch -> switchTopLevel(navigationAction.destination as T)
+            is NavigationAction.Clear -> {
+                clearCurrentStack()
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.illiouchine.jm.logic
 
 import android.content.Context
+import android.util.Log.e
 import android.widget.Toast
 import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.ViewModel
@@ -11,20 +12,21 @@ import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.service.DuelAnalyzer
 import com.illiouchine.jm.service.ParticipantGroupAnalysis
 import com.illiouchine.jm.service.TextStylist
-import com.illiouchine.jm.ui.Navigator
+import com.illiouchine.jm.ui.NavigationAction
 import com.illiouchine.jm.ui.Screens
 import fr.mieuxvoter.mj.CollectedTally
 import fr.mieuxvoter.mj.DeliberatorInterface
 import fr.mieuxvoter.mj.MajorityJudgmentDeliberator
 import fr.mieuxvoter.mj.ResultInterface
 import fr.mieuxvoter.mj.TallyInterface
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PollResultViewModel(
-    private val navigator: Navigator,
     private val pollDataSource: PollDataSource,
 ) : ViewModel() {
 
@@ -44,6 +46,9 @@ class PollResultViewModel(
     private val _pollResultViewState = MutableStateFlow(PollResultViewState())
     val pollResultViewState: StateFlow<PollResultViewState> = _pollResultViewState
 
+    private val _navEvents = MutableSharedFlow<NavigationAction>()
+    val navEvents = _navEvents.asSharedFlow()
+
     fun initializePollResultById(context: Context, pollId: Int) {
         viewModelScope.launch {
             val poll = pollDataSource.getPollById(pollId)
@@ -54,7 +59,7 @@ class PollResultViewModel(
                     context.getString(R.string.toast_that_poll_does_not_exist),
                     Toast.LENGTH_LONG,
                 ).show()
-                navigator.navigateTo(destination = Screens.Home)
+                _navEvents.emit(NavigationAction.To(Screens.Home))
             } else {
                 initializePollResult(context, poll)
             }
@@ -126,7 +131,7 @@ class PollResultViewModel(
 
     fun onFinish() {
         viewModelScope.launch {
-            navigator.navigateTo(Screens.Home)
+            _navEvents.emit(NavigationAction.Clear)
         }
     }
 }
