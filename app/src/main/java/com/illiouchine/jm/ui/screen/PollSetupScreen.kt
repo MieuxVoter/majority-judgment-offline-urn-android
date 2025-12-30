@@ -32,7 +32,7 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.Screens
+import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.composable.GradingSelectionRow
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.MjuSnackbarWithStringResId

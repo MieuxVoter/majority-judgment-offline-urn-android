@@ -3,7 +3,7 @@ package com.illiouchine.jm.logic
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.data.SharedPrefsHelper
-import com.illiouchine.jm.ui.NavigationAction
+import com.illiouchine.jm.ui.navigator.NavigationAction
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -18,7 +18,7 @@ class OnBoardingViewModel(
     fun finish(){
         viewModelScope.launch {
             prefsHelper.editShowOnboarding(false)
-            _navEvents.emit(NavigationAction.Up)
+            _navEvents.emit(NavigationAction.Back)
         }
     }
 

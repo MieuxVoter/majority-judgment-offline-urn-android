@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.model.Grading
-import com.illiouchine.jm.ui.NavigationAction
-import com.illiouchine.jm.ui.Screens
+import com.illiouchine.jm.ui.navigator.NavigationAction
+import com.illiouchine.jm.ui.navigator.Screens
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -59,7 +59,6 @@ class SettingsViewModel(
     fun showOnBoarding() {
         viewModelScope.launch {
             _navEvents.emit(NavigationAction.To(Screens.OnBoarding))
-                // TODO WGU : navOptions = { launchSingleTop = true }
         }
     }
 

@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.illiouchine.jm.R
-import com.illiouchine.jm.ui.Screens
+import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.composable.BottomBarItem.Home
 import com.illiouchine.jm.ui.composable.BottomBarItem.About
 import com.illiouchine.jm.ui.composable.BottomBarItem.Settings
