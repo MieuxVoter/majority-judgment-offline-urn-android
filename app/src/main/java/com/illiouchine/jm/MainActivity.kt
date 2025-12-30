@@ -28,8 +28,8 @@ import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.logic.PollVotingViewModel
 import com.illiouchine.jm.logic.SettingsViewModel
-import com.illiouchine.jm.ui.Screens
-import com.illiouchine.jm.ui.TopLevelBackStack
+import com.illiouchine.jm.ui.navigator.Screens
+import com.illiouchine.jm.ui.navigator.TopLevelBackStack
 import com.illiouchine.jm.ui.screen.AboutScreen
 import com.illiouchine.jm.ui.screen.HomeScreen
 import com.illiouchine.jm.ui.screen.LoaderScreen
@@ -72,7 +72,7 @@ class MainActivity : ComponentActivity() {
 
                             LaunchedEffect(Unit) {
                                 homeViewModel.navEvents.collect { event ->
-                                    topLevelBackStack.catch(event)
+                                    topLevelBackStack.handle(event)
                                 }
                             }
 
@@ -95,7 +95,7 @@ class MainActivity : ComponentActivity() {
                                 onBottomBarItemSelected = { topLevelBackStack.switchTopLevel(it) },
                             )
                         }
-                        entry<Screens.Loader>{
+                        entry<Screens.Loader> {
                             LoaderScreen(
                                 modifier = Modifier.fillMaxSize(),
                             )
@@ -104,7 +104,7 @@ class MainActivity : ComponentActivity() {
                             val onBoardingViewModel: OnBoardingViewModel by viewModel()
                             LaunchedEffect(Unit) {
                                 onBoardingViewModel.navEvents.collect { event ->
-                                    topLevelBackStack.catch(event)
+                                    topLevelBackStack.handle(event)
                                 }
                             }
                             OnBoardingScreen(
@@ -125,7 +125,7 @@ class MainActivity : ComponentActivity() {
 
                             LaunchedEffect(Unit) {
                                 pollResultViewModel.navEvents.collect { event ->
-                                    topLevelBackStack.catch(event)
+                                    topLevelBackStack.handle(event)
                                 }
                             }
 
@@ -145,7 +145,7 @@ class MainActivity : ComponentActivity() {
 
                             LaunchedEffect(Unit) {
                                 pollSetupViewModel.navEvents.collect { event ->
-                                    topLevelBackStack.catch(event)
+                                    topLevelBackStack.handle(event)
                                 }
                             }
 
@@ -158,7 +158,7 @@ class MainActivity : ComponentActivity() {
 
                             PollSetupScreen(
                                 modifier = Modifier,
-                                onBottomBarItemSelected = {topLevelBackStack.switchTopLevel(it)},
+                                onBottomBarItemSelected = { topLevelBackStack.switchTopLevel(it) },
                                 pollSetupState = pollSetupViewState,
                                 onAddSubject = pollSetupViewModel::addSubject,
                                 onAddProposal = pollSetupViewModel::addProposal,
@@ -178,7 +178,7 @@ class MainActivity : ComponentActivity() {
 
                             LaunchedEffect(Unit) {
                                 pollVotingViewModel.navEvents.collect { event ->
-                                    topLevelBackStack.catch(event)
+                                    topLevelBackStack.handle(event)
                                 }
                             }
 
@@ -221,7 +221,7 @@ class MainActivity : ComponentActivity() {
 
                             LaunchedEffect(Unit) {
                                 settingsViewModel.navEvents.collect { event ->
-                                    topLevelBackStack.catch(event)
+                                    topLevelBackStack.handle(event)
                                 }
                             }
 
@@ -229,7 +229,7 @@ class MainActivity : ComponentActivity() {
 
                             SettingsScreen(
                                 modifier = Modifier,
-                                onBottomBarItemSelected = {topLevelBackStack.switchTopLevel(it)},
+                                onBottomBarItemSelected = { topLevelBackStack.switchTopLevel(it) },
                                 settingsState = settingsViewState,
                                 onShowOnBoardingRequested = settingsViewModel::showOnBoarding,
                                 onPlaySoundChange = settingsViewModel::updatePlaySound,

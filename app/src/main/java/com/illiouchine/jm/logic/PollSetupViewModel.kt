@@ -13,8 +13,8 @@ import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.NavigationAction
-import com.illiouchine.jm.ui.Screens
+import com.illiouchine.jm.ui.navigator.NavigationAction
+import com.illiouchine.jm.ui.navigator.Screens
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -179,8 +179,7 @@ class PollSetupViewModel(
                 ballots = emptyList(),
             )
             val pollId = pollDataSource.savePoll(poll)
-            _navEvents.emit(NavigationAction.To(Screens.PollVote(id = pollId)))
-                // TODO WGU : popUpTo(Screens.Home) { inclusive = false }
+            _navEvents.emit(NavigationAction.ClearTo(Screens.PollVote(id = pollId)))
         }
         // Reset poll id
         lastId = null

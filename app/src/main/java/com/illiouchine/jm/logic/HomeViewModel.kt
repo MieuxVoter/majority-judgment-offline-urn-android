@@ -8,8 +8,8 @@ import com.illiouchine.jm.data.PollTemplateDataSource
 import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollTemplate
-import com.illiouchine.jm.ui.NavigationAction
-import com.illiouchine.jm.ui.Screens
+import com.illiouchine.jm.ui.navigator.NavigationAction
+import com.illiouchine.jm.ui.navigator.Screens
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -45,7 +45,7 @@ class HomeViewModel(
         viewModelScope.launch {
             val showOnboarding = sharedPrefsHelper.getShowOnboarding()
             if (showOnboarding){
-                _navEvents.emit(NavigationAction.To(Screens.OnBoarding)) // Todo manage launchSingleTop
+                _navEvents.emit(NavigationAction.To(Screens.OnBoarding))
             }
         }
     }

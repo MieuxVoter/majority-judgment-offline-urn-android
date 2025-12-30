@@ -1,7 +1,6 @@
 package com.illiouchine.jm.logic
 
 import android.content.Context
-import android.util.Log.e
 import android.widget.Toast
 import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.ViewModel
@@ -12,8 +11,8 @@ import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.service.DuelAnalyzer
 import com.illiouchine.jm.service.ParticipantGroupAnalysis
 import com.illiouchine.jm.service.TextStylist
-import com.illiouchine.jm.ui.NavigationAction
-import com.illiouchine.jm.ui.Screens
+import com.illiouchine.jm.ui.navigator.NavigationAction
+import com.illiouchine.jm.ui.navigator.Screens
 import fr.mieuxvoter.mj.CollectedTally
 import fr.mieuxvoter.mj.DeliberatorInterface
 import fr.mieuxvoter.mj.MajorityJudgmentDeliberator
