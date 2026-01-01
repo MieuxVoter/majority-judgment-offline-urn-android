@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -182,9 +183,13 @@ fun HomeScreen(
 
             Spacer(Modifier.height(Theme.spacing.medium))
 
-            Text(stringResource(R.string.home_try_poll_templates))
+            Text(
+                modifier = Modifier.padding(bottom = 16.dp),
+                text = stringResource(R.string.home_try_poll_templates)
+            )
             homeViewState.templates.forEach { template ->
                 OutlinedButton(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 30.dp),
                     onClick = {
                         onSetupTemplatePoll(template.slug)
                     },
