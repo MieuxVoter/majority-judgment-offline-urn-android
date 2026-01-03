@@ -1,4 +1,4 @@
-* Adapt to low density devices, innit
+* Adapt to low density devices
 * Fix the locked keyboard focus on proposals
 * Reverse the order of proposals on the setup screen
 * Randomise the proposals' order on the voting screen
