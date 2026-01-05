@@ -46,7 +46,6 @@ class PollSetupViewModel(
     val navEvents = _navEvents.asSharedFlow()
 
     fun initialize(cloneablePollId: Int = 0, pollTemplateSlug: String = "") {
-        Log.d("WGU", "cloneablePollId = $cloneablePollId - poolTemplateSlug = $pollTemplateSlug")
         viewModelScope.launch {
             when (cloneablePollId) {
                 0 -> {
