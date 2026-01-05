@@ -1,5 +1,6 @@
 package com.illiouchine.jm.logic
 
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.data.SharedPrefsHelper
@@ -17,6 +18,7 @@ class SettingsViewModel(
     private val sharedPreferences: SharedPrefsHelper,
 ) : ViewModel() {
 
+    @Stable
     data class SettingsViewState(
         val playSound: Boolean = DEFAULT_PLAY_SOUND_VALUE,
         val pinScreen: Boolean = DEFAULT_PIN_SCREEN_VALUE,

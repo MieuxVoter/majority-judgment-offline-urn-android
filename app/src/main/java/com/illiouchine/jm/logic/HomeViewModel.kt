@@ -1,6 +1,7 @@
 package com.illiouchine.jm.logic
 
 import android.app.Application
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.data.PollDataSource
@@ -24,6 +25,7 @@ class HomeViewModel(
     application: Application,
 ) : AndroidViewModel(application) {
 
+    @Stable
     data class HomeViewState(
         val polls: List<Poll> = emptyList(),
         val templates: List<PollTemplate> = emptyList(),

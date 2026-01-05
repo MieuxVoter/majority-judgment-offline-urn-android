@@ -2,6 +2,7 @@ package com.illiouchine.jm.logic
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,6 +30,7 @@ class PollResultViewModel(
     private val pollDataSource: PollDataSource,
 ) : ViewModel() {
 
+    @Stable
     data class PollResultViewState(
         val poll: Poll? = null,
         val tally: TallyInterface? = null,
