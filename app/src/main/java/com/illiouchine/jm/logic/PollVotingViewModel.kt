@@ -4,6 +4,7 @@ import android.content.Context
 import android.media.MediaPlayer
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.R
@@ -27,6 +28,7 @@ class PollVotingViewModel(
     private val sharedPrefsHelper: SharedPrefsHelper,
 ) : ViewModel() {
 
+    @Stable
     data class PollVotingViewState(
         val pollId: Int = 0,
         val pollConfig: PollConfig = PollConfig(),

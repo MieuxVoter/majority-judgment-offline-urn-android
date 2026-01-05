@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.R
@@ -31,6 +32,7 @@ class PollSetupViewModel(
     application: Application,
 ) : AndroidViewModel(application) {
 
+    @Stable
     data class PollSetupViewState(
         val config: PollConfig = PollConfig(),
         val subjectSuggestion: List<String> = emptyList(),
