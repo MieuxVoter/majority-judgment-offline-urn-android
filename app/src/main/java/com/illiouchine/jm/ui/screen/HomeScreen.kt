@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -27,7 +26,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -45,10 +43,10 @@ import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.PollDeletionConfirmationDialog
 import com.illiouchine.jm.ui.composable.PollSummary
+import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -67,7 +65,6 @@ fun HomeScreen(
     onShowResult: (poll: Poll) -> Unit = {},
     onDeletePoll: (poll: Poll) -> Unit = {},
 ) {
-    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
@@ -104,15 +101,16 @@ fun HomeScreen(
                 .padding(horizontal = Theme.spacing.medium)
                 .verticalScroll(state = scrollState)
         ) {
+            val titleContentDescription = (stringResource(R.string.majority_judgment)
+                    + " "
+                    + stringResource(R.string.menu_home)
+                    )
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = Theme.spacing.medium)
                     .semantics {
-                        contentDescription = (context.getString(R.string.majority_judgment)
-                                + " "
-                                + context.getString(R.string.menu_home)
-                                )
+                        contentDescription = titleContentDescription
                     },
                 fontSize = 32.sp,
                 lineHeight = 32.sp,
