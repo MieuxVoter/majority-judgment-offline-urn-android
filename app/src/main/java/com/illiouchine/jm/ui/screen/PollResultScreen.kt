@@ -166,16 +166,14 @@ fun ResultScreen(
                                     max(0f, 0.85f * proposalDisplayIndex / amountOfProposals),
                                     min(1f, 1.15f * (proposalDisplayIndex + 1) / amountOfProposals),
                                     appearAnimation.value,
-                                )
-                                        *
-                                        (if (isInSelectedDuel || !isAnyProfileSelected) 1.0f else 0.38f)
+                                ) * (if (isInSelectedDuel || !isAnyProfileSelected) 1.0f else 0.38f)
                             )
                             .clickable {
                                 if (isInSelectedDuel) {
                                     isAnyProfileSelected = false
                                 } else {
                                     isAnyProfileSelected = true
-                                    @Suppress("AssignedValueIsNeverRead")
+                                    @Suppress("AssignedValueIsNeverRead")  // because it IS
                                     selectedProfileIndex = proposalDisplayIndex
                                 }
                             }
