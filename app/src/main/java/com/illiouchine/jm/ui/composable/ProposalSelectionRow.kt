@@ -23,7 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.onClick
@@ -49,7 +49,7 @@ fun ColumnScope.ProposalSelectionRow(
     onProposalSelected: (String) -> Unit = {},
     onClearSuggestion: () -> Unit = {},
 ) {
-    val context = LocalContext.current
+    val context = LocalResources.current
     var textFieldHeight by remember { mutableIntStateOf(0) }
 
     // Helps us put the cursor at the end after selecting a suggestion.
