@@ -13,7 +13,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -39,7 +39,7 @@ fun PollSummary(
     onSetupClonePoll: (poll: Poll) -> Unit = {},
     onShowResult: (poll: Poll) -> Unit = {},
 ) {
-    val context = LocalContext.current
+    val res = LocalResources.current
     Row(
         modifier = modifier
             // TalkBack accessibility
@@ -48,28 +48,28 @@ fun PollSummary(
             ) {
                 customActions = listOf(
                     CustomAccessibilityAction(
-                        label = context.getString(R.string.action_inspect),
+                        label = res.getString(R.string.action_inspect),
                         action = {
                             onShowResult(poll)
                             true
                         }
                     ),
                     CustomAccessibilityAction(
-                        label = context.getString(R.string.action_resume),
+                        label = res.getString(R.string.action_resume),
                         action = {
                             onResumePoll(poll)
                             true
                         }
                     ),
                     CustomAccessibilityAction(
-                        label = context.getString(R.string.action_clone),
+                        label = res.getString(R.string.action_clone),
                         action = {
                             onSetupClonePoll(poll)
                             true
                         }
                     ),
                     CustomAccessibilityAction(
-                        label = context.getString(R.string.action_delete),
+                        label = res.getString(R.string.action_delete),
                         action = {
                             onDeletePoll(poll)
                             true
