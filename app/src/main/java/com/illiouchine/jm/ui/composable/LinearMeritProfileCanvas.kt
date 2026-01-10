@@ -12,10 +12,17 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.ImageShader
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
@@ -23,6 +30,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
+import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.service.ParticipantGroupAnalysis
 import fr.mieuxvoter.mj.ParticipantGroup
@@ -47,6 +55,63 @@ fun LinearMeritProfileCanvas(
     val outlineAlphaAnimation = remember { Animatable(0f) }
     val outlineAnimation = remember { Animatable(0f) }
     val percentageAnimation = remember { Animatable(0f) }
+
+    val patterns = listOf(
+        ImageBitmap.imageResource(R.drawable.pattern_0),
+        ImageBitmap.imageResource(R.drawable.pattern_1),
+        ImageBitmap.imageResource(R.drawable.pattern_2),
+        ImageBitmap.imageResource(R.drawable.pattern_3),
+        ImageBitmap.imageResource(R.drawable.pattern_4),
+        ImageBitmap.imageResource(R.drawable.pattern_5),
+    )
+
+    val brushes = remember {
+        listOf(
+            ShaderBrush(
+                shader = ImageShader(
+                    image = patterns[0],
+                    tileModeX = TileMode.Repeated,
+                    tileModeY = TileMode.Repeated,
+                ),
+            ),
+            ShaderBrush(
+                shader = ImageShader(
+                    image = patterns[1],
+                    tileModeX = TileMode.Repeated,
+                    tileModeY = TileMode.Repeated,
+                ),
+            ),
+            ShaderBrush(
+                shader = ImageShader(
+                    image = patterns[2],
+                    tileModeX = TileMode.Repeated,
+                    tileModeY = TileMode.Repeated,
+                ),
+            ),
+            ShaderBrush(
+                shader = ImageShader(
+                    image = patterns[3],
+                    tileModeX = TileMode.Repeated,
+                    tileModeY = TileMode.Repeated,
+                ),
+            ),
+            ShaderBrush(
+                shader = ImageShader(
+                    image = patterns[4],
+                    tileModeX = TileMode.Repeated,
+                    tileModeY = TileMode.Repeated,
+                ),
+            ),
+            ShaderBrush(
+                shader = ImageShader(
+                    image = patterns[5],
+                    tileModeX = TileMode.Repeated,
+                    tileModeY = TileMode.Repeated,
+                ),
+            ),
+        )
+    }
+
 
     LaunchedEffect("apparition") {
         widthAnimation.animateTo(1f, tween(1500, 1000))
@@ -95,9 +160,24 @@ fun LinearMeritProfileCanvas(
                 )
             )
 
+
             // Fill a rectangle with the color of the grade
             drawRect(
                 color = grading.getGradeColor(gradeIndex),
+                size = gradeRectSize,
+                topLeft = gradeRectOffset,
+            )
+
+            // Add a pattern overlay for color-impaired people
+            drawRect(
+                brush = brushes[gradeIndex % brushes.size],
+                colorFilter = ColorFilter.tint(
+                    color = lerp(
+                        grading.getGradeColor(gradeIndex),
+                        Color.Black,
+                        0.2f,
+                    ),
+                ),
                 size = gradeRectSize,
                 topLeft = gradeRectOffset,
             )
@@ -132,7 +212,7 @@ fun LinearMeritProfileCanvas(
                 )
             }
 
-            // Outline only the median grade
+            // Compute the median grade outline
             if (gradeIndex == proposalResult.analysis.medianGrade) {
                 val medianGradeRectInitialWidth = 2.dp.toPx()
                 medianGradeOutline.addRect(
@@ -238,7 +318,6 @@ fun LinearMeritProfileCanvas(
                 )
             }
         }
-
 
         // Amount by which the median line overshoots the merit profile vertically
         val medianLineVerticalOvershoot = 3.dp.toPx()
