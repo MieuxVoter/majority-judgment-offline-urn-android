@@ -30,7 +30,6 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
-import androidx.core.graphics.ColorUtils
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.service.ParticipantGroupAnalysis
