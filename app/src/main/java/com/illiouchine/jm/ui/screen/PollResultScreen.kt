@@ -152,7 +152,6 @@ fun ResultScreen(
                 appearAnimation.animateTo(1f, tween(1500))
             }
 
-
             result.proposalResultsRanked.forEachIndexed { proposalDisplayIndex, proposalResult ->
                 if (proposalResult.analysis.totalSize > BigInteger.ZERO) {
                     val isInSelectedDuel = isAnyProfileSelected &&
@@ -183,9 +182,7 @@ fun ResultScreen(
                                     // NOTE: does not work well on the last merit profile.
                                     liveRegion = LiveRegionMode.Assertive
                                 }
-                                onClick(label = context.getString(R.string.tts_show_explanation)) {
-                                    true
-                                }
+                                onClick(label = context.getString(R.string.tts_show_explanation)) { true }
                             },
                     ) {
                         Row(
@@ -194,8 +191,9 @@ fun ResultScreen(
                             val rank = proposalResult.rank
                             val proposalName = poll.pollConfig.proposals[proposalResult.index]
                             val medianGrade = proposalResult.analysis.medianGrade
-                            val medianGradeName =
-                                stringResource(poll.pollConfig.grading.getGradeName(medianGrade))
+                            val medianGradeName = stringResource(
+                                poll.pollConfig.grading.getGradeName(medianGrade)
+                            )
                             Text(
                                 modifier = Modifier
                                     .padding(end = Theme.spacing.extraSmall + Theme.spacing.small),
