@@ -1,6 +1,7 @@
 package com.illiouchine.jm.logic
 
 import android.app.Application
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.data.PollDataSource
@@ -8,10 +9,12 @@ import com.illiouchine.jm.data.PollTemplateDataSource
 import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollTemplate
-import com.illiouchine.jm.ui.Navigator
-import com.illiouchine.jm.ui.Screens
+import com.illiouchine.jm.ui.navigator.NavigationAction
+import com.illiouchine.jm.ui.navigator.Screens
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -19,14 +22,17 @@ class HomeViewModel(
     private val pollDataSource: PollDataSource,
     private val pollTemplateDataSource: PollTemplateDataSource,
     private val sharedPrefsHelper: SharedPrefsHelper,
-    private val navigator: Navigator,
     application: Application,
 ) : AndroidViewModel(application) {
 
+    @Stable
     data class HomeViewState(
         val polls: List<Poll> = emptyList(),
         val templates: List<PollTemplate> = emptyList(),
     )
+
+    private val _navEvents = MutableSharedFlow<NavigationAction>()
+    val navEvents = _navEvents.asSharedFlow()
 
     private val _homeViewState = MutableStateFlow(HomeViewState())
     val homeViewState: StateFlow<HomeViewState> = _homeViewState
@@ -41,12 +47,7 @@ class HomeViewModel(
         viewModelScope.launch {
             val showOnboarding = sharedPrefsHelper.getShowOnboarding()
             if (showOnboarding){
-                navigator.navigateTo(
-                    Screens.OnBoarding,
-                    navOptions = {
-                        launchSingleTop = true
-                    }
-                )
+                _navEvents.emit(NavigationAction.To(Screens.OnBoarding))
             }
         }
     }
@@ -83,16 +84,16 @@ class HomeViewModel(
 
     fun setupBlankPoll() {
         viewModelScope.launch {
-            navigator.navigateTo(Screens.PollSetup(cloneablePollId = 0))
+            _navEvents.emit(NavigationAction.To(Screens.PollSetup(cloneablePollId = 0)))
         }
     }
 
     fun setupPollFromTemplate(pollTemplateSlug: String) {
         viewModelScope.launch {
-            navigator.navigateTo(Screens.PollSetup(
+           _navEvents.emit(NavigationAction.To(Screens.PollSetup(
                 cloneablePollId = 0,
                 pollTemplateSlug = pollTemplateSlug,
-            ))
+            )))
         }
     }
 
@@ -105,19 +106,19 @@ class HomeViewModel(
 
     fun clonePoll(poll: Poll) {
         viewModelScope.launch {
-            navigator.navigateTo(Screens.PollSetup(cloneablePollId = poll.id))
+            _navEvents.emit(NavigationAction.To(Screens.PollSetup(cloneablePollId = poll.id)))
         }
     }
 
     fun resumePoll(poll: Poll) {
         viewModelScope.launch {
-            navigator.navigateTo(Screens.PollVote(id = poll.id))
+            _navEvents.emit(NavigationAction.To(Screens.PollVote(id = poll.id)))
         }
     }
 
     fun showResult(poll: Poll) {
         viewModelScope.launch {
-            navigator.navigateTo(Screens.PollResult(id = poll.id))
+            _navEvents.emit(NavigationAction.To(Screens.PollResult(id = poll.id)))
         }
     }
 }

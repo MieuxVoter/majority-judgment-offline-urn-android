@@ -2,10 +2,11 @@ package com.illiouchine.jm.logic
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.util.appendPlaceholders
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.data.PollTemplateDataSource
@@ -13,10 +14,12 @@ import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.Navigator
-import com.illiouchine.jm.ui.Screens
+import com.illiouchine.jm.ui.navigator.NavigationAction
+import com.illiouchine.jm.ui.navigator.Screens
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.text.DateFormat
@@ -26,10 +29,10 @@ class PollSetupViewModel(
     private val sharedPrefs: SharedPrefsHelper,
     private val pollDataSource: PollDataSource,
     private val pollTemplateDataSource: PollTemplateDataSource,
-    private val navigator: Navigator,
     application: Application,
 ) : AndroidViewModel(application) {
 
+    @Stable
     data class PollSetupViewState(
         val config: PollConfig = PollConfig(),
         val subjectSuggestion: List<String> = emptyList(),
@@ -41,12 +44,12 @@ class PollSetupViewModel(
     val pollSetupViewState: StateFlow<PollSetupViewState> = _pollSetupViewState
     private var lastId: Int? = null
 
+    private val _navEvents = MutableSharedFlow<NavigationAction>()
+    val navEvents = _navEvents.asSharedFlow()
+
     fun initialize(cloneablePollId: Int = 0, pollTemplateSlug: String = "") {
         viewModelScope.launch {
             when (cloneablePollId) {
-                lastId -> { /* Do nothing : Reload from configuration change */
-                }
-
                 0 -> {
                     _pollSetupViewState.update {
                         var newConfig = PollConfig(grading = sharedPrefs.getDefaultGrading())
@@ -59,7 +62,8 @@ class PollSetupViewModel(
                         it.copy(config = newConfig)
                     }
                 }
-
+                lastId -> { /* Do nothing : Reload from configuration change */
+                }
                 else -> {
                     val poll = pollDataSource.getPollById(pollId = cloneablePollId)
                     val initialPollConfig =
@@ -176,9 +180,7 @@ class PollSetupViewModel(
                 ballots = emptyList(),
             )
             val pollId = pollDataSource.savePoll(poll)
-            navigator.navigateTo(Screens.PollVote(id = pollId)) {
-                popUpTo(Screens.Home) { inclusive = false }
-            }
+            _navEvents.emit(NavigationAction.ClearTo(Screens.PollVote(id = pollId)))
         }
         // Reset poll id
         lastId = null

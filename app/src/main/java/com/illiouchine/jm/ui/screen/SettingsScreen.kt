@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.invisibleToUser
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
@@ -31,16 +31,15 @@ import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavKey
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.SettingsViewModel
 import com.illiouchine.jm.model.Grading
-import com.illiouchine.jm.ui.Screens
 import com.illiouchine.jm.ui.composable.GradingSelectionRow
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.ScreenTitle
+import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -49,7 +48,7 @@ import com.illiouchine.jm.ui.theme.spacing
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
-    navController: NavController = rememberNavController(),
+    onBottomBarItemSelected: (item: NavKey) -> Unit = {},
     settingsState: SettingsViewModel.SettingsViewState = SettingsViewModel.SettingsViewState(),
     feedback: String? = "",
     onShowOnBoardingRequested: () -> Unit = {},
@@ -75,7 +74,7 @@ fun SettingsScreen(
             MjuBottomBar(
                 modifier = Modifier,
                 selected = Screens.Settings,
-                onItemSelected = { destination -> navController.navigate(destination) },
+                onItemSelected = { destination -> onBottomBarItemSelected(destination) },
             )
         },
     ) { innerPadding ->
@@ -150,7 +149,7 @@ fun ShowOnboardingRow(
             Text(
                 modifier = Modifier
                     .semantics {
-                        invisibleToUser()
+                        hideFromAccessibility()
                     },
                 text = titleText,
             )

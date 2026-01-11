@@ -32,10 +32,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavKey
 import com.illiouchine.jm.R
-import com.illiouchine.jm.ui.Screens
+import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.composable.IconTextButton
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.ScreenTitle
@@ -47,13 +46,14 @@ import com.illiouchine.jm.ui.theme.spacing
 @Composable
 fun AboutScreen(
     modifier: Modifier = Modifier,
-    navController: NavController = rememberNavController(),
+    onBottomBarItemSelected: (item: NavKey) -> Unit = {},
     onDiscuss: () -> Unit = {},
     onBrowseSource: () -> Unit = {},
     onReportBug: () -> Unit = {},
     onSuggestImprovement: () -> Unit = {},
     onContributeTranslations: () -> Unit = {},
     onOpenWebsite: () -> Unit = {},
+    onShowSpirograph: () -> Unit = {},
 ) {
 
     Scaffold(
@@ -63,7 +63,7 @@ fun AboutScreen(
         bottomBar = {
             MjuBottomBar(
                 selected = Screens.About,
-                onItemSelected = { destination -> navController.navigate(destination) },
+                onItemSelected = { destination -> onBottomBarItemSelected(destination) },
             )
         },
     ) { innerPadding ->
@@ -87,7 +87,7 @@ fun AboutScreen(
                 Image(
                     modifier = Modifier.pointerInput(Unit){
                         detectTapGestures {
-                            navController.navigate(Screens.Loader)
+                            onShowSpirograph()
                         }
                     },
                     painter = painterResource(R.drawable.onboarding_3),

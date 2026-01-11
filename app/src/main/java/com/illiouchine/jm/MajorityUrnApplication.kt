@@ -15,9 +15,6 @@ import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.logic.PollVotingViewModel
 import com.illiouchine.jm.logic.SettingsViewModel
-import com.illiouchine.jm.ui.DefaultNavigator
-import com.illiouchine.jm.ui.Navigator
-import com.illiouchine.jm.ui.Screens
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -55,15 +52,11 @@ val module = module {
     single<PollDataSource> { SqlitePollDataSource(get()) }
     single<PollTemplateDataSource> { HardcodedPollTemplateDataSource() }
 
-    // Navigation
-    single<Navigator> { DefaultNavigator(Screens.Home) }
-
     // ViewModel
     viewModel {
         HomeViewModel(
             pollDataSource = get(),
             pollTemplateDataSource = get(),
-            navigator = get(),
             sharedPrefsHelper = get(),
             application = get(),
         )
@@ -71,7 +64,6 @@ val module = module {
     viewModel {
         SettingsViewModel(
             sharedPreferences = get(),
-            navigator = get(),
         )
     }
     viewModel {
@@ -79,7 +71,6 @@ val module = module {
             sharedPrefs = get(),
             pollDataSource = get(),
             pollTemplateDataSource = get(),
-            navigator = get(),
             application = get(),
         )
     }
@@ -87,19 +78,16 @@ val module = module {
         PollVotingViewModel(
             pollDataSource = get(),
             sharedPrefsHelper = get(),
-            navigator = get(),
         )
     }
     viewModel {
         PollResultViewModel(
             pollDataSource = get(),
-            navigator = get(),
         )
     }
     viewModel {
         OnBoardingViewModel(
             prefsHelper = get(),
-            navigator = get(),
         )
     }
 }

@@ -1,21 +1,24 @@
 package com.illiouchine.jm.logic
 
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.model.Grading
-import com.illiouchine.jm.ui.Navigator
-import com.illiouchine.jm.ui.Screens
+import com.illiouchine.jm.ui.navigator.NavigationAction
+import com.illiouchine.jm.ui.navigator.Screens
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
     private val sharedPreferences: SharedPrefsHelper,
-    private val navigator: Navigator,
 ) : ViewModel() {
 
+    @Stable
     data class SettingsViewState(
         val playSound: Boolean = DEFAULT_PLAY_SOUND_VALUE,
         val pinScreen: Boolean = DEFAULT_PIN_SCREEN_VALUE,
@@ -24,6 +27,9 @@ class SettingsViewModel(
 
     private val _settingsViewState = MutableStateFlow(SettingsViewState())
     val settingsViewState: StateFlow<SettingsViewState> = _settingsViewState
+
+    private val _navEvents = MutableSharedFlow<NavigationAction>()
+    val navEvents = _navEvents.asSharedFlow()
 
     fun initialize() {
         loadPlaySound()
@@ -54,12 +60,7 @@ class SettingsViewModel(
 
     fun showOnBoarding() {
         viewModelScope.launch {
-            navigator.navigateTo(
-                Screens.OnBoarding,
-                navOptions = {
-                    launchSingleTop = true
-                }
-            )
+            _navEvents.emit(NavigationAction.To(Screens.OnBoarding))
         }
     }
 

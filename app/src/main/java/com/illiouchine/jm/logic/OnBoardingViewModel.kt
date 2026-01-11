@@ -3,18 +3,22 @@ package com.illiouchine.jm.logic
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.data.SharedPrefsHelper
-import com.illiouchine.jm.ui.Navigator
+import com.illiouchine.jm.ui.navigator.NavigationAction
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 class OnBoardingViewModel(
     private val prefsHelper: SharedPrefsHelper,
-    private val navigator: Navigator
 ) : ViewModel() {
+
+    private val _navEvents = MutableSharedFlow<NavigationAction>()
+    val navEvents = _navEvents.asSharedFlow()
 
     fun finish(){
         viewModelScope.launch {
             prefsHelper.editShowOnboarding(false)
-            navigator.navigateUp()
+            _navEvents.emit(NavigationAction.Back)
         }
     }
 

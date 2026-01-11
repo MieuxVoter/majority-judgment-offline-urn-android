@@ -26,7 +26,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -36,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation3.runtime.NavKey
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.logic.HomeViewModel
@@ -43,12 +43,10 @@ import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.DefaultNavigator
-import com.illiouchine.jm.ui.Navigator
-import com.illiouchine.jm.ui.Screens
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.PollDeletionConfirmationDialog
 import com.illiouchine.jm.ui.composable.PollSummary
+import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -59,7 +57,7 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     modifier: Modifier = Modifier,
     homeViewState: HomeViewModel.HomeViewState = HomeViewModel.HomeViewState(),
-    navigator: Navigator = DefaultNavigator(),
+    onBottomBarItemSelected: (item: NavKey) -> Unit = {},
     onSetupBlankPoll: () -> Unit = {},
     onSetupTemplatePoll: (templateSlug: String) -> Unit = {},
     onSetupClonePoll: (poll: Poll) -> Unit = {},
@@ -67,7 +65,6 @@ fun HomeScreen(
     onShowResult: (poll: Poll) -> Unit = {},
     onDeletePoll: (poll: Poll) -> Unit = {},
 ) {
-    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
@@ -79,7 +76,7 @@ fun HomeScreen(
                 selected = Screens.Home,
                 onItemSelected = { destination ->
                     coroutineScope.launch {
-                        navigator.navigateTo(destination)
+                        onBottomBarItemSelected(destination)
                     }
                 },
             )
@@ -104,15 +101,16 @@ fun HomeScreen(
                 .padding(horizontal = Theme.spacing.medium)
                 .verticalScroll(state = scrollState)
         ) {
+            val titleContentDescription = (stringResource(R.string.majority_judgment)
+                    + " "
+                    + stringResource(R.string.menu_home)
+                    )
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = Theme.spacing.medium)
                     .semantics {
-                        contentDescription = (context.getString(R.string.majority_judgment)
-                                + " "
-                                + context.getString(R.string.menu_home)
-                                )
+                        contentDescription = titleContentDescription
                     },
                 fontSize = 32.sp,
                 lineHeight = 32.sp,
@@ -183,9 +181,13 @@ fun HomeScreen(
 
             Spacer(Modifier.height(Theme.spacing.medium))
 
-            Text(stringResource(R.string.home_try_poll_templates))
+            Text(
+                modifier = Modifier.padding(bottom = 16.dp),
+                text = stringResource(R.string.home_try_poll_templates)
+            )
             homeViewState.templates.forEach { template ->
                 OutlinedButton(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 30.dp),
                     onClick = {
                         onSetupTemplatePoll(template.slug)
                     },

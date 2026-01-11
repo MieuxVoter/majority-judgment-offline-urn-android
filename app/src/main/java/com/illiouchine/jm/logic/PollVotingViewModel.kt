@@ -4,6 +4,7 @@ import android.content.Context
 import android.media.MediaPlayer
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.R
@@ -13,19 +14,21 @@ import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.Navigator
-import com.illiouchine.jm.ui.Screens
+import com.illiouchine.jm.ui.navigator.NavigationAction
+import com.illiouchine.jm.ui.navigator.Screens
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PollVotingViewModel(
     private val pollDataSource: PollDataSource,
     private val sharedPrefsHelper: SharedPrefsHelper,
-    private val navigator: Navigator,
 ) : ViewModel() {
 
+    @Stable
     data class PollVotingViewState(
         val pollId: Int = 0,
         val pollConfig: PollConfig = PollConfig(),
@@ -50,6 +53,9 @@ class PollVotingViewModel(
 
     private val _pollVotingViewState = MutableStateFlow(PollVotingViewState())
     val pollVotingViewState: StateFlow<PollVotingViewState> = _pollVotingViewState
+
+    private val _navEvents = MutableSharedFlow<NavigationAction>()
+    val navEvents = _navEvents.asSharedFlow()
 
     private fun generateRandomOrder(size: Int): List<Int> = (0..<size).shuffled()
     private var currentPollId: Int? = null
@@ -145,7 +151,7 @@ class PollVotingViewModel(
                 ballots = _pollVotingViewState.value.ballots,
             )
             val newPollId = pollDataSource.savePoll(poll)
-            navigator.navigateTo(Screens.PollResult(id = newPollId))
+            _navEvents.emit(NavigationAction.To(Screens.PollResult(id = newPollId)))
             currentPollId = null
         }
     }

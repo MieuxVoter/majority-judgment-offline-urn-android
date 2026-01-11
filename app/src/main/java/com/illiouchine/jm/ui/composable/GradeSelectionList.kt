@@ -17,7 +17,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.onClick
@@ -74,7 +73,6 @@ fun GradeSelectionList(
         )
     }
 
-    val context = LocalContext.current
     var selectedGradeIndex: Int? by remember { mutableStateOf(null) }
 
     for (gradeIndex in 0..<pollConfig.grading.grades.size) {
@@ -86,7 +84,12 @@ fun GradeSelectionList(
             targetValue = if (interactionSourceIsPressed) 80.dp else 64.dp
         )
 
-        val gradeName = context.getString(pollConfig.grading.grades[gradeIndex].name)
+        val gradeName = stringResource(pollConfig.grading.grades[gradeIndex].name)
+        val onClickSemanticsLabel = stringResource(
+            R.string.tts_judge_proposal_as_grade,
+            forProposalName,
+            gradeName,
+        )
 
         GradeSelectionButton(
             modifier = Modifier
@@ -94,11 +97,7 @@ fun GradeSelectionList(
                 .testTag("grade_selection_$gradeIndex")
                 .semantics {
                     onClick(
-                        label = context.getString(
-                            R.string.tts_judge_proposal_as_grade,
-                            forProposalName,
-                            gradeName,
-                        ),
+                        label = onClickSemanticsLabel,
                         action = null,
                     )
                 },
