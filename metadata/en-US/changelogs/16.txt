@@ -3,3 +3,6 @@
 * Add a monochrome launcher icon
 * Improve the design of titles
 * Add german translations (thanks @Fadikkop)
+* Fade out merit profiles that are not part of the selected duel
+* Add background patterns to merit profiles for color-impaired people
+* Improve screen navigation consistency
