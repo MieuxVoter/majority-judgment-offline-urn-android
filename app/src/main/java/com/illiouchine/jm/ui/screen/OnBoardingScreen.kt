@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -145,7 +146,7 @@ fun OnBoardingPage(
             )
         },
     ) {
-        Column(
+        FlowColumn(
             modifier = modifier
                 .align(Alignment.Center)
                 .padding(horizontal = Theme.spacing.medium + Theme.spacing.small),
@@ -156,8 +157,6 @@ fun OnBoardingPage(
             )
             Spacer(Modifier.padding(Theme.spacing.medium))
             Text(
-                modifier = Modifier
-                    .fillMaxWidth(),
                 text = stringResource(onBoardingPage.text),
             )
         }
