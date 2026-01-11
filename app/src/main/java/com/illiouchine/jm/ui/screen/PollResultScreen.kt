@@ -92,11 +92,19 @@ fun ResultScreen(
     val grading = poll.pollConfig.grading
 
     val context = LocalContext.current
+    val amountOfProposals = result.proposalResultsRanked.size
 
     var isAnyProfileSelected by remember { mutableStateOf(false) }
     var selectedProfileIndex by remember { mutableIntStateOf(0) }
+    // Selecting the last proposal behaves like selecting the penultimate, duel-wise.
+    val selectedDuelIndex = if (selectedProfileIndex == amountOfProposals - 1) {
+        selectedProfileIndex - 1
+    } else {
+        selectedProfileIndex
+    }
+
     // Not all these groups belong to the selected profile ; they belong to a duel
-    val decisiveGroupsForSelectedProfile = state.groups[selectedProfileIndex].groups
+    val decisiveGroupsForSelectedProfile = state.groups[selectedDuelIndex].groups
 
     var proportionalDropdownExpanded by remember { mutableStateOf(false) }
     var proportionalAlgorithm by rememberSaveable { mutableStateOf(ProportionalAlgorithms.NONE) }
@@ -143,39 +151,34 @@ fun ResultScreen(
                 appearAnimation.animateTo(1f, tween(1500))
             }
 
-            val amountOfProposals = result.proposalResultsRanked.size
-            result.proposalResultsRanked.forEachIndexed { displayIndex, proposalResult ->
+            result.proposalResultsRanked.forEachIndexed { proposalDisplayIndex, proposalResult ->
                 if (proposalResult.analysis.totalSize > BigInteger.ZERO) {
-                    // Clicking on the last is clicking on the penultimate.
-                    val clickedIndex =
-                        if (displayIndex == amountOfProposals - 1) {
-                            displayIndex - 1
-                        } else {
-                            displayIndex
-                        }
-                    // Behaves like an exclusive toggle
-                    val currentlySelected =
-                        isAnyProfileSelected && selectedProfileIndex == clickedIndex
+                    // I don't know how to indent this properly (I am triggered)
+                    val isInSelectedDuel = isAnyProfileSelected &&
+                            (selectedDuelIndex == proposalDisplayIndex
+                                    || selectedDuelIndex + 1 == proposalDisplayIndex)
                     val ttsShowExplanation = stringResource(R.string.tts_show_explanation)
+                    
                     Column(
                         modifier = Modifier
                             .alpha(
                                 smoothStep(
-                                    max(0f, 0.85f * displayIndex / amountOfProposals),
-                                    min(1f, 1.15f * (displayIndex + 1) / amountOfProposals),
+                                    max(0f, 0.85f * proposalDisplayIndex / amountOfProposals),
+                                    min(1f, 1.15f * (proposalDisplayIndex + 1) / amountOfProposals),
                                     appearAnimation.value,
-                                )
+                                ) * (if (isInSelectedDuel || !isAnyProfileSelected) 1.0f else 0.38f)
                             )
                             .clickable {
-                                if (currentlySelected) {
+                                if (isInSelectedDuel) {
                                     isAnyProfileSelected = false
                                 } else {
                                     isAnyProfileSelected = true
-                                    selectedProfileIndex = clickedIndex
+                                    @Suppress("AssignedValueIsNeverRead")  // because it IS
+                                    selectedProfileIndex = proposalDisplayIndex
                                 }
                             }
                             .semantics {
-                                if (currentlySelected) {
+                                if (isInSelectedDuel) {
                                     // Bit of a hack to force reading the explanations that show up.
                                     // NOTE: does not work well on the last merit profile.
                                     liveRegion = LiveRegionMode.Assertive
@@ -191,8 +194,9 @@ fun ResultScreen(
                             val rank = proposalResult.rank
                             val proposalName = poll.pollConfig.proposals[proposalResult.index]
                             val medianGrade = proposalResult.analysis.medianGrade
-                            val medianGradeName =
-                                stringResource(poll.pollConfig.grading.getGradeName(medianGrade))
+                            val medianGradeName = stringResource(
+                                poll.pollConfig.grading.getGradeName(medianGrade)
+                            )
                             Text(
                                 modifier = Modifier
                                     .padding(end = Theme.spacing.extraSmall + Theme.spacing.small),
@@ -223,7 +227,7 @@ fun ResultScreen(
                                 proposalResult = proposalResult,
                                 grading = grading,
                                 decisiveGroups = decisiveGroupsForSelectedProfile.filter { group ->
-                                    group.participant == displayIndex
+                                    group.participant == proposalDisplayIndex
                                 },
                                 showDecisiveGroups = isAnyProfileSelected,
                             )
@@ -237,18 +241,18 @@ fun ResultScreen(
 
                         // Ux: Explanations are shown one at a time (exclusive toggle)
                         val shouldShowExplanation = isAnyProfileSelected
-                                && selectedProfileIndex == displayIndex
+                                && selectedDuelIndex == proposalDisplayIndex
 
                         AnimatedVisibility(shouldShowExplanation) {
                             Row {
                                 Text(
                                     fontSize = 14.sp,
                                     text =
-                                    if (state.explanations.size > displayIndex) {
-                                        state.explanations[displayIndex]
-                                    } else {
-                                        AnnotatedString("\uD83D\uDC1E")
-                                    },
+                                        if (state.explanations.size > proposalDisplayIndex) {
+                                            state.explanations[proposalDisplayIndex]
+                                        } else {
+                                            AnnotatedString("\uD83D\uDC1E")
+                                        },
                                 )
                             }
                         }
@@ -385,23 +389,23 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
         ballots = listOf(
             Ballot(
                 judgments = listOf(
-                    Judgment(0, 0),
-                    Judgment(1, 5),
-                    Judgment(2, 6),
+                    Judgment(proposal = 0, grade = 0),
+                    Judgment(proposal = 1, grade = 5),
+                    Judgment(proposal = 2, grade = 6),
                 )
             ),
             Ballot(
                 judgments = listOf(
-                    Judgment(0, 4),
-                    Judgment(1, 1),
-                    Judgment(2, 6),
+                    Judgment(proposal = 0, grade = 4),
+                    Judgment(proposal = 1, grade = 1),
+                    Judgment(proposal = 2, grade = 6),
                 )
             ),
             Ballot(
                 judgments = listOf(
-                    Judgment(0, 5),
-                    Judgment(1, 5),
-                    Judgment(2, 5),
+                    Judgment(proposal = 0, grade = 5),
+                    Judgment(proposal = 1, grade = 5),
+                    Judgment(proposal = 2, grade = 5),
                 )
             ),
         ),
