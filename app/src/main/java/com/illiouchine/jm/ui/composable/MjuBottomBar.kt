@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.Preview
 import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.navigator.Screens
@@ -84,7 +85,23 @@ private fun PreviewBottomBar() {
         Scaffold(
             bottomBar = {
                 MjuBottomBar()
-            }
+            },
+        ) {
+            Box(modifier = Modifier.padding(it))
+        }
+    }
+}
+
+@Preview(
+    uiMode = UI_MODE_NIGHT_YES,
+)
+@Composable
+private fun PreviewBottomBarNight() {
+    JmTheme {
+        Scaffold(
+            bottomBar = {
+                MjuBottomBar()
+            },
         ) {
             Box(modifier = Modifier.padding(it))
         }
