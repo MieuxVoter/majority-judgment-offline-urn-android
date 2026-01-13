@@ -1,5 +1,6 @@
 package com.illiouchine.jm.ui.screen
 
+import android.content.res.Configuration
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,10 +36,10 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.SettingsViewModel
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.ui.composable.GradingSelectionRow
-import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.ScreenTitle
 import com.illiouchine.jm.ui.navigator.Screens
+import com.illiouchine.jm.ui.scaffold.MjuScaffold
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -57,7 +57,7 @@ fun SettingsScreen(
     onDefaultGradingSelected: (Grading) -> Unit = {},
     onDismissFeedback: () -> Unit = {},
 ) {
-    Scaffold(
+    MjuScaffold(
         modifier = Modifier
             .fillMaxSize()
             .testTag("screen_settings"),
@@ -70,13 +70,15 @@ fun SettingsScreen(
                 },
             )
         },
-        bottomBar = {
-            MjuBottomBar(
-                modifier = Modifier,
-                selected = Screens.Settings,
-                onItemSelected = { destination -> onBottomBarItemSelected(destination) },
-            )
-        },
+        showMenu = true,
+        menuItemSelected = Screens.Settings,
+        onMenuItemSelected = { destination -> onBottomBarItemSelected(destination) },
+//        bottomBar = {
+//            MjuBottomBar(
+//                selected = Screens.Settings,
+//                onItemSelected = { destination -> onBottomBarItemSelected(destination) },
+//            )
+//        },
     ) { innerPadding ->
 
         val scrollState = rememberScrollState()
@@ -233,6 +235,11 @@ fun SwitchSettingRow(
 
 
 @Preview(showSystemUi = true)
+@Preview(
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    device = "spec:width=511dp,height=891dp,orientation=landscape",
+)
 @Composable
 fun PreviewSettingsScreen() {
     JmTheme {
