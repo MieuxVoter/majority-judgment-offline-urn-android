@@ -20,8 +20,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.model.Ballot
-import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -82,17 +82,12 @@ fun JudgmentBall(
 
 @Preview
 @Composable
-private fun PreviewJudgmentBall() {
+private fun PreviewJudgmentBallFull() {
     JmTheme {
         JudgmentBalls(
             pollConfig = PollConfig(proposals = listOf("a", "b", "c", "d")),
             ballot = Ballot(
-                judgments = listOf(
-                    Judgment(proposal = 1, grade = 1),
-                    Judgment(proposal = 2, grade = 3),
-                    Judgment(proposal = 3, grade = 6),
-                    Judgment(proposal = 4, grade = 2),
-                )
+                judgments = PreviewDataBuilder.judgments(size = 4)
             )
         )
     }
@@ -105,7 +100,7 @@ private fun PreviewJudgmentBallEmpty() {
         JudgmentBalls(
             pollConfig = PollConfig(proposals = listOf("a", "b", "c", "d")),
             ballot = Ballot(
-                judgments = emptyList()
+                judgments = PreviewDataBuilder.judgments(0)
             )
         )
     }
@@ -113,15 +108,12 @@ private fun PreviewJudgmentBallEmpty() {
 
 @Preview
 @Composable
-private fun PreviewJudgmentBallMidle() {
+private fun PreviewJudgmentBallMiddle() {
     JmTheme {
         JudgmentBalls(
             pollConfig = PollConfig(proposals = listOf("a", "b", "c", "d")),
             ballot = Ballot(
-                judgments = listOf(
-                    Judgment(proposal = 1, grade = 1),
-                    Judgment(proposal = 2, grade = 3),
-                )
+                judgments = PreviewDataBuilder.judgments(2)
             )
         )
     }

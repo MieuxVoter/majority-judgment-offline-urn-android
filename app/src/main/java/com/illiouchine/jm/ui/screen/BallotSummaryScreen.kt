@@ -28,6 +28,7 @@ import com.illiouchine.jm.ui.theme.DeleteColor
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
+import kotlinx.collections.immutable.toImmutableList
 
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -138,7 +139,7 @@ fun PreviewBallotSummaryScreen(modifier: Modifier = Modifier) {
                         Judgment(0, 2),
                         Judgment(1, 1),
                         Judgment(2, 0),
-                    )
+                    ).toImmutableList()
                 ),
             )
         }
@@ -171,7 +172,7 @@ fun PreviewBallotSmallSummaryScreen(modifier: Modifier = Modifier) {
                         Judgment(0, 2),
                         Judgment(1, 1),
                         Judgment(2, 0),
-                    )
+                    ).toImmutableList()
                 ),
             )
         }

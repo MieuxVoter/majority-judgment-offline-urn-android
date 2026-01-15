@@ -50,6 +50,7 @@ import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 
 
@@ -227,7 +228,7 @@ fun PreviewHomeScreen(modifier: Modifier = Modifier) {
                                     Judgment(proposal = 0, 2),
                                     Judgment(proposal = 1, 7),
                                     Judgment(proposal = 2, 1),
-                                )
+                                ).toImmutableList()
                             )
                         )
                     ),
@@ -250,13 +251,13 @@ fun PreviewHomeScreen(modifier: Modifier = Modifier) {
                                 judgments = listOf(
                                     Judgment(proposal = 0, 2),
                                     Judgment(proposal = 1, 4),
-                                ),
+                                ).toImmutableList(),
                             ),
                             Ballot(
                                 judgments = listOf(
                                     Judgment(proposal = 0, 1),
                                     Judgment(proposal = 1, 3),
-                                ),
+                                ).toImmutableList(),
                             ),
                         )
                     )
