@@ -10,4 +10,9 @@
     <string name="poll_of">Poll of</string>
     <string name="ballots">ballots</string>
     <string name="ballot">ballot</string>
+    <string name="in_the_urn">in the urn</string>
+    <string name="adhesion">adhesion</string>
+    <string name="contestation">contestation</string>
+    <string name="higher">higher</string>
+    <string name="lower">lower</string>
 </resources>
