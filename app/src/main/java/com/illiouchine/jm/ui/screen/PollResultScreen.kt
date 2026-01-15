@@ -69,6 +69,7 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import com.illiouchine.jm.ui.utils.smoothStep
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import java.math.BigInteger
 import java.util.Locale
@@ -388,21 +389,21 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
         ),
         ballots = listOf(
             Ballot(
-                judgments = listOf(
+                judgments = persistentListOf(
                     Judgment(proposal = 0, grade = 0),
                     Judgment(proposal = 1, grade = 5),
                     Judgment(proposal = 2, grade = 6),
                 )
             ),
             Ballot(
-                judgments = listOf(
+                judgments = persistentListOf(
                     Judgment(proposal = 0, grade = 4),
                     Judgment(proposal = 1, grade = 1),
                     Judgment(proposal = 2, grade = 6),
                 )
             ),
             Ballot(
-                judgments = listOf(
+                judgments = persistentListOf(
                     Judgment(proposal = 0, grade = 5),
                     Judgment(proposal = 1, grade = 5),
                     Judgment(proposal = 2, grade = 5),

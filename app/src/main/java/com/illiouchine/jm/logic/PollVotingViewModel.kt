@@ -16,6 +16,8 @@ import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.navigator.NavigationAction
 import com.illiouchine.jm.ui.navigator.Screens
+import kotlinx.collections.immutable.immutableListOf
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -102,7 +104,7 @@ class PollVotingViewModel(
         // Add judgment to current ballot
         _pollVotingViewState.update {
             it.copy(
-                currentBallot = it.currentBallot?.withJudgment(judgment) ?: Ballot(listOf(judgment))
+                currentBallot = it.currentBallot?.withJudgment(judgment) ?: Ballot(persistentListOf(judgment))
             )
         }
     }
