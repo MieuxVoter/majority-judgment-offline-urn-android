@@ -9,6 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.model.Tally
+import com.illiouchine.jm.model.toTally
 import com.illiouchine.jm.service.DuelAnalyzer
 import com.illiouchine.jm.service.ParticipantGroupAnalysis
 import com.illiouchine.jm.service.TextStylist
@@ -18,7 +20,6 @@ import fr.mieuxvoter.mj.CollectedTally
 import fr.mieuxvoter.mj.DeliberatorInterface
 import fr.mieuxvoter.mj.MajorityJudgmentDeliberator
 import fr.mieuxvoter.mj.ResultInterface
-import fr.mieuxvoter.mj.TallyInterface
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -33,7 +34,7 @@ class PollResultViewModel(
     @Stable
     data class PollResultViewState(
         val poll: Poll? = null,
-        val tally: TallyInterface? = null,
+        val tally: Tally? = null,
         val result: ResultInterface? = null,
         val explanations: List<AnnotatedString> = emptyList(),
         val groups: List<DuelGroups> = emptyList(),
@@ -121,7 +122,7 @@ class PollResultViewModel(
         _pollResultViewState.update {
             it.copy(
                 poll = poll,
-                tally = tally,
+                tally = tally.toTally(),
                 result = result,
                 explanations = explanations,
                 groups = groups,

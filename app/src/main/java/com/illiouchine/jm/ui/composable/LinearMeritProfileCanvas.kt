@@ -32,17 +32,17 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Grading
+import com.illiouchine.jm.model.Tally
 import com.illiouchine.jm.service.ParticipantGroupAnalysis
 import fr.mieuxvoter.mj.ParticipantGroup
 import fr.mieuxvoter.mj.ProposalResultInterface
-import fr.mieuxvoter.mj.TallyInterface
 import java.util.Locale
 import kotlin.math.round
 
 @Composable
 fun LinearMeritProfileCanvas(
     modifier: Modifier = Modifier,
-    tally: TallyInterface,
+    tally: Tally,
     proposalResult: ProposalResultInterface,
     grading: Grading,
     decisiveGroups: List<ParticipantGroupAnalysis>,
