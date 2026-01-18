@@ -11,8 +11,10 @@ import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.Tally
 import com.illiouchine.jm.model.toTally
+import com.illiouchine.jm.model.Result
+import com.illiouchine.jm.model.toResult
 import com.illiouchine.jm.service.DuelAnalyzer
-import com.illiouchine.jm.service.ParticipantGroupAnalysis
+import com.illiouchine.jm.model.ParticipantGroupAnalysis
 import com.illiouchine.jm.service.TextStylist
 import com.illiouchine.jm.ui.navigator.NavigationAction
 import com.illiouchine.jm.ui.navigator.Screens
@@ -35,7 +37,7 @@ class PollResultViewModel(
     data class PollResultViewState(
         val poll: Poll? = null,
         val tally: Tally? = null,
-        val result: ResultInterface? = null,
+        val result: Result? = null,
         val explanations: List<AnnotatedString> = emptyList(),
         val groups: List<DuelGroups> = emptyList(),
         val proportions: Map<ProportionalAlgorithms, List<Double>> = emptyMap(),
@@ -123,7 +125,7 @@ class PollResultViewModel(
             it.copy(
                 poll = poll,
                 tally = tally.toTally(),
-                result = result,
+                result = result.toResult(),
                 explanations = explanations,
                 groups = groups,
                 proportions = proportions,

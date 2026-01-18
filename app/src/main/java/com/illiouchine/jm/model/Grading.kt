@@ -1,6 +1,7 @@
 package com.illiouchine.jm.model
 
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
@@ -29,6 +30,7 @@ val gradings: List<Grading> = listOf(
 /**
  * The grades must be unambiguously ordered for MJ to work.
  */
+@Stable
 @Serializable
 sealed class Grading(
     val uid: Int, // make sure those are really unique, and DON'T edit them afterwards
