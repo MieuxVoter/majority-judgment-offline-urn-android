@@ -24,6 +24,7 @@ import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.JudgmentSummary
+import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
 import com.illiouchine.jm.ui.theme.DeleteColor
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
@@ -135,11 +136,7 @@ fun PreviewBallotSummaryScreen(modifier: Modifier = Modifier) {
                     grading = DEFAULT_GRADING_QUALITY_VALUE,
                 ),
                 ballot = Ballot(
-                    judgments = listOf(
-                        Judgment(0, 2),
-                        Judgment(1, 1),
-                        Judgment(2, 0),
-                    ).toImmutableList()
+                    judgments = PreviewDataBuilder.judgments(3)
                 ),
             )
         }
@@ -168,11 +165,7 @@ fun PreviewBallotSmallSummaryScreen(modifier: Modifier = Modifier) {
                     grading = DEFAULT_GRADING_QUALITY_VALUE,
                 ),
                 ballot = Ballot(
-                    judgments = listOf(
-                        Judgment(0, 2),
-                        Judgment(1, 1),
-                        Judgment(2, 0),
-                    ).toImmutableList()
+                    judgments = PreviewDataBuilder.judgments(3)
                 ),
             )
         }
