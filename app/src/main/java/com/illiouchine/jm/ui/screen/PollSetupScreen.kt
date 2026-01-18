@@ -46,6 +46,7 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import com.illiouchine.jm.ui.utils.displayed
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 
 
@@ -121,7 +122,7 @@ fun PollSetupScreen(
             SubjectSelectionRow(
                 modifier = Modifier,
                 subject = pollSetupState.config.subject,
-                subjectSuggestion = pollSetupState.subjectSuggestion,
+                subjectSuggestion = pollSetupState.subjectSuggestion.toImmutableList(),
                 onSuggestionSelected = {
                     onAddSubject(context, it)
                     onGetSubjectSuggestion("")
@@ -155,7 +156,7 @@ fun PollSetupScreen(
                     onAddProposal(context, it)
                     proposal = ""
                 },
-                proposalSuggestion = pollSetupState.proposalSuggestion,
+                proposalSuggestion = pollSetupState.proposalSuggestion.toImmutableList(),
                 onProposalSelected = {
                     proposal = it
                     onClearProposalSuggestion()

@@ -141,7 +141,7 @@ fun ResultScreen(
 
             BallotCountRow(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                ballots = poll.ballots,
+                ballots = poll.ballots.toImmutableList(),
             )
 
             Spacer(Modifier.padding(vertical = Theme.spacing.small))

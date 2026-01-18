@@ -2,6 +2,8 @@ package com.illiouchine.jm.ui.composable.loading
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
@@ -44,7 +46,7 @@ data class Spirograph(
 
 data class Epicycloid(
     val name: String = "",
-    val compasses: List<Compass>,
+    val compasses: ImmutableList<Compass>,
 ) {
     /**
      * Ensure that the sum of the radii of compasses is 1.
@@ -66,7 +68,7 @@ data class Epicycloid(
         }
 
         return this.copy(
-            compasses = normalizedCompasses.toList(),
+            compasses = normalizedCompasses.toList().toImmutableList(),
         )
     }
 }
@@ -110,7 +112,7 @@ val defaultsEpicycloids: List<Epicycloid> = listOf(
                 radius = 0.06,
                 speed = 3.0,
             ),
-        ),
+        ).toImmutableList(),
     ),
     // ring respiration
     Epicycloid(
@@ -131,7 +133,7 @@ val defaultsEpicycloids: List<Epicycloid> = listOf(
                 radius = 0.05,
                 speed = 2.0,
             ),
-        ),
+        ).toImmutableList(),
     ),
     // Trippy circle
     Epicycloid(
@@ -149,7 +151,7 @@ val defaultsEpicycloids: List<Epicycloid> = listOf(
                 radius = 0.2,
                 speed = 12.0,
             ),
-        ),
+        ).toImmutableList(),
     ),
     // Triangle in square
     Epicycloid(
@@ -167,7 +169,7 @@ val defaultsEpicycloids: List<Epicycloid> = listOf(
                 radius = 0.2,
                 speed = 12.0,
             ),
-        ),
+        ).toImmutableList(),
     ),
     // School of fishes
     Epicycloid(
@@ -189,6 +191,6 @@ val defaultsEpicycloids: List<Epicycloid> = listOf(
                 radius = 0.3,
                 speed = 9.0,
             ),
-        ),
+        ).toImmutableList(),
     ),
 )
