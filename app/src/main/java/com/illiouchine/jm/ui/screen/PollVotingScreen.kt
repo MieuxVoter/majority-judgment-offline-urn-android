@@ -35,6 +35,7 @@ import com.illiouchine.jm.ui.composable.GradeSelectionList
 import com.illiouchine.jm.ui.composable.JudgmentBalls
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
+import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -232,7 +233,7 @@ private fun PreviewVotingScreenWithBallots(modifier: Modifier = Modifier) {
                     grading = DEFAULT_GRADING_QUALITY_VALUE,
                 ),
                 ballots = listOf(
-                    Ballot(judgments = persistentListOf(Judgment(1, grade = 3)))
+                    Ballot(judgments = PreviewDataBuilder.judgments(1))
                 ),
                 currentBallot = null,
             ),
@@ -263,11 +264,7 @@ private fun PreviewVotingScreenConfirmation(modifier: Modifier = Modifier) {
                     //Ballot(judgments = listOf(Judgment(proposal = 1, grade = 3)))
                 ),
                 currentBallot = Ballot(
-                    judgments = persistentListOf(
-                        Judgment(proposal = 0, grade = 0),
-                        Judgment(proposal = 1, grade = 3),
-                        Judgment(proposal = 2, grade = 2),
-                    ),
+                    judgments = PreviewDataBuilder.judgments(3)
                 ),
             ),
         )
@@ -299,11 +296,7 @@ private fun PreviewVotingSmallScreenConfirmation(modifier: Modifier = Modifier) 
                     //Ballot(judgments = listOf(Judgment(proposal = 1, grade = 3)))
                 ),
                 currentBallot = Ballot(
-                    judgments = persistentListOf(
-                        Judgment(proposal = 0, grade = 0),
-                        Judgment(proposal = 1, grade = 3),
-                        Judgment(proposal = 2, grade = 2),
-                    ),
+                    judgments = PreviewDataBuilder.judgments(3)
                 ),
             ),
         )
@@ -331,15 +324,11 @@ private fun PreviewVotingScreenWithoutCurrentBallot(modifier: Modifier = Modifie
                 ),
                 ballots = listOf(
                     Ballot(
-                        judgments = persistentListOf(
-                            Judgment(proposal = 0, grade = 2),
-                            Judgment(proposal = 1, grade = 2),
-                            Judgment(proposal = 2, grade = 3),
-                        )
+                        judgments = PreviewDataBuilder.judgments(3)
                     )
                 ),
                 currentBallot = Ballot(
-                    judgments = persistentListOf(),
+                    judgments = PreviewDataBuilder.judgments(0),
                 ),
             ),
         )

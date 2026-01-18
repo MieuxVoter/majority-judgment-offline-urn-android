@@ -65,6 +65,7 @@ import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
+import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -389,25 +390,13 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
         ),
         ballots = listOf(
             Ballot(
-                judgments = persistentListOf(
-                    Judgment(proposal = 0, grade = 0),
-                    Judgment(proposal = 1, grade = 5),
-                    Judgment(proposal = 2, grade = 6),
-                )
+                judgments = PreviewDataBuilder.judgments(3)
             ),
             Ballot(
-                judgments = persistentListOf(
-                    Judgment(proposal = 0, grade = 4),
-                    Judgment(proposal = 1, grade = 1),
-                    Judgment(proposal = 2, grade = 6),
-                )
+                judgments = PreviewDataBuilder.judgments(3)
             ),
             Ballot(
-                judgments = persistentListOf(
-                    Judgment(proposal = 0, grade = 5),
-                    Judgment(proposal = 1, grade = 5),
-                    Judgment(proposal = 2, grade = 5),
-                )
+                judgments = PreviewDataBuilder.judgments(3)
             ),
         ),
     )

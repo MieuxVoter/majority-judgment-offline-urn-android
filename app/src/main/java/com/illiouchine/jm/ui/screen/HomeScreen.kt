@@ -47,6 +47,7 @@ import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.PollDeletionConfirmationDialog
 import com.illiouchine.jm.ui.composable.PollSummary
 import com.illiouchine.jm.ui.navigator.Screens
+import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -224,11 +225,7 @@ fun PreviewHomeScreen(modifier: Modifier = Modifier) {
                         ),
                         ballots = listOf(
                             Ballot(
-                                judgments = listOf(
-                                    Judgment(proposal = 0, 2),
-                                    Judgment(proposal = 1, 7),
-                                    Judgment(proposal = 2, 1),
-                                ).toImmutableList()
+                                judgments = PreviewDataBuilder.judgments(3)
                             )
                         )
                     ),
@@ -248,16 +245,10 @@ fun PreviewHomeScreen(modifier: Modifier = Modifier) {
                         ),
                         ballots = listOf(
                             Ballot(
-                                judgments = listOf(
-                                    Judgment(proposal = 0, 2),
-                                    Judgment(proposal = 1, 4),
-                                ).toImmutableList(),
+                                judgments = PreviewDataBuilder.judgments(2)
                             ),
                             Ballot(
-                                judgments = listOf(
-                                    Judgment(proposal = 0, 1),
-                                    Judgment(proposal = 1, 3),
-                                ).toImmutableList(),
+                                judgments = PreviewDataBuilder.judgments(2)
                             ),
                         )
                     )
