@@ -37,6 +37,9 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 @Suppress("UnusedReceiverParameter")
@@ -45,7 +48,7 @@ fun ColumnScope.ProposalSelectionRow(
     proposal: String = "",
     onProposalChange: (String) -> Unit = {},
     onAddProposal: (String) -> Unit = {},
-    proposalSuggestion: List<String> = emptyList(),
+    proposalSuggestion: ImmutableList<String> = persistentListOf(),
     onProposalSelected: (String) -> Unit = {},
     onClearSuggestion: () -> Unit = {},
 ) {
@@ -133,7 +136,7 @@ fun ColumnScope.ProposalSelectionRow(
             SuggestionPopup(
                 offset = IntOffset(0, textFieldHeight),
                 modifier = Modifier,
-                suggestions = proposalSuggestion.take(3),
+                suggestions = proposalSuggestion.take(3).toImmutableList(),
                 onSuggestionSelected = { onProposalSelected(it) },
                 onClearSuggestion = { onClearSuggestion() },
             )
@@ -156,7 +159,7 @@ private fun PreviewProposalSelectionRow() {
                 proposal = "Mario",
                 onAddProposal = {},
                 onProposalChange = {},
-                proposalSuggestion = listOf(
+                proposalSuggestion = persistentListOf(
                     "Subject suggestion 1",
                     "Subject suggestion 2",
                     "Subject suggestion 3",

@@ -14,12 +14,14 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.window.Popup
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun SuggestionPopup(
     modifier: Modifier = Modifier,
     offset: IntOffset = IntOffset(0, 0),
-    suggestions: List<String> = emptyList(),
+    suggestions: ImmutableList<String> = persistentListOf(),
     onSuggestionSelected: (String) -> Unit = {},
     onClearSuggestion: () -> Unit = {},
 ) {

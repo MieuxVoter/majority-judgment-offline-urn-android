@@ -20,13 +20,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.theme.JmTheme
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 @Suppress("UnusedReceiverParameter")
 fun ColumnScope.SubjectSelectionRow(
     modifier: Modifier = Modifier,
     subject: String = "",
-    subjectSuggestion: List<String> = emptyList(),
+    subjectSuggestion: ImmutableList<String> = persistentListOf(),
     onSubjectChange: (String) -> Unit = {},
     onSuggestionSelected: (String) -> Unit = {},
     onClearSuggestion: () -> Unit = {},
@@ -58,7 +61,7 @@ fun ColumnScope.SubjectSelectionRow(
             SuggestionPopup(
                 offset = IntOffset(0, textFieldHeight),
                 modifier = Modifier,
-                suggestions = subjectSuggestion.take(3),
+                suggestions = subjectSuggestion.take(3).toImmutableList(),
                 onSuggestionSelected = { onSuggestionSelected(it) },
                 onClearSuggestion = { onClearSuggestion() }
             )
@@ -77,7 +80,7 @@ private fun PreviewSelectionRow() {
             SubjectSelectionRow(
                 modifier = Modifier,
                 subject = "my dummy subject",
-                subjectSuggestion = listOf(
+                subjectSuggestion = persistentListOf(
                     "Subject suggestion 1",
                     "Subject suggestion 2",
                     "Subject suggestion 3",
