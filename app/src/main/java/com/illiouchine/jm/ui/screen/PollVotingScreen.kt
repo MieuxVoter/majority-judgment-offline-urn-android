@@ -39,7 +39,6 @@ import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 
 @Composable
@@ -205,11 +204,7 @@ private fun PreviewVotingScreen(modifier: Modifier = Modifier) {
         PollVotingScreen(
             modifier = modifier,
             pollVotingState = PollVotingViewModel.PollVotingViewState(
-                pollConfig = PollConfig(
-                    subject = "Best Prezidan ?",
-                    proposals = listOf("That candidate with a long name-san", "Mario", "JanBob"),
-                    grading = DEFAULT_GRADING_QUALITY_VALUE,
-                ),
+                pollConfig = PreviewDataBuilder.pollConfig(),
                 ballots = emptyList(),
                 currentBallot = null,
             ),
@@ -227,11 +222,7 @@ private fun PreviewVotingScreenWithBallots(modifier: Modifier = Modifier) {
         PollVotingScreen(
             modifier = modifier,
             pollVotingState = PollVotingViewModel.PollVotingViewState(
-                pollConfig = PollConfig(
-                    subject = "Who let the dogs out in the cold of winter ?",
-                    proposals = listOf("That candidate with a long name-san", "Mario", "JanBob"),
-                    grading = DEFAULT_GRADING_QUALITY_VALUE,
-                ),
+                pollConfig = PreviewDataBuilder.pollConfig(),
                 ballots = listOf(
                     Ballot(judgments = PreviewDataBuilder.judgments(1))
                 ),
@@ -251,15 +242,7 @@ private fun PreviewVotingScreenConfirmation(modifier: Modifier = Modifier) {
         PollVotingScreen(
             modifier = modifier,
             pollVotingState = PollVotingViewModel.PollVotingViewState(
-                pollConfig = PollConfig(
-                    subject = "Oh my gawd this poll has a very long title !",
-                    proposals = listOf(
-                        "That candidate with quite a long name-san",
-                        "Mario",
-                        "JanBob",
-                    ),
-                    grading = DEFAULT_GRADING_QUALITY_VALUE,
-                ),
+                pollConfig = PreviewDataBuilder.pollConfig(),
                 ballots = listOf(
                     //Ballot(judgments = listOf(Judgment(proposal = 1, grade = 3)))
                 ),
@@ -283,15 +266,7 @@ private fun PreviewVotingSmallScreenConfirmation(modifier: Modifier = Modifier) 
         PollVotingScreen(
             modifier = modifier,
             pollVotingState = PollVotingViewModel.PollVotingViewState(
-                pollConfig = PollConfig(
-                    subject = "Oh my gawd this poll has a very long title !",
-                    proposals = listOf(
-                        "That candidate with quite a long name-san",
-                        "Mario",
-                        "JanBob",
-                    ),
-                    grading = DEFAULT_GRADING_QUALITY_VALUE,
-                ),
+                pollConfig = PreviewDataBuilder.pollConfig(),
                 ballots = listOf(
                     //Ballot(judgments = listOf(Judgment(proposal = 1, grade = 3)))
                 ),
@@ -313,20 +288,8 @@ private fun PreviewVotingScreenWithoutCurrentBallot(modifier: Modifier = Modifie
         PollVotingScreen(
             modifier = modifier,
             pollVotingState = PollVotingViewModel.PollVotingViewState(
-                pollConfig = PollConfig(
-                    subject = "Best Prezidan ?",
-                    proposals = listOf(
-                        "That candidate with quite a long name-san",
-                        "Mario",
-                        "JanBob",
-                    ),
-                    grading = DEFAULT_GRADING_QUALITY_VALUE,
-                ),
-                ballots = listOf(
-                    Ballot(
-                        judgments = PreviewDataBuilder.judgments(3)
-                    )
-                ),
+                pollConfig = PreviewDataBuilder.pollConfig(),
+                ballots = PreviewDataBuilder.ballots(),
                 currentBallot = Ballot(
                     judgments = PreviewDataBuilder.judgments(0),
                 ),

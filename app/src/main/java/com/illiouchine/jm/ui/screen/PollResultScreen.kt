@@ -376,28 +376,7 @@ fun formatAmount(amount: Double, maxDecimals: Int = 2, locale: Locale = Locale.F
 @Composable
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
 
-    val poll = Poll(
-        pollConfig = PollConfig(
-            subject = "Epic Plumbers",
-            proposals = listOf(
-                "Luigi the green plumber with a mustache and a long name, mamma mia !",
-                "Bob",
-                "Mario",
-            ),
-            grading = Grading.Quality7Grading,
-        ),
-        ballots = listOf(
-            Ballot(
-                judgments = PreviewDataBuilder.judgments(3)
-            ),
-            Ballot(
-                judgments = PreviewDataBuilder.judgments(3)
-            ),
-            Ballot(
-                judgments = PreviewDataBuilder.judgments(3)
-            ),
-        ),
-    )
+    val poll = PreviewDataBuilder.poll()
 
     val pollResultViewModel = viewModel {
         PollResultViewModel(
