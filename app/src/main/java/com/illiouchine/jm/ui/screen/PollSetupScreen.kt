@@ -41,6 +41,7 @@ import com.illiouchine.jm.ui.composable.ProposalSelectionRow
 import com.illiouchine.jm.ui.composable.ScreenTitle
 import com.illiouchine.jm.ui.composable.SubjectSelectionRow
 import com.illiouchine.jm.ui.composable.ThemedHorizontalDivider
+import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -219,14 +220,7 @@ fun PreviewSetupSurveyScreenWithHugeNames(modifier: Modifier = Modifier) {
         PollSetupScreen(
             modifier = modifier,
             pollSetupState = PollSetupViewModel.PollSetupViewState(
-                config = PollConfig(
-                    subject = "Repas de ce soir, le Banquet Républicain de l'avènement du Jugement Majoritaire",
-                    proposals = listOf(
-                        "Des nouilles aux champignons forestiers sur leur lit de purée de carottes urticantes",
-                        "Du riz",
-                        "Du riche",
-                    ),
-                ),
+                config = PreviewDataBuilder.pollConfig(index = 4)
             ),
         )
     }
@@ -240,18 +234,7 @@ fun PreviewSetupSurveyScreenWithLotsOfProposals(modifier: Modifier = Modifier) {
         PollSetupScreen(
             modifier = modifier,
             pollSetupState = PollSetupViewModel.PollSetupViewState(
-                config = PollConfig(
-                    subject = "Repas de ce soir, le Banquet Républicain de l'avènement du Jugement Majoritaire",
-                    proposals = listOf(
-                        "Des nouilles aux champignons forestiers sur leur lit de purée de carottes urticantes",
-                        "Du riz",
-                        "Du riche",
-                        "Des Spaghetti Carbonara",
-                        "Poulet Tikka Masala",
-                        "Sushis Vegans",
-                        "Tacos au Bœuf",
-                    ),
-                ),
+                config = PreviewDataBuilder.pollConfig(index = 5)
             ),
         )
     }

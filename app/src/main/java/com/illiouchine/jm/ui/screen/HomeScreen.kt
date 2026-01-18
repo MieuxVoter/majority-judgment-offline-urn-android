@@ -37,12 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
 import com.illiouchine.jm.R
-import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.logic.HomeViewModel
-import com.illiouchine.jm.model.Ballot
-import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
-import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.PollDeletionConfirmationDialog
 import com.illiouchine.jm.ui.composable.PollSummary
@@ -51,7 +47,6 @@ import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 
 
@@ -210,48 +205,15 @@ fun HomeScreen(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
 )
 @Composable
-@Suppress("SpellCheckingInspection")
 fun PreviewHomeScreen(modifier: Modifier = Modifier) {
     JmTheme {
         HomeScreen(
             modifier = modifier,
             homeViewState = HomeViewModel.HomeViewState(
                 polls = listOf(
-                    Poll(
-                        pollConfig = PollConfig(
-                            subject = "President ?",
-                            proposals = listOf("Mario", "Bob", "JLM"),
-                            grading = DEFAULT_GRADING_QUALITY_VALUE,
-                        ),
-                        ballots = listOf(
-                            Ballot(
-                                judgments = PreviewDataBuilder.judgments(3)
-                            )
-                        )
-                    ),
-                    Poll(
-                        pollConfig = PollConfig(
-                            subject = "De combien de megawatts la couleur bleu est-elle plus poilue que sous la mer ?",
-                            proposals = listOf(
-                                "42",
-                                "Rose",
-                                "Un sac de rats",
-                                "Presque",
-                                "Mercure",
-                                "Un Sayan",
-                                "Merde !"
-                            ),
-                            grading = DEFAULT_GRADING_QUALITY_VALUE,
-                        ),
-                        ballots = listOf(
-                            Ballot(
-                                judgments = PreviewDataBuilder.judgments(2)
-                            ),
-                            Ballot(
-                                judgments = PreviewDataBuilder.judgments(2)
-                            ),
-                        )
-                    )
+                    PreviewDataBuilder.poll(0, 3),
+                    PreviewDataBuilder.poll(1, 0),
+                    PreviewDataBuilder.poll(1, 2)
                 )
             )
         )

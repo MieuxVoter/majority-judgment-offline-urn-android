@@ -126,15 +126,7 @@ fun PreviewBallotSummaryScreen(modifier: Modifier = Modifier) {
         Scaffold { innerPadding ->
             BallotSummaryScreen(
                 modifier = modifier.padding(innerPadding),
-                pollConfig = PollConfig(
-                    subject = "Emperor ?",
-                    proposals = listOf(
-                        "Dominus The Emperor With a Long Name",
-                        "Dump",
-                        "Augustin",
-                    ),
-                    grading = DEFAULT_GRADING_QUALITY_VALUE,
-                ),
+                pollConfig = PreviewDataBuilder.pollConfig(),
                 ballot = Ballot(
                     judgments = PreviewDataBuilder.judgments(3)
                 ),
@@ -155,15 +147,7 @@ fun PreviewBallotSmallSummaryScreen(modifier: Modifier = Modifier) {
         Scaffold { innerPadding ->
             BallotSummaryScreen(
                 modifier = modifier.padding(innerPadding),
-                pollConfig = PollConfig(
-                    subject = "Emperor ?",
-                    proposals = listOf(
-                        "AnteDominus The Anarchist With a Long Name",
-                        "Tronald Dump",
-                        "Augustinus",
-                    ),
-                    grading = DEFAULT_GRADING_QUALITY_VALUE,
-                ),
+                pollConfig = PreviewDataBuilder.pollConfig(),
                 ballot = Ballot(
                     judgments = PreviewDataBuilder.judgments(3)
                 ),

@@ -18,13 +18,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.tooling.preview.Preview
 import com.illiouchine.jm.ui.composable.loading.Epicycloid
 import com.illiouchine.jm.ui.composable.loading.EpicycloidMenu
 import com.illiouchine.jm.ui.composable.loading.Loader
 import com.illiouchine.jm.ui.composable.loading.Spirograph
 import com.illiouchine.jm.ui.composable.loading.defaultsEpicycloids
 
-
+@Preview
 @Composable
 fun LoaderScreen(
     modifier: Modifier = Modifier,
