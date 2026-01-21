@@ -3,20 +3,14 @@ package com.illiouchine.jm.service
 import android.content.Context
 import androidx.compose.ui.text.AnnotatedString
 import com.illiouchine.jm.R
+import com.illiouchine.jm.model.ParticipantGroupAnalysis
 import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.model.toParticipantGroup
 import fr.mieuxvoter.mj.ParticipantGroup
-import fr.mieuxvoter.mj.ParticipantGroup.Type
 import fr.mieuxvoter.mj.ProposalResultInterface
 import fr.mieuxvoter.mj.ResultInterface
 import fr.mieuxvoter.mj.TallyInterface
 import kotlin.math.max
-
-
-data class ParticipantGroupAnalysis(
-    val participant: Int,
-    val group: ParticipantGroup,
-    val decisive: Boolean = false,
-)
 
 @Suppress("CanBeParameter")
 // There's no logic to this.  Only madness.  Plz rewrite.
@@ -59,7 +53,7 @@ class DuelAnalyzer(
                 return stylist.resolve(
                     context.getString(
                         R.string.ranking_explain_no_more_groups,
-                        if (otherGroup.type == Type.Adhesion) {
+                        if (otherGroup.type == ParticipantGroup.Type.Adhesion) {
                             context.getString(R.string.adhesion)
                         } else {
                             context.getString(R.string.contestation)
@@ -75,7 +69,7 @@ class DuelAnalyzer(
                 return stylist.resolve(
                     context.getString(
                         R.string.ranking_explain_no_more_groups,
-                        if (baseGroup.type == Type.Adhesion) {
+                        if (baseGroup.type == ParticipantGroup.Type.Adhesion) {
                             context.getString(R.string.adhesion)
                         } else {
                             context.getString(R.string.contestation)
@@ -87,7 +81,7 @@ class DuelAnalyzer(
             }
             val otherGroup = otherGroups[i]
 
-            if (baseGroup.type == Type.Median && otherGroup.type == Type.Median) {
+            if (baseGroup.type == ParticipantGroup.Type.Median && otherGroup.type == ParticipantGroup.Type.Median) {
                 // The median grades are the same, go deeper
                 if (baseGroup.grade == otherGroup.grade) {
                     continue
@@ -139,7 +133,7 @@ class DuelAnalyzer(
                         stylist.annotateGradeName(
                             context.getString(poll.pollConfig.grading.getGradeName(base.analysis.medianGrade))
                         ),
-                        if (biggestGroup.type == Type.Adhesion) {
+                        if (biggestGroup.type == ParticipantGroup.Type.Adhesion) {
                             context.getString(R.string.adhesion)
                         } else {
                             context.getString(R.string.contestation)
@@ -155,13 +149,13 @@ class DuelAnalyzer(
                     return stylist.resolve(
                         context.getString(
                             R.string.ranking_explain_double_majority,
-                            if (baseGroup.type == Type.Adhesion) {
+                            if (baseGroup.type == ParticipantGroup.Type.Adhesion) {
                                 context.getString(R.string.adhesion)
                             } else {
                                 context.getString(R.string.contestation)
                             },
                             poll.pollConfig.proposals[base.index],
-                            if (otherGroup.type == Type.Adhesion) {
+                            if (otherGroup.type == ParticipantGroup.Type.Adhesion) {
                                 context.getString(R.string.adhesion)
                             } else {
                                 context.getString(R.string.contestation)
@@ -188,7 +182,7 @@ class DuelAnalyzer(
                 return stylist.resolve(
                     context.getString(
                         R.string.ranking_explain_different_sub_groups,
-                        if (baseGroup.type == Type.Adhesion) {
+                        if (baseGroup.type == ParticipantGroup.Type.Adhesion) {
                             context.getString(R.string.adhesion)
                         } else {
                             context.getString(R.string.contestation)
@@ -202,7 +196,7 @@ class DuelAnalyzer(
                         } else {
                             context.getString(R.string.lower)
                         },
-                        if (otherGroup.type == Type.Adhesion) {
+                        if (otherGroup.type == ParticipantGroup.Type.Adhesion) {
                             context.getString(R.string.adhesion)
                         } else {
                             context.getString(R.string.contestation)
@@ -234,7 +228,7 @@ class DuelAnalyzer(
                 groups.add(
                     ParticipantGroupAnalysis(
                         participant = otherIndex,
-                        group = otherGroup,
+                        group = otherGroup.toParticipantGroup(),
                         decisive = true,
                     )
                 )
@@ -246,7 +240,7 @@ class DuelAnalyzer(
                 groups.add(
                     ParticipantGroupAnalysis(
                         participant = baseIndex,
-                        group = baseGroup,
+                        group = baseGroup.toParticipantGroup(),
                         decisive = true,
                     )
                 )
@@ -254,8 +248,8 @@ class DuelAnalyzer(
             }
             val otherGroup = otherGroups[i]
 
-            if (baseGroup.type == Type.Median || otherGroup.type == Type.Median) {
-                assert(baseGroup.type == Type.Median && otherGroup.type == Type.Median)
+            if (baseGroup.type == ParticipantGroup.Type.Median || otherGroup.type == ParticipantGroup.Type.Median) {
+                assert(baseGroup.type == ParticipantGroup.Type.Median && otherGroup.type == ParticipantGroup.Type.Median)
                 // The median grades are the same → go deeper
                 if (baseGroup.grade == otherGroup.grade) {
                     continue
@@ -264,14 +258,14 @@ class DuelAnalyzer(
                 groups.add(
                     ParticipantGroupAnalysis(
                         participant = baseIndex,
-                        group = baseGroup,
+                        group = baseGroup.toParticipantGroup(),
                         decisive = (baseGroup.grade >= otherGroup.grade),
                     )
                 )
                 groups.add(
                     ParticipantGroupAnalysis(
                         participant = otherIndex,
-                        group = otherGroup,
+                        group = otherGroup.toParticipantGroup(),
                         decisive = (baseGroup.grade <= otherGroup.grade),
                     )
                 )
@@ -282,14 +276,14 @@ class DuelAnalyzer(
                 groups.add(
                     ParticipantGroupAnalysis(
                         participant = baseIndex,
-                        group = baseGroup,
+                        group = baseGroup.toParticipantGroup(),
                         decisive = (baseGroup.size >= otherGroup.size),
                     )
                 )
                 groups.add(
                     ParticipantGroupAnalysis(
                         participant = otherIndex,
-                        group = otherGroup,
+                        group = otherGroup.toParticipantGroup(),
                         decisive = (baseGroup.size <= otherGroup.size),
                     )
                 )
@@ -303,14 +297,14 @@ class DuelAnalyzer(
                     groups.add(
                         ParticipantGroupAnalysis(
                             participant = baseIndex,
-                            group = baseGroup,
+                            group = baseGroup.toParticipantGroup(),
                             decisive = true,
                         )
                     )
                     groups.add(
                         ParticipantGroupAnalysis(
                             participant = otherIndex,
-                            group = otherGroup,
+                            group = otherGroup.toParticipantGroup(),
                             decisive = true,
                         )
                     )
@@ -321,14 +315,14 @@ class DuelAnalyzer(
                 groups.add(
                     ParticipantGroupAnalysis(
                         participant = baseIndex,
-                        group = baseGroup,
+                        group = baseGroup.toParticipantGroup(),
                         decisive = (baseGroup.grade >= otherGroup.grade),
                     )
                 )
                 groups.add(
                     ParticipantGroupAnalysis(
                         participant = otherIndex,
-                        group = otherGroup,
+                        group = otherGroup.toParticipantGroup(),
                         decisive = (baseGroup.grade <= otherGroup.grade),
                     )
                 )

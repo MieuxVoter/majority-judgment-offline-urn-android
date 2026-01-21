@@ -51,24 +51,24 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavKey
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.ProportionalAlgorithms
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Grading
-import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
+import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import com.illiouchine.jm.ui.utils.smoothStep
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import java.math.BigInteger
 import java.util.Locale
@@ -141,7 +141,7 @@ fun ResultScreen(
 
             BallotCountRow(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                ballots = poll.ballots,
+                ballots = poll.ballots.toImmutableList(),
             )
 
             Spacer(Modifier.padding(vertical = Theme.spacing.small))
@@ -158,7 +158,7 @@ fun ResultScreen(
                             (selectedDuelIndex == proposalDisplayIndex
                                     || selectedDuelIndex + 1 == proposalDisplayIndex)
                     val ttsShowExplanation = stringResource(R.string.tts_show_explanation)
-                    
+
                     Column(
                         modifier = Modifier
                             .alpha(
@@ -228,7 +228,7 @@ fun ResultScreen(
                                 grading = grading,
                                 decisiveGroups = decisiveGroupsForSelectedProfile.filter { group ->
                                     group.participant == proposalDisplayIndex
-                                },
+                                }.toImmutableList(),
                                 showDecisiveGroups = isAnyProfileSelected,
                             )
                         }
@@ -376,40 +376,7 @@ fun formatAmount(amount: Double, maxDecimals: Int = 2, locale: Locale = Locale.F
 @Composable
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
 
-    val poll = Poll(
-        pollConfig = PollConfig(
-            subject = "Epic Plumbers",
-            proposals = listOf(
-                "Luigi the green plumber with a mustache and a long name, mamma mia !",
-                "Bob",
-                "Mario",
-            ),
-            grading = Grading.Quality7Grading,
-        ),
-        ballots = listOf(
-            Ballot(
-                judgments = listOf(
-                    Judgment(proposal = 0, grade = 0),
-                    Judgment(proposal = 1, grade = 5),
-                    Judgment(proposal = 2, grade = 6),
-                )
-            ),
-            Ballot(
-                judgments = listOf(
-                    Judgment(proposal = 0, grade = 4),
-                    Judgment(proposal = 1, grade = 1),
-                    Judgment(proposal = 2, grade = 6),
-                )
-            ),
-            Ballot(
-                judgments = listOf(
-                    Judgment(proposal = 0, grade = 5),
-                    Judgment(proposal = 1, grade = 5),
-                    Judgment(proposal = 2, grade = 5),
-                )
-            ),
-        ),
-    )
+    val poll = PreviewDataBuilder.poll()
 
     val pollResultViewModel = viewModel {
         PollResultViewModel(

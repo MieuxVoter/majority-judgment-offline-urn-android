@@ -32,20 +32,21 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Grading
-import com.illiouchine.jm.service.ParticipantGroupAnalysis
-import fr.mieuxvoter.mj.ParticipantGroup
-import fr.mieuxvoter.mj.ProposalResultInterface
-import fr.mieuxvoter.mj.TallyInterface
+import com.illiouchine.jm.model.ParticipantGroup
+import com.illiouchine.jm.model.ProposalResult
+import com.illiouchine.jm.model.Tally
+import com.illiouchine.jm.model.ParticipantGroupAnalysis
+import kotlinx.collections.immutable.ImmutableList
 import java.util.Locale
 import kotlin.math.round
 
 @Composable
 fun LinearMeritProfileCanvas(
     modifier: Modifier = Modifier,
-    tally: TallyInterface,
-    proposalResult: ProposalResultInterface,
+    tally: Tally,
+    proposalResult: ProposalResult,
     grading: Grading,
-    decisiveGroups: List<ParticipantGroupAnalysis>,
+    decisiveGroups: ImmutableList<ParticipantGroupAnalysis>,
     showDecisiveGroups: Boolean = false,
 ) {
 
@@ -291,15 +292,14 @@ fun LinearMeritProfileCanvas(
             for (decisiveGroup in decisiveGroups) {
 
                 val groupOutline = Path()
-                val groupOutlineRect: Rect
-                if (decisiveGroup.group.type != ParticipantGroup.Type.Median) {
-                    groupOutlineRect = expandToGroup(
+                val groupOutlineRect: Rect = if (decisiveGroup.group.type != ParticipantGroup.Type.Median) {
+                    expandToGroup(
                         gradesRects[decisiveGroup.group.grade],
                         decisiveGroup.group.type == ParticipantGroup.Type.Contestation,
                         greenToRed,
                     )
                 } else {
-                    groupOutlineRect = gradesRects[decisiveGroup.group.grade]
+                    gradesRects[decisiveGroup.group.grade]
                 }
                 groupOutline.addRect(groupOutlineRect)
 

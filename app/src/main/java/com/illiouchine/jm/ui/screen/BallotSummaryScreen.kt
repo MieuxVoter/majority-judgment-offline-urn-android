@@ -24,10 +24,12 @@ import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.JudgmentSummary
+import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
 import com.illiouchine.jm.ui.theme.DeleteColor
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
+import kotlinx.collections.immutable.toImmutableList
 
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -124,21 +126,9 @@ fun PreviewBallotSummaryScreen(modifier: Modifier = Modifier) {
         Scaffold { innerPadding ->
             BallotSummaryScreen(
                 modifier = modifier.padding(innerPadding),
-                pollConfig = PollConfig(
-                    subject = "Emperor ?",
-                    proposals = listOf(
-                        "Dominus The Emperor With a Long Name",
-                        "Dump",
-                        "Augustin",
-                    ),
-                    grading = DEFAULT_GRADING_QUALITY_VALUE,
-                ),
+                pollConfig = PreviewDataBuilder.pollConfig(),
                 ballot = Ballot(
-                    judgments = listOf(
-                        Judgment(0, 2),
-                        Judgment(1, 1),
-                        Judgment(2, 0),
-                    )
+                    judgments = PreviewDataBuilder.judgments(3)
                 ),
             )
         }
@@ -157,21 +147,9 @@ fun PreviewBallotSmallSummaryScreen(modifier: Modifier = Modifier) {
         Scaffold { innerPadding ->
             BallotSummaryScreen(
                 modifier = modifier.padding(innerPadding),
-                pollConfig = PollConfig(
-                    subject = "Emperor ?",
-                    proposals = listOf(
-                        "AnteDominus The Anarchist With a Long Name",
-                        "Tronald Dump",
-                        "Augustinus",
-                    ),
-                    grading = DEFAULT_GRADING_QUALITY_VALUE,
-                ),
+                pollConfig = PreviewDataBuilder.pollConfig(),
                 ballot = Ballot(
-                    judgments = listOf(
-                        Judgment(0, 2),
-                        Judgment(1, 1),
-                        Judgment(2, 0),
-                    )
+                    judgments = PreviewDataBuilder.judgments(3)
                 ),
             )
         }

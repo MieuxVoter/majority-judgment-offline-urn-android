@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
+import kotlinx.collections.immutable.toImmutableList
 
 
 @Composable
@@ -74,25 +75,25 @@ fun EpicycloidMenu(
                 onDeleteCompass = {
                     val newCompasses = compasses.toMutableList()
                     newCompasses.removeAt(index)
-                    compasses = newCompasses.toList()
+                    compasses = newCompasses.toImmutableList()
                 },
                 onChangeRadius = { radius ->
                     val newCompasses = compasses.toMutableList()
                     val newCompass = newCompasses[index].copy(radius = radius)
                     newCompasses[index] = newCompass
-                    compasses = newCompasses.toList()
+                    compasses = newCompasses.toImmutableList()
                 },
                 onChangeSpeed = { speed ->
                     val newCompasses = compasses.toMutableList()
                     val newCompass = newCompasses[index].copy(speed = speed)
                     newCompasses[index] = newCompass
-                    compasses = newCompasses.toList()
+                    compasses = newCompasses.toImmutableList()
                 },
                 onChangePhase = { phase ->
                     val newCompasses = compasses.toMutableList()
                     val newCompass = newCompasses[index].copy(phase = phase)
                     newCompasses[index] = newCompass
-                    compasses = newCompasses.toList()
+                    compasses = newCompasses.toImmutableList()
                 },
             )
         }
@@ -104,7 +105,7 @@ fun EpicycloidMenu(
                     val newCompasses = compasses.toMutableList()
                     val newCompass = Compass(0.0)
                     newCompasses.add(newCompass)
-                    compasses = newCompasses.toList()
+                    compasses = newCompasses.toImmutableList()
                 },
             ) {
                 Icon(Icons.Filled.Add, null)

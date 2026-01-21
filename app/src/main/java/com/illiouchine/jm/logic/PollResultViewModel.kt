@@ -9,8 +9,12 @@ import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.model.Tally
+import com.illiouchine.jm.model.toTally
+import com.illiouchine.jm.model.Result
+import com.illiouchine.jm.model.toResult
 import com.illiouchine.jm.service.DuelAnalyzer
-import com.illiouchine.jm.service.ParticipantGroupAnalysis
+import com.illiouchine.jm.model.ParticipantGroupAnalysis
 import com.illiouchine.jm.service.TextStylist
 import com.illiouchine.jm.ui.navigator.NavigationAction
 import com.illiouchine.jm.ui.navigator.Screens
@@ -18,7 +22,6 @@ import fr.mieuxvoter.mj.CollectedTally
 import fr.mieuxvoter.mj.DeliberatorInterface
 import fr.mieuxvoter.mj.MajorityJudgmentDeliberator
 import fr.mieuxvoter.mj.ResultInterface
-import fr.mieuxvoter.mj.TallyInterface
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -33,8 +36,8 @@ class PollResultViewModel(
     @Stable
     data class PollResultViewState(
         val poll: Poll? = null,
-        val tally: TallyInterface? = null,
-        val result: ResultInterface? = null,
+        val tally: Tally? = null,
+        val result: Result? = null,
         val explanations: List<AnnotatedString> = emptyList(),
         val groups: List<DuelGroups> = emptyList(),
         val proportions: Map<ProportionalAlgorithms, List<Double>> = emptyMap(),
@@ -121,8 +124,8 @@ class PollResultViewModel(
         _pollResultViewState.update {
             it.copy(
                 poll = poll,
-                tally = tally,
-                result = result,
+                tally = tally.toTally(),
+                result = result.toResult(),
                 explanations = explanations,
                 groups = groups,
                 proportions = proportions,

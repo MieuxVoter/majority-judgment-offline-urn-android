@@ -109,6 +109,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.serialization.json)
+    implementation(libs.kotlinx.collections.immutable)
 
     implementation(libs.navigation3.ui)
     implementation(libs.navigation3.runtime)

@@ -36,16 +36,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
 import com.illiouchine.jm.R
-import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.logic.HomeViewModel
-import com.illiouchine.jm.model.Ballot
-import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.PollDeletionConfirmationDialog
 import com.illiouchine.jm.ui.composable.PollSummary
 import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.scaffold.MjuScaffold
+import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -219,58 +218,15 @@ fun HomeScreen(
     device = "spec:width=511dp,height=891dp,orientation=landscape",
 )
 @Composable
-@Suppress("SpellCheckingInspection")
 fun PreviewHomeScreen(modifier: Modifier = Modifier) {
     JmTheme {
         HomeScreen(
             modifier = modifier,
             homeViewState = HomeViewModel.HomeViewState(
                 polls = listOf(
-                    Poll(
-                        pollConfig = PollConfig(
-                            subject = "President ?",
-                            proposals = listOf("Mario", "Bob", "JLM"),
-                            grading = DEFAULT_GRADING_QUALITY_VALUE,
-                        ),
-                        ballots = listOf(
-                            Ballot(
-                                judgments = listOf(
-                                    Judgment(proposal = 0, 2),
-                                    Judgment(proposal = 1, 7),
-                                    Judgment(proposal = 2, 1),
-                                )
-                            )
-                        )
-                    ),
-                    Poll(
-                        pollConfig = PollConfig(
-                            subject = "De combien de megawatts la couleur bleu est-elle plus poilue que sous la mer ?",
-                            proposals = listOf(
-                                "42",
-                                "Rose",
-                                "Un sac de rats",
-                                "Presque",
-                                "Mercure",
-                                "Un Sayan",
-                                "Merde !"
-                            ),
-                            grading = DEFAULT_GRADING_QUALITY_VALUE,
-                        ),
-                        ballots = listOf(
-                            Ballot(
-                                judgments = listOf(
-                                    Judgment(proposal = 0, 2),
-                                    Judgment(proposal = 1, 4),
-                                ),
-                            ),
-                            Ballot(
-                                judgments = listOf(
-                                    Judgment(proposal = 0, 1),
-                                    Judgment(proposal = 1, 3),
-                                ),
-                            ),
-                        )
-                    )
+                    PreviewDataBuilder.poll(0, 3),
+                    PreviewDataBuilder.poll(1, 0),
+                    PreviewDataBuilder.poll(1, 2)
                 )
             )
         )

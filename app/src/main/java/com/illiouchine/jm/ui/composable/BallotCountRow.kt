@@ -7,11 +7,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Ballot
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun BallotCountRow(
     modifier: Modifier = Modifier,
-    ballots: List<Ballot> = emptyList(),
+    ballots: ImmutableList<Ballot> = persistentListOf(),
 ) {
     val amountOfBallots = ballots.size
     Row(
@@ -24,7 +26,7 @@ fun BallotCountRow(
             stringResource(R.string.ballots)
 
         Text(
-            "${amountOfBallots} ${ballotsString} " + stringResource(R.string.in_the_urn)
+            "$amountOfBallots $ballotsString " + stringResource(R.string.in_the_urn)
         )
     }
 }
