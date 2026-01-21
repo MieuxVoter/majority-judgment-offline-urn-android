@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,6 +31,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
@@ -144,7 +146,7 @@ fun OnBoardingPage(
             )
         },
     ) {
-        Column(
+        FlowColumn(
             modifier = modifier
                 .align(Alignment.Center)
                 .padding(horizontal = Theme.spacing.medium + Theme.spacing.small),
@@ -155,8 +157,6 @@ fun OnBoardingPage(
             )
             Spacer(Modifier.padding(Theme.spacing.medium))
             Text(
-                modifier = Modifier
-                    .fillMaxWidth(),
                 text = stringResource(onBoardingPage.text),
             )
         }
@@ -236,11 +236,24 @@ fun PreviewOnBoarding(modifier: Modifier = Modifier) {
 @Preview(
     showSystemUi = true,
     device = "spec:width=330dp,height=691dp",
-//    widthDp = 330,
     locale = "fr",
 )
 @Composable
 fun PreviewOnBoardingLastPageFr(modifier: Modifier = Modifier) {
+    JmTheme {
+        OnBoardingScreen(
+            modifier = modifier,
+        )
+    }
+}
+
+@Preview(
+    showSystemUi = true,
+    uiMode = UI_MODE_NIGHT_YES,
+    device = "spec:width=411dp,height=891dp,orientation=landscape",
+)
+@Composable
+fun PreviewOnBoardingLandscape(modifier: Modifier = Modifier) {
     JmTheme {
         OnBoardingScreen(
             modifier = modifier,

@@ -20,7 +20,6 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,10 +33,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.NavKey
 import com.illiouchine.jm.R
-import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.composable.IconTextButton
-import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.ScreenTitle
+import com.illiouchine.jm.ui.navigator.Screens
+import com.illiouchine.jm.ui.scaffold.MjuScaffold
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -56,16 +55,19 @@ fun AboutScreen(
     onShowSpirograph: () -> Unit = {},
 ) {
 
-    Scaffold(
+    MjuScaffold(
         modifier = modifier
             .fillMaxSize()
             .testTag("screen_about"),
-        bottomBar = {
-            MjuBottomBar(
-                selected = Screens.About,
-                onItemSelected = { destination -> onBottomBarItemSelected(destination) },
-            )
-        },
+        showMenu = true,
+        menuItemSelected = Screens.About,
+        onMenuItemSelected = { destination -> onBottomBarItemSelected(destination) },
+//        bottomBar = {
+//            MjuBottomBar(
+//                selected = Screens.About,
+//                onItemSelected = { destination -> onBottomBarItemSelected(destination) },
+//            )
+//        },
     ) { innerPadding ->
 
         val scrollState = rememberScrollState()
@@ -225,6 +227,11 @@ fun AboutScreen(
 @Preview(
     showSystemUi = true,
     uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
+@Preview(
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    device = "spec:width=511dp,height=891dp,orientation=landscape",
 )
 @Composable
 fun PreviewAboutScreen(modifier: Modifier = Modifier) {

@@ -17,7 +17,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -39,10 +38,12 @@ import androidx.navigation3.runtime.NavKey
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.PollDeletionConfirmationDialog
 import com.illiouchine.jm.ui.composable.PollSummary
 import com.illiouchine.jm.ui.navigator.Screens
+import com.illiouchine.jm.ui.scaffold.MjuScaffold
 import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
@@ -64,20 +65,27 @@ fun HomeScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    Scaffold(
+    MjuScaffold(
         modifier = modifier
             .fillMaxSize()
             .testTag("home_screen"),
-        bottomBar = {
-            MjuBottomBar(
-                selected = Screens.Home,
-                onItemSelected = { destination ->
-                    coroutineScope.launch {
-                        onBottomBarItemSelected(destination)
-                    }
-                },
-            )
+        showMenu = true,
+        menuItemSelected = Screens.Home,
+        onMenuItemSelected = { destination ->
+            coroutineScope.launch {
+                onBottomBarItemSelected(destination)
+            }
         },
+//        bottomBar = {
+//            MjuBottomBar(
+//                selected = Screens.Home,
+//                onItemSelected = { destination ->
+//                    coroutineScope.launch {
+//                        onBottomBarItemSelected(destination)
+//                    }
+//                },
+//            )
+//        },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 modifier = Modifier
@@ -203,6 +211,11 @@ fun HomeScreen(
 @Preview(
     showSystemUi = true,
     uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
+@Preview(
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    device = "spec:width=511dp,height=891dp,orientation=landscape",
 )
 @Composable
 fun PreviewHomeScreen(modifier: Modifier = Modifier) {
