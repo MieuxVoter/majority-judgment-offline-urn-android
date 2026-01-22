@@ -45,17 +45,13 @@ This Android app is available on [F-Droid](https://f-droid.org/en/packages/com.i
 
 ### Google Play
 
-[Publication on Google Play](https://github.com/MieuxVoter/majority-judgment-offline-urn-android/issues/100) is in the works. 
-
-[Try the open beta](https://play.google.com/apps/testing/fr.mieuxvoter.urn).
+This application is also [available on Google Play](https://play.google.com/store/apps/details?id=fr.mieuxvoter.urn).
 
 ### Direct Download
 
 [Download the latest release](https://github.com/MieuxVoter/majority-judgment-offline-urn-android/releases/latest/download/app-release.apk) of the app.
 
-You can also download the debug `apk` from [the releases](https://github.com/MieuxVoter/majority-judgment-offline-urn-android/releases).
-
-> Both are built by our Continuous Integration (CI) on each release.
+> All the artifacts are built by our Continuous Integration (CI) on each release.
 
 
 ## Contribute
