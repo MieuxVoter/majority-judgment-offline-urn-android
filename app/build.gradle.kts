@@ -69,9 +69,9 @@ android {
     // We need to remove it before we publish to F-Droid, as it's a security hole.
     // https://gitlab.com/fdroid/fdroiddata/-/merge_requests/19981
     dependenciesInfo {
-        // Disables dependency metadata when building APKs.
+        // Enables/Disables dependency metadata when building APKs.
         includeInApk = isGoogleFlavor
-        // Disables dependency metadata when building Android App Bundles.
+        // Enables/Disables dependency metadata when building Android App Bundles.
         includeInBundle = isGoogleFlavor
     }
 
