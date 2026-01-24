@@ -76,16 +76,6 @@ fun HomeScreen(
                 onBottomBarItemSelected(destination)
             }
         },
-//        bottomBar = {
-//            MjuBottomBar(
-//                selected = Screens.Home,
-//                onItemSelected = { destination ->
-//                    coroutineScope.launch {
-//                        onBottomBarItemSelected(destination)
-//                    }
-//                },
-//            )
-//        },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 modifier = Modifier
@@ -192,7 +182,9 @@ fun HomeScreen(
             )
             homeViewState.templates.forEach { template ->
                 OutlinedButton(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 30.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 30.dp),
                     onClick = {
                         onSetupTemplatePoll(template.slug)
                     },

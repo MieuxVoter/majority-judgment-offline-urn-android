@@ -6,7 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.add
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,17 +36,20 @@ import com.illiouchine.jm.ui.theme.spacing
  * Purpose
  * -------
  * Show either the NavigationBar or the NavigationRail, depending on the orientation.
+ * Other than that, act like the base Scaffold.
  *
  * I don't get how and why this is not part of the core of Compose yet.
- * Perhaps we're doing this wrong.
+ * Perhaps we're doing this wrong?
  */
 @Composable
 fun MjuScaffold(
     modifier: Modifier = Modifier,
+    // Custom properties
     showMenu: Boolean = false,
     menuModifier: Modifier = Modifier,
     menuItemSelected: Screens = Screens.Home,
     onMenuItemSelected: (Screens) -> Unit = {},
+    // -----------------
     topBar: @Composable () -> Unit = {},
     // BottomBar property was removed ; use showMenu and menu properties instead
     //bottomBar: @Composable () -> Unit = {},
@@ -60,7 +65,7 @@ fun MjuScaffold(
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     var bottomBar: @Composable () -> Unit = {}
-    if (showMenu && ! isLandscape) {
+    if (showMenu && !isLandscape) {
         bottomBar = {
             MjuBottomBar(
                 modifier = menuModifier,
@@ -79,22 +84,33 @@ fun MjuScaffold(
         floatingActionButtonPosition = floatingActionButtonPosition,
         containerColor = containerColor,
         contentColor = contentColor,
-        // One way to update the padding is to update the content window insets,
-        // but we're using a magic number here (80) instead of measuring the navigation rail.
-        contentWindowInsets = if (showMenu && isLandscape) {
-            contentWindowInsets.add(WindowInsets(left=80.dp + Theme.spacing.small))
-        } else {
-            contentWindowInsets
-        },
-    ) { contentPadding ->
+        contentWindowInsets = contentWindowInsets,
+    ) { originalPadding ->
+        val layoutDirection = LocalLayoutDirection.current
+        var actualPadding = originalPadding
         if (showMenu && isLandscape) {
+            // WARN: We're using a magic number here (80) instead of measuring the navigation rail.
+            // Since we create the nav rail at the very end I'm not even sure how we might do that.
+            val railWidth = 80.dp + Theme.spacing.small
+            actualPadding = PaddingValues(
+                start = originalPadding.calculateStartPadding(layoutDirection) + railWidth,
+                top = originalPadding.calculateTopPadding(),
+                end = originalPadding.calculateEndPadding(layoutDirection),
+                bottom = originalPadding.calculateBottomPadding(),
+            )
+            // We must process the content first, so that our navigation rail has a "higher zIndex".
+            // (otherwise it does appear but the user cannot interact with it → soft lock)
+            // The behavior appears inconsistent, so it might cause trouble down the line.
+            // If it ever fails, just assign a high zIndex to the modifier of the rail?
+            content(actualPadding)
             MjuNavigationRail(
                 modifier = menuModifier,
                 selected = menuItemSelected,
                 onItemSelected = onMenuItemSelected,
             )
+        } else {
+            content(actualPadding)
         }
-        content(contentPadding)
     }
 }
 
