@@ -1,0 +1,2 @@
+* Fix issues with landscape mode
+* Fix navigation issues when rotating the device
