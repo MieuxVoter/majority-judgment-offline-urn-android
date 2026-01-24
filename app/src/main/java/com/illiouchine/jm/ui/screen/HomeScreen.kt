@@ -38,13 +38,11 @@ import androidx.navigation3.runtime.NavKey
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.model.Poll
-import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.PollDeletionConfirmationDialog
 import com.illiouchine.jm.ui.composable.PollSummary
 import com.illiouchine.jm.ui.navigator.Screens
-import com.illiouchine.jm.ui.scaffold.MjuScaffold
 import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
+import com.illiouchine.jm.ui.scaffold.MjuScaffold
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
