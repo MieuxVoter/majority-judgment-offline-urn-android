@@ -47,7 +47,7 @@ class HomeViewModel(
         viewModelScope.launch {
             val showOnboarding = sharedPrefsHelper.getShowOnboarding()
             if (showOnboarding){
-                _navEvents.emit(NavigationAction.To(Screens.OnBoarding))
+                _navEvents.emit(NavigationAction.To(Screens.Onboarding))
             }
         }
     }

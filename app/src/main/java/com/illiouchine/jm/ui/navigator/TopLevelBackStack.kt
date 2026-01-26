@@ -2,9 +2,11 @@ package com.illiouchine.jm.ui.navigator
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.navigation3.runtime.NavKey
 
 /**
@@ -21,49 +23,51 @@ import androidx.navigation3.runtime.NavKey
  *                 This key is used to initialize the very first navigation stack.
  */
 class TopLevelBackStack(startKey: NavKey) {
-    private var topLevelBackStacks: HashMap<NavKey, SnapshotStateList<NavKey>> = hashMapOf(
+
+    private var backStacks: SnapshotStateMap<NavKey, SnapshotStateList<NavKey>> = mutableStateMapOf(
         startKey to mutableStateListOf(startKey)
     )
 
-    var topLevelKey by mutableStateOf(startKey)
+    var currentBackStackKey by mutableStateOf(startKey)
         private set
-    val backStack = mutableStateListOf<NavKey>(startKey)
+
+    val currentBackStack = mutableStateListOf(startKey)
 
     private fun updateBackStack() {
-        backStack.clear()
-        backStack.addAll(topLevelBackStacks[topLevelKey] ?: emptyList())
+        currentBackStack.clear()
+        currentBackStack.addAll(backStacks[currentBackStackKey] ?: emptyList())
     }
 
     fun switchTopLevel(key: NavKey) {
-        if (topLevelBackStacks[key] == null) {
-            topLevelBackStacks[key] = mutableStateListOf(key)
+        if (backStacks[key] == null) {
+            backStacks[key] = mutableStateListOf(key)
         }
-        topLevelKey = key
+        currentBackStackKey = key
         updateBackStack()
     }
 
     fun add(key: NavKey) {
-        topLevelBackStacks[topLevelKey]?.add(key)
+        backStacks[currentBackStackKey]?.add(key)
         updateBackStack()
     }
 
     fun removeLast() {
-        topLevelBackStacks[topLevelKey]?.removeLastOrNull()
+        backStacks[currentBackStackKey]?.removeLastOrNull()
         updateBackStack()
     }
 
-    fun replaceStack(vararg keys: NavKey) {
-        topLevelBackStacks[topLevelKey] = mutableStateListOf(*keys)
-        updateBackStack()
-    }
+//    fun replaceStack(vararg keys: NavKey) {
+//        backStacks[currentBackStackKey] = mutableStateListOf(*keys)
+//        updateBackStack()
+//    }
 
     fun clearCurrentStack(destination: NavKey?) {
-        val firstEntry = topLevelBackStacks[topLevelKey]?.first()
-        firstEntry?.let { entry ->
-            topLevelBackStacks.clear()
-            topLevelBackStacks[topLevelKey] = mutableStateListOf(topLevelKey)
+        val firstEntry = backStacks[currentBackStackKey]?.first()
+        firstEntry?.let { _ ->
+            backStacks.clear()
+            backStacks[currentBackStackKey] = mutableStateListOf(currentBackStackKey)
             if (destination != null) {
-                topLevelBackStacks[topLevelKey]?.add(destination)
+                backStacks[currentBackStackKey]?.add(destination)
             }
         }
         updateBackStack()
