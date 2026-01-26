@@ -16,6 +16,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -53,11 +54,13 @@ class MainActivity : ComponentActivity() {
             // Therefore, we clear the flag here and set it on in the appropriate screens.
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-            val topLevelBackStack = remember { TopLevelBackStack(Screens.Home) }
+            // Retained variables survive activity recreations (eg: orientation change)
+            // https://developer.android.com/develop/ui/compose/state-lifespans
+            val topLevelBackStack = retain { TopLevelBackStack(Screens.Home) }
 
             JmTheme {
                 NavDisplay(
-                    backStack = topLevelBackStack.backStack,
+                    backStack = topLevelBackStack.currentBackStack,
                     onBack = { topLevelBackStack.removeLast() },
                     entryDecorators = listOf(
                         rememberSaveableStateHolderNavEntryDecorator(),
