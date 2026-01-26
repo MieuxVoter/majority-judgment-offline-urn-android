@@ -60,7 +60,7 @@ class SettingsViewModel(
 
     fun showOnBoarding() {
         viewModelScope.launch {
-            _navEvents.emit(NavigationAction.To(Screens.OnBoarding))
+            _navEvents.emit(NavigationAction.To(Screens.Onboarding))
         }
     }
 

@@ -103,7 +103,7 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier.fillMaxSize(),
                             )
                         }
-                        entry<Screens.OnBoarding> {
+                        entry<Screens.Onboarding> {
                             val onBoardingViewModel: OnBoardingViewModel by viewModel()
                             LaunchedEffect(Unit) {
                                 onBoardingViewModel.navEvents.collect { event ->
