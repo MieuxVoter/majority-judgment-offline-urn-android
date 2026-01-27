@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
@@ -40,6 +41,7 @@ import com.illiouchine.jm.ui.scaffold.MjuScaffold
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -54,6 +56,7 @@ fun AboutScreen(
     onOpenWebsite: () -> Unit = {},
     onShowSpirograph: () -> Unit = {},
 ) {
+    val coroutineScope = rememberCoroutineScope()
 
     MjuScaffold(
         modifier = modifier
@@ -61,13 +64,11 @@ fun AboutScreen(
             .testTag("screen_about"),
         showMenu = true,
         menuItemSelected = Screens.About,
-        onMenuItemSelected = { destination -> onBottomBarItemSelected(destination) },
-//        bottomBar = {
-//            MjuBottomBar(
-//                selected = Screens.About,
-//                onItemSelected = { destination -> onBottomBarItemSelected(destination) },
-//            )
-//        },
+        onMenuItemSelected = { destination ->
+            coroutineScope.launch {
+                onBottomBarItemSelected(destination)
+            }
+        },
     ) { innerPadding ->
 
         val scrollState = rememberScrollState()
@@ -87,7 +88,7 @@ fun AboutScreen(
                     .fillMaxWidth()
             ) {
                 Image(
-                    modifier = Modifier.pointerInput(Unit){
+                    modifier = Modifier.pointerInput(Unit) {
                         detectTapGestures {
                             onShowSpirograph()
                         }

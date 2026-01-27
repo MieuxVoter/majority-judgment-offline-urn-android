@@ -73,12 +73,6 @@ fun SettingsScreen(
         showMenu = true,
         menuItemSelected = Screens.Settings,
         onMenuItemSelected = { destination -> onBottomBarItemSelected(destination) },
-//        bottomBar = {
-//            MjuBottomBar(
-//                selected = Screens.Settings,
-//                onItemSelected = { destination -> onBottomBarItemSelected(destination) },
-//            )
-//        },
     ) { innerPadding ->
 
         val scrollState = rememberScrollState()

@@ -38,13 +38,11 @@ import androidx.navigation3.runtime.NavKey
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.model.Poll
-import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.composable.MjuBottomBar
 import com.illiouchine.jm.ui.composable.PollDeletionConfirmationDialog
 import com.illiouchine.jm.ui.composable.PollSummary
 import com.illiouchine.jm.ui.navigator.Screens
-import com.illiouchine.jm.ui.scaffold.MjuScaffold
 import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
+import com.illiouchine.jm.ui.scaffold.MjuScaffold
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -76,16 +74,6 @@ fun HomeScreen(
                 onBottomBarItemSelected(destination)
             }
         },
-//        bottomBar = {
-//            MjuBottomBar(
-//                selected = Screens.Home,
-//                onItemSelected = { destination ->
-//                    coroutineScope.launch {
-//                        onBottomBarItemSelected(destination)
-//                    }
-//                },
-//            )
-//        },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 modifier = Modifier
@@ -192,7 +180,9 @@ fun HomeScreen(
             )
             homeViewState.templates.forEach { template ->
                 OutlinedButton(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 30.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 30.dp),
                     onClick = {
                         onSetupTemplatePoll(template.slug)
                     },
