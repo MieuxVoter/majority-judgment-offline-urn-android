@@ -1,3 +1,5 @@
+* Fix issues with landscape mode
+* Fix navigation issues when rotating the device
 * Fix some issues on very small screens
 * Add poll templates
 * Add a monochrome launcher icon
