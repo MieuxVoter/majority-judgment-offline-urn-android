@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -27,17 +25,11 @@ fun PollSubject(
             .padding(
                 start = Theme.spacing.small,
                 end = Theme.spacing.small,
-                top = Theme.spacing.medium + Theme.spacing.small
-            )
-            .semantics {
-                traversalIndex = -2f
-            },
+                top = Theme.spacing.medium + Theme.spacing.small,
+            ),
     ) {
         Text(
-            modifier = modifier
-                .semantics {
-                    traversalIndex = -1f
-                },
+            modifier = modifier,
             text = subject,
             color = Theme.colorScheme.onPrimary,
             fontSize = 24.sp,

@@ -16,12 +16,19 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.focused
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.R
@@ -70,6 +77,15 @@ fun PollVotingScreen(
 
         val scrollState = rememberScrollState()
 
+        // Rule: After a single judgment the focus should go back to the top of the screen; WCag 3.2
+        // We only recompose when screen state changes but from an UX standpoint it is a new screen.
+        var shouldFocusScreenTop by remember { mutableStateOf(false) }
+        LaunchedEffect(shouldFocusScreenTop) {
+            if (shouldFocusScreenTop) {
+                shouldFocusScreenTop = false
+            }
+        }
+
         Column(
             modifier = modifier
                 .padding(innerPadding)
@@ -79,13 +95,15 @@ fun PollVotingScreen(
         ) {
             if (!pollVotingState.isInStateSummary()) {
                 PollSubject(
-                    modifier = Modifier.padding(bottom = Theme.spacing.small + Theme.spacing.medium),
+                    modifier = Modifier
+                        .padding(bottom = Theme.spacing.small + Theme.spacing.medium)
+                        .semantics { focused = shouldFocusScreenTop },
                     subject = pollVotingState.pollConfig.subject,
                 )
             }
 
             if (pollVotingState.isInStateReady()) {
-                // State: READY, waiting for new participant.
+                // State: READY, waiting for a new participant.
 
                 Spacer(modifier = Modifier.height(Theme.spacing.large))
 
@@ -140,6 +158,7 @@ fun PollVotingScreen(
                         onJudgmentCast(judgment)
                         scrollCoroutine.launch {
                             scrollState.scrollTo(67)
+                            shouldFocusScreenTop = true
                         }
                     }
                 )
@@ -152,6 +171,8 @@ fun PollVotingScreen(
                 // State: SUMMARY, awaiting confirmation, back or redo.
 
                 BallotSummaryScreen(
+                    modifier = Modifier
+                        .semantics { focused = shouldFocusScreenTop },
                     pollConfig = pollVotingState.pollConfig,
                     ballot = pollVotingState.currentBallot!!,
                     onConfirm = {
