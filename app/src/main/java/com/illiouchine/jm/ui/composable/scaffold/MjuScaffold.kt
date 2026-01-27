@@ -55,7 +55,7 @@ fun MjuScaffold(
     topBar: @Composable () -> Unit = {},
     // BottomBar property was removed ; use showMenu and menu properties instead
     // IDEA: re-enable the property and yell/throw on use ?
-    //bottomBar: @Composable () -> Unit = {},
+    // bottomBar: @Composable () -> Unit = {},
     snackbarHost: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
@@ -128,7 +128,6 @@ fun MjuScaffold(
     }
 }
 
-
 @Preview(
     showSystemUi = true,
     uiMode = UI_MODE_NIGHT_YES,
@@ -139,7 +138,6 @@ private fun PreviewScaffoldLandscapeNoMenu() {
     JmTheme {
         MjuScaffold {
             Box(modifier = Modifier.padding(it)) {
-
             }
         }
     }

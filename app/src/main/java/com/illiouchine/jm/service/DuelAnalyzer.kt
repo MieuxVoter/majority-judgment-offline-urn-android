@@ -12,8 +12,8 @@ import fr.mieuxvoter.mj.ResultInterface
 import fr.mieuxvoter.mj.TallyInterface
 import kotlin.math.max
 
-@Suppress("CanBeParameter")
 // There's no logic to this.  Only madness.  Plz rewrite.
+@Suppress("CanBeParameter")
 class DuelAnalyzer(
     private val poll: Poll,
     private val tally: TallyInterface,
@@ -30,12 +30,10 @@ class DuelAnalyzer(
     private val otherGroups: Array<ParticipantGroup> =
         other.analysis.computeResolution(tally.proposalsTallies[other.index])
 
-
     fun generateDuelExplanation(
         context: Context,
         stylist: TextStylist,
     ): AnnotatedString {
-
         if (base.rank == other.rank) {
             return stylist.resolve(
                 context.getString(
@@ -142,7 +140,6 @@ class DuelAnalyzer(
                     )
                 )
             } else if (baseGroup.grade != otherGroup.grade) {
-
                 if (baseGroup.type != otherGroup.type) {
                     // The %1$s group of %2$s is just as big as the %3$s group of %4$s.
                     // Both mean that %5$s should be %6$s than %7$s.
@@ -213,7 +210,6 @@ class DuelAnalyzer(
         return stylist.resolve(context.getString(R.string.wip_stay_tuned))
     }
 
-
     fun generateGroups(): List<ParticipantGroupAnalysis> {
         val groups: MutableList<ParticipantGroupAnalysis> = mutableListOf()
 
@@ -249,7 +245,9 @@ class DuelAnalyzer(
             val otherGroup = otherGroups[i]
 
             if (baseGroup.type == ParticipantGroup.Type.Median || otherGroup.type == ParticipantGroup.Type.Median) {
-                assert(baseGroup.type == ParticipantGroup.Type.Median && otherGroup.type == ParticipantGroup.Type.Median)
+                assert(
+                    baseGroup.type == ParticipantGroup.Type.Median && otherGroup.type == ParticipantGroup.Type.Median
+                )
                 // The median grades are the same → go deeper
                 if (baseGroup.grade == otherGroup.grade) {
                     continue
@@ -270,7 +268,6 @@ class DuelAnalyzer(
                     )
                 )
                 return groups
-
             } else if (baseGroup.size != otherGroup.size) {
                 // %1$s and %2$s are both %3$s, but the %4$s group of %5$s is bigger.
                 groups.add(
@@ -288,9 +285,7 @@ class DuelAnalyzer(
                     )
                 )
                 return groups
-
             } else if (baseGroup.grade != otherGroup.grade) {
-
                 if (baseGroup.type != otherGroup.type) {
                     // The %1$s group of %2$s is just as big as the %3$s group of %4$s.
                     // Both mean that %5$s should be %6$s than %7$s.

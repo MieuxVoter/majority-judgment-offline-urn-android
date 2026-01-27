@@ -30,13 +30,11 @@ import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun ProportionsHelpScreen(
     modifier: Modifier = Modifier,
     onNavigateUp: () -> Unit = {},
 ) {
-
     Scaffold(
         modifier = modifier
             .fillMaxSize()
@@ -53,7 +51,6 @@ fun ProportionsHelpScreen(
                 .padding(innerPadding)
                 .padding(horizontal = Theme.spacing.small)
         ) {
-
             ScreenTitle(text = stringResource(R.string.title_proportional_representation))
 
             Text(
@@ -109,7 +106,9 @@ fun ProportionsHelpScreen(
             TextButton(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = {
-                    uriHandler.openUri("https://github.com/MieuxVoter/majority-judgment-offline-urn-android/wiki/Judgments-&-Proportional-Representation")
+                    uriHandler.openUri(
+                        "https://github.com/MieuxVoter/majority-judgment-offline-urn-android/wiki/Judgments-&-Proportional-Representation"
+                    )
                 },
             ) {
                 Text("\uD83D\uDCDA " + stringResource(R.string.button_learn_more_on_the_wiki))
@@ -132,7 +131,6 @@ fun ProportionsHelpScreen(
         }
     }
 }
-
 
 @Preview(
     showSystemUi = true,

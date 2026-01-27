@@ -40,7 +40,6 @@ import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import kotlinx.collections.immutable.toImmutableList
 
-
 @Composable
 fun EpicycloidMenu(
     modifier: Modifier,
@@ -62,7 +61,6 @@ fun EpicycloidMenu(
                 onValueChange = { name = it },
             )
         }
-
 
         itemsIndexed(
             items = compasses,
@@ -223,7 +221,6 @@ fun CompassMenu(
         }
     }
 }
-
 
 @Preview(showSystemUi = true)
 @Composable

@@ -15,4 +15,3 @@ fun TallyInterface.toTally(): Tally {
         }.toImmutableList()
     )
 }
-

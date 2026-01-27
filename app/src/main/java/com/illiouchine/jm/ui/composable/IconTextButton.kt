@@ -10,7 +10,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 
-
 @Composable
 fun IconTextButton(
     modifier: Modifier = Modifier,

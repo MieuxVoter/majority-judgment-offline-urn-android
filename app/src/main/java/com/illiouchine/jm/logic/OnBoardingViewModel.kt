@@ -15,11 +15,10 @@ class OnBoardingViewModel(
     private val _navEvents = MutableSharedFlow<NavigationAction>()
     val navEvents = _navEvents.asSharedFlow()
 
-    fun finish(){
+    fun finish() {
         viewModelScope.launch {
             prefsHelper.editShowOnboarding(false)
             _navEvents.emit(NavigationAction.Back)
         }
     }
-
 }

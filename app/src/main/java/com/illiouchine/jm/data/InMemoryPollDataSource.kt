@@ -3,9 +3,8 @@ package com.illiouchine.jm.data
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Poll
 
-
 // This is now basically only a dummy used in @Previews, ever since we've had SqlitePollDataSource.
-//Todo : Should not be accessed directly,
+// Todo : Should not be accessed directly,
 // 1 - setup a pollRepository
 // 2 - in Repository : make the polls reactive by wrapping it in Flow
 class InMemoryPollDataSource : PollDataSource {

@@ -2,7 +2,6 @@ package com.illiouchine.jm.service
 
 import com.illiouchine.jm.model.Poll
 
-
 /**
  * Computes a proportional representation of the proposals/candidates.
  * The returned list of proportions is normalized, that is its sum will always be 1.
@@ -26,7 +25,6 @@ import com.illiouchine.jm.model.Poll
 class OsmosisRepartitor { // FavorityJudgmentRepartitor?  (still workshopping the name)
 
     fun computeProportionalRepresentation(poll: Poll): List<Double> {
-
         val ballots = poll.ballots
         val amountOfProposals = poll.pollConfig.proposals.size
 
@@ -73,7 +71,6 @@ class OsmosisRepartitor { // FavorityJudgmentRepartitor?  (still workshopping th
         val seepingNormalization = amountOfBallots * (amountOfProposals - 1)
         for (proposalIndexA in (0..<amountOfProposals - 1)) {
             for (proposalIndexB in (proposalIndexA + 1..<amountOfProposals)) {
-
                 var preferenceForA = 0
                 var preferenceForB = 0
 
@@ -81,8 +78,8 @@ class OsmosisRepartitor { // FavorityJudgmentRepartitor?  (still workshopping th
                     val proposalGradeA = ballot.gradeOf(proposalIndexA)
                     val proposalGradeB = ballot.gradeOf(proposalIndexB)
                     val highestGrade = ballot.getHighestGrade()
-                    val isBallotFavoritism = proposalGradeA == highestGrade
-                            || proposalGradeB == highestGrade
+                    val isBallotFavoritism = proposalGradeA == highestGrade ||
+                        proposalGradeB == highestGrade
                     val isBallotRejection = highestGrade < acceptationGradeThreshold
 
                     if (isBallotFavoritism && !isBallotRejection) {
@@ -96,8 +93,10 @@ class OsmosisRepartitor { // FavorityJudgmentRepartitor?  (still workshopping th
                     }
                 }
 
-                val seepingIntent: Double = ((preferenceForB - preferenceForA).toDouble()
-                        / seepingNormalization)
+                val seepingIntent: Double = (
+                    (preferenceForB - preferenceForA).toDouble() /
+                        seepingNormalization
+                    )
                 var seepingAmount = 0.0
                 if (seepingIntent > 0) {
                     seepingAmount = initialProportions[proposalIndexA] * seepingIntent

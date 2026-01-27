@@ -5,7 +5,7 @@ import com.illiouchine.jm.service.DecreasingListConstrictorStrategies.MEAN_DESCE
 class DecreasingListConstraint(
     private val strategy: DecreasingListConstrictorStrategies = MEAN_DESCENDING,
 ) {
-    
+
     fun apply(input: List<Double>): List<Double> {
         if (this.strategy == MEAN_DESCENDING) {
             return applyMeanDescending(input)
@@ -17,9 +17,9 @@ class DecreasingListConstraint(
     private fun applyMeanDescending(input: List<Double>): List<Double> {
         val output = input.toMutableList()
         var violationIndex: Int? = getFirstViolationIndex(output)
-        //System.out.println("Applying constraint on ${output}")
+        // System.out.println("Applying constraint on ${output}")
         while (violationIndex != null) {
-            //System.out.println("    violation at ${violationIndex} on ${output}")
+            // System.out.println("    violation at ${violationIndex} on ${output}")
             val mean = (output[violationIndex] + output[violationIndex - 1]) / 2.0
             output[violationIndex] = mean
             output[violationIndex - 1] = mean

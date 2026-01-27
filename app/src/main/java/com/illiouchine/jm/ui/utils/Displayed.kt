@@ -10,7 +10,6 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 
-
 /**
  * The [displayed] extension function detects whether a composable is visible in the window
  * and triggers a callback [onVisibilityChanged] whenever its visibility changes.

@@ -30,4 +30,3 @@ fun MJParticipantGroup.toParticipantGroup(): ParticipantGroup {
         type = this.type.toType()
     )
 }
-

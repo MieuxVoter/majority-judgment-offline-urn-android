@@ -1,3 +1,5 @@
+# The order in which these variables are declared "does not matter", so let's make it alphabetical.
+
 [versions]
 agp = "8.13.2"
 cucumberAndroid = "4.9.0"
@@ -21,6 +23,7 @@ serialization = "2.1.0"
 serialization-json = "1.8.0"
 navigation3Ui = "1.0.0"
 navigation3RuntimeVersion = "1.0.0"
+detekt = "1.23.8"
 
 [libraries]
 androidx-material3-adaptive-navigation3 = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation3", version.ref = "material3AdaptiveNav3" }
@@ -52,15 +55,16 @@ androidx-room-compiler = { group ="androidx.room", name = "room-compiler", versi
 androidx-room-ktx = { group ="androidx.room", name = "room-ktx", version.ref = "room"}
 serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization-json" }
 navigation3-runtime = { group = "androidx.navigation3", name = "navigation3-runtime", version.ref = "navigation3RuntimeVersion" }
+detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
 
 
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt"}
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-room = { id = "androidx.room", version.ref = "room"}
-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"}
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
-
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"}
+room = { id = "androidx.room", version.ref = "room"}
 

@@ -69,7 +69,6 @@ fun ColumnScope.SubjectSelectionRow(
     }
 }
 
-
 @Preview(name = "Selection Row")
 @Composable
 private fun PreviewSelectionRow() {

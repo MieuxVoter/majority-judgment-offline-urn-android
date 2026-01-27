@@ -9,7 +9,7 @@ class PreviewDataBuilderTest {
     @Test
     fun buildJudgment() {
         // Test judgments size.
-        (0..10).forEach { i->
+        (0..10).forEach { i ->
             val judgments = PreviewDataBuilder.judgments(size = i)
             assertEquals(i, judgments.size)
         }
@@ -18,7 +18,7 @@ class PreviewDataBuilderTest {
     @Test
     fun buildPollConfig() {
         // Test judgments size.
-        (0..10).forEach { i->
+        (0..10).forEach { i ->
             val pollConfig = PreviewDataBuilder.pollConfig()
             assert(pollConfig.subject.isNotEmpty())
             assert(pollConfig.proposals.isNotEmpty())

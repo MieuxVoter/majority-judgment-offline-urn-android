@@ -84,7 +84,6 @@ fun GradingSelectionRow(
             }
 
             AnimatedVisibility(expanded) {
-
                 val lazyListState = rememberLazyListState()
                 LaunchedEffect(expanded) {
                     lazyListState.animateScrollToItem(index = gradings.indexOf(grading))
@@ -138,7 +137,6 @@ fun GradingThumbnail(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.SpaceAround,
     ) {
-
         // Do we really need to provide the grading's title here ?
 //        Text(
 //            text = stringResource(grading.name),
@@ -147,7 +145,6 @@ fun GradingThumbnail(
         grading.grades.reversed().forEach { grade ->
 
             var boxSize by remember { mutableStateOf(IntSize.Zero) }
-
 
             Canvas(
                 modifier = Modifier,
@@ -161,7 +158,8 @@ fun GradingThumbnail(
                         height = boxSize.height.toFloat() - verticalPad * 2f,
                     ),
                     cornerRadius = CornerRadius(
-                        32f * 0.618f, 32f,
+                        32f * 0.618f,
+                        32f,
                     ),
                 )
             }
@@ -173,13 +171,14 @@ fun GradingThumbnail(
                         boxSize = coordinates.size
                     },
 
-                ) {
-
+            ) {
                 Text(
                     modifier = Modifier
                         .padding(
-                            top = 0.dp, bottom = 0.dp,
-                            start = 6.dp, end = 6.dp,
+                            top = 0.dp,
+                            bottom = 0.dp,
+                            start = 6.dp,
+                            end = 6.dp,
                         ),
                     text = stringResource(grade.name),
                     textAlign = TextAlign.Center,
@@ -195,7 +194,7 @@ fun GradingThumbnail(
 @Preview(
     showBackground = true,
     // Hmm ; nope, but why ?
-    //uiMode = Configuration.UI_MODE_NIGHT_YES,
+    // uiMode = Configuration.UI_MODE_NIGHT_YES,
 )
 @Preview(
     name = "French",

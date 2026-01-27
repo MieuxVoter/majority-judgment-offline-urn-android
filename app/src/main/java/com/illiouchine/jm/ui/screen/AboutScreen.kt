@@ -36,13 +36,12 @@ import androidx.navigation3.runtime.NavKey
 import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.composable.IconTextButton
 import com.illiouchine.jm.ui.composable.ScreenTitle
-import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
+import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import kotlinx.coroutines.launch
-
 
 @Composable
 fun AboutScreen(
@@ -119,7 +118,8 @@ fun AboutScreen(
                 text = stringResource(R.string.button_ask_a_question),
                 onClick = {
                     onDiscuss()
-                    uriHandler.openUri("https://github.com" +
+                    uriHandler.openUri(
+                        "https://github.com" +
                             "/MieuxVoter" +
                             "/majority-judgment-offline-urn-android" +
                             "/discussions"
@@ -135,7 +135,8 @@ fun AboutScreen(
                 text = stringResource(R.string.button_browse_the_source),
                 onClick = {
                     onBrowseSource()
-                    uriHandler.openUri("https://github.com" +
+                    uriHandler.openUri(
+                        "https://github.com" +
                             "/MieuxVoter" +
                             "/majority-judgment-offline-urn-android"
                     )
@@ -150,7 +151,8 @@ fun AboutScreen(
                 text = stringResource(R.string.button_report_bug),
                 onClick = {
                     onReportBug()
-                    uriHandler.openUri("https://github.com" +
+                    uriHandler.openUri(
+                        "https://github.com" +
                             "/MieuxVoter" +
                             "/majority-judgment-offline-urn-android" +
                             "/issues" +
@@ -168,7 +170,8 @@ fun AboutScreen(
                 text = stringResource(R.string.button_suggest_improvement),
                 onClick = {
                     onSuggestImprovement()
-                    uriHandler.openUri("https://github.com" +
+                    uriHandler.openUri(
+                        "https://github.com" +
                             "/MieuxVoter" +
                             "/majority-judgment-offline-urn-android" +
                             "/issues" +
@@ -186,7 +189,8 @@ fun AboutScreen(
                 text = stringResource(R.string.button_translate_app),
                 onClick = {
                     onContributeTranslations()
-                    uriHandler.openUri("https://github.com" +
+                    uriHandler.openUri(
+                        "https://github.com" +
                             "/MieuxVoter" +
                             "/majority-judgment-offline-urn-android" +
                             "/wiki" +

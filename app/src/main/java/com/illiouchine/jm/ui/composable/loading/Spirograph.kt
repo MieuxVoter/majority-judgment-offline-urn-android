@@ -9,7 +9,6 @@ import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 
-
 // Why isn't TAU in kotlin.math ?   …   Sigh.
 const val TAU: Double = PI * 2
 
@@ -90,7 +89,6 @@ data class Point(
         )
     }
 }
-
 
 val defaultsEpicycloids: List<Epicycloid> = listOf(
     Epicycloid(

@@ -44,10 +44,8 @@ import com.illiouchine.jm.ui.theme.spacing
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
-
 private fun PagerState.isScrollOverLast(): Boolean =
     (this.currentPage == this.pageCount - 1 && this.currentPageOffsetFraction > 0)
-
 
 @Composable
 fun OnBoardingScreen(

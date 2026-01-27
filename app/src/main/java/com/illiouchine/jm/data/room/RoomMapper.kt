@@ -6,8 +6,8 @@ import com.illiouchine.jm.data.room.entity.PollEntity
 import com.illiouchine.jm.data.room.entity.PollWithProposals
 import com.illiouchine.jm.data.room.entity.ProposalEntity
 import com.illiouchine.jm.model.Ballot
-import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Grading
+import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import kotlinx.collections.immutable.toImmutableList
@@ -35,7 +35,6 @@ fun Ballot.toListOfJudgments(ballotId: Int): List<JudgmentEntity> {
         )
     }
 }
-
 
 fun List<Ballot>.toListOfJudgments(): List<List<JudgmentEntity>> {
     return this.map { ballot: Ballot ->

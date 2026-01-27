@@ -60,12 +60,11 @@ fun Loader(
                 )
             }
     ) {
-
         for (i in (0..<amountOfOrbitals)) {
             val position = (
-                    loopAnimation.value +
-                            i.toDouble() / amountOfOrbitals.toDouble()
-                    ).mod(1.0)
+                loopAnimation.value +
+                    i.toDouble() / amountOfOrbitals.toDouble()
+                ).mod(1.0)
 
             for (trail in (1..trailLength)) {
                 drawCircle(
@@ -88,7 +87,6 @@ fun Loader(
         }
     }
 }
-
 
 @Preview(
     uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL

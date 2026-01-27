@@ -22,10 +22,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.Preview
 import com.illiouchine.jm.R
-import com.illiouchine.jm.ui.navigator.Screens
-import com.illiouchine.jm.ui.composable.ScreensMenuItem.Home
 import com.illiouchine.jm.ui.composable.ScreensMenuItem.About
+import com.illiouchine.jm.ui.composable.ScreensMenuItem.Home
 import com.illiouchine.jm.ui.composable.ScreensMenuItem.Settings
+import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.theme.JmTheme
 
 private enum class ScreensMenuItem(
@@ -35,10 +35,10 @@ private enum class ScreensMenuItem(
 ) {
     Home(screen = Screens.Home, resId = R.string.menu_home, icon = Icons.Default.Home),
     Settings(screen = Screens.Settings, resId = R.string.menu_settings, icon = Icons.Default.Settings),
-    About(screen = Screens.About, resId = R.string.menu_about, icon = Icons.Default.Info);
+    About(screen = Screens.About, resId = R.string.menu_about, icon = Icons.Default.Info)
 }
 
-private fun Screens.toScreensMenuItem() : ScreensMenuItem {
+private fun Screens.toScreensMenuItem(): ScreensMenuItem {
     return when (this) {
         Screens.Home -> Home
         Screens.Settings -> Settings
@@ -81,7 +81,6 @@ fun MjuBottomBar(
     }
 }
 
-
 @Composable
 fun MjuNavigationRail(
     modifier: Modifier = Modifier,
@@ -113,7 +112,6 @@ fun MjuNavigationRail(
         Spacer(Modifier.weight(1f))
     }
 }
-
 
 @Preview
 @Composable
@@ -153,7 +151,7 @@ private fun PreviewBottomBarNight() {
 @Composable
 private fun PreviewMenuBarVertical() {
     JmTheme {
-        Scaffold() {
+        Scaffold {
             Box(modifier = Modifier.padding(it)) {
                 MjuNavigationRail()
             }

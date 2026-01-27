@@ -5,13 +5,13 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
+import com.illiouchine.jm.model.Grading.Enthusiasm6Grading
+import com.illiouchine.jm.model.Grading.PositiveQuality5Grading
+import com.illiouchine.jm.model.Grading.Priority5Grading
 import com.illiouchine.jm.model.Grading.Quality3Grading
 import com.illiouchine.jm.model.Grading.Quality5Grading
-import com.illiouchine.jm.model.Grading.PositiveQuality5Grading
 import com.illiouchine.jm.model.Grading.Quality7Grading
 import com.illiouchine.jm.model.Grading.Urgency5Grading
-import com.illiouchine.jm.model.Grading.Priority5Grading
-import com.illiouchine.jm.model.Grading.Enthusiasm6Grading
 import kotlinx.serialization.Serializable
 
 /**

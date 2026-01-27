@@ -46,7 +46,7 @@ class HomeViewModel(
     private fun loadDefaultSettings() {
         viewModelScope.launch {
             val showOnboarding = sharedPrefsHelper.getShowOnboarding()
-            if (showOnboarding){
+            if (showOnboarding) {
                 _navEvents.emit(NavigationAction.To(Screens.Onboarding))
             }
         }
@@ -90,10 +90,14 @@ class HomeViewModel(
 
     fun setupPollFromTemplate(pollTemplateSlug: String) {
         viewModelScope.launch {
-           _navEvents.emit(NavigationAction.To(Screens.PollSetup(
-                cloneablePollId = 0,
-                pollTemplateSlug = pollTemplateSlug,
-            )))
+            _navEvents.emit(
+                NavigationAction.To(
+                    Screens.PollSetup(
+                        cloneablePollId = 0,
+                        pollTemplateSlug = pollTemplateSlug,
+                    )
+                )
+            )
         }
     }
 

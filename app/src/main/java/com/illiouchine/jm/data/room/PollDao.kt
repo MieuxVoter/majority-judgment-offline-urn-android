@@ -37,7 +37,6 @@ interface PollDao {
         proposals: List<ProposalEntity>,
         ballots: List<List<JudgmentEntity>>,
     ): Int {
-
         val pollId = insertPollDatumOnly(poll).toInt()
         insertProposals(
             proposals.map { proposal ->

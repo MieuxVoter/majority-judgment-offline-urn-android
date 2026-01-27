@@ -56,14 +56,13 @@ class SqlitePollDataSource(
             )
 
             return poll
-
         } catch (_: NullPointerException) {
             return null
         }
     }
 
     override suspend fun getAllPolls(): List<Poll> {
-        val loadBallots : suspend (pollId : Int) -> List<Ballot> = { pollId ->
+        val loadBallots: suspend (pollId: Int) -> List<Ballot> = { pollId ->
             pollDao
                 .loadBallots(pollId = pollId)
                 .toDomainObject()

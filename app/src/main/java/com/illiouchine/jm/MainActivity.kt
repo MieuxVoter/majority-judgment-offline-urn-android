@@ -49,7 +49,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
             // Rule: the screen should never lock during the voting/result phase of the poll
             // Therefore, we clear the flag here and set it on in the appropriate screens.
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -250,8 +249,7 @@ class MainActivity : ComponentActivity() {
     private fun perhapsLockScreen(pinScreen: Boolean) {
         val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         if (
-            pinScreen
-            &&
+            pinScreen &&
             activityManager.lockTaskModeState == ActivityManager.LOCK_TASK_MODE_NONE
         ) {
             startLockTask()

@@ -40,14 +40,13 @@ import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.ui.composable.PollDeletionConfirmationDialog
 import com.illiouchine.jm.ui.composable.PollSummary
+import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
 import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
-import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import kotlinx.coroutines.launch
-
 
 @Composable
 fun HomeScreen(
@@ -94,10 +93,11 @@ fun HomeScreen(
                 .padding(horizontal = Theme.spacing.medium)
                 .verticalScroll(state = scrollState)
         ) {
-            val titleContentDescription = (stringResource(R.string.majority_judgment)
-                    + " "
-                    + stringResource(R.string.menu_home)
-                    )
+            val titleContentDescription = (
+                stringResource(R.string.majority_judgment) +
+                    " " +
+                    stringResource(R.string.menu_home)
+                )
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -222,7 +222,6 @@ fun PreviewHomeScreen(modifier: Modifier = Modifier) {
         )
     }
 }
-
 
 @Preview(showSystemUi = true)
 @Composable

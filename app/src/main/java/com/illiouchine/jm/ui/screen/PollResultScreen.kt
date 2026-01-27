@@ -55,10 +55,6 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.ProportionalAlgorithms
-import com.illiouchine.jm.model.Ballot
-import com.illiouchine.jm.model.Grading
-import com.illiouchine.jm.model.Poll
-import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.MjuSnackbar
@@ -133,7 +129,6 @@ fun ResultScreen(
                 .verticalScroll(state = scrollState)
                 .padding(Theme.spacing.small),
         ) {
-
             PollSubject(
                 modifier = Modifier.padding(bottom = Theme.spacing.small + Theme.spacing.medium),
                 subject = poll.pollConfig.subject,
@@ -155,8 +150,10 @@ fun ResultScreen(
                 if (proposalResult.analysis.totalSize > BigInteger.ZERO) {
                     // I don't know how to indent this properly (I am triggered)
                     val isInSelectedDuel = isAnyProfileSelected &&
-                            (selectedDuelIndex == proposalDisplayIndex
-                                    || selectedDuelIndex + 1 == proposalDisplayIndex)
+                        (
+                            selectedDuelIndex == proposalDisplayIndex ||
+                                selectedDuelIndex + 1 == proposalDisplayIndex
+                            )
                     val ttsShowExplanation = stringResource(R.string.tts_show_explanation)
 
                     Column(
@@ -173,7 +170,7 @@ fun ResultScreen(
                                     isAnyProfileSelected = false
                                 } else {
                                     isAnyProfileSelected = true
-                                    @Suppress("AssignedValueIsNeverRead")  // because it IS
+                                    @Suppress("AssignedValueIsNeverRead") // because it IS
                                     selectedProfileIndex = proposalDisplayIndex
                                 }
                             }
@@ -240,19 +237,19 @@ fun ResultScreen(
                         )
 
                         // Ux: Explanations are shown one at a time (exclusive toggle)
-                        val shouldShowExplanation = isAnyProfileSelected
-                                && selectedDuelIndex == proposalDisplayIndex
+                        val shouldShowExplanation = isAnyProfileSelected &&
+                            selectedDuelIndex == proposalDisplayIndex
 
                         AnimatedVisibility(shouldShowExplanation) {
                             Row {
                                 Text(
                                     fontSize = 14.sp,
                                     text =
-                                        if (state.explanations.size > proposalDisplayIndex) {
-                                            state.explanations[proposalDisplayIndex]
-                                        } else {
-                                            AnnotatedString("\uD83D\uDC1E")
-                                        },
+                                    if (state.explanations.size > proposalDisplayIndex) {
+                                        state.explanations[proposalDisplayIndex]
+                                    } else {
+                                        AnnotatedString("\uD83D\uDC1E")
+                                    },
                                 )
                             }
                         }
@@ -343,8 +340,7 @@ fun ResultScreen(
 fun formatAmount(amount: Double, maxDecimals: Int = 2, locale: Locale = Locale.FRANCE): String {
     var decimals = 0
     while (
-        decimals < maxDecimals
-        &&
+        decimals < maxDecimals &&
         floor(amount * 10.0.pow(decimals)) != amount * 10.0.pow(decimals)
     ) {
         decimals += 1
@@ -372,10 +368,9 @@ fun formatAmount(amount: Double, maxDecimals: Int = 2, locale: Locale = Locale.F
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     showSystemUi = true,
 )
-//@PreviewScreenSizes // my eyes hurt ← no dark mode
+// @PreviewScreenSizes // my eyes hurt ← no dark mode
 @Composable
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
-
     val poll = PreviewDataBuilder.poll()
 
     val pollResultViewModel = viewModel {

@@ -20,10 +20,11 @@ fun BallotCountRow(
         modifier = modifier,
     ) {
         // Another pluralization that should use R.plurals instead
-        val ballotsString = if (amountOfBallots <= 1)
+        val ballotsString = if (amountOfBallots <= 1) {
             stringResource(R.string.ballot)
-        else
+        } else {
             stringResource(R.string.ballots)
+        }
 
         Text(
             "$amountOfBallots $ballotsString " + stringResource(R.string.in_the_urn)

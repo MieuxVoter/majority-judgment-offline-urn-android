@@ -33,9 +33,9 @@ import androidx.compose.ui.util.lerp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.ParticipantGroup
+import com.illiouchine.jm.model.ParticipantGroupAnalysis
 import com.illiouchine.jm.model.ProposalResult
 import com.illiouchine.jm.model.Tally
-import com.illiouchine.jm.model.ParticipantGroupAnalysis
 import kotlinx.collections.immutable.ImmutableList
 import java.util.Locale
 import kotlin.math.round
@@ -49,7 +49,6 @@ fun LinearMeritProfileCanvas(
     decisiveGroups: ImmutableList<ParticipantGroupAnalysis>,
     showDecisiveGroups: Boolean = false,
 ) {
-
     val textMeasurer = rememberTextMeasurer()
     val contrastedColor = if (isSystemInDarkTheme()) Color.White else Color.Black
     val widthAnimation = remember { Animatable(0f) }
@@ -115,7 +114,6 @@ fun LinearMeritProfileCanvas(
         )
     }
 
-
     LaunchedEffect("apparition") {
         widthAnimation.animateTo(1f, tween(1500, 1000))
         outlineAlphaAnimation.animateTo(1f, tween(600, 150))
@@ -152,7 +150,7 @@ fun LinearMeritProfileCanvas(
         var offsetX = 0f // cursor for the grades' loop
         for (gradeIndex in gradesIndices) {
             var gradeWidth = (size.width * proposalTally.tally[gradeIndex].toFloat()) /
-                    proposalTally.amountOfJudgments.toFloat()
+                proposalTally.amountOfJudgments.toFloat()
             gradeWidth = lerp(balancedGradeWidth, gradeWidth, widthAnimation.value)
             val gradeRectSize = Size(gradeWidth, size.height)
             val gradeRectOffset = Offset(offsetX, 0f)
@@ -162,7 +160,6 @@ fun LinearMeritProfileCanvas(
                     size = gradeRectSize,
                 )
             )
-
 
             // Fill a rectangle with the color of the grade
             drawRect(
@@ -292,7 +289,6 @@ fun LinearMeritProfileCanvas(
         // Draw the outline of the decisive groups
         if (showDecisiveGroups) {
             for (decisiveGroup in decisiveGroups) {
-
                 val groupOutline = Path()
                 val groupOutlineRect: Rect = if (decisiveGroup.group.type != ParticipantGroup.Type.Median) {
                     expandToGroup(

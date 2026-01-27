@@ -11,7 +11,7 @@ data class Poll(
     val ballots: List<Ballot>,
 ) {
 
-    val judgments : List<Judgment>
+    val judgments: List<Judgment>
         get() = ballots.flatMap { ballot ->
             ballot.judgments
         }

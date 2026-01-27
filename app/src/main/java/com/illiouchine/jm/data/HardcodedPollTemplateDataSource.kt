@@ -5,7 +5,7 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.PollConfig
 
-class HardcodedPollTemplateDataSource: PollTemplateDataSource {
+class HardcodedPollTemplateDataSource : PollTemplateDataSource {
 
     override suspend fun getAvailableSlugs(): List<String> {
         return listOf(
@@ -16,7 +16,7 @@ class HardcodedPollTemplateDataSource: PollTemplateDataSource {
     }
 
     override suspend fun getBySlug(slug: String, context: Context): PollConfig {
-        return when(slug) {
+        return when (slug) {
             "meal" -> {
                 PollConfig(
                     subject = context.getString(R.string.poll_template_meal_subject),
@@ -71,5 +71,4 @@ class HardcodedPollTemplateDataSource: PollTemplateDataSource {
             }
         }
     }
-
 }

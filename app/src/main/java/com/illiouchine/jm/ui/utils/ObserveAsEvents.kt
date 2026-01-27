@@ -19,7 +19,8 @@ fun <T> ObserveAsEvents(
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(
         key1 = lifecycleOwner.lifecycle,
-        key1, key2
+        key1,
+        key2
     ) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
             withContext(Dispatchers.Main.immediate) {

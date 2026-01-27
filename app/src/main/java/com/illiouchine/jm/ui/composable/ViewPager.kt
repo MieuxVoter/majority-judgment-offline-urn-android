@@ -21,21 +21,19 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 
-
 @Composable
 fun ViewPager(
     modifier: Modifier = Modifier,
     pageSize: Int = 3,
     currentPage: Int = 0,
 ) {
-
     Row(
         modifier = modifier
             .padding(Theme.spacing.medium),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
     ) {
-        repeat(pageSize){ iteration ->
+        repeat(pageSize) { iteration ->
             val animatedSize by animateDpAsState(
                 targetValue = if (currentPage == iteration) {
                     24.dp

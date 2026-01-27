@@ -48,7 +48,7 @@ val module = module {
 
     // Data
     single { SharedPrefsHelper(get()) }
-    //single<PollDataSource>(named("inMemory") { InMemoryPollDataSource() }
+    // single<PollDataSource>(named("inMemory") { InMemoryPollDataSource() }
     single<PollDataSource> { SqlitePollDataSource(get()) }
     single<PollTemplateDataSource> { HardcodedPollTemplateDataSource() }
 

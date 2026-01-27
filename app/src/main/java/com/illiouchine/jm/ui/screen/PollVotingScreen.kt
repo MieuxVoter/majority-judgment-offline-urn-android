@@ -25,11 +25,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.R
-import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.logic.PollVotingViewModel
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
-import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.GradeSelectionList
 import com.illiouchine.jm.ui.composable.JudgmentBalls
@@ -79,8 +77,7 @@ fun PollVotingScreen(
                 .verticalScroll(state = scrollState)
                 .padding(Theme.spacing.medium),
         ) {
-
-            if ( ! pollVotingState.isInStateSummary()) {
+            if (!pollVotingState.isInStateSummary()) {
                 PollSubject(
                     modifier = Modifier.padding(bottom = Theme.spacing.small + Theme.spacing.medium),
                     subject = pollVotingState.pollConfig.subject,
@@ -125,7 +122,6 @@ fun PollVotingScreen(
                     enabled = pollVotingState.ballots.isNotEmpty(),
                     onClick = { onFinish() },
                 ) { Text(stringResource(R.string.button_end_the_poll)) }
-
             } else if (pollVotingState.isInStateVoting()) {
                 // State: VOTING, filling the ballot with judgments.
 
@@ -152,7 +148,6 @@ fun PollVotingScreen(
                     pollConfig = pollVotingState.pollConfig,
                     ballot = pollVotingState.currentBallot,
                 )
-
             } else {
                 // State: SUMMARY, awaiting confirmation, back or redo.
 
@@ -245,7 +240,7 @@ private fun PreviewVotingScreenConfirmation(modifier: Modifier = Modifier) {
             pollVotingState = PollVotingViewModel.PollVotingViewState(
                 pollConfig = PreviewDataBuilder.pollConfig(),
                 ballots = listOf(
-                    //Ballot(judgments = listOf(Judgment(proposal = 1, grade = 3)))
+                    // Ballot(judgments = listOf(Judgment(proposal = 1, grade = 3)))
                 ),
                 currentBallot = Ballot(
                     judgments = PreviewDataBuilder.judgments(3)
@@ -269,7 +264,7 @@ private fun PreviewVotingSmallScreenConfirmation(modifier: Modifier = Modifier) 
             pollVotingState = PollVotingViewModel.PollVotingViewState(
                 pollConfig = PreviewDataBuilder.pollConfig(),
                 ballots = listOf(
-                    //Ballot(judgments = listOf(Judgment(proposal = 1, grade = 3)))
+                    // Ballot(judgments = listOf(Judgment(proposal = 1, grade = 3)))
                 ),
                 currentBallot = Ballot(
                     judgments = PreviewDataBuilder.judgments(3)

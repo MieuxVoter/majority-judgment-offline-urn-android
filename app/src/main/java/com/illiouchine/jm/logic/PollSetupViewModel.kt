@@ -2,7 +2,6 @@ package com.illiouchine.jm.logic
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.AndroidViewModel
@@ -62,7 +61,8 @@ class PollSetupViewModel(
                         it.copy(config = newConfig)
                     }
                 }
-                lastId -> { /* Do nothing : Reload from configuration change */
+                lastId -> {
+                    /* Do nothing : Reload from configuration change */
                 }
                 else -> {
                     val poll = pollDataSource.getPollById(pollId = cloneablePollId)
@@ -211,5 +211,4 @@ class PollSetupViewModel(
 
     private fun proposalAlreadyExist(proposal: String): Boolean =
         _pollSetupViewState.value.config.proposals.any { it == proposal }
-
 }

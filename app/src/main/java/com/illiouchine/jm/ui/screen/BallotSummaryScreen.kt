@@ -19,9 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
-import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.model.Ballot
-import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.JudgmentSummary
 import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
@@ -29,8 +27,6 @@ import com.illiouchine.jm.ui.theme.DeleteColor
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
-import kotlinx.collections.immutable.toImmutableList
-
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -46,7 +42,6 @@ fun BallotSummaryScreen(
             .fillMaxSize()
             .padding(Theme.spacing.medium),
     ) {
-
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(R.string.summary_you_are_almost_done),
@@ -90,7 +85,6 @@ fun BallotSummaryScreen(
                 .fillMaxWidth()
                 .padding(vertical = Theme.spacing.medium),
         ) {
-
             TextButton(
                 modifier = Modifier.padding(bottom = Theme.spacing.medium),
                 onClick = onCancel,
@@ -111,10 +105,8 @@ fun BallotSummaryScreen(
                 )
             }
         }
-
     }
 }
-
 
 @Preview(
     showSystemUi = true,
@@ -134,7 +126,6 @@ fun PreviewBallotSummaryScreen(modifier: Modifier = Modifier) {
         }
     }
 }
-
 
 @Preview(
     showSystemUi = true,

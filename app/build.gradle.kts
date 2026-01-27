@@ -5,10 +5,10 @@ plugins {
     alias(libs.plugins.room)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
-    id("io.gitlab.arturbosch.detekt") version "1.23.8"
+    alias(libs.plugins.detekt) //apply true  // (some people use apply true, not sure yet for us
 }
 
-// Bit of a self-made hack, this, but product flavors don't run smoothly.
+// Bit of a self-made hack, this, but product flavors didn't run smoothly.  Anyway this works.
 val isGoogleFlavor = providers
     .environmentVariable("GOOGLE")
     .getOrElse("false") == "true"
@@ -20,12 +20,13 @@ android {
     defaultConfig {
         applicationId = if (isGoogleFlavor) {
             // We have to use another applicationId for Google, as Google says
-            // "com.illiouchine.jm.androidx-startup is already in use"
+            // > "com.illiouchine.jm is already in use"
             // This is because a malicious actor published a malware-riddled version of our app
-            // on Google Play, pretending to be us.  …   There's always bad apples.  -_-
+            // on Google Play, pretending to be us.  …  -_-
+            // Three months later, the offender has been removed but we kept this application id.
             "fr.mieuxvoter.urn"
         } else {
-            // But we've already registered this app on F-Droid with this applicationId:
+            // We'd initially registered this app on F-Droid with this applicationId:
             "com.illiouchine.jm"
         }
         minSdk = 27
@@ -99,6 +100,9 @@ android {
 }
 
 dependencies {
+    // The Usual Suspects
+    implementation(libs.serialization.json)
+
     // Android & Jetpack Compose
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -108,10 +112,9 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.serialization.json)
     implementation(libs.kotlinx.collections.immutable)
 
-    // Android Navigation
+    // Android App Navigation
     implementation(libs.navigation3.ui)
     implementation(libs.navigation3.runtime)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
@@ -130,7 +133,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
-    // Testing
+    // Testing — Development only
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -140,15 +143,14 @@ dependencies {
     androidTestImplementation(libs.cucumber.picocontainer)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Static Analysis — Development only
+    detektPlugins(libs.detekt.formatting)
 }
 
-// Static code analyzer:
+// Static code analyzer, run with:
 //     ./gradlew detekt
 detekt {
-    // Version of detekt that will be used. When unspecified the latest detekt
-    // version found will be used. Override to stay on the same version.
-    toolVersion = "1.23.8"
-
     // The directories where detekt looks for source files.
     // Defaults to `files("src/main/java", "src/test/java", "src/main/kotlin", "src/test/kotlin")`.
     //source.setFrom("src/main/java", "src/main/kotlin")
@@ -157,7 +159,7 @@ detekt {
     // Can lead to speedups in larger projects. `false` by default.
     parallel = false
 
-    // Define the detekt configuration(s) you want to use.
+    // Define the detekt configuration(s) we use.
     // Defaults to the default detekt configuration.
     config.setFrom("../detekt.yml")
 
@@ -166,9 +168,6 @@ detekt {
 
     // Turns on all the rules. `false` by default.
     allRules = false
-
-    // Specifying a baseline file. All findings stored in this file in subsequent runs of detekt.
-    //baseline = file("path/to/baseline.xml")
 
     // Disables all default detekt rulesets and will only run detekt with custom rules
     // defined in plugins passed in with `detektPlugins` configuration. `false` by default.
@@ -196,6 +195,6 @@ detekt {
     // Android: Don't create tasks for the specified build variants (e.g. "productionRelease")
     ignoredVariants = listOf("productionRelease")
 
-    // This never worked for me ._.
-    autoCorrect = true
+    // This does not work anymore — Instead, use:  ./gradlew detekt --auto-correct --rerun
+    //autoCorrect = true
 }

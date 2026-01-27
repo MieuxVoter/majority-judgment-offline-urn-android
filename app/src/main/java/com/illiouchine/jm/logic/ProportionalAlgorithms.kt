@@ -6,7 +6,6 @@ import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.service.OsmosisRepartitor
 import fr.mieuxvoter.mj.ResultInterface
 
-
 // NOTE: we could use a sealed class instead of an enum
 enum class ProportionalAlgorithms {
 
@@ -119,4 +118,4 @@ enum class ProportionalAlgorithms {
 }
 
 // Can't figure out how to make this work
-//abstract class Proportions : List<Double>
+// abstract class Proportions : List<Double>

@@ -1,6 +1,5 @@
 package com.illiouchine.jm.model
 
-
 import fr.mieuxvoter.mj.ProposalTallyInterface
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -11,7 +10,7 @@ data class ProposalTally(
     val amountOfJudgments: BigInteger,
 )
 
-fun ProposalTallyInterface.toProposalTally() : ProposalTally {
+fun ProposalTallyInterface.toProposalTally(): ProposalTally {
     return ProposalTally(
         tally = this.tally.toImmutableList(),
         amountOfJudgments = this.amountOfJudgments
