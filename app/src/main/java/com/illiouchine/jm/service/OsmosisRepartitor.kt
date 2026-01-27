@@ -19,7 +19,7 @@ import com.illiouchine.jm.model.Poll
  * - simple: elementary arithmetic
  *
  * Known Issues:
- * - not isomorphic with MJ ; could be mitigated using the DecreasingListConstrictor
+ * - not isomorphic with MJ ; could be mitigated using the DecreasingListConstrictor (berk)
  * - might be ever so slightly numerically unstable since we're handling IEE754 floats
  */
 class OsmosisRepartitor { // FavorityJudgmentRepartitor?  (still workshopping the name)

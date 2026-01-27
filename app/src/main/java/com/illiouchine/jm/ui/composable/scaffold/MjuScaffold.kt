@@ -157,7 +157,8 @@ private fun PreviewScaffoldLandscapeWithMenu() {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    text = "I should NOT be behind the vertical menu on the left, and yet I should probably go to the right edge of the preview.",
+                    text = "I should NOT be behind the vertical menu on the left, " +
+                        "and yet I should probably go to the right edge of the preview.",
                     fontStyle = FontStyle.Italic,
                 )
                 Spacer(Modifier.weight(1f))
@@ -181,7 +182,10 @@ private fun PreviewScaffoldLandscapeWithMenuRtl() {
                     Text(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        text = "I should NOT be behind the vertical menu, I should be filled with joy and hot muffins, and the ever-nagging sense of doom that never fails to accompany my fellow contemporaries.",
+                        text = "I should NOT be behind the vertical menu, " +
+                            "I should be filled with joy and hot muffins, " +
+                            "and the ever-nagging sense of doom " +
+                            "that never fails to accompany my fellow contemporaries.",
                         fontStyle = FontStyle.Italic,
                     )
                     Spacer(Modifier.weight(1f))

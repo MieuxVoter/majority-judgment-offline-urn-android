@@ -107,7 +107,12 @@ fun ProportionsHelpScreen(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = {
                     uriHandler.openUri(
-                        "https://github.com/MieuxVoter/majority-judgment-offline-urn-android/wiki/Judgments-&-Proportional-Representation"
+                        uri = "https://" +
+                            "github.com" +
+                            "/MieuxVoter" +
+                            "/majority-judgment-offline-urn-android" +
+                            "/wiki" +
+                            "/Judgments-&-Proportional-Representation"
                     )
                 },
             ) {

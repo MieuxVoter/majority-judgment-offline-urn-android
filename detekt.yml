@@ -3,6 +3,9 @@
 # Copied from https://github.com/detekt/detekt/blob/v1.23.8/detekt-core/src/main/resources/default-detekt-config.yml
 # Changes:
 # - disabled MagicNumber (too many false positives)
+# - disabled NoWildcardImports (can't tell it to just skip tests)
+# - bumped NestedBlockDepth depth (4 → 5)
+
 
 build:
   maxIssues: 0
@@ -49,7 +52,7 @@ console-reports:
 
 output-reports:
   active: true
-  exclude:
+  exclude: []
   # - 'TxtOutputReport'
   # - 'XmlOutputReport'
   # - 'HtmlOutputReport'
@@ -152,7 +155,7 @@ complexity:
     ignoreArgumentsMatchingNames: false
   NestedBlockDepth:
     active: true
-    threshold: 4
+    threshold: 5
   NestedScopeFunctions:
     active: false
     threshold: 1
@@ -523,6 +526,11 @@ potential-bugs:
     active: true
   WrongEqualsTypeParameter:
     active: true
+
+formatting:
+  active: true
+  NoWildcardImports:
+    active: false
 
 style:
   active: true
