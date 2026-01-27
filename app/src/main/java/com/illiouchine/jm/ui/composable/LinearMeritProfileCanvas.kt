@@ -64,6 +64,8 @@ fun LinearMeritProfileCanvas(
         ImageBitmap.imageResource(R.drawable.pattern_3),
         ImageBitmap.imageResource(R.drawable.pattern_4),
         ImageBitmap.imageResource(R.drawable.pattern_5),
+        ImageBitmap.imageResource(R.drawable.pattern_6),
+        ImageBitmap.imageResource(R.drawable.pattern_7),
     )
 
     val brushes = remember {
