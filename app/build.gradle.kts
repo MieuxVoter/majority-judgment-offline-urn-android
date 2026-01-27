@@ -99,7 +99,7 @@ android {
 }
 
 dependencies {
-    // Android
+    // Android & Jetpack Compose
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -111,6 +111,7 @@ dependencies {
     implementation(libs.serialization.json)
     implementation(libs.kotlinx.collections.immutable)
 
+    // Android Navigation
     implementation(libs.navigation3.ui)
     implementation(libs.navigation3.runtime)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
@@ -119,12 +120,12 @@ dependencies {
     // Majority Judgment
     implementation(libs.majority.judgment.library.java)
 
-    // Koin (DI)
+    // Koin (Dependency Injection)
     implementation(project.dependencies.platform(libs.koin.bom))
     implementation(libs.koin.core)
     implementation(libs.koin.android)
 
-    // Room (DB)
+    // Room (Database)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
