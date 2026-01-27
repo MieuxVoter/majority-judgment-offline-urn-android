@@ -1,0 +1,8 @@
+* Fix some issues on very small screens
+* Add poll templates
+* Add a monochrome launcher icon
+* Improve the design of titles
+* Add German translations (thanks @Fadikkop)
+* Fade out merit profiles that are not part of the selected duel
+* Add background patterns to merit profiles for colour-impaired people
+* Improve screen navigation consistency

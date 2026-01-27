@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.room)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.detekt) //apply true  // (some people use apply true, not sure yet for us
+    alias(libs.plugins.detekt)
 }
 
 // Bit of a self-made hack, this, but product flavors didn't run smoothly.  Anyway this works.
@@ -23,7 +23,7 @@ android {
             // > "com.illiouchine.jm is already in use"
             // This is because a malicious actor published a malware-riddled version of our app
             // on Google Play, pretending to be us.  …  -_-
-            // Three months later, the offender has been removed but we kept this application id.
+            // Three months later, the offender had been removed but we kept this application id.
             "fr.mieuxvoter.urn"
         } else {
             // We'd initially registered this app on F-Droid with this applicationId:
@@ -150,11 +150,8 @@ dependencies {
 
 // Static code analyzer, run with:
 //     ./gradlew detekt
+//     ./gradlew detekt --auto-correct --rerun
 detekt {
-    // The directories where detekt looks for source files.
-    // Defaults to `files("src/main/java", "src/test/java", "src/main/kotlin", "src/test/kotlin")`.
-    //source.setFrom("src/main/java", "src/main/kotlin")
-
     // Builds the AST in parallel. Rules are always executed in parallel.
     // Can lead to speedups in larger projects. `false` by default.
     parallel = false
