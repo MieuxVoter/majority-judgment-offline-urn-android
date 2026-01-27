@@ -1,4 +1,4 @@
-package com.illiouchine.jm.ui.scaffold
+package com.illiouchine.jm.ui.composable.scaffold
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box

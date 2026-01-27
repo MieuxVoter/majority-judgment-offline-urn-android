@@ -37,7 +37,7 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.composable.IconTextButton
 import com.illiouchine.jm.ui.composable.ScreenTitle
 import com.illiouchine.jm.ui.navigator.Screens
-import com.illiouchine.jm.ui.scaffold.MjuScaffold
+import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
