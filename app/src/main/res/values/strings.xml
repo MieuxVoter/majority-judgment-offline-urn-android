@@ -131,7 +131,7 @@
     <string name="tts_more_information_about_proportional_algorithms">More information about proportional algorithms</string>
     <string name="tts_remove_the_proposal">remove the proposal</string>
     <string name="tts_add_the_proposal">add the proposal</string>
-    <string name="tts_judge_proposal_as_grade">judge %s as %s</string>
+    <string name="tts_judge_proposal_as_grade">judge %1$s as %2$s</string>
     <string name="tts_choose_a_proportional_algorithm">choose a proportional algorithm</string>
     <string name="poll_template_meal_subject">Meal of Tonight</string>
     <string name="poll_template_meal_proposal_pizza">Pizza</string>

@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.math.max
 
 class PollResultViewModel(
     private val pollDataSource: PollDataSource,
@@ -92,7 +93,7 @@ class PollResultViewModel(
             val otherIndex = if (displayIndex < amountOfProposals - 1) {
                 displayIndex + 1
             } else {
-                displayIndex - 1
+                max(0, displayIndex - 1)
             }
             val duelAnalyzer = DuelAnalyzer(
                 poll = poll,

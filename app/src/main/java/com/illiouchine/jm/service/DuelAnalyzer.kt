@@ -12,7 +12,12 @@ import fr.mieuxvoter.mj.ResultInterface
 import fr.mieuxvoter.mj.TallyInterface
 import kotlin.math.max
 
-// There's no logic to this.  Only madness.  Plz rewrite.
+/**
+ * This is an attempt at generating explanations and analysis data for MJ ranking duels,
+ * when we compare two proposals, to understand why one ranks higher than the other.
+ *
+ * There's no logic to this.  Only madness.  Plz rewrite.
+ */
 @Suppress("CanBeParameter")
 class DuelAnalyzer(
     private val poll: Poll,

@@ -145,8 +145,9 @@ fun PollVotingScreen(
 
                 val scrollCoroutine = rememberCoroutineScope()
 
-                val currentProposalIndex =
-                    pollVotingState.currentProposalsOrder[pollVotingState.currentBallot!!.judgments.size]
+                val currentProposalIndex = pollVotingState.currentProposalsOrder[
+                    pollVotingState.currentBallot!!.judgments.size
+                ]
                 GradeSelectionList(
                     pollConfig = pollVotingState.pollConfig,
                     forProposalIndex = currentProposalIndex,

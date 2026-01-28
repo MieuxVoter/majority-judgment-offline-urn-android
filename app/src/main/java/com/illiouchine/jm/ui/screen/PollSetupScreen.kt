@@ -184,7 +184,8 @@ fun PollSetupScreen(
                 onGradingSelected = { onGradingSelected(it) },
             )
 
-            // Rule: A poll should have more than 1 proposal.
+            // Rule: A poll must have at least 1 proposal.
+            // Definition: Polls with only one proposal are (p)referendums.
             Button(
                 modifier = Modifier
                     .testTag("setup_submit")
@@ -192,7 +193,7 @@ fun PollSetupScreen(
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(0.62f)
                     .padding(Theme.spacing.medium),
-                enabled = pollSetupState.config.proposals.size > 1,
+                enabled = pollSetupState.config.proposals.size > 0,
                 onClick = { onSetupFinished(context) },
             ) {
                 Text(stringResource(R.string.button_let_s_go))
