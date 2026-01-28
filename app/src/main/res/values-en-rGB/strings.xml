@@ -15,4 +15,6 @@
     <string name="contestation">contestation</string>
     <string name="higher">higher</string>
     <string name="lower">lower</string>
+    <string name="grade_to_reject">to reject</string>
+    <string name="grade_insufficient">insufficient</string>
 </resources>
