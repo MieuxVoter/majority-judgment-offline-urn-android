@@ -84,24 +84,24 @@ class PollSetupViewModel(
         }
     }
 
-    fun addProposal(context: Context, proposal: String = "") {
+    fun addProposal(context: Context, proposalName: String = "") {
         // Rule: if the proposal name is not specified, use a default
-        val notEmptyProposal = proposal.ifEmpty { generateProposalName(context) }
+        val notEmptyProposalName = proposalName.ifEmpty { generateProposalName(context) }
         // Rule: proposals must have unique names
-        if (proposalAlreadyExist(notEmptyProposal)) {
+        if (doesProposalAlreadyExist(notEmptyProposalName)) {
             _pollSetupViewState.update {
                 it.copy(feedback = R.string.toast_proposal_name_already_exists)
             }
         } else {
             val newProposals = buildList {
                 addAll(_pollSetupViewState.value.config.proposals)
-                add(notEmptyProposal)
+                add(notEmptyProposalName)
             }
             _pollSetupViewState.update {
                 it.copy(
                     config = it.config.copy(proposals = newProposals),
                     proposalSuggestion = emptyList(),
-                    subjectSuggestion = emptyList()
+                    subjectSuggestion = emptyList(),
                 )
             }
         }
@@ -207,6 +207,6 @@ class PollSetupViewModel(
         )
     }
 
-    private fun proposalAlreadyExist(proposal: String): Boolean =
+    private fun doesProposalAlreadyExist(proposal: String): Boolean =
         _pollSetupViewState.value.config.proposals.any { it == proposal }
 }
