@@ -113,34 +113,6 @@ class MainActivity : ComponentActivity() {
                                 onFinish = onBoardingViewModel::finish
                             )
                         }
-                        entry<Screens.PollResult> { key ->
-                            val pollResultViewModel: PollResultViewModel by viewModel()
-                            val pollResultViewState by pollResultViewModel.pollResultViewState.collectAsState()
-
-                            val context = LocalContext.current
-                            LaunchedEffect(key.id) {
-                                pollResultViewModel.initializePollResultById(
-                                    context = context,
-                                    pollId = key.id,
-                                )
-                            }
-
-                            LaunchedEffect(Unit) {
-                                pollResultViewModel.navEvents.collect { event ->
-                                    topLevelBackStack.handle(event)
-                                }
-                            }
-
-                            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-                            if (pollResultViewState.poll != null) {
-                                ResultScreen(
-                                    modifier = Modifier,
-                                    state = pollResultViewState,
-                                    onFinish = pollResultViewModel::onFinish,
-                                    onShowProportionsHelp = { topLevelBackStack.add(Screens.ProportionsHelp) },
-                                )
-                            }
-                        }
                         entry<Screens.PollSetup> { key ->
                             val pollSetupViewModel: PollSetupViewModel by viewModel()
                             val pollSetupViewState by pollSetupViewModel.pollSetupViewState.collectAsState()
@@ -210,6 +182,34 @@ class MainActivity : ComponentActivity() {
                                 onFinish = pollVotingViewModel::finalizePoll,
                                 onTryToGoBack = pollVotingViewModel::tryToGoBack,
                             )
+                        }
+                        entry<Screens.PollResult> { key ->
+                            val pollResultViewModel: PollResultViewModel by viewModel()
+                            val pollResultViewState by pollResultViewModel.pollResultViewState.collectAsState()
+
+                            val context = LocalContext.current
+                            LaunchedEffect(key.id) {
+                                pollResultViewModel.initializePollResultById(
+                                    context = context,
+                                    pollId = key.id,
+                                )
+                            }
+
+                            LaunchedEffect(Unit) {
+                                pollResultViewModel.navEvents.collect { event ->
+                                    topLevelBackStack.handle(event)
+                                }
+                            }
+
+                            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                            if (pollResultViewState.poll != null) {
+                                ResultScreen(
+                                    modifier = Modifier,
+                                    state = pollResultViewState,
+                                    onFinish = pollResultViewModel::onFinish,
+                                    onShowProportionsHelp = { topLevelBackStack.add(Screens.ProportionsHelp) },
+                                )
+                            }
                         }
                         entry<Screens.ProportionsHelp> {
                             ProportionsHelpScreen(
