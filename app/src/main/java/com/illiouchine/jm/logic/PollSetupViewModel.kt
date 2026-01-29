@@ -36,7 +36,7 @@ class PollSetupViewModel(
         val config: PollConfig = PollConfig(),
         val subjectSuggestion: List<String> = emptyList(),
         val proposalSuggestion: List<String> = emptyList(),
-        @StringRes val feedback: Int? = null,
+        @param:StringRes val feedback: Int? = null,
     )
 
     private val _pollSetupViewState = MutableStateFlow(PollSetupViewState())
@@ -78,10 +78,9 @@ class PollSetupViewModel(
         }
     }
 
-    fun addSubject(context: Context, subject: String) {
-        val newSubject = subject.ifEmpty { generateSubject(context = context) }
+    fun addSubject(@Suppress("unused") context: Context, subject: String) {
         _pollSetupViewState.update {
-            it.copy(config = it.config.copy(subject = newSubject))
+            it.copy(config = it.config.copy(subject = subject))
         }
     }
 
@@ -203,10 +202,9 @@ class PollSetupViewModel(
     }
 
     private fun PollConfig.addSubjectIfEmpty(context: Context): PollConfig {
-        val newPoll = copy(
+        return copy(
             subject = subject.ifEmpty { generateSubject(context) }
         )
-        return newPoll
     }
 
     private fun proposalAlreadyExist(proposal: String): Boolean =
