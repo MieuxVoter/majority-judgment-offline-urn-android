@@ -1,2 +1,11 @@
+* Correction de problèmes en mode paysage
+* Correction de problèmes avec la nouvelle navigation
+* Ajout de modèles de scrutins
 * Correction de problèmes sur les tout petits écrans
 * Ajout de modèles de scrutins
+* Ajout d'une icône monochrome
+* Amélioration de l'apparence des titres
+* Ajout de l'allemand (merci @Fadikkop)
+* Masquage des profils de mérite extérieurs au duel sélectionné
+* Ajout de striures dans les couleurs, pour les daltoniens
+* Amélioration de la navigation entre les écrans
