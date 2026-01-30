@@ -124,4 +124,7 @@
     <string name="tts_add_the_proposal">añadir la propuesta</string>
     <string name="tts_judge_proposal_as_grade">juzgar %s como %s</string>
     <string name="tts_choose_a_proportional_algorithm">elige un algoritmo de proporcion</string>
+    <string name="home_try_poll_templates">O inicie rápidamente cualquiera de estas encuestas:</string>
+    <string name="summary_you_are_almost_done">¡Ya casi estás listo!</string>
+    <string name="summary_please_confirm_your_vote">Por favor, confirme su voto:</string>
 </resources>
