@@ -94,7 +94,7 @@ fun ResultScreen(
     var selectedProfileIndex by remember { mutableIntStateOf(0) }
     // Selecting the last proposal behaves like selecting the penultimate, duel-wise.
     val selectedDuelIndex = if (selectedProfileIndex == amountOfProposals - 1) {
-        selectedProfileIndex - 1
+        max(0, selectedProfileIndex - 1)
     } else {
         selectedProfileIndex
     }
@@ -148,12 +148,12 @@ fun ResultScreen(
 
             result.proposalResultsRanked.forEachIndexed { proposalDisplayIndex, proposalResult ->
                 if (proposalResult.analysis.totalSize > BigInteger.ZERO) {
-                    // I don't know how to indent this properly (I am triggered)
+                    // I don't know how to indent this readably (I am triggered by the linter >.<)
                     val isInSelectedDuel = isAnyProfileSelected &&
-                        (
-                            selectedDuelIndex == proposalDisplayIndex ||
-                                selectedDuelIndex + 1 == proposalDisplayIndex
-                            )
+                            (
+                                    selectedDuelIndex == proposalDisplayIndex ||
+                                            selectedDuelIndex + 1 == proposalDisplayIndex
+                                    )
                     val ttsShowExplanation = stringResource(R.string.tts_show_explanation)
 
                     Column(
@@ -238,18 +238,19 @@ fun ResultScreen(
 
                         // Ux: Explanations are shown one at a time (exclusive toggle)
                         val shouldShowExplanation = isAnyProfileSelected &&
-                            selectedDuelIndex == proposalDisplayIndex
+                                selectedDuelIndex == proposalDisplayIndex &&
+                                result.proposalResultsRanked.size > 1
 
                         AnimatedVisibility(shouldShowExplanation) {
                             Row {
                                 Text(
                                     fontSize = 14.sp,
                                     text =
-                                    if (state.explanations.size > proposalDisplayIndex) {
-                                        state.explanations[proposalDisplayIndex]
-                                    } else {
-                                        AnnotatedString("\uD83D\uDC1E")
-                                    },
+                                        if (state.explanations.size > proposalDisplayIndex) {
+                                            state.explanations[proposalDisplayIndex]
+                                        } else {
+                                            AnnotatedString("\uD83D\uDC1E")
+                                        },
                                 )
                             }
                         }

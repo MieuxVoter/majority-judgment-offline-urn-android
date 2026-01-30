@@ -122,7 +122,7 @@
     <string name="tts_more_information_about_proportional_algorithms">Plus d\'informations au sujet des algorithmes de proportionnelle</string>
     <string name="tts_remove_the_proposal">supprimer la proposition</string>
     <string name="tts_add_the_proposal">ajouter la proposition</string>
-    <string name="tts_judge_proposal_as_grade">juger %s comme %s</string>
+    <string name="tts_judge_proposal_as_grade">juger %1$s comme %2$s</string>
     <string name="tts_choose_a_proportional_algorithm">choisir un algorithme de proportionnelle</string>
     <string name="home_try_poll_templates">Ou lancez rapidement un de ces modèles de scrutin :</string>
     <string name="summary_you_are_almost_done">C\'est presque fini !</string>
