@@ -36,7 +36,7 @@ class PollSetupViewModel(
         val config: PollConfig = PollConfig(),
         val subjectSuggestion: List<String> = emptyList(),
         val proposalSuggestion: List<String> = emptyList(),
-        @StringRes val feedback: Int? = null,
+        @param:StringRes val feedback: Int? = null,
     )
 
     private val _pollSetupViewState = MutableStateFlow(PollSetupViewState())
@@ -78,31 +78,30 @@ class PollSetupViewModel(
         }
     }
 
-    fun addSubject(context: Context, subject: String) {
-        val newSubject = subject.ifEmpty { generateSubject(context = context) }
+    fun addSubject(@Suppress("unused") context: Context, subject: String) {
         _pollSetupViewState.update {
-            it.copy(config = it.config.copy(subject = newSubject))
+            it.copy(config = it.config.copy(subject = subject))
         }
     }
 
-    fun addProposal(context: Context, proposal: String = "") {
+    fun addProposal(context: Context, proposalName: String = "") {
         // Rule: if the proposal name is not specified, use a default
-        val notEmptyProposal = proposal.ifEmpty { generateProposalName(context) }
+        val notEmptyProposalName = proposalName.ifEmpty { generateProposalName(context) }
         // Rule: proposals must have unique names
-        if (proposalAlreadyExist(notEmptyProposal)) {
+        if (doesProposalAlreadyExist(notEmptyProposalName)) {
             _pollSetupViewState.update {
                 it.copy(feedback = R.string.toast_proposal_name_already_exists)
             }
         } else {
             val newProposals = buildList {
                 addAll(_pollSetupViewState.value.config.proposals)
-                add(notEmptyProposal)
+                add(notEmptyProposalName)
             }
             _pollSetupViewState.update {
                 it.copy(
                     config = it.config.copy(proposals = newProposals),
                     proposalSuggestion = emptyList(),
-                    subjectSuggestion = emptyList()
+                    subjectSuggestion = emptyList(),
                 )
             }
         }
@@ -203,12 +202,11 @@ class PollSetupViewModel(
     }
 
     private fun PollConfig.addSubjectIfEmpty(context: Context): PollConfig {
-        val newPoll = copy(
+        return copy(
             subject = subject.ifEmpty { generateSubject(context) }
         )
-        return newPoll
     }
 
-    private fun proposalAlreadyExist(proposal: String): Boolean =
+    private fun doesProposalAlreadyExist(proposal: String): Boolean =
         _pollSetupViewState.value.config.proposals.any { it == proposal }
 }
