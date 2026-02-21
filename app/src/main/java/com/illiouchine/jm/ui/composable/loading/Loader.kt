@@ -53,18 +53,17 @@ fun Loader(
             .pointerInput(Unit) {
                 detectTapGestures(
                     onDoubleTap = {
-                        // change epicycloid (recharge full config from preset)
+                        // Change epicycloid (recharges full config from next preset)
                         onNextSpirograph()
-                        // TODO show some toast
                     },
                 )
             }
     ) {
         for (i in (0..<amountOfOrbitals)) {
             val position = (
-                loopAnimation.value +
-                    i.toDouble() / amountOfOrbitals.toDouble()
-                ).mod(1.0)
+                    loopAnimation.value +
+                            i.toDouble() / amountOfOrbitals.toDouble()
+                    ).mod(1.0)
 
             for (trail in (1..trailLength)) {
                 drawCircle(
@@ -89,7 +88,7 @@ fun Loader(
 }
 
 @Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
+    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
 )
 @Composable
 private fun PreviewLoader() {
