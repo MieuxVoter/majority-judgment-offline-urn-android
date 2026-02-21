@@ -1,0 +1,2 @@
+* Allow polls with a single proposal (preferendums)
+* Fix a screen flicker on navigation (again)

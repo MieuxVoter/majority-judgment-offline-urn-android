@@ -32,8 +32,8 @@ android {
         minSdk = 27
         targetSdk = 35
         // You need to bump both of those when making a new release.
-        versionCode = 17
-        versionName = "1.5.4"
+        versionCode = 18
+        versionName = "1.5.5"
 
         // Ideally we'd have both, but support for multiple runners looks experimental
 //        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
