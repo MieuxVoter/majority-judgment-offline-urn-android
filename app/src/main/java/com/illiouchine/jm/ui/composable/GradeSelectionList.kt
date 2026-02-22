@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
+import com.illiouchine.jm.ui.preview.PreviewDataBuilder
 import com.illiouchine.jm.ui.theme.JmTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

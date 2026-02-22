@@ -1,4 +1,4 @@
-package com.illiouchine.jm.ui.previewdatabuilder
+package com.illiouchine.jm.ui.preview
 
 import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.model.Ballot
