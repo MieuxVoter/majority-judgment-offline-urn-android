@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.composable.ScreenTitle
-import com.illiouchine.jm.ui.composable.ViewPager
+import com.illiouchine.jm.ui.composable.DotsPager
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -189,7 +189,7 @@ fun OnBoardingBottomRow(
             ) { Text(stringResource(R.string.button_skip)) }
         }
 
-        ViewPager(
+        DotsPager(
             modifier = Modifier
                 .weight(0.9f)
                 .wrapContentSize(),
