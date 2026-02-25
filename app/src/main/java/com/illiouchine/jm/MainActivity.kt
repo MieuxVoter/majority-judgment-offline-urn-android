@@ -11,6 +11,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
@@ -58,196 +59,198 @@ class MainActivity : ComponentActivity() {
             val topLevelBackStack = retain { TopLevelBackStack(Screens.Home) }
 
             JmTheme {
-                NavDisplay(
-                    backStack = topLevelBackStack.currentBackStack,
-                    onBack = { topLevelBackStack.removeLast() },
-                    entryDecorators = listOf(
-                        rememberSaveableStateHolderNavEntryDecorator(),
-                        rememberViewModelStoreNavEntryDecorator(),
-                    ),
-                    entryProvider = entryProvider {
-                        entry<Screens.Home> {
-                            val homeViewModel: HomeViewModel by viewModel()
-                            val homeViewState by homeViewModel.homeViewState.collectAsState()
+                Surface {  // Using a Surface here prevents a screen flicker when navigating.
+                    NavDisplay(
+                        backStack = topLevelBackStack.currentBackStack,
+                        onBack = { topLevelBackStack.removeLast() },
+                        entryDecorators = listOf(
+                            rememberSaveableStateHolderNavEntryDecorator(),
+                            rememberViewModelStoreNavEntryDecorator(),
+                        ),
+                        entryProvider = entryProvider {
+                            entry<Screens.Home> {
+                                val homeViewModel: HomeViewModel by viewModel()
+                                val homeViewState by homeViewModel.homeViewState.collectAsState()
 
-                            SideEffect { homeViewModel.initialize() }
+                                SideEffect { homeViewModel.initialize() }
 
-                            LaunchedEffect(Unit) {
-                                homeViewModel.navEvents.collect { event ->
-                                    topLevelBackStack.handle(event)
+                                LaunchedEffect(Unit) {
+                                    homeViewModel.navEvents.collect { event ->
+                                        topLevelBackStack.handle(event)
+                                    }
                                 }
-                            }
 
-                            HomeScreen(
-                                modifier = Modifier,
-                                onBottomBarItemSelected = { topLevelBackStack.switchTopLevel(it) },
-                                homeViewState = homeViewState,
-                                onSetupBlankPoll = homeViewModel::setupBlankPoll,
-                                onSetupTemplatePoll = homeViewModel::setupPollFromTemplate,
-                                onSetupClonePoll = homeViewModel::clonePoll,
-                                onResumePoll = homeViewModel::resumePoll,
-                                onShowResult = homeViewModel::showResult,
-                                onDeletePoll = homeViewModel::deletePoll,
-                            )
-                        }
-                        entry<Screens.About> {
-                            AboutScreen(
-                                modifier = Modifier,
-                                onShowSpirograph = { topLevelBackStack.add(Screens.Loader) },
-                                onBottomBarItemSelected = { topLevelBackStack.switchTopLevel(it) },
-                            )
-                        }
-                        entry<Screens.Loader> {
-                            LoaderScreen(
-                                modifier = Modifier.fillMaxSize(),
-                            )
-                        }
-                        entry<Screens.Onboarding> {
-                            val onBoardingViewModel: OnBoardingViewModel by viewModel()
-                            LaunchedEffect(Unit) {
-                                onBoardingViewModel.navEvents.collect { event ->
-                                    topLevelBackStack.handle(event)
-                                }
-                            }
-                            OnBoardingScreen(
-                                onFinish = onBoardingViewModel::finish
-                            )
-                        }
-                        entry<Screens.PollSetup> { key ->
-                            val pollSetupViewModel: PollSetupViewModel by viewModel()
-                            val pollSetupViewState by pollSetupViewModel.pollSetupViewState.collectAsState()
-
-                            LaunchedEffect(Unit) {
-                                pollSetupViewModel.navEvents.collect { event ->
-                                    topLevelBackStack.handle(event)
-                                }
-                            }
-
-                            LaunchedEffect(key.hashCode()) {
-                                pollSetupViewModel.initialize(
-                                    cloneablePollId = key.cloneablePollId,
-                                    pollTemplateSlug = key.pollTemplateSlug,
-                                )
-                            }
-
-                            PollSetupScreen(
-                                modifier = Modifier,
-                                onBottomBarItemSelected = { topLevelBackStack.switchTopLevel(it) },
-                                pollSetupState = pollSetupViewState,
-                                onAddSubject = pollSetupViewModel::addSubject,
-                                onAddProposal = pollSetupViewModel::addProposal,
-                                onRemoveProposal = pollSetupViewModel::removeProposal,
-                                onGradingSelected = pollSetupViewModel::selectGrading,
-                                onSetupFinished = pollSetupViewModel::finishSetup,
-                                onDismissFeedback = pollSetupViewModel::clearFeedback,
-                                onGetSubjectSuggestion = pollSetupViewModel::refreshSubjectSuggestion,
-                                onGetProposalSuggestion = pollSetupViewModel::refreshProposalSuggestion,
-                                onClearSubjectSuggestion = pollSetupViewModel::clearSubjectSuggestion,
-                                onClearProposalSuggestion = pollSetupViewModel::clearProposalSuggestion,
-                            )
-                        }
-                        entry<Screens.PollVote> { key ->
-                            val pollVotingViewModel: PollVotingViewModel by viewModel()
-                            val pollVotingViewState by pollVotingViewModel.pollVotingViewState.collectAsState()
-
-                            LaunchedEffect(Unit) {
-                                pollVotingViewModel.navEvents.collect { event ->
-                                    topLevelBackStack.handle(event)
-                                }
-                            }
-
-                            LaunchedEffect(key.id) {
-                                pollVotingViewModel.initVotingSessionForPoll(key.id)
-                            }
-
-                            // Hotfix: Wait for the state to be updated by initVotingSessionForPoll
-                            // Otherwise pollVotingViewState.pinScreens may be true when it should not,
-                            // albeit only once after setting the "pin auto." Setting to false.
-                            val waitAnimation = remember { Animatable(0f) }
-                            LaunchedEffect(pollVotingViewState.pinScreens) {
-                                waitAnimation.animateTo(1f, tween(1000))
-                                perhapsLockScreen(pollVotingViewState.pinScreens)
-                            }
-
-                            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-
-                            PollVotingScreen(
-                                modifier = Modifier,
-                                pollVotingState = pollVotingViewState,
-                                onStartVoting = pollVotingViewModel::initParticipantVotingSession,
-                                onJudgmentCast = pollVotingViewModel::castJudgment,
-                                onBallotConfirmed = pollVotingViewModel::confirmBallot,
-                                onBallotCanceled = pollVotingViewModel::cancelBallot,
-                                onCancelLastJudgment = pollVotingViewModel::cancelLastJudgment,
-                                onFinish = pollVotingViewModel::finalizePoll,
-                                onTryToGoBack = pollVotingViewModel::tryToGoBack,
-                            )
-                        }
-                        entry<Screens.PollResult> { key ->
-                            val pollResultViewModel: PollResultViewModel by viewModel()
-                            val pollResultViewState by pollResultViewModel.pollResultViewState.collectAsState()
-
-                            val context = LocalContext.current
-                            LaunchedEffect(key.id) {
-                                pollResultViewModel.initializePollResultById(
-                                    context = context,
-                                    pollId = key.id,
-                                )
-                            }
-
-                            LaunchedEffect(Unit) {
-                                pollResultViewModel.navEvents.collect { event ->
-                                    topLevelBackStack.handle(event)
-                                }
-                            }
-
-                            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-                            if (pollResultViewState.poll != null) {
-                                ResultScreen(
+                                HomeScreen(
                                     modifier = Modifier,
-                                    state = pollResultViewState,
-                                    onFinish = pollResultViewModel::onFinish,
-                                    onShowProportionsHelp = { topLevelBackStack.add(Screens.ProportionsHelp) },
+                                    onBottomBarItemSelected = { topLevelBackStack.switchTopLevel(it) },
+                                    homeViewState = homeViewState,
+                                    onSetupBlankPoll = homeViewModel::setupBlankPoll,
+                                    onSetupTemplatePoll = homeViewModel::setupPollFromTemplate,
+                                    onSetupClonePoll = homeViewModel::clonePoll,
+                                    onResumePoll = homeViewModel::resumePoll,
+                                    onShowResult = homeViewModel::showResult,
+                                    onDeletePoll = homeViewModel::deletePoll,
+                                )
+                            }
+                            entry<Screens.About> {
+                                AboutScreen(
+                                    modifier = Modifier,
+                                    onShowSpirograph = { topLevelBackStack.add(Screens.Loader) },
+                                    onBottomBarItemSelected = { topLevelBackStack.switchTopLevel(it) },
+                                )
+                            }
+                            entry<Screens.Loader> {
+                                LoaderScreen(
+                                    modifier = Modifier.fillMaxSize(),
+                                )
+                            }
+                            entry<Screens.Onboarding> {
+                                val onBoardingViewModel: OnBoardingViewModel by viewModel()
+                                LaunchedEffect(Unit) {
+                                    onBoardingViewModel.navEvents.collect { event ->
+                                        topLevelBackStack.handle(event)
+                                    }
+                                }
+                                OnBoardingScreen(
+                                    onFinish = onBoardingViewModel::finish
+                                )
+                            }
+                            entry<Screens.PollSetup> { key ->
+                                val pollSetupViewModel: PollSetupViewModel by viewModel()
+                                val pollSetupViewState by pollSetupViewModel.pollSetupViewState.collectAsState()
+
+                                LaunchedEffect(Unit) {
+                                    pollSetupViewModel.navEvents.collect { event ->
+                                        topLevelBackStack.handle(event)
+                                    }
+                                }
+
+                                LaunchedEffect(key.hashCode()) {
+                                    pollSetupViewModel.initialize(
+                                        cloneablePollId = key.cloneablePollId,
+                                        pollTemplateSlug = key.pollTemplateSlug,
+                                    )
+                                }
+
+                                PollSetupScreen(
+                                    modifier = Modifier,
+                                    onBottomBarItemSelected = { topLevelBackStack.switchTopLevel(it) },
+                                    pollSetupState = pollSetupViewState,
+                                    onAddSubject = pollSetupViewModel::addSubject,
+                                    onAddProposal = pollSetupViewModel::addProposal,
+                                    onRemoveProposal = pollSetupViewModel::removeProposal,
+                                    onGradingSelected = pollSetupViewModel::selectGrading,
+                                    onSetupFinished = pollSetupViewModel::finishSetup,
+                                    onDismissFeedback = pollSetupViewModel::clearFeedback,
+                                    onGetSubjectSuggestion = pollSetupViewModel::refreshSubjectSuggestion,
+                                    onGetProposalSuggestion = pollSetupViewModel::refreshProposalSuggestion,
+                                    onClearSubjectSuggestion = pollSetupViewModel::clearSubjectSuggestion,
+                                    onClearProposalSuggestion = pollSetupViewModel::clearProposalSuggestion,
+                                )
+                            }
+                            entry<Screens.PollVote> { key ->
+                                val pollVotingViewModel: PollVotingViewModel by viewModel()
+                                val pollVotingViewState by pollVotingViewModel.pollVotingViewState.collectAsState()
+
+                                LaunchedEffect(Unit) {
+                                    pollVotingViewModel.navEvents.collect { event ->
+                                        topLevelBackStack.handle(event)
+                                    }
+                                }
+
+                                LaunchedEffect(key.id) {
+                                    pollVotingViewModel.initVotingSessionForPoll(key.id)
+                                }
+
+                                // Hotfix: Wait for the state to be updated by initVotingSessionForPoll
+                                // Otherwise pollVotingViewState.pinScreens may be true when it should not,
+                                // albeit only once after setting the "pin auto." Setting to false.
+                                val waitAnimation = remember { Animatable(0f) }
+                                LaunchedEffect(pollVotingViewState.pinScreens) {
+                                    waitAnimation.animateTo(1f, tween(1000))
+                                    perhapsLockScreen(pollVotingViewState.pinScreens)
+                                }
+
+                                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+                                PollVotingScreen(
+                                    modifier = Modifier,
+                                    pollVotingState = pollVotingViewState,
+                                    onStartVoting = pollVotingViewModel::initParticipantVotingSession,
+                                    onJudgmentCast = pollVotingViewModel::castJudgment,
+                                    onBallotConfirmed = pollVotingViewModel::confirmBallot,
+                                    onBallotCanceled = pollVotingViewModel::cancelBallot,
+                                    onCancelLastJudgment = pollVotingViewModel::cancelLastJudgment,
+                                    onFinish = pollVotingViewModel::finalizePoll,
+                                    onTryToGoBack = pollVotingViewModel::tryToGoBack,
+                                )
+                            }
+                            entry<Screens.PollResult> { key ->
+                                val pollResultViewModel: PollResultViewModel by viewModel()
+                                val pollResultViewState by pollResultViewModel.pollResultViewState.collectAsState()
+
+                                val context = LocalContext.current
+                                LaunchedEffect(key.id) {
+                                    pollResultViewModel.initializePollResultById(
+                                        context = context,
+                                        pollId = key.id,
+                                    )
+                                }
+
+                                LaunchedEffect(Unit) {
+                                    pollResultViewModel.navEvents.collect { event ->
+                                        topLevelBackStack.handle(event)
+                                    }
+                                }
+
+                                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                                if (pollResultViewState.poll != null) {
+                                    ResultScreen(
+                                        modifier = Modifier,
+                                        state = pollResultViewState,
+                                        onFinish = pollResultViewModel::onFinish,
+                                        onShowProportionsHelp = { topLevelBackStack.add(Screens.ProportionsHelp) },
+                                    )
+                                }
+                            }
+                            entry<Screens.ProportionsHelp> {
+                                ProportionsHelpScreen(
+                                    modifier = Modifier.fillMaxSize(),
+                                    onNavigateUp = { topLevelBackStack.removeLast() },
+                                )
+                            }
+                            entry<Screens.Settings> {
+                                val settingsViewModel: SettingsViewModel by viewModel()
+                                val settingsViewState by settingsViewModel.settingsViewState.collectAsState()
+
+                                LaunchedEffect(Unit) {
+                                    settingsViewModel.navEvents.collect { event ->
+                                        topLevelBackStack.handle(event)
+                                    }
+                                }
+
+                                SideEffect { settingsViewModel.initialize() }
+
+                                SettingsScreen(
+                                    modifier = Modifier,
+                                    onBottomBarItemSelected = { topLevelBackStack.switchTopLevel(it) },
+                                    settingsState = settingsViewState,
+                                    onShowOnBoardingRequested = settingsViewModel::showOnBoarding,
+                                    onPlaySoundChange = settingsViewModel::updatePlaySound,
+                                    onPinScreenChange = settingsViewModel::updatePinScreen,
+                                    onDefaultGradingSelected = settingsViewModel::updateDefaultGrading,
+                                    onDismissFeedback = {},
                                 )
                             }
                         }
-                        entry<Screens.ProportionsHelp> {
-                            ProportionsHelpScreen(
-                                modifier = Modifier.fillMaxSize(),
-                                onNavigateUp = { topLevelBackStack.removeLast() },
-                            )
-                        }
-                        entry<Screens.Settings> {
-                            val settingsViewModel: SettingsViewModel by viewModel()
-                            val settingsViewState by settingsViewModel.settingsViewState.collectAsState()
-
-                            LaunchedEffect(Unit) {
-                                settingsViewModel.navEvents.collect { event ->
-                                    topLevelBackStack.handle(event)
-                                }
-                            }
-
-                            SideEffect { settingsViewModel.initialize() }
-
-                            SettingsScreen(
-                                modifier = Modifier,
-                                onBottomBarItemSelected = { topLevelBackStack.switchTopLevel(it) },
-                                settingsState = settingsViewState,
-                                onShowOnBoardingRequested = settingsViewModel::showOnBoarding,
-                                onPlaySoundChange = settingsViewModel::updatePlaySound,
-                                onPinScreenChange = settingsViewModel::updatePinScreen,
-                                onDefaultGradingSelected = settingsViewModel::updateDefaultGrading,
-                                onDismissFeedback = {},
-                            )
-                        }
-                    }
-                )
+                    )
+                }
             }
         }
     }
 
     private fun perhapsLockScreen(pinScreen: Boolean) {
-        val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
         if (
             pinScreen &&
             activityManager.lockTaskModeState == ActivityManager.LOCK_TASK_MODE_NONE
