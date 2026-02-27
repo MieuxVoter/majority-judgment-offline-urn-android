@@ -111,6 +111,20 @@ fun LinearMeritProfileCanvas(
                     tileModeY = TileMode.Repeated,
                 ),
             ),
+            ShaderBrush(
+                shader = ImageShader(
+                    image = patterns[6],
+                    tileModeX = TileMode.Repeated,
+                    tileModeY = TileMode.Repeated,
+                ),
+            ),
+            ShaderBrush(
+                shader = ImageShader(
+                    image = patterns[7],
+                    tileModeX = TileMode.Repeated,
+                    tileModeY = TileMode.Repeated,
+                ),
+            ),
         )
     }
 
@@ -320,7 +334,7 @@ fun LinearMeritProfileCanvas(
         // Amount by which the median line overshoots the merit profile vertically
         val medianLineVerticalOvershoot = 3.dp.toPx()
 
-        // Vertical line in the middle, marking the median grade
+        // Vertical line in the middle, helping humans find the median grade
         drawLine(
             color = contrastedColor,
             start = Offset(middleX, 0 - medianLineVerticalOvershoot),

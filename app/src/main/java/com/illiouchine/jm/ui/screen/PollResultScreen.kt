@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -49,6 +50,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.illiouchine.jm.R
@@ -59,6 +61,7 @@ import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
+import com.illiouchine.jm.ui.composable.plot.OpinionProfile
 import com.illiouchine.jm.ui.preview.PreviewDataBuilder
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
@@ -138,6 +141,20 @@ fun ResultScreen(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 ballots = poll.ballots.toImmutableList(),
             )
+
+
+
+
+            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
+            Text("Opinion Profile")
+            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
+            OpinionProfile(
+                modifier = Modifier.size(300.dp).fillMaxWidth(),
+                poll = poll,
+                tally = tally,
+            )
+
+
 
             Spacer(Modifier.padding(vertical = Theme.spacing.small))
 
@@ -350,7 +367,7 @@ fun formatAmount(amount: Double, maxDecimals: Int = 2, locale: Locale = Locale.F
 }
 
 // To correctly preview this, you need to Start Interactive Mode.
-// This is the cost of animating the apparition of the merit profiles.
+// This is a hidden cost of animating the apparition of the merit profiles.
 @Preview(
     name = "Phone (Portrait)",
     showSystemUi = true,
