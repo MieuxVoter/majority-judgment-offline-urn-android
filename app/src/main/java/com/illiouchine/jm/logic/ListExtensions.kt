@@ -1,7 +1,7 @@
 package com.illiouchine.jm.logic
 
 
-fun List<Double>.reversedIf(shouldReverse: Boolean): List<Double> {
+fun <T> List<T>.reversedIf(shouldReverse: Boolean): List<T> {
     if (shouldReverse) {
         return this.reversed()
     }
