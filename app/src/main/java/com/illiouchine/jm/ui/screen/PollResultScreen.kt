@@ -61,7 +61,9 @@ import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
+import com.illiouchine.jm.ui.composable.plot.NuanceProfile
 import com.illiouchine.jm.ui.composable.plot.OpinionProfile
+import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
 import com.illiouchine.jm.ui.preview.PreviewDataBuilder
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
@@ -146,6 +148,19 @@ fun ResultScreen(
 
 
             Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
+            Text("Nuance Profile")
+            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
+            NuanceProfile(
+                modifier = Modifier.size(300.dp).fillMaxWidth(),
+                poll = poll,
+                lessToMore = false,
+            )
+            PlotTitle(
+                modifier = Modifier.padding(top=Theme.spacing.tiny),
+                text = "Amount of ballots per amount of different grades used in each ballot.",
+            )
+
+            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
             Text("Opinion Profile")
             Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
             OpinionProfile(
@@ -153,7 +168,10 @@ fun ResultScreen(
                 poll = poll,
                 tally = tally,
             )
-
+            PlotTitle(
+                //modifier = Modifier.padding(top=Theme.spacing.tiny),
+                text = "Total amount of judgments cast per grade.",
+            )
 
 
             Spacer(Modifier.padding(vertical = Theme.spacing.small))

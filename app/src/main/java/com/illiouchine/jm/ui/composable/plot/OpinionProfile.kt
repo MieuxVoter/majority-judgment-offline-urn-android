@@ -1,22 +1,29 @@
 package com.illiouchine.jm.ui.composable.plot
 
-import androidx.compose.animation.core.EaseInOutCubic
-import androidx.compose.animation.core.tween
+import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.logic.reversedIf
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.Tally
-import ir.ehsannarmani.compose_charts.LineChart
-import ir.ehsannarmani.compose_charts.models.AnimationMode
-import ir.ehsannarmani.compose_charts.models.DotProperties
-import ir.ehsannarmani.compose_charts.models.DrawStyle
+import com.illiouchine.jm.ui.theme.Theme
+import ir.ehsannarmani.compose_charts.ColumnChart
+import ir.ehsannarmani.compose_charts.models.BarProperties
+import ir.ehsannarmani.compose_charts.models.Bars
+import ir.ehsannarmani.compose_charts.models.DividerProperties
 import ir.ehsannarmani.compose_charts.models.GridProperties
-import ir.ehsannarmani.compose_charts.models.Line
+import ir.ehsannarmani.compose_charts.models.HorizontalIndicatorProperties
+import ir.ehsannarmani.compose_charts.models.LabelHelperProperties
+import ir.ehsannarmani.compose_charts.models.LabelProperties
 
 //import org.jetbrains.kotlinx.dataframe.api.dataFrameOf
 //import org.jetbrains.kotlinx.dataframe.api.gather
@@ -31,6 +38,7 @@ import ir.ehsannarmani.compose_charts.models.Line
 //import org.jetbrains.kotlinx.kandy.letsplot.translator.toLetsPlot
 //import org.jetbrains.kotlinx.kandy.util.color.Color as KandyColor
 
+
 @Composable
 fun OpinionProfile(
     modifier: Modifier = Modifier,
@@ -39,60 +47,141 @@ fun OpinionProfile(
     greenToRed: Boolean = true,
 ) {
 
-    val data = remember {
-        // One line per proposal, somewhat redundant with merit profiles, uninteresting
-//            tally.proposalsTallies.mapIndexed { i, proposalTally ->
-//                Line(
-//                    label = poll.pollConfig.proposals[i].toString(),
-//                    values = proposalTally.tally.map { gradeTally -> gradeTally.toDouble() },
-//                    color = SolidColor(Color(0xFF23af92)),
-//                    firstGradientFillColor = Color(0xFF2BC0A1).copy(alpha = .5f),
-//                    secondGradientFillColor = Color.Transparent,
-//                    strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
-//                    gradientAnimationDelay = 2000,
-//                    drawStyle = DrawStyle.Stroke(width = 2.dp),
-//                )
-//            }
+//    val data = remember {
+//        // One line per proposal, somewhat redundant with merit profiles, uninteresting
+////            tally.proposalsTallies.mapIndexed { i, proposalTally ->
+////                Line(
+////                    label = poll.pollConfig.proposals[i].toString(),
+////                    values = proposalTally.tally.map { gradeTally -> gradeTally.toDouble() },
+////                    color = SolidColor(Color(0xFF23af92)),
+////                    firstGradientFillColor = Color(0xFF2BC0A1).copy(alpha = .5f),
+////                    secondGradientFillColor = Color.Transparent,
+////                    strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
+////                    gradientAnimationDelay = 2000,
+////                    drawStyle = DrawStyle.Stroke(width = 2.dp),
+////                )
+////            }
+//
+//        // Cumulative (without strata because the lib does not support it out of the box)
+//        listOf(
+//            Line(
+//                values = poll.pollConfig.grading.grades.mapIndexed { gradeIndex, _ ->
+//                    tally.proposalsTallies.map { proposalTally ->
+//                        proposalTally.tally[gradeIndex].toDouble()
+//                    }.reduce { acc, value -> acc + value }
+//                }.reversedIf(greenToRed),
+//                color = SolidColor(Color(0xFF23af92)),
+//                firstGradientFillColor = Color(0xFF2BC0A1).copy(alpha = .5f),
+//                secondGradientFillColor = Color.Transparent,
+//                strokeAnimationSpec = tween(3000, easing = EaseInOutCubic),
+//                gradientAnimationDelay = 2500,
+//                drawStyle = DrawStyle.Stroke(width = 2.dp),
+//                dotProperties = DotProperties(
+//                    enabled = true,
+//                    color = SolidColor(Color.White),
+//                    strokeWidth = 4.dp,
+//                    radius = 7.dp,
+//                    strokeColor = SolidColor(Color(0xFF23af92)),
+//                ),
+//            ),
+//        )
+//    }
+//    LineChart(
+//        modifier = modifier,
+//        data = data,
+//
+//        gridProperties = GridProperties(
+//            enabled = true,
+//            xAxisProperties = GridProperties.AxisProperties(
+//                enabled = true,
+//                lineCount = poll.pollConfig.grading.getAmountOfGrades() + 1,
+//            ),
+//        ),
+//        labelProperties = LabelProperties(
+//            enabled = true,
+//            textStyle = TextStyle.Default.copy(
+//                fontSize = 10.sp,
+//                textAlign = TextAlign.End,
+//                color = Theme.colorScheme.onBackground,
+//            ),
+//            labels = poll.pollConfig.grading.grades.mapIndexed {_, grade ->
+//                stringResource(grade.name)
+//            }.reversedIf(greenToRed),
+//        ),
+//        animationMode = AnimationMode.Together(delayBuilder = {
+//            it * 618L
+//        }),
+//    )
+//    // Hotfix for bottom padding being too small when x-axis labels are rotated.
+//    // This must stay a magic value, since it's a hotfix hack and not theme related.
+//    Spacer(modifier = Modifier.padding(vertical = 16.dp))
 
+
+    val context = LocalContext.current
+    val barData = remember (poll, poll.ballots.size) {
         // Cumulative (without strata because the lib does not support it out of the box)
-        listOf(
-            Line(
-                values = poll.pollConfig.grading.grades.mapIndexed { gradeIndex, _ ->
-                    tally.proposalsTallies.map { proposalTally ->
-                        proposalTally.tally[gradeIndex].toDouble()
-                    }.reduce { acc, value -> acc + value }
-                }.reversedIf(greenToRed),
-                color = SolidColor(Color(0xFF23af92)),
-                firstGradientFillColor = Color(0xFF2BC0A1).copy(alpha = .5f),
-                secondGradientFillColor = Color.Transparent,
-                strokeAnimationSpec = tween(3000, easing = EaseInOutCubic),
-                gradientAnimationDelay = 2500,
-                drawStyle = DrawStyle.Stroke(width = 2.dp),
-                dotProperties = DotProperties(
-                    enabled = true,
-                    color = SolidColor(Color.White),
-                    strokeWidth = 4.dp,
-                    radius = 7.dp,
-                    strokeColor = SolidColor(Color(0xFF23af92)),
+        poll.pollConfig.grading.grades.mapIndexed { gradeIndex, grade ->
+            @SuppressLint("LocalContextGetResourceValueCall") // how else?
+            Bars(
+                label = context.getString(grade.name),
+                values = listOf(
+                    Bars.Data(
+                        value = tally.proposalsTallies.map { proposalTally ->
+                            proposalTally.tally[gradeIndex].toDouble()
+                        }.reduce { acc, value -> acc + value },
+                        color = SolidColor(grade.color),
+                    ),
                 ),
-            ),
-        )
+            )
+        }.reversedIf(greenToRed)
     }
 
-    LineChart(
+    ColumnChart(
         modifier = modifier,
-        data = data,
+        data = barData,
+        barProperties = BarProperties(
+            thickness = 32.dp,
+            spacing = 0.dp,
+            cornerRadius = Bars.Data.Radius.Rectangle(
+                topLeft = 4.dp,
+                topRight = 4.dp,
+            ),
+        ),
+        labelProperties = LabelProperties(
+            enabled = true,
+            textStyle = TextStyle.Default.copy(
+                fontSize = 10.sp,
+                textAlign = TextAlign.End,
+                color = Theme.colorScheme.onBackground,
+            ),
+        ),
+        indicatorProperties = HorizontalIndicatorProperties(
+            textStyle = TextStyle.Default.copy(
+                fontSize = 10.sp,
+                textAlign = TextAlign.End,
+                color = Theme.colorScheme.onBackground,
+            ),
+        ),
+        dividerProperties = DividerProperties(
+            enabled = false,
+        ),
         gridProperties = GridProperties(
             enabled = true,
             xAxisProperties = GridProperties.AxisProperties(
                 enabled = true,
-                lineCount = poll.pollConfig.grading.getAmountOfGrades() + 1,
+            ),
+            yAxisProperties = GridProperties.AxisProperties(
+                enabled = false,
             ),
         ),
-        animationMode = AnimationMode.Together(delayBuilder = {
-            it * 618L
-        }),
+        labelHelperProperties = LabelHelperProperties(
+            enabled = false,
+        ),
     )
+
+    // Hotfix for bottom padding being too small when x-axis labels are rotated.
+    // This must stay a magic value, since it's a hotfix hack and not theme related.
+    Spacer(modifier = Modifier.padding(vertical = 24.dp))
 }
 
 //@Composable
