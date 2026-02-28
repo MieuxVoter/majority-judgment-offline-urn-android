@@ -21,8 +21,8 @@ fun PlotTitle(
         modifier = modifier.fillMaxWidth().padding(
             horizontal = Theme.spacing.medium,
         ),
-        lineHeight = 10.sp,
-        fontSize = 10.sp,
+        lineHeight = 12.sp,
+        fontSize = 12.sp,
         fontStyle = FontStyle.Italic,
         textAlign = TextAlign.Center,
     )

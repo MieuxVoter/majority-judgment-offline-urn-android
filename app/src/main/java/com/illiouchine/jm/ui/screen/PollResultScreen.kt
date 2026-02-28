@@ -144,36 +144,6 @@ fun ResultScreen(
                 ballots = poll.ballots.toImmutableList(),
             )
 
-
-
-
-            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
-            Text("Nuance Profile")
-            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
-            NuanceProfile(
-                modifier = Modifier.size(300.dp).fillMaxWidth(),
-                poll = poll,
-                lessToMore = false,
-            )
-            PlotTitle(
-                modifier = Modifier.padding(top=Theme.spacing.tiny),
-                text = "Amount of ballots per amount of different grades used in each ballot.",
-            )
-
-            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
-            Text("Opinion Profile")
-            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
-            OpinionProfile(
-                modifier = Modifier.size(300.dp).fillMaxWidth(),
-                poll = poll,
-                tally = tally,
-            )
-            PlotTitle(
-                //modifier = Modifier.padding(top=Theme.spacing.tiny),
-                text = "Total amount of judgments cast per grade.",
-            )
-
-
             Spacer(Modifier.padding(vertical = Theme.spacing.small))
 
             val appearAnimation = remember { Animatable(0f) }
@@ -363,7 +333,42 @@ fun ResultScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.padding(Theme.spacing.small))
+//            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.medium))
+//            Text("Proportionality")
+
+            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.medium))
+
+            Text("Nuance Profile")
+
+            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
+
+            NuanceProfile(
+                modifier = Modifier.size(600.dp, 280.dp).fillMaxWidth(),
+                poll = poll,
+                lessToMore = false,
+            )
+            PlotTitle(
+                modifier = Modifier.padding(top=Theme.spacing.tiny),
+                text = "Amount of ballots per amount of different grades used in each ballot.",
+            )
+
+            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.medium))
+
+            Text("Opinion Profile")
+
+            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
+
+            OpinionProfile(
+                modifier = Modifier.size(600.dp, 280.dp).fillMaxWidth(),
+                poll = poll,
+                tally = tally,
+            )
+            PlotTitle(
+                //modifier = Modifier.padding(top=Theme.spacing.tiny),
+                text = "Total amount of judgments cast per grade.",
+            )
+
+            Spacer(modifier = Modifier.padding(Theme.spacing.medium))
 
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
