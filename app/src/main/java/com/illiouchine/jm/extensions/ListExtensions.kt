@@ -1,4 +1,4 @@
-package com.illiouchine.jm.logic
+package com.illiouchine.jm.extensions
 
 
 fun <T> List<T>.reversedIf(shouldReverse: Boolean): List<T> {

@@ -8,7 +8,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.illiouchine.jm.logic.reversedIf
+import com.illiouchine.jm.extensions.reversedIf
+import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.ui.theme.Theme
 import ir.ehsannarmani.compose_charts.ColumnChart
@@ -69,10 +70,13 @@ fun NuanceProfile(
         ),
         indicatorProperties = HorizontalIndicatorProperties(
             textStyle = TextStyle.Default.copy(
-                fontSize = 10.sp,
+                fontSize = 12.sp,
                 textAlign = TextAlign.End,
                 color = textColor,
             ),
+            contentBuilder = {
+                it.smartFormat()
+            },
         ),
         dividerProperties = DividerProperties(
             enabled = false,

@@ -12,11 +12,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.illiouchine.jm.logic.reversedIf
+import com.illiouchine.jm.extensions.reversedIf
+import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.Tally
 import com.illiouchine.jm.ui.theme.Theme
 import ir.ehsannarmani.compose_charts.ColumnChart
+import ir.ehsannarmani.compose_charts.extensions.format
 import ir.ehsannarmani.compose_charts.models.BarProperties
 import ir.ehsannarmani.compose_charts.models.Bars
 import ir.ehsannarmani.compose_charts.models.DividerProperties
@@ -82,10 +84,13 @@ fun OpinionProfile(
         ),
         indicatorProperties = HorizontalIndicatorProperties(
             textStyle = TextStyle.Default.copy(
-                fontSize = 10.sp,
+                fontSize = 12.sp,
                 textAlign = TextAlign.End,
                 color = Theme.colorScheme.onBackground,
             ),
+            contentBuilder = {
+                it.smartFormat()
+            },
         ),
         dividerProperties = DividerProperties(
             enabled = false,

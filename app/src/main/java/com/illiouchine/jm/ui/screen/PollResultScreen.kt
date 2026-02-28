@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.InMemoryPollDataSource
+import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.ProportionalAlgorithms
 import com.illiouchine.jm.ui.composable.BallotCountRow
@@ -209,8 +210,7 @@ fun ResultScreen(
                             if (proportionalAlgorithm != ProportionalAlgorithms.NONE) {
                                 val shownProportions = state.proportions[proportionalAlgorithm]
                                 if (shownProportions != null) {
-                                    proportionAsText = "   " + formatAmount(
-                                        amount = 100 * shownProportions[proposalResult.index],
+                                    proportionAsText = "   " + (100 * shownProportions[proposalResult.index]).smartFormat(
                                         maxDecimals = 3,
                                     ) + "%"
                                 }
@@ -378,16 +378,6 @@ fun ResultScreen(
     }
 }
 
-fun formatAmount(amount: Double, maxDecimals: Int = 2, locale: Locale = Locale.FRANCE): String {
-    var decimals = 0
-    while (
-        decimals < maxDecimals &&
-        floor(amount * 10.0.pow(decimals)) != amount * 10.0.pow(decimals)
-    ) {
-        decimals += 1
-    }
-    return String.format(locale, "%.${decimals}f", amount)
-}
 
 // To correctly preview this, you need to Start Interactive Mode.
 // This is a hidden cost of animating the apparition of the merit profiles.
