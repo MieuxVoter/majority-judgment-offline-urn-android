@@ -25,7 +25,7 @@ import ir.ehsannarmani.compose_charts.models.LabelProperties
 fun NuanceProfile(
     modifier: Modifier = Modifier,
     poll: Poll,
-    lessToMore: Boolean = true,
+    moreNuanceToLessNuance: Boolean = false,
 ) {
     val textColor = Theme.colorScheme.onBackground
     val barData = remember (poll, poll.ballots.size) {
@@ -46,7 +46,7 @@ fun NuanceProfile(
                     ),
                 ),
             )
-        }.reversedIf(!lessToMore)
+        }.reversedIf(moreNuanceToLessNuance)
     }
 
     ColumnChart(
@@ -90,6 +90,7 @@ fun NuanceProfile(
                 enabled = false,
             ),
         ),
+        // This appears to be glitchy (color dot top left?), let's hide it altogether.
         labelHelperProperties = LabelHelperProperties(
             enabled = false,
         ),

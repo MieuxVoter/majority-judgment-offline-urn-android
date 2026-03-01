@@ -18,7 +18,6 @@ import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.Tally
 import com.illiouchine.jm.ui.theme.Theme
 import ir.ehsannarmani.compose_charts.ColumnChart
-import ir.ehsannarmani.compose_charts.extensions.format
 import ir.ehsannarmani.compose_charts.models.BarProperties
 import ir.ehsannarmani.compose_charts.models.Bars
 import ir.ehsannarmani.compose_charts.models.DividerProperties
@@ -42,11 +41,11 @@ fun OpinionProfile(
     modifier: Modifier = Modifier,
     poll: Poll,
     tally: Tally,
-    greenToRed: Boolean = true,
+    highestGradeToLowestGrade: Boolean = false,
 ) {
     val context = LocalContext.current
-    val barData = remember (poll, poll.ballots.size) {
-        // Cumulative (without strata because the lib does not support it out of the box)
+    val barData = remember (poll, poll.ballots.size,highestGradeToLowestGrade) {
+        // Cumulative (without strata because the chart lib does not support it out of the box)
         poll.pollConfig.grading.grades.mapIndexed { gradeIndex, grade ->
             @SuppressLint("LocalContextGetResourceValueCall") // how else?
             Bars(
@@ -60,7 +59,7 @@ fun OpinionProfile(
                     ),
                 ),
             )
-        }.reversedIf(greenToRed)
+        }.reversedIf(highestGradeToLowestGrade)
     }
 
     ColumnChart(

@@ -73,11 +73,8 @@ import com.illiouchine.jm.ui.utils.smoothStep
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import java.math.BigInteger
-import java.util.Locale
-import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.math.pow
 
 @Composable
 fun ResultScreen(
@@ -92,6 +89,9 @@ fun ResultScreen(
     val result = state.result!!
     val tally = state.tally!!
     val grading = poll.pollConfig.grading
+
+    // TODO: fetch this from settings
+    val highestGradeToLowestGrade = true;
 
     val context = LocalContext.current
     val amountOfProposals = result.proposalResultsRanked.size
@@ -232,6 +232,7 @@ fun ResultScreen(
                                     group.participant == proposalDisplayIndex
                                 }.toImmutableList(),
                                 showDecisiveGroups = isAnyProfileSelected,
+                                greenToRed = highestGradeToLowestGrade,
                             )
                         }
 
@@ -338,34 +339,38 @@ fun ResultScreen(
 
             Spacer(modifier = Modifier.padding(vertical = Theme.spacing.medium))
 
-            Text("Nuance Profile")
+            Text(stringResource(R.string.nuance_profile))
 
             Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
 
             NuanceProfile(
-                modifier = Modifier.size(600.dp, 280.dp).fillMaxWidth(),
+                modifier = Modifier
+                    .size(600.dp, 280.dp)
+                    .fillMaxWidth(),
                 poll = poll,
-                lessToMore = false,
+                moreNuanceToLessNuance = highestGradeToLowestGrade,
             )
             PlotTitle(
                 modifier = Modifier.padding(top=Theme.spacing.tiny),
-                text = "Amount of ballots per amount of different grades used in each ballot.",
+                text = stringResource(R.string.plot_title_nuance_profile),
             )
 
             Spacer(modifier = Modifier.padding(vertical = Theme.spacing.medium))
 
-            Text("Opinion Profile")
+            Text(stringResource(R.string.opinion_profile))
 
             Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
 
             OpinionProfile(
-                modifier = Modifier.size(600.dp, 280.dp).fillMaxWidth(),
+                modifier = Modifier
+                    .size(600.dp, 280.dp)
+                    .fillMaxWidth(),
                 poll = poll,
                 tally = tally,
+                highestGradeToLowestGrade = highestGradeToLowestGrade,
             )
             PlotTitle(
-                //modifier = Modifier.padding(top=Theme.spacing.tiny),
-                text = "Total amount of judgments cast per grade.",
+                text = stringResource(R.string.plot_title_opinion_profile),
             )
 
             Spacer(modifier = Modifier.padding(Theme.spacing.medium))

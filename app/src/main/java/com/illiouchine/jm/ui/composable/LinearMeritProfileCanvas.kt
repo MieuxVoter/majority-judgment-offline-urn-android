@@ -48,6 +48,7 @@ fun LinearMeritProfileCanvas(
     grading: Grading,
     decisiveGroups: ImmutableList<ParticipantGroupAnalysis>,
     showDecisiveGroups: Boolean = false,
+    greenToRed: Boolean = false,
 ) {
     val textMeasurer = rememberTextMeasurer()
     val contrastedColor = if (isSystemInDarkTheme()) Color.White else Color.Black
@@ -145,7 +146,6 @@ fun LinearMeritProfileCanvas(
     Canvas(
         modifier = modifier,
     ) {
-        val greenToRed = true // hoist this to Composable params and then settings ?
         val proposalTally = tally.proposalsTallies[proposalResult.index]
         val middleX = size.width * 0.5f
         val amountOfGrades = grading.getAmountOfGrades()
