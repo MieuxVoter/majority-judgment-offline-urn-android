@@ -39,7 +39,7 @@ import com.illiouchine.jm.ui.composable.SubjectSelectionRow
 import com.illiouchine.jm.ui.composable.ThemedHorizontalDivider
 import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
 import com.illiouchine.jm.ui.navigator.Screens
-import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
+import com.illiouchine.jm.ui.preview.PreviewDataBuilder
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing

@@ -40,7 +40,7 @@ import com.illiouchine.jm.ui.composable.GradeSelectionList
 import com.illiouchine.jm.ui.composable.JudgmentBalls
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
-import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
+import com.illiouchine.jm.ui.preview.PreviewDataBuilder
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing

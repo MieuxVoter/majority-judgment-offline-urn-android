@@ -22,7 +22,7 @@ import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 
 @Composable
-fun ViewPager(
+fun DotsPager(
     modifier: Modifier = Modifier,
     pageSize: Int = 3,
     currentPage: Int = 0,
@@ -60,6 +60,6 @@ fun ViewPager(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewViewPager() {
-    JmTheme { ViewPager(pageSize = 4, currentPage = 2) }
+fun PreviewDotsPager() {
+    JmTheme { DotsPager(pageSize = 4, currentPage = 2) }
 }

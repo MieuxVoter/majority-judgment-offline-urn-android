@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -49,17 +50,22 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.InMemoryPollDataSource
+import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.ProportionalAlgorithms
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
-import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
+import com.illiouchine.jm.ui.composable.plot.NuanceProfile
+import com.illiouchine.jm.ui.composable.plot.OpinionProfile
+import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
+import com.illiouchine.jm.ui.preview.PreviewDataBuilder
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -67,11 +73,8 @@ import com.illiouchine.jm.ui.utils.smoothStep
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import java.math.BigInteger
-import java.util.Locale
-import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.math.pow
 
 @Composable
 fun ResultScreen(
@@ -86,6 +89,9 @@ fun ResultScreen(
     val result = state.result!!
     val tally = state.tally!!
     val grading = poll.pollConfig.grading
+
+    // TODO: fetch this from settings
+    val highestGradeToLowestGrade = true;
 
     val context = LocalContext.current
     val amountOfProposals = result.proposalResultsRanked.size
@@ -204,8 +210,7 @@ fun ResultScreen(
                             if (proportionalAlgorithm != ProportionalAlgorithms.NONE) {
                                 val shownProportions = state.proportions[proportionalAlgorithm]
                                 if (shownProportions != null) {
-                                    proportionAsText = "   " + formatAmount(
-                                        amount = 100 * shownProportions[proposalResult.index],
+                                    proportionAsText = "   " + (100 * shownProportions[proposalResult.index]).smartFormat(
                                         maxDecimals = 3,
                                     ) + "%"
                                 }
@@ -227,6 +232,7 @@ fun ResultScreen(
                                     group.participant == proposalDisplayIndex
                                 }.toImmutableList(),
                                 showDecisiveGroups = isAnyProfileSelected,
+                                greenToRed = highestGradeToLowestGrade,
                             )
                         }
 
@@ -328,7 +334,46 @@ fun ResultScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.padding(Theme.spacing.small))
+//            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.medium))
+//            Text("Proportionality")
+
+            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.medium))
+
+            Text(stringResource(R.string.nuance_profile))
+
+            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
+
+            NuanceProfile(
+                modifier = Modifier
+                    .size(600.dp, 280.dp)
+                    .fillMaxWidth(),
+                poll = poll,
+                moreNuanceToLessNuance = highestGradeToLowestGrade,
+            )
+            PlotTitle(
+                modifier = Modifier.padding(top=Theme.spacing.tiny),
+                text = stringResource(R.string.plot_title_nuance_profile),
+            )
+
+            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.medium))
+
+            Text(stringResource(R.string.opinion_profile))
+
+            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
+
+            OpinionProfile(
+                modifier = Modifier
+                    .size(600.dp, 280.dp)
+                    .fillMaxWidth(),
+                poll = poll,
+                tally = tally,
+                highestGradeToLowestGrade = highestGradeToLowestGrade,
+            )
+            PlotTitle(
+                text = stringResource(R.string.plot_title_opinion_profile),
+            )
+
+            Spacer(modifier = Modifier.padding(Theme.spacing.medium))
 
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -338,19 +383,9 @@ fun ResultScreen(
     }
 }
 
-fun formatAmount(amount: Double, maxDecimals: Int = 2, locale: Locale = Locale.FRANCE): String {
-    var decimals = 0
-    while (
-        decimals < maxDecimals &&
-        floor(amount * 10.0.pow(decimals)) != amount * 10.0.pow(decimals)
-    ) {
-        decimals += 1
-    }
-    return String.format(locale, "%.${decimals}f", amount)
-}
 
 // To correctly preview this, you need to Start Interactive Mode.
-// This is the cost of animating the apparition of the merit profiles.
+// This is a hidden cost of animating the apparition of the merit profiles.
 @Preview(
     name = "Phone (Portrait)",
     showSystemUi = true,
