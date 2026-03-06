@@ -1,7 +1,6 @@
 package com.illiouchine.jm.previewdatabuilder
 
-import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder
-import com.illiouchine.jm.ui.previewdatabuilder.PreviewDataBuilder.judgments
+import com.illiouchine.jm.ui.preview.PreviewDataBuilder
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

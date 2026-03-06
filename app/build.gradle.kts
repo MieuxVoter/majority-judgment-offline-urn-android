@@ -67,7 +67,7 @@ android {
 
     // We find that there is a DependencyInfoBlock in our APK. It's a Signing block added by AGP
     // and encrypted with the Google public key so it can't be read by anyone else but Google.
-    // We need to remove it before we publish to F-Droid, as it's a security hole.
+    // We need to remove it before we publish to F-Droid, as this block is a security hole.
     // https://gitlab.com/fdroid/fdroiddata/-/merge_requests/19981
     dependenciesInfo {
         // Enables/Disables dependency metadata when building APKs.
@@ -132,6 +132,10 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+
+    // Plotting
+    //implementation(libs.kandy.lets.plot) // not using kandy for now as it produces raster (+svg)
+    implementation (libs.compose.charts)
 
     // Testing — Development only
     testImplementation(libs.junit)

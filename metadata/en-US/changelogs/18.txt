@@ -1,2 +1,4 @@
 * Allow polls with a single proposal (preferendums)
-* Fix a screen flicker on navigation (again)
+* Fix a screen flicker on navigation in dark mode
+* Add an opinion profile
+* Add a nuance profile
