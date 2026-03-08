@@ -16,7 +16,7 @@ import com.illiouchine.jm.extensions.reversedIf
 import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.Tally
-import com.illiouchine.jm.ui.composable.plot.utils.AdaptLineCountForBars
+import com.illiouchine.jm.ui.composable.plot.utils.favorIntLineCountForBars
 import com.illiouchine.jm.ui.theme.Theme
 import ir.ehsannarmani.compose_charts.ColumnChart
 import ir.ehsannarmani.compose_charts.models.BarProperties
@@ -63,7 +63,7 @@ fun OpinionProfile(
             )
         }.reversedIf(highestGradeToLowestGrade)
     }
-    val horizontalLinesCount = AdaptLineCountForBars(barData)
+    val horizontalLinesCount = favorIntLineCountForBars(barData)
 
     ColumnChart(
         modifier = modifier,

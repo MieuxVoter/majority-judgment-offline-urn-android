@@ -4,8 +4,11 @@ import ir.ehsannarmani.compose_charts.models.Bars
 import java.util.stream.IntStream.range
 
 
-fun AdaptLineCount(maxValue: Int, minValue: Int = 0, maxLineCount: Int = 11): Int {
+fun favorIntLineCount(maxValue: Int, minValue: Int = 0, maxLineCount: Int = 11): Int {
     val rangeValue = maxValue - minValue
+    if (rangeValue < 2) {
+        return 2
+    }
     for (n in range(2, maxLineCount).toArray().reversed()) {
         if (rangeValue % n == 0) {
             return n + 1
@@ -15,7 +18,8 @@ fun AdaptLineCount(maxValue: Int, minValue: Int = 0, maxLineCount: Int = 11): In
     return 5 // the default value in compose charts is 5
 }
 
-fun AdaptLineCountForBars(bars: List<Bars>, maxLineCount: Int = 11): Int {
+
+fun favorIntLineCountForBars(bars: List<Bars>, maxLineCount: Int = 11): Int {
     var maxValue = 0
     bars.forEach {
         it.values.forEach {
@@ -24,7 +28,8 @@ fun AdaptLineCountForBars(bars: List<Bars>, maxLineCount: Int = 11): Int {
             }
         }
     }
-    return AdaptLineCount(
+
+    return favorIntLineCount(
         maxValue = maxValue,
         minValue = 0,
         maxLineCount = maxLineCount,
