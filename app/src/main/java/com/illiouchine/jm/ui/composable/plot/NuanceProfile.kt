@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.extensions.reversedIf
 import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.ui.composable.plot.utils.AdaptLineCountForBars
 import com.illiouchine.jm.ui.theme.Theme
 import ir.ehsannarmani.compose_charts.ColumnChart
 import ir.ehsannarmani.compose_charts.models.BarProperties
@@ -18,6 +19,7 @@ import ir.ehsannarmani.compose_charts.models.Bars
 import ir.ehsannarmani.compose_charts.models.DividerProperties
 import ir.ehsannarmani.compose_charts.models.GridProperties
 import ir.ehsannarmani.compose_charts.models.HorizontalIndicatorProperties
+import ir.ehsannarmani.compose_charts.models.IndicatorCount
 import ir.ehsannarmani.compose_charts.models.LabelHelperProperties
 import ir.ehsannarmani.compose_charts.models.LabelProperties
 
@@ -48,6 +50,7 @@ fun NuanceProfile(
             )
         }.reversedIf(moreNuanceToLessNuance)
     }
+    val horizontalLinesCount = AdaptLineCountForBars(barData)
 
     ColumnChart(
         modifier = modifier,
@@ -77,6 +80,7 @@ fun NuanceProfile(
             contentBuilder = {
                 it.smartFormat()
             },
+            count = IndicatorCount.CountBased(horizontalLinesCount),
         ),
         dividerProperties = DividerProperties(
             enabled = false,
@@ -85,6 +89,7 @@ fun NuanceProfile(
             enabled = true,
             xAxisProperties = GridProperties.AxisProperties(
                 enabled = true,
+                lineCount = horizontalLinesCount,
             ),
             yAxisProperties = GridProperties.AxisProperties(
                 enabled = false,

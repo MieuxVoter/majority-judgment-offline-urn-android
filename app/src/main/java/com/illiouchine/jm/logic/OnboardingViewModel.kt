@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
-class OnBoardingViewModel(
+class OnboardingViewModel(
     private val prefsHelper: SharedPrefsHelper,
 ) : ViewModel() {
 

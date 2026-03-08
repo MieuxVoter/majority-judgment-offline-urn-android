@@ -17,7 +17,7 @@ import com.illiouchine.jm.data.room.entity.ProposalEntity
         BallotEntity::class,
         JudgmentEntity::class,
     ],
-    version = 2,
+    version = 3,
     exportSchema = true,
     autoMigrations = [
         AutoMigration(
@@ -25,7 +25,12 @@ import com.illiouchine.jm.data.room.entity.ProposalEntity
             to = 2,
             spec = PollDataBase.AutoMigration1To2::class,
         ),
-    ]
+        AutoMigration(
+            from = 2,
+            to = 3,
+            spec = PollDataBase.AutoMigration2To3::class,
+        ),
+    ],
 )
 abstract class PollDataBase : RoomDatabase() {
     @RenameColumn.Entries(
@@ -37,5 +42,16 @@ abstract class PollDataBase : RoomDatabase() {
     )
     class AutoMigration1To2 : AutoMigrationSpec
 
+    // Add Uuids to Polls and Ballots
+    class AutoMigration2To3 : AutoMigrationSpec
+
     abstract fun pollDao(): PollDao
 }
+
+// Next migration, not an AutoMigration this time
+//val MIGRATION_3_4 = object : Migration(3, 4) {
+//    override fun migrate(db: SupportSQLiteDatabase) {
+//        // Fill up the NULL uuids with random values
+//        db.execSQL("UPDATE …")
+//    }
+//}
