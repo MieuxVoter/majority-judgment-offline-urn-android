@@ -51,7 +51,7 @@ class PollSetupViewModel(
             when (cloneablePollId) {
                 0 -> {
                     _pollSetupViewState.update {
-                        var newConfig = PollConfig(grading = sharedPrefs.getDefaultGrading())
+                        var newConfig = makeDefaultPollConfig()
                         if ("" != pollTemplateSlug) {
                             newConfig = pollTemplateDataSource.getBySlug(
                                 slug = pollTemplateSlug,
@@ -65,9 +65,8 @@ class PollSetupViewModel(
                     /* Do nothing : Reload from configuration change */
                 }
                 else -> {
-                    val poll = pollDataSource.getPollById(pollId = cloneablePollId)
-                    val initialPollConfig =
-                        poll?.pollConfig ?: PollConfig(grading = sharedPrefs.getDefaultGrading())
+                    val cloneablePoll = pollDataSource.getPollById(pollId = cloneablePollId)
+                    val initialPollConfig = cloneablePoll?.pollConfig ?: makeDefaultPollConfig()
 
                     _pollSetupViewState.update {
                         it.copy(config = initialPollConfig)
@@ -76,6 +75,10 @@ class PollSetupViewModel(
             }
             lastId = cloneablePollId
         }
+    }
+
+    fun makeDefaultPollConfig(): PollConfig {
+        return PollConfig(grading = sharedPrefs.getDefaultGrading())
     }
 
     fun addSubject(@Suppress("unused") context: Context, subject: String) {

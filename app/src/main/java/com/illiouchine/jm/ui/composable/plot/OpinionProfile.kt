@@ -16,6 +16,7 @@ import com.illiouchine.jm.extensions.reversedIf
 import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.Tally
+import com.illiouchine.jm.ui.composable.plot.utils.favorIntLineCountForBars
 import com.illiouchine.jm.ui.theme.Theme
 import ir.ehsannarmani.compose_charts.ColumnChart
 import ir.ehsannarmani.compose_charts.models.BarProperties
@@ -23,6 +24,7 @@ import ir.ehsannarmani.compose_charts.models.Bars
 import ir.ehsannarmani.compose_charts.models.DividerProperties
 import ir.ehsannarmani.compose_charts.models.GridProperties
 import ir.ehsannarmani.compose_charts.models.HorizontalIndicatorProperties
+import ir.ehsannarmani.compose_charts.models.IndicatorCount
 import ir.ehsannarmani.compose_charts.models.LabelHelperProperties
 import ir.ehsannarmani.compose_charts.models.LabelProperties
 
@@ -61,6 +63,7 @@ fun OpinionProfile(
             )
         }.reversedIf(highestGradeToLowestGrade)
     }
+    val horizontalLinesCount = favorIntLineCountForBars(barData)
 
     ColumnChart(
         modifier = modifier,
@@ -90,6 +93,7 @@ fun OpinionProfile(
             contentBuilder = {
                 it.smartFormat()
             },
+            count = IndicatorCount.CountBased(horizontalLinesCount),
         ),
         dividerProperties = DividerProperties(
             enabled = false,
@@ -98,6 +102,7 @@ fun OpinionProfile(
             enabled = true,
             xAxisProperties = GridProperties.AxisProperties(
                 enabled = true,
+                lineCount = horizontalLinesCount,
             ),
             yAxisProperties = GridProperties.AxisProperties(
                 enabled = false,

@@ -25,7 +25,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.illiouchine.jm.logic.HomeViewModel
-import com.illiouchine.jm.logic.OnBoardingViewModel
+import com.illiouchine.jm.logic.OnboardingViewModel
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.logic.PollVotingViewModel
@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
             val topLevelBackStack = retain { TopLevelBackStack(Screens.Home) }
 
             JmTheme {
-                Surface {  // Using a Surface here prevents a screen flicker when navigating.
+                Surface {  // This Surface prevents a screen flicker when navigating in dark mode.
                     NavDisplay(
                         backStack = topLevelBackStack.currentBackStack,
                         onBack = { topLevelBackStack.removeLast() },
@@ -105,14 +105,14 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             entry<Screens.Onboarding> {
-                                val onBoardingViewModel: OnBoardingViewModel by viewModel()
+                                val onBoardingViewModel: OnboardingViewModel by viewModel()
                                 LaunchedEffect(Unit) {
                                     onBoardingViewModel.navEvents.collect { event ->
                                         topLevelBackStack.handle(event)
                                     }
                                 }
                                 OnBoardingScreen(
-                                    onFinish = onBoardingViewModel::finish
+                                    onFinish = onBoardingViewModel::finish,
                                 )
                             }
                             entry<Screens.PollSetup> { key ->

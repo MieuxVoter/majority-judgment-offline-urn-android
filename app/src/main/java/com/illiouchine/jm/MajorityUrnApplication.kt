@@ -10,7 +10,7 @@ import com.illiouchine.jm.data.SqlitePollDataSource
 import com.illiouchine.jm.data.room.PollDao
 import com.illiouchine.jm.data.room.PollDataBase
 import com.illiouchine.jm.logic.HomeViewModel
-import com.illiouchine.jm.logic.OnBoardingViewModel
+import com.illiouchine.jm.logic.OnboardingViewModel
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.logic.PollVotingViewModel
@@ -86,7 +86,7 @@ val module = module {
         )
     }
     viewModel {
-        OnBoardingViewModel(
+        OnboardingViewModel(
             prefsHelper = get(),
         )
     }
