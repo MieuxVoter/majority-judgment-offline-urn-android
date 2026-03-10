@@ -137,6 +137,9 @@ dependencies {
     //implementation(libs.kandy.lets.plot) // not using kandy for now as it produces raster (+svg)
     implementation (libs.compose.charts)
 
+    // Faking — Development only
+    implementation(libs.kotlin.faker)
+
     // Testing — Development only
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

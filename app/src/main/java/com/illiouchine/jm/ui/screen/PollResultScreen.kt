@@ -64,6 +64,7 @@ import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.composable.plot.NuanceProfile
 import com.illiouchine.jm.ui.composable.plot.OpinionProfile
+import com.illiouchine.jm.ui.composable.plot.ProximityProfile
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
 import com.illiouchine.jm.ui.preview.PreviewDataBuilder
 import com.illiouchine.jm.ui.theme.JmTheme
@@ -340,9 +341,7 @@ fun ResultScreen(
             Spacer(modifier = Modifier.padding(vertical = Theme.spacing.medium))
 
             Text(stringResource(R.string.nuance_profile))
-
             Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
-
             NuanceProfile(
                 modifier = Modifier
                     .size(600.dp, 280.dp)
@@ -354,13 +353,10 @@ fun ResultScreen(
                 modifier = Modifier.padding(top=Theme.spacing.tiny),
                 text = stringResource(R.string.plot_title_nuance_profile),
             )
-
             Spacer(modifier = Modifier.padding(vertical = Theme.spacing.medium))
 
             Text(stringResource(R.string.opinion_profile))
-
             Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
-
             OpinionProfile(
                 modifier = Modifier
                     .size(600.dp, 280.dp)
@@ -372,7 +368,19 @@ fun ResultScreen(
             PlotTitle(
                 text = stringResource(R.string.plot_title_opinion_profile),
             )
+            Spacer(modifier = Modifier.padding(Theme.spacing.medium))
 
+            Text("Proximity Profile")
+            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
+            ProximityProfile(
+                modifier = Modifier
+                    .size(600.dp, 280.dp)
+                    .fillMaxWidth(),
+                poll = poll,
+            )
+            PlotTitle(
+                text = "Proximity between Proposals\n(one minus the normalized standard deviation)",
+            )
             Spacer(modifier = Modifier.padding(Theme.spacing.medium))
 
             Button(
