@@ -24,6 +24,7 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import ir.ehsannarmani.compose_charts.ColumnChart
+import ir.ehsannarmani.compose_charts.models.AnimationMode
 import ir.ehsannarmani.compose_charts.models.BarProperties
 import ir.ehsannarmani.compose_charts.models.Bars
 import ir.ehsannarmani.compose_charts.models.DividerProperties
@@ -36,12 +37,13 @@ import kotlin.math.sqrt
 
 // Shows how close (in the collective hearts of the judges) pairs of proposals are.
 // A proximity of 1 means that the two proposals received exactly the same mentions in each ballot.
-// A proximity of 0 means that the two proposals received extreme and diametrally opposite mentions in each ballot.
+// A proximity of 0 means that the two proposals received extreme and diametrically opposite mentions in each ballot.
 // Basically:    proximity = 1.0 - standardDeviation / maximumStandardDeviation
 @Composable
 fun ProximityProfile(
     modifier: Modifier = Modifier,
     poll: Poll,
+    animated: Boolean = true,
 ) {
     val textColor = Theme.colorScheme.onBackground
     val primaryColor = Theme.colorScheme.primary
@@ -138,13 +140,18 @@ fun ProximityProfile(
         labelHelperProperties = LabelHelperProperties(
             enabled = false,
         ),
+        animationMode = if (animated) {
+            AnimationMode.Together { it * 240L }
+        } else {
+            AnimationMode.None
+        },
     )
 }
 
 
 @Preview(
     name = "Phone (Portrait)",
-    showSystemUi = true,
+    showSystemUi = false,
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     fontScale = 1.0f,
 )
@@ -160,6 +167,7 @@ fun PreviewProximityProfile(modifier: Modifier = Modifier) {
                 ProximityProfile(
                     modifier = Modifier.height(300.dp),
                     poll = poll,
+                    animated = false,
                 )
                 PlotTitle("Plot Legend")
                 Text("Some other text below, no padding applied.")
