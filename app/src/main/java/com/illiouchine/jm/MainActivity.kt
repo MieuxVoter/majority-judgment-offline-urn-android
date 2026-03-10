@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
             val topLevelBackStack = retain { TopLevelBackStack(Screens.Home) }
 
             JmTheme {
-                Surface {  // Using a Surface here prevents a screen flicker when navigating.
+                Surface {  // This Surface prevents a screen flicker when navigating in dark mode.
                     NavDisplay(
                         backStack = topLevelBackStack.currentBackStack,
                         onBack = { topLevelBackStack.removeLast() },
@@ -112,7 +112,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                                 OnBoardingScreen(
-                                    onFinish = onBoardingViewModel::finish
+                                    onFinish = onBoardingViewModel::finish,
                                 )
                             }
                             entry<Screens.PollSetup> { key ->
