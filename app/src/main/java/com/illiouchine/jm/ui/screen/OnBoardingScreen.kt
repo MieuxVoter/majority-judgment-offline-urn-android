@@ -19,6 +19,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -57,7 +58,7 @@ fun OnBoardingScreen(
     }
 
     Scaffold(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .testTag("onboarding_screen"),
     ) { innerPadding ->
@@ -72,7 +73,7 @@ fun OnBoardingScreen(
         }
 
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .padding(innerPadding)
                 .padding(Theme.spacing.medium),
         ) {
@@ -87,7 +88,7 @@ fun OnBoardingScreen(
             ) { page ->
                 with(onBoardingPages[page]) {
                     OnBoardingPage(
-                        modifier = Modifier,
+                        modifier = Modifier.fillMaxWidth(),
                         pagerState = pagerState,
                         pageIndex = page,
                         onBoardingPage = this,
@@ -104,8 +105,8 @@ fun OnBoardingScreen(
 }
 
 data class OnBoardingPage(
-    @DrawableRes val image: Int,
-    @StringRes val text: Int,
+    @get:DrawableRes val image: Int,
+    @get:StringRes val text: Int,
 )
 
 @Stable
@@ -145,7 +146,7 @@ fun OnBoardingPage(
         },
     ) {
         FlowColumn(
-            modifier = modifier
+            modifier = Modifier
                 .align(Alignment.Center)
                 .padding(horizontal = Theme.spacing.medium + Theme.spacing.small),
         ) {
@@ -250,11 +251,18 @@ fun PreviewOnBoardingLastPageFr(modifier: Modifier = Modifier) {
     uiMode = UI_MODE_NIGHT_YES,
     device = "spec:width=411dp,height=891dp,orientation=landscape",
 )
+@Preview(
+    showSystemUi = true,
+    uiMode = UI_MODE_NIGHT_YES,
+    device = "spec:width=720dp,height=1280dp,orientation=landscape",
+)
 @Composable
 fun PreviewOnBoardingLandscape(modifier: Modifier = Modifier) {
     JmTheme {
-        OnBoardingScreen(
-            modifier = modifier,
-        )
+        Surface {
+            OnBoardingScreen(
+                modifier = modifier,
+            )
+        }
     }
 }
