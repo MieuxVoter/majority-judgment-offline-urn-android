@@ -19,6 +19,7 @@ fun favorIntLineCount(maxValue: Int, minValue: Int = 0, maxLineCount: Int = 11):
 }
 
 
+
 fun favorIntLineCountForBars(bars: List<Bars>, maxLineCount: Int = 11): Int {
     var maxValue = 0
     bars.forEach {

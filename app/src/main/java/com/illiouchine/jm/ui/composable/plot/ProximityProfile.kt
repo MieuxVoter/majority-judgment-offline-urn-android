@@ -2,9 +2,9 @@ package com.illiouchine.jm.ui.composable.plot
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
+import com.illiouchine.jm.ui.composable.plot.utils.truncate
 import com.illiouchine.jm.ui.preview.PreviewDataBuilder
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
@@ -77,7 +78,10 @@ fun ProximityProfile(
 
         poll.pollConfig.proposals.mapIndexed { proposalIndex, proposal ->
             Bars(
-                label = proposal,
+                label = proposal.replace("\n", "").truncate(
+                    maxLength = 15,
+                    ellipsis = "…",
+                ),
                 values = proximities[proposalIndex].mapIndexed { otherProposalIndex, proximity ->
                     Bars.Data(
                         value = proximity,
@@ -94,7 +98,7 @@ fun ProximityProfile(
     val horizontalLinesCount = 5
 
     ColumnChart(
-        modifier = modifier.padding(bottom = Theme.spacing.large),
+        modifier = modifier, //.padding(bottom = Theme.spacing.large), best leave padding alone, no?
         data = barData,
         barProperties = BarProperties(
             thickness = 4.dp,
@@ -106,11 +110,27 @@ fun ProximityProfile(
         ),
         labelProperties = LabelProperties(
             enabled = true,
+            padding = Theme.spacing.extraSmall,
             textStyle = TextStyle.Default.copy(
-                fontSize = 10.sp,
+                fontSize = 11.sp,
                 textAlign = TextAlign.End,
                 color = textColor,
             ),
+            // Wip: We can customize the label Composable but … it's delicate, fastidious and will require a TextMeasurer
+            // See https://github.com/ehsannarmani/ComposeCharts/blob/master/compose-charts/src/commonMain/kotlin/ir/ehsannarmani/compose_charts/utils/Labels.kt#L83
+//            builder = { modifier, label, shouldRotate, _ ->
+//                BasicText(
+//                    modifier = modifier.background(color = Color.Magenta),
+//                    text = label,
+//                    style = TextStyle.Default.copy(
+//                        fontSize = 11.sp,
+//                        textAlign = if (shouldRotate) TextAlign.End else TextAlign.Center,
+//                        color = textColor,
+//                    ),
+//                    overflow = if (shouldRotate) TextOverflow.Visible else TextOverflow.Clip,
+//                    softWrap = !shouldRotate,
+//                )
+//            },
         ),
         indicatorProperties = HorizontalIndicatorProperties(
             textStyle = TextStyle.Default.copy(
@@ -146,6 +166,7 @@ fun ProximityProfile(
             AnimationMode.None
         },
     )
+    Spacer(modifier = Modifier.height(56.dp))
 }
 
 
@@ -163,14 +184,14 @@ fun PreviewProximityProfile(modifier: Modifier = Modifier) {
     JmTheme {
         Surface(Modifier.fillMaxSize()) {
             Column(modifier) {
-                Text("Proximity Profile of ${poll.pollConfig.subject}")
+                Text("\uD83E\uDD9D ${poll.pollConfig.subject}")
+                PlotTitle("Proximity Profile")
                 ProximityProfile(
                     modifier = Modifier.height(300.dp),
                     poll = poll,
                     animated = false,
                 )
-                PlotTitle("Plot Legend")
-                Text("Some other text below, no padding applied.")
+                Text("Some other probably somewhat related text below, no padding applied.")
             }
         }
     }
