@@ -1,24 +1,21 @@
-package com.illiouchine.jm.previewdatabuilder
+package com.illiouchine.jm.ui.preview
 
-import com.illiouchine.jm.ui.preview.PreviewDataBuilder
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class PreviewDataBuilderTest {
+class PreviewDataFakerTest {
     @Test
-    fun buildJudgment() {
-        // Test judgments size.
+    fun fakeSomeJudgments() {
         (0..10).forEach { i ->
-            val judgments = PreviewDataBuilder.judgments(size = i)
+            val judgments = PreviewDataFaker.judgments(size = i)
             assertEquals(i, judgments.size)
         }
     }
 
     @Test
     fun buildPollConfig() {
-        // Test judgments size.
         (0..10).forEach { i ->
-            val pollConfig = PreviewDataBuilder.pollConfig()
+            val pollConfig = PreviewDataFaker.pollConfig()
             assert(pollConfig.subject.isNotEmpty())
             assert(pollConfig.proposals.isNotEmpty())
         }

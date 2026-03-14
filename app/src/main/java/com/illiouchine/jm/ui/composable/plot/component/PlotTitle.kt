@@ -13,8 +13,8 @@ import com.illiouchine.jm.ui.theme.spacing
 
 @Composable
 fun PlotTitle(
-    modifier: Modifier = Modifier,
     text: String,
+    modifier: Modifier = Modifier,
 ) {
     Text(
         text = text,

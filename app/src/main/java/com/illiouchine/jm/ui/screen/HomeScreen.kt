@@ -42,7 +42,7 @@ import com.illiouchine.jm.ui.composable.PollDeletionConfirmationDialog
 import com.illiouchine.jm.ui.composable.PollSummary
 import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
 import com.illiouchine.jm.ui.navigator.Screens
-import com.illiouchine.jm.ui.preview.PreviewDataBuilder
+import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -214,9 +214,9 @@ fun PreviewHomeScreen(modifier: Modifier = Modifier) {
             modifier = modifier,
             homeViewState = HomeViewModel.HomeViewState(
                 polls = listOf(
-                    PreviewDataBuilder.poll(0, 3),
-                    PreviewDataBuilder.poll(1, 0),
-                    PreviewDataBuilder.poll(1, 2)
+                    PreviewDataFaker.poll(0, 3),
+                    PreviewDataFaker.poll(1, 0),
+                    PreviewDataFaker.poll(1, 2)
                 )
             )
         )

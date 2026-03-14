@@ -29,6 +29,8 @@ import ir.ehsannarmani.compose_charts.models.LabelHelperProperties
 import ir.ehsannarmani.compose_charts.models.LabelProperties
 
 /**
+ * Idea: This should take the form of a merit profile, as it IS one, for the poll itself.
+ *
  * An opinion profile shows how many judgments of each grade were cast in the poll,
  * "tous candidats confondus".
  * This helps getting a sense of the overall feel of the judges for the whole set of candidates.

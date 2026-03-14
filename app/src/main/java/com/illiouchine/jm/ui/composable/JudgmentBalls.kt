@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.preview.PreviewDataBuilder
+import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -87,7 +87,7 @@ private fun PreviewJudgmentBallFull() {
         JudgmentBalls(
             pollConfig = PollConfig(proposals = listOf("a", "b", "c", "d")),
             ballot = Ballot(
-                judgments = PreviewDataBuilder.judgments(size = 4)
+                judgments = PreviewDataFaker.judgments(size = 4)
             )
         )
     }
@@ -100,7 +100,7 @@ private fun PreviewJudgmentBallEmpty() {
         JudgmentBalls(
             pollConfig = PollConfig(proposals = listOf("a", "b", "c", "d")),
             ballot = Ballot(
-                judgments = PreviewDataBuilder.judgments(0)
+                judgments = PreviewDataFaker.judgments(0)
             )
         )
     }
@@ -113,7 +113,7 @@ private fun PreviewJudgmentBallMiddle() {
         JudgmentBalls(
             pollConfig = PollConfig(proposals = listOf("a", "b", "c", "d")),
             ballot = Ballot(
-                judgments = PreviewDataBuilder.judgments(2)
+                judgments = PreviewDataFaker.judgments(2)
             )
         )
     }

@@ -34,7 +34,7 @@ val gradings: List<Grading> = listOf(
 @Serializable
 sealed class Grading(
     val uid: Int, // make sure those are really unique, and DON'T edit them afterwards
-    @StringRes val name: Int,
+    @get:StringRes val name: Int,
     val grades: List<Grade>,
     // This grade and all the grades above it are considered acceptation grades.
     // This is usually the index of the "Passable" grade.
