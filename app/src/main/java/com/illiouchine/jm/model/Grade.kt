@@ -13,7 +13,7 @@ import kotlinx.serialization.encoding.Encoder
 
 @Serializable
 data class Grade(
-    @StringRes val name: Int,
+    @get:StringRes val name: Int,
     @Serializable(with = ColorSerializer::class) val color: Color,
     @Serializable(with = ColorSerializer::class) val textColor: Color
 )

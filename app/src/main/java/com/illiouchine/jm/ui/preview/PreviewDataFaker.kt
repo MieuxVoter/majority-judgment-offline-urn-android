@@ -59,10 +59,10 @@ val subjectsWithProposals: List<Pair<String, List<String>>> = listOf(
     )
 )
 
-val _faker = faker { }
+val faker = faker { }
 
 // TBD: Look into Fakers for Kotlin, and conform
-object PreviewDataBuilder {
+object PreviewDataFaker {
 
     fun judgments(
         size: Int,
@@ -81,24 +81,30 @@ object PreviewDataBuilder {
 
     fun pollConfig(
         index: Int? = null,
+        amountOfProposals: Int = 5,
         grading: Grading = DEFAULT_GRADING_QUALITY_VALUE,
     ): PollConfig {
         // Note: The Elvis operator in Kotlin is actually a nil-coalescing, not a true Elvis
         val currentIndex = index ?: floor(Math.random() * subjectsWithProposals.size).toInt()
         return PollConfig(
             subject = subjectsWithProposals[currentIndex].first,
-            proposals = subjectsWithProposals[currentIndex].second,
+            //proposals = subjectsWithProposals[currentIndex].second,
             //subject = faker.quote.yoda(),
-            //proposals = faker.coffee.blendName(), // not a list yet
+            proposals = 0.rangeUntil(amountOfProposals).map {
+                faker.coffee.blendName()
+            },
             grading = grading,
         )
     }
 
-    fun ballots(size: Int = 3, pollConfig: PollConfig = pollConfig()): ImmutableList<Ballot> {
+    fun ballots(
+        size: Int,
+        pollConfig: PollConfig = pollConfig(),
+    ): ImmutableList<Ballot> {
         val ballots = mutableListOf<Ballot>()
-        0.rangeUntil(size).forEach { i ->
+        0.rangeUntil(size).forEach { _ ->
             val ballot = Ballot(
-                judgments = judgments(pollConfig.proposals.size, pollConfig.grading)
+                judgments = judgments(pollConfig.proposals.size, pollConfig.grading),
             )
             ballots.add(ballot)
         }
@@ -107,14 +113,21 @@ object PreviewDataBuilder {
 
     fun poll(
         id: Int = 0,
-        amountOfBallots: Int = 3,
+        amountOfProposals: Int = 9,
+        amountOfBallots: Int = 5,
         grading: Grading = DEFAULT_GRADING_QUALITY_VALUE,
     ): Poll {
-        val config = pollConfig(grading = grading)
+        val config = pollConfig(
+            grading = grading,
+            amountOfProposals = amountOfProposals,
+        )
         return Poll(
             id = id,
             pollConfig = config,
-            ballots = ballots(amountOfBallots, config)
+            ballots = ballots(
+                size = amountOfBallots,
+                pollConfig = config,
+            )
         )
     }
 }

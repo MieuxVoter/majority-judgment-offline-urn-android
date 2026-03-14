@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.preview.PreviewDataBuilder
+import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -125,7 +125,7 @@ private fun Preview7GradeList() {
     JmTheme {
         Column {
             GradeSelectionList(
-                pollConfig = PreviewDataBuilder.pollConfig(),
+                pollConfig = PreviewDataFaker.pollConfig(),
                 forProposalIndex = 2,
                 onGradeSelected = {}
             )
@@ -139,7 +139,7 @@ private fun Preview5GradeList() {
     JmTheme {
         Column {
             GradeSelectionList(
-                pollConfig = PreviewDataBuilder.pollConfig(grading = Grading.Quality7Grading),
+                pollConfig = PreviewDataFaker.pollConfig(grading = Grading.Quality7Grading),
                 forProposalIndex = 2,
                 onGradeSelected = {}
             )

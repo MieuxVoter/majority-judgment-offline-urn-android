@@ -66,7 +66,7 @@ import com.illiouchine.jm.ui.composable.plot.NuanceProfile
 import com.illiouchine.jm.ui.composable.plot.OpinionProfile
 import com.illiouchine.jm.ui.composable.plot.ProximityProfile
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
-import com.illiouchine.jm.ui.preview.PreviewDataBuilder
+import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -370,18 +370,21 @@ fun ResultScreen(
             )
             Spacer(modifier = Modifier.padding(Theme.spacing.medium))
 
-            Text("Proximity Profile")
-            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
-            ProximityProfile(
-                modifier = Modifier
-                    .size(600.dp, 280.dp)
-                    .fillMaxWidth(),
-                poll = poll,
-            )
-            PlotTitle(
-                text = "Proximity between Proposals\n(one minus the normalized standard deviation)",
-            )
-            Spacer(modifier = Modifier.padding(Theme.spacing.medium))
+            // Rule: hide the proximity profile if there's only one proposal, as it's useless
+            if (poll.pollConfig.proposals.size > 1) {
+                Text("Proximity Profile")
+                Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
+                ProximityProfile(
+                    modifier = Modifier
+                        .size(600.dp, 280.dp)
+                        .fillMaxWidth(),
+                    poll = poll,
+                )
+                PlotTitle(
+                    text = "Proximity between Proposals\n(one minus the normalized standard deviation)",
+                )
+                Spacer(modifier = Modifier.padding(Theme.spacing.medium))
+            }
 
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -415,7 +418,7 @@ fun ResultScreen(
 // @PreviewScreenSizes // my eyes hurt ← no dark mode
 @Composable
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
-    val poll = PreviewDataBuilder.poll()
+    val poll = PreviewDataFaker.poll()
 
     val pollResultViewModel = viewModel {
         PollResultViewModel(
