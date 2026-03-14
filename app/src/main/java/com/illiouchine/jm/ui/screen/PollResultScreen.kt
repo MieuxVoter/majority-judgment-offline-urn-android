@@ -376,9 +376,10 @@ fun ResultScreen(
                 Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
                 ProximityProfile(
                     modifier = Modifier
-                        .size(600.dp, 280.dp)
+                        .height(250.dp)
                         .fillMaxWidth(),
                     poll = poll,
+                    onlyProposalsIndices = result.proposalResultsRanked.map { it.index },
                 )
                 PlotTitle(
                     text = "Proximity between Proposals\n(one minus the normalized standard deviation)",

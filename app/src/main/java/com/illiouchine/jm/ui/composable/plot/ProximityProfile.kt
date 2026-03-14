@@ -62,6 +62,7 @@ fun ProximityProfile(
     val primaryColor = Theme.colorScheme.primary
 
     // What we'd truly want would be the chartWidth inside ColumnChart — see 64.dp hack below
+    // But for that we'd need to open up the lib we're using and tweak its internals?
     var chartSizeInPx by remember { mutableStateOf(IntSize.Zero) }
     // Hack: 64.dp is (a little) more than the size of the Y-axis ticks' labels.
     val chartWidth = with(density) {
@@ -69,6 +70,7 @@ fun ProximityProfile(
     }
 
     var maxAmountOfProposals = with(density) {
+        // in girum imus nocte | et consumimur igni //
         floor(sqrt(chartWidth.toPx() / 8.dp.toPx())).toInt()
     }
 
@@ -101,25 +103,26 @@ fun ProximityProfile(
                     }
                 } else {
                     val stdDeviation = sqrt(
-                        poll.ballots.map { ballot ->
+                        poll.ballots.sumOf { ballot ->
                             val someGradeValue = ballot.gradeOf(someProposalIndex)
                             val otherGradeValue = ballot.gradeOf(otherProposalIndex)
                             (someGradeValue - otherGradeValue) * (someGradeValue - otherGradeValue)
-                        }.reduce { acc, value -> acc + value }.toDouble()
+                        }.toDouble()
                     )
                     1.0 - stdDeviation / maxDeviation
                 }
             }
         }
 
-        proposalsIndices.map { proposalIndex ->
+        proposalsIndices.mapIndexed { index, proposalIndex ->
             val proposal = poll.pollConfig.proposals[proposalIndex]
             Bars(
                 label = proposal.replace("\n", "").truncate(
                     maxLength = 15,
                     ellipsis = "…",
                 ),
-                values = proximities[proposalIndex].mapIndexed { otherProposalIndex, proximity ->
+                values = proposalsIndices.mapIndexed { otherIndex, otherProposalIndex ->
+                    val proximity = proximities[index][otherIndex]
                     Bars.Data(
                         value = proximity,
                         color = if (proposalIndex == otherProposalIndex) {
