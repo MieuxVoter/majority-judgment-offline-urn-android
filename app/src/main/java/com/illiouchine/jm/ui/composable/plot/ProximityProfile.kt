@@ -61,27 +61,24 @@ fun ProximityProfile(
     val textColor = Theme.colorScheme.onBackground
     val primaryColor = Theme.colorScheme.primary
 
-    // What we'd truly want would be the chartWidth inside ColumnChart — see 64.dp hack below
+    // What we'd truly want would be the chartWidth inside ColumnChart — see ~64.dp hack below
     // But for that we'd need to open up the lib we're using and tweak its internals?
     var chartSizeInPx by remember { mutableStateOf(IntSize.Zero) }
-    // Hack: 64.dp is (a little) more than the size of the Y-axis ticks' labels.
+    // Hack: 64.dp is (a big little) more than the size of the Y-axis ticks' labels.
     val chartWidth = with(density) {
         chartSizeInPx.width.toDp() - 64.dp
-    }
-
-    var maxAmountOfProposals = with(density) {
-        // in girum imus nocte | et consumimur igni //
-        floor(sqrt(chartWidth.toPx() / 8.dp.toPx())).toInt()
     }
 
     val allProposalsIndices = 0.rangeUntil(poll.pollConfig.proposals.size).toList()
     val lotsOfProposalsIndices = onlyProposalsIndices ?: allProposalsIndices
 
-    maxAmountOfProposals = min(maxAmountOfProposals, lotsOfProposalsIndices.size)
+    val maxAmountOfProposalsThatFit = with(density) {
+        // in girum imus nocte | et consumimur igni //
+        floor(sqrt(chartWidth.toPx() / 8.dp.toPx())).toInt()
+    }
+    val maxAmountOfProposals = min(maxAmountOfProposalsThatFit, lotsOfProposalsIndices.size)
 
-    val proposalsIndices = lotsOfProposalsIndices.slice(
-        0.rangeUntil(maxAmountOfProposals)
-    )
+    val proposalsIndices = lotsOfProposalsIndices.slice(0..<maxAmountOfProposals)
 
     val barWidth = with(density) {
         val n = proposalsIndices.size

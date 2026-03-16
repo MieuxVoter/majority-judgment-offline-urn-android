@@ -142,7 +142,7 @@ fun LinearMeritProfileCanvas(
         percentageAnimation.animateTo(1f, tween(3000, 150))
     }
 
-    // Draw the linear merit profile of the proposal.
+    // Draw a linear merit profile
     Canvas(
         modifier = modifier,
     ) {
