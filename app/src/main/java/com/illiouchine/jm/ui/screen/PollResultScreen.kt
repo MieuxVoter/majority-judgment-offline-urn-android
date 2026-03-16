@@ -58,6 +58,11 @@ import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.ProportionalAlgorithms
+import com.illiouchine.jm.model.ParticipantGroupAnalysis
+import com.illiouchine.jm.model.ProposalResult
+import com.illiouchine.jm.model.ProposalTally
+import com.illiouchine.jm.model.ProposalTallyAnalysis
+import com.illiouchine.jm.model.Tally
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.MjuSnackbar
@@ -72,6 +77,7 @@ import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import com.illiouchine.jm.ui.utils.smoothStep
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import java.math.BigInteger
 import kotlin.math.max
@@ -357,6 +363,46 @@ fun ResultScreen(
 
             Text(stringResource(R.string.opinion_profile))
             Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
+
+            // FIXME: THIS is what happens when you don't refactor your composables adequately
+            val pollResultAsProposalResult = ProposalResult(
+                index = 0,
+                rank = 1,
+                relativeMerit = 0.5,
+                analysis = ProposalTallyAnalysis(
+                    medianGrade = 0,
+                    totalSize = BigInteger.ONE,
+                )
+            )
+            val pollTallyAsProposalTally = ProposalTally(
+                tally = grading.grades.mapIndexed { gradeIndex, _ ->
+                    tally.proposalsTallies
+                        .map { it.tally[gradeIndex] }
+                        .reduce { acc, bigInteger -> acc.add(bigInteger) }
+                }.toPersistentList(),
+                amountOfJudgments = tally.proposalsTallies
+                    .map {it.amountOfJudgments}
+                    .reduce { acc, bigInteger -> acc.add(bigInteger) },
+            )
+
+            LinearMeritProfileCanvas(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(Theme.spacing.medium + Theme.spacing.small),
+                tally = Tally(
+                    proposalsTallies = listOf(
+                        pollTallyAsProposalTally,
+                    ).toPersistentList(),
+                ),
+                proposalResult = pollResultAsProposalResult,
+                grading = grading,
+                decisiveGroups = emptyList<ParticipantGroupAnalysis>().toImmutableList(),
+                showDecisiveGroups = true,
+                greenToRed = highestGradeToLowestGrade,
+            )
+
+            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.medium))
+
             OpinionProfile(
                 modifier = Modifier
                     .size(600.dp, 280.dp)
