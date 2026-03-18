@@ -46,12 +46,14 @@ import com.illiouchine.jm.ui.theme.spacing
 @Composable
 fun MjuScaffold(
     modifier: Modifier = Modifier,
-    // Custom properties
+
+    // Custom properties ----------------------
     showMenu: Boolean = false,
     menuModifier: Modifier = Modifier,
     menuItemSelected: Screens = Screens.Home,
     onMenuItemSelected: (Screens) -> Unit = {},
-    // -----------------
+    // ----------------------------------------
+
     topBar: @Composable () -> Unit = {},
     // BottomBar property was removed ; use showMenu and menu properties instead
     // IDEA: re-enable the property and yell/throw on use ?
