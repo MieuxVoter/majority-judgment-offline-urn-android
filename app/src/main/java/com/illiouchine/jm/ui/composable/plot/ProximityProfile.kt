@@ -3,9 +3,7 @@ package com.illiouchine.jm.ui.composable.plot
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -61,12 +59,13 @@ fun ProximityProfile(
     val textColor = Theme.colorScheme.onBackground
     val primaryColor = Theme.colorScheme.primary
 
+    // We need the size of the chart to compute how many proposals can fit in it.
     // What we'd truly want would be the chartWidth inside ColumnChart — see ~64.dp hack below
     // But for that we'd need to open up the lib we're using and tweak its internals?
     var chartSizeInPx by remember { mutableStateOf(IntSize.Zero) }
     // Hack: 64.dp is (a big little) more than the size of the Y-axis ticks' labels.
     val chartWidth = with(density) {
-        chartSizeInPx.width.toDp() - 64.dp
+        chartSizeInPx.width.toDp()
     }
 
     val allProposalsIndices = 0.rangeUntil(poll.pollConfig.proposals.size).toList()
@@ -74,7 +73,7 @@ fun ProximityProfile(
 
     val maxAmountOfProposalsThatFit = with(density) {
         // in girum imus nocte | et consumimur igni //
-        floor(sqrt(chartWidth.toPx() / 8.dp.toPx())).toInt()
+        floor(sqrt(chartWidth.toPx() / 7.dp.toPx())).toInt()
     }
     val maxAmountOfProposals = min(maxAmountOfProposalsThatFit, lotsOfProposalsIndices.size)
 
@@ -106,7 +105,7 @@ fun ProximityProfile(
                             (someGradeValue - otherGradeValue) * (someGradeValue - otherGradeValue)
                         }.toDouble()
                     )
-                    1.0 - stdDeviation / maxDeviation
+                    ((1.0 - stdDeviation / maxDeviation) - 0.5) * 2.0
                 }
             }
         }
@@ -141,7 +140,6 @@ fun ProximityProfile(
         },
         data = barData,
         barProperties = BarProperties(
-//            thickness = 4.dp,
             thickness = barWidth,
             spacing = 1.dp,
 
@@ -150,6 +148,7 @@ fun ProximityProfile(
                 topRight = 2.dp,
             ),
         ),
+        // X Axis Ticks' Labels
         labelProperties = LabelProperties(
             enabled = true,
             padding = Theme.spacing.extraSmall,
@@ -174,7 +173,9 @@ fun ProximityProfile(
 //                )
 //            },
         ),
+        // Y Axis ticks' labels
         indicatorProperties = HorizontalIndicatorProperties(
+            enabled = false,
             padding = 20.dp,
             textStyle = TextStyle.Default.copy(
                 fontSize = 12.sp,
@@ -234,19 +235,18 @@ fun ProximityProfile(
 fun PreviewProximityProfile(modifier: Modifier = Modifier) {
     val poll = PreviewDataFaker.poll(
         amountOfBallots = 7,
-        amountOfProposals = 10,
+        amountOfProposals = 13,
     )
     JmTheme {
-        Surface(Modifier.fillMaxSize()) {
-            Column(modifier) {
-                Text("\uD83E\uDD9D I am the glitch raccoon that looks for glitches:")
-                PlotTitle("Proximity Profile\n${poll.pollConfig.subject}")
-                ProximityProfile(
-                    modifier = Modifier.height(200.dp),
-                    poll = poll,
-                    animated = false,
-                )
-                // Uncomment this to expose trouble with our noob remember {} setup
+        Column(modifier) {
+            Text("\uD83E\uDD9D I am the glitch raccoon that looks for glitches:")
+            PlotTitle("Proximity Profile\n${poll.pollConfig.subject}")
+            ProximityProfile(
+                modifier = Modifier.height(200.dp),
+                poll = poll,
+                animated = false,
+            )
+            // Uncomment this to expose trouble with our noob remember {} setup
 //                Text("And now the version with a coerced amount of proposals (6):")
 //                ProximityProfile(
 //                    modifier = Modifier.height(300.dp),
@@ -254,7 +254,6 @@ fun PreviewProximityProfile(modifier: Modifier = Modifier) {
 //                    animated = false,
 //                    onlyProposalsIndices = 0.rangeUntil(6).toList(),
 //                )
-            }
         }
     }
 }

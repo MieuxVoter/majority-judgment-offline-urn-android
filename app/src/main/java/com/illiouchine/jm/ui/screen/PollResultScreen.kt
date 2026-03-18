@@ -428,7 +428,7 @@ fun ResultScreen(
                     onlyProposalsIndices = result.proposalResultsRanked.map { it.index },
                 )
                 PlotTitle(
-                    text = "Proximity between Proposals\n(one minus the normalized standard deviation)",
+                    text = "Proximity between Proposals\n(derived from the standard deviation)",
                 )
                 Spacer(modifier = Modifier.padding(Theme.spacing.medium))
             }
