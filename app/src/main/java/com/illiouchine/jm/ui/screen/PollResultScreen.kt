@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -71,6 +70,8 @@ import com.illiouchine.jm.ui.composable.plot.NuanceProfile
 import com.illiouchine.jm.ui.composable.plot.OpinionProfile
 import com.illiouchine.jm.ui.composable.plot.ProximityProfile
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
+import com.illiouchine.jm.ui.composable.spacer.MediumVerticalSpacer
+import com.illiouchine.jm.ui.composable.spacer.SmallVerticalSpacer
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
@@ -98,7 +99,7 @@ fun ResultScreen(
     val grading = poll.pollConfig.grading
 
     // TODO: fetch this from settings
-    val highestGradeToLowestGrade = true;
+    val highestGradeToLowestGrade = true
 
     val context = LocalContext.current
     val amountOfProposals = result.proposalResultsRanked.size
@@ -152,7 +153,7 @@ fun ResultScreen(
                 ballots = poll.ballots.toImmutableList(),
             )
 
-            Spacer(Modifier.padding(vertical = Theme.spacing.small))
+            SmallVerticalSpacer()
 
             val appearAnimation = remember { Animatable(0f) }
             LaunchedEffect("waterfall") {
@@ -273,7 +274,7 @@ fun ResultScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.padding(Theme.spacing.small))
+            SmallVerticalSpacer()
 
             Row {
                 Text(
@@ -347,10 +348,11 @@ fun ResultScreen(
             Spacer(modifier = Modifier.padding(vertical = Theme.spacing.medium))
 
             Text(stringResource(R.string.nuance_profile))
-            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
+            SmallVerticalSpacer()
             NuanceProfile(
                 modifier = Modifier
-                    .size(600.dp, 280.dp)
+//                    .size(600.dp, 280.dp)
+                    .height(250.dp)
                     .fillMaxWidth(),
                 poll = poll,
                 moreNuanceToLessNuance = highestGradeToLowestGrade,
@@ -359,10 +361,10 @@ fun ResultScreen(
                 modifier = Modifier.padding(top=Theme.spacing.tiny),
                 text = stringResource(R.string.plot_title_nuance_profile),
             )
-            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.medium))
+            MediumVerticalSpacer()
 
             Text(stringResource(R.string.opinion_profile))
-            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
+            SmallVerticalSpacer()
 
             // FIXME: THIS is what happens when you don't refactor your composables adequately
             val pollResultAsProposalResult = ProposalResult(
@@ -401,11 +403,12 @@ fun ResultScreen(
                 greenToRed = highestGradeToLowestGrade,
             )
 
-            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.medium))
+            MediumVerticalSpacer()
 
             OpinionProfile(
                 modifier = Modifier
-                    .size(600.dp, 280.dp)
+                    .height(250.dp)
+//                    .size(600.dp, 280.dp)
                     .fillMaxWidth(),
                 poll = poll,
                 tally = tally,
@@ -414,12 +417,12 @@ fun ResultScreen(
             PlotTitle(
                 text = stringResource(R.string.plot_title_opinion_profile),
             )
-            Spacer(modifier = Modifier.padding(Theme.spacing.medium))
+            MediumVerticalSpacer()
 
             // Rule: hide the proximity profile if there's only one proposal, as it's useless
             if (poll.pollConfig.proposals.size > 1) {
                 Text("Proximity Profile")
-                Spacer(modifier = Modifier.padding(vertical = Theme.spacing.small))
+                SmallVerticalSpacer()
                 ProximityProfile(
                     modifier = Modifier
                         .height(250.dp)
@@ -430,7 +433,7 @@ fun ResultScreen(
                 PlotTitle(
                     text = "Proximity between Proposals\n(derived from the standard deviation)",
                 )
-                Spacer(modifier = Modifier.padding(Theme.spacing.medium))
+                MediumVerticalSpacer()
             }
 
             Button(
