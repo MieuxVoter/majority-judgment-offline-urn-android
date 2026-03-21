@@ -2,3 +2,5 @@
 * Fix a screen flicker on navigation in dark mode
 * Add an opinion profile
 * Add a nuance profile
+* Add a proximity profile
+* Don't add any explanation for the above new charts
