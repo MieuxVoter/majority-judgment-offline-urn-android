@@ -430,9 +430,9 @@ fun ResultScreen(
                 // I suspect I'll want to calibrate it to get/show meaningful thresholds.
                 PlotTitle(
                     text =
-                        "Proximity between proposals using the grades they received in each ballot." +
-                        "A value of 1.0 means that the two proposals received the exact same grades in each ballot. " +
-                        "A value of -1.0 means that the two proposals received extreme and opposite grades in each ballot.",
+                        "Proximity of every pair of proposals inside the ballots.",
+//                        "A value of 1.0 means that the two proposals received the exact same grades in each ballot. " +
+//                        "A value of -1.0 means that the two proposals received extreme and opposite grades in each ballot.",
                 )
                 MediumVerticalSpacer()
             }
