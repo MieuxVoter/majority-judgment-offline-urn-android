@@ -131,7 +131,7 @@ fun ProximityProfile(
             )
         }
     }
-    val horizontalLinesCount = 5
+    val horizontalLinesCount = 9
 
     ColumnChart(
         modifier = modifier.onGloballyPositioned { coordinates ->

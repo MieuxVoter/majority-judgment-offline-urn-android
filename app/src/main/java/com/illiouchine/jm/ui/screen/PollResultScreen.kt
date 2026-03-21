@@ -342,16 +342,12 @@ fun ResultScreen(
                 }
             }
 
-//            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.medium))
-//            Text("Proportionality")
-
-            Spacer(modifier = Modifier.padding(vertical = Theme.spacing.medium))
+            MediumVerticalSpacer()
 
             Text(stringResource(R.string.nuance_profile))
             SmallVerticalSpacer()
             NuanceProfile(
                 modifier = Modifier
-//                    .size(600.dp, 280.dp)
                     .height(250.dp)
                     .fillMaxWidth(),
                 poll = poll,
@@ -408,7 +404,6 @@ fun ResultScreen(
             OpinionProfile(
                 modifier = Modifier
                     .height(250.dp)
-//                    .size(600.dp, 280.dp)
                     .fillMaxWidth(),
                 poll = poll,
                 tally = tally,
@@ -430,8 +425,14 @@ fun ResultScreen(
                     poll = poll,
                     onlyProposalsIndices = result.proposalResultsRanked.map { it.index },
                 )
+                // TODO: i18n once we're somewhat OK with what's written in here — not the case now
+                // And not just because of the language ; I'm not so sure about the formula itself.
+                // I suspect I'll want to calibrate it to get/show meaningful thresholds.
                 PlotTitle(
-                    text = "Proximity between Proposals\n(derived from the standard deviation)",
+                    text =
+                        "Proximity between proposals using the grades they received in each ballot." +
+                        "A value of 1.0 means that the two proposals received the exact same grades in each ballot. " +
+                        "A value of -1.0 means that the two proposals received extreme and opposite grades in each ballot.",
                 )
                 MediumVerticalSpacer()
             }
