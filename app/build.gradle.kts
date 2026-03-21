@@ -138,7 +138,7 @@ dependencies {
     implementation (libs.compose.charts)
 
     // Faking — Development only
-    implementation(libs.kotlin.faker)
+    debugImplementation(libs.kotlin.faker)
 
     // Testing — Development only
     testImplementation(libs.junit)
