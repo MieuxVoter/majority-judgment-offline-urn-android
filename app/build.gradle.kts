@@ -138,7 +138,8 @@ dependencies {
     implementation (libs.compose.charts)
 
     // Faking — Development only
-    debugImplementation(libs.kotlin.faker)
+    implementation(libs.kotlin.faker)
+    //debugImplementation(libs.kotlin.faker) // We want to shake it from release, but how?
 
     // Testing — Development only
     testImplementation(libs.junit)
