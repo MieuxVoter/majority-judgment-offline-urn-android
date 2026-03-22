@@ -240,7 +240,8 @@ class MainActivity : ComponentActivity() {
                                 onDismissFeedback = {},
                             )
                         }
-                    })
+                    }
+                )
             }
         }
     }

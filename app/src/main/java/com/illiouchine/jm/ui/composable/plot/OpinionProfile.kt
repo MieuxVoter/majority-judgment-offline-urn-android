@@ -48,7 +48,7 @@ fun OpinionProfile(
     highestGradeToLowestGrade: Boolean = false,
 ) {
     val context = LocalContext.current
-    val barData = remember (poll, poll.ballots.size,highestGradeToLowestGrade) {
+    val barData = remember(poll, poll.ballots.size, highestGradeToLowestGrade) {
         // Cumulative (without strata because the chart lib does not support it out of the box)
         poll.pollConfig.grading.grades.mapIndexed { gradeIndex, grade ->
             @SuppressLint("LocalContextGetResourceValueCall") // how else?

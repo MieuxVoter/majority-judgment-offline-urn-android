@@ -157,7 +157,7 @@ fun ProximityProfile(
                 textAlign = TextAlign.End,
                 color = textColor,
             ),
-            // Wip: We can customize the label Composable but … it's delicate, fastidious and will require a TextMeasurer
+            // Wip: We can customize the label Composable but … it will require a TextMeasurer
             // See https://github.com/ehsannarmani/ComposeCharts/blob/master/compose-charts/src/commonMain/kotlin/ir/ehsannarmani/compose_charts/utils/Labels.kt#L83
 //            builder = { modifier, label, shouldRotate, _ ->
 //                BasicText(
@@ -216,7 +216,6 @@ fun ProximityProfile(
     // With a careful formula and a TextMeasurer perhaps we can replace this.
     Spacer(modifier = Modifier.height(56.dp))
 }
-
 
 @Preview(
     name = "Phone (Portrait)",

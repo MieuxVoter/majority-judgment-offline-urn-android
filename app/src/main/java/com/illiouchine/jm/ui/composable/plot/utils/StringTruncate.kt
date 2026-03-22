@@ -1,9 +1,8 @@
 package com.illiouchine.jm.ui.composable.plot.utils
 
-
 fun String.truncate(
     maxLength: Int,
-    //maxLines: Int = -1, // perhaps later
+    // maxLines: Int = -1, // perhaps later
     ellipsis: String = "",
 ): String {
     if (maxLength < 0) return this

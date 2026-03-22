@@ -49,9 +49,9 @@ abstract class PollDataBase : RoomDatabase() {
 }
 
 // Next migration, not an AutoMigration this time
-//val MIGRATION_3_4 = object : Migration(3, 4) {
+// val MIGRATION_3_4 = object : Migration(3, 4) {
 //    override fun migrate(db: SupportSQLiteDatabase) {
 //        // Fill up the NULL uuids with random values
 //        db.execSQL("UPDATE …")
 //    }
-//}
+// }

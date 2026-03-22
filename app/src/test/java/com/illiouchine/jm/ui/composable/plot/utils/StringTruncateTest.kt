@@ -146,7 +146,7 @@ class StringTruncateTest {
                 )
                 val expected = io.second
                 assertEquals(
-                    "Rule #${testIndex} `${testDatum.rule}` fails:",
+                    "Rule #$testIndex `${testDatum.rule}` fails:",
                     expected,
                     actual,
                 )

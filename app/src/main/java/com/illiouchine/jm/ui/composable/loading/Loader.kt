@@ -61,9 +61,9 @@ fun Loader(
     ) {
         for (i in (0..<amountOfOrbitals)) {
             val position = (
-                    loopAnimation.value +
-                            i.toDouble() / amountOfOrbitals.toDouble()
-                    ).mod(1.0)
+                loopAnimation.value +
+                    i.toDouble() / amountOfOrbitals.toDouble()
+                ).mod(1.0)
 
             for (trail in (1..trailLength)) {
                 drawCircle(

@@ -81,6 +81,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import java.math.BigInteger
+import java.util.Locale
 import kotlin.math.max
 import kotlin.math.min
 
@@ -163,11 +164,10 @@ fun ResultScreen(
             result.proposalResultsRanked.forEachIndexed { proposalDisplayIndex, proposalResult ->
                 if (proposalResult.analysis.totalSize > BigInteger.ZERO) {
                     // I don't know how to indent this readably (I am triggered by the linter >.<)
-                    val isInSelectedDuel = isAnyProfileSelected &&
-                            (
-                                    selectedDuelIndex == proposalDisplayIndex ||
-                                            selectedDuelIndex + 1 == proposalDisplayIndex
-                                    )
+                    val isInSelectedDuel = isAnyProfileSelected && (
+                        selectedDuelIndex == proposalDisplayIndex ||
+                            selectedDuelIndex + 1 == proposalDisplayIndex
+                        )
                     val ttsShowExplanation = stringResource(R.string.tts_show_explanation)
 
                     Column(
@@ -209,8 +209,7 @@ fun ResultScreen(
                                 poll.pollConfig.grading.getGradeName(medianGrade)
                             )
                             Text(
-                                modifier = Modifier
-                                    .padding(end = Theme.spacing.extraSmall + Theme.spacing.small),
+                                modifier = Modifier.padding(end = Theme.spacing.extraSmall + Theme.spacing.small),
                                 fontSize = 24.sp,
                                 text = "#$rank",
                             )
@@ -218,9 +217,13 @@ fun ResultScreen(
                             if (proportionalAlgorithm != ProportionalAlgorithms.NONE) {
                                 val shownProportions = state.proportions[proportionalAlgorithm]
                                 if (shownProportions != null) {
-                                    proportionAsText = "   " + (100 * shownProportions[proposalResult.index]).smartFormat(
-                                        maxDecimals = 3,
-                                    ) + "%"
+                                    proportionAsText = String.format(
+                                        Locale.FRANCE,
+                                        "   %s%%",
+                                        (100 * shownProportions[proposalResult.index]).smartFormat(
+                                            maxDecimals = 2,
+                                        )
+                                    )
                                 }
                             }
                             Text(
@@ -252,19 +255,18 @@ fun ResultScreen(
 
                         // Ux: Explanations are shown one at a time (exclusive toggle)
                         val shouldShowExplanation = isAnyProfileSelected &&
-                                selectedDuelIndex == proposalDisplayIndex &&
-                                result.proposalResultsRanked.size > 1
+                            selectedDuelIndex == proposalDisplayIndex &&
+                            result.proposalResultsRanked.size > 1
 
                         AnimatedVisibility(shouldShowExplanation) {
                             Row {
                                 Text(
                                     fontSize = 14.sp,
-                                    text =
-                                        if (state.explanations.size > proposalDisplayIndex) {
-                                            state.explanations[proposalDisplayIndex]
-                                        } else {
-                                            AnnotatedString("\uD83D\uDC1E")
-                                        },
+                                    text = if (state.explanations.size > proposalDisplayIndex) {
+                                        state.explanations[proposalDisplayIndex]
+                                    } else {
+                                        AnnotatedString("\uD83D\uDC1E")
+                                    },
                                 )
                             }
                         }
@@ -292,13 +294,12 @@ fun ResultScreen(
                         R.string.tts_choose_a_proportional_algorithm
                     )
                     TextButton(
-                        modifier = Modifier
-                            .semantics {
-                                onClick(
-                                    label = ttsChooseAProportionalAlgorithm,
-                                    action = null,
-                                )
-                            },
+                        modifier = Modifier.semantics {
+                            onClick(
+                                label = ttsChooseAProportionalAlgorithm,
+                                action = null,
+                            )
+                        },
                         onClick = {
                             proportionalDropdownExpanded = !proportionalDropdownExpanded
                         },
@@ -308,7 +309,9 @@ fun ResultScreen(
 
                     DropdownMenu(
                         expanded = proportionalDropdownExpanded,
-                        onDismissRequest = { proportionalDropdownExpanded = false }
+                        onDismissRequest = {
+                            proportionalDropdownExpanded = false
+                        },
                     ) {
                         for (algo in ProportionalAlgorithms.entries) {
                             DropdownMenuItem(
@@ -354,7 +357,7 @@ fun ResultScreen(
                 moreNuanceToLessNuance = highestGradeToLowestGrade,
             )
             PlotTitle(
-                modifier = Modifier.padding(top=Theme.spacing.tiny),
+                modifier = Modifier.padding(top = Theme.spacing.tiny),
                 text = stringResource(R.string.plot_title_nuance_profile),
             )
             MediumVerticalSpacer()
@@ -374,12 +377,10 @@ fun ResultScreen(
             )
             val pollTallyAsProposalTally = ProposalTally(
                 tally = grading.grades.mapIndexed { gradeIndex, _ ->
-                    tally.proposalsTallies
-                        .map { it.tally[gradeIndex] }
+                    tally.proposalsTallies.map { it.tally[gradeIndex] }
                         .reduce { acc, bigInteger -> acc.add(bigInteger) }
                 }.toPersistentList(),
-                amountOfJudgments = tally.proposalsTallies
-                    .map {it.amountOfJudgments}
+                amountOfJudgments = tally.proposalsTallies.map { it.amountOfJudgments }
                     .reduce { acc, bigInteger -> acc.add(bigInteger) },
             )
 
@@ -429,10 +430,9 @@ fun ResultScreen(
                 // And not just because of the language ; I'm not so sure about the formula itself.
                 // I suspect I'll want to calibrate it to get/show meaningful thresholds.
                 PlotTitle(
-                    text =
-                        "Proximity of every pair of proposals inside the ballots.",
-//                        "A value of 1.0 means that the two proposals received the exact same grades in each ballot. " +
-//                        "A value of -1.0 means that the two proposals received extreme and opposite grades in each ballot.",
+                    text = "Proximity of every pair of proposals inside the ballots.",
+// "A value of 1.0 means that the two proposals received the exact same grades in each ballot. " +
+// "A value of -1.0 means that the two proposals received extreme opposite grades in each ballot.",
                 )
                 MediumVerticalSpacer()
             }
@@ -444,7 +444,6 @@ fun ResultScreen(
         }
     }
 }
-
 
 // To correctly preview this, you need to Start Interactive Mode.
 // This is a hidden cost of animating the apparition of the merit profiles.

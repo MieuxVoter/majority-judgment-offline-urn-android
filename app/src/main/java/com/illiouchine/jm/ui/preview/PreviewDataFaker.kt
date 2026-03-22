@@ -88,8 +88,8 @@ object PreviewDataFaker {
         val currentIndex = index ?: floor(Math.random() * subjectsWithProposals.size).toInt()
         return PollConfig(
             subject = subjectsWithProposals[currentIndex].first,
-            //proposals = subjectsWithProposals[currentIndex].second,
-            //subject = faker.quote.yoda(),
+            // proposals = subjectsWithProposals[currentIndex].second,
+            // subject = faker.quote.yoda(),
             proposals = 0.rangeUntil(amountOfProposals).map {
                 faker.coffee.blendName()
             },
