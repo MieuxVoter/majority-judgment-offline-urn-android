@@ -56,9 +56,7 @@ This application is also [available on Google Play](https://play.google.com/stor
 
 ## Contribute
 
-> Follow the usual _git_ flow:
-> Fork, clone, branch, hack, push and create a merge request.
-
+This project has been made by many hands.
 
 ### Translations
 
@@ -74,6 +72,9 @@ We're using the amazing _Weblate_ for translations : https://hosted.weblate.org/
 > You don't have to do everything.  Every little bit helps.  🥜🐜🐜🐜
 
 ### Code
+
+> Follow the usual _git_ flow:
+> Fork, clone, branch, hack, push and create a merge request.
 
 This is an unremarkable _Android_ project in _Kotlin_, made with _Jetpack Compose_.
 
