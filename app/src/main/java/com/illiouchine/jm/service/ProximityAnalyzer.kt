@@ -48,7 +48,7 @@ class ProximityAnalyzer {
                         0.0
                     }
                 } else {
-                    // Distance between the two proposals in the n-dimensional space of the ballots
+                    // Distance between the two proposals in the ND orthogonal space of the ballots
                     val stdDeviation = sqrt(
                         poll.ballots.sumOf { ballot ->
                             // Assuming grades are linearly distributed, value-wise, here.
