@@ -120,6 +120,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.androidx.material3.adaptive.navigation3)
 
+    // Legacy Material Icons
+    // See https://developer.android.com/jetpack/androidx/releases/compose-material3#1.4.0
+    implementation(libs.androidx.material.icons)
+
     // Majority Judgment
     implementation(libs.majority.judgment.library.java)
 
@@ -135,7 +139,8 @@ dependencies {
 
     // Plotting
     //implementation(libs.kandy.lets.plot) // not using kandy for now as it produces raster (+svg)
-    implementation (libs.compose.charts)
+    implementation(libs.compose.charts)
+    implementation(libs.koalaplot.core)
 
     // Faking — Development only
     implementation(libs.kotlin.faker)
