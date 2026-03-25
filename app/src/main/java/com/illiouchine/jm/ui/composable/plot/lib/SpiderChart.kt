@@ -33,8 +33,6 @@ import io.github.koalaplot.core.style.AreaStyle
 import io.github.koalaplot.core.style.LineStyle
 import io.github.koalaplot.core.util.ExperimentalKoalaPlotApi
 import ir.ehsannarmani.compose_charts.extensions.format
-import org.jetbrains.kotlinx.dataframe.DataFrame
-import org.jetbrains.kotlinx.dataframe.io.readCsvStr
 
 
 @OptIn(ExperimentalKoalaPlotApi::class)
@@ -54,6 +52,20 @@ fun SpiderChart(
     val indexedCategories = categories.mapIndexed { index, name ->
         Pair(index, name)
     }
+
+    // Hack to skip the "appear" animation of PolarPlotSeries2 when we change category focus
+    // Disgusting.  This prevents having two SpiderChart on the same compose tree I suppose.
+    val polarPlotData = remember {
+        values.mapIndexed { index, value ->
+            PolarPoint(value, indexedCategories[index])
+        }.toMutableList()
+    }
+//    LaunchedEffect(values) { // add this for some neat race condition
+    polarPlotData.replaceAll({
+        val index = it.theta.first
+        PolarPoint(values[index], indexedCategories[index])
+    })
+//    }
 
     ChartLayout(
         modifier = modifier,
@@ -102,14 +114,13 @@ fun SpiderChart(
             ),
         ) {
             PolarPlotSeries2(
-                data = values.mapIndexed { index, value ->
-                    PolarPoint(value, indexedCategories[index])
-                },
+                data = polarPlotData,
                 lineStyle = LineStyle(SolidColor(Theme.colorScheme.primary), strokeWidth = 1.5.dp),
                 areaStyle = AreaStyle(SolidColor(Theme.colorScheme.primary), alpha = 0.3f),
                 symbols = {
                     Symbol(shape = CircleShape, fillBrush = SolidColor(Theme.colorScheme.primary))
                 },
+//                animationSpec = TweenSpec<Float>(durationMillis = 0),
             )
         }
     }
