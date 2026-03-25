@@ -1,6 +1,6 @@
 package com.illiouchine.jm.ui.preview
 
-import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
+import com.illiouchine.jm.config.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment

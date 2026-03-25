@@ -142,6 +142,9 @@ dependencies {
     implementation(libs.compose.charts)
     implementation(libs.koalaplot.core)
 
+    // Data Formats for I/O
+    implementation("org.jetbrains.kotlinx:dataframe:1.0.0-Beta4")
+
     // Faking — Development only
     implementation(libs.kotlin.faker)
     //debugImplementation(libs.kotlin.faker) // We want to shake it from release, but how?

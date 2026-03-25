@@ -3,6 +3,9 @@ package com.illiouchine.jm.logic
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.illiouchine.jm.config.DEFAULT_GRADING_QUALITY_VALUE
+import com.illiouchine.jm.config.DEFAULT_PIN_SCREEN_VALUE
+import com.illiouchine.jm.config.DEFAULT_PLAY_SOUND_VALUE
 import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.ui.navigator.NavigationAction

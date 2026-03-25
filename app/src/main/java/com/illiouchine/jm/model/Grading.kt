@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import com.illiouchine.jm.R
-import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
+import com.illiouchine.jm.config.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.model.Grading.Enthusiasm6Grading
 import com.illiouchine.jm.model.Grading.PositiveQuality5Grading
 import com.illiouchine.jm.model.Grading.Priority5Grading

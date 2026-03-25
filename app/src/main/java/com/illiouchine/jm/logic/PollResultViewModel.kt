@@ -7,6 +7,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.R
+import com.illiouchine.jm.config.ProportionalAlgorithms
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.model.ParticipantGroupAnalysis
 import com.illiouchine.jm.model.Poll

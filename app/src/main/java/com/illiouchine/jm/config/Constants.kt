@@ -1,4 +1,4 @@
-package com.illiouchine.jm.logic
+package com.illiouchine.jm.config
 
 import com.illiouchine.jm.model.Grading
 

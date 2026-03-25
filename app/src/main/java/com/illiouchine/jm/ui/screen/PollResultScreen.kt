@@ -56,7 +56,7 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.logic.PollResultViewModel
-import com.illiouchine.jm.logic.ProportionalAlgorithms
+import com.illiouchine.jm.config.ProportionalAlgorithms
 import com.illiouchine.jm.model.ParticipantGroupAnalysis
 import com.illiouchine.jm.model.ProposalResult
 import com.illiouchine.jm.model.ProposalTally
