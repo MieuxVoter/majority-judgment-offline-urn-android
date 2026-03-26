@@ -61,10 +61,11 @@ android {
         compose = true
     }
     packaging {
-        // For org.apache.arrow:arrow-dataset:18.3.0/arrow-dataset-18.3.0.jar and 6 others (Koala)
+        // For org.apache.arrow:arrow-dataset:18.3.0 and 6 others (from dataframe)
         resources.excludes.add("META-INF/DEPENDENCIES")
         resources.excludes.add("META-INF/*LICENSE")
         resources.excludes.add("META-INF/*NOTICE")
+        resources.excludes.add("META-INF/services/com.fasterxml.jackson.databind.Module")
     }
 
     room {
@@ -108,6 +109,7 @@ android {
 dependencies {
     // The Usual Suspects
     implementation(libs.serialization.json)
+    implementation(libs.kotlinx.collections.immutable)
 
     // Android & Jetpack Compose
     implementation(libs.androidx.core.ktx)
@@ -118,7 +120,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.kotlinx.collections.immutable)
 
     // Android App Navigation
     implementation(libs.navigation3.ui)
