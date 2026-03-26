@@ -23,13 +23,9 @@ class ProximityAnalyzer {
 
     fun analyze(
         poll: Poll,
-        onlyProposalsIndices: List<Int>? = null, // TODO: remove this
     ): ProximityAnalysis {
 
-        assert(onlyProposalsIndices == null) // strong deprecation
-
-        val allProposalsIndices = 0.rangeUntil(poll.pollConfig.proposals.size).toList()
-        val proposalsIndices = onlyProposalsIndices ?: allProposalsIndices
+        val proposalsIndices = 0.rangeUntil(poll.pollConfig.proposals.size).toList()
 
         // We need the maximum standard deviation possible in order to normalize
         val maxDifference = poll.pollConfig.grading.getAmountOfGrades() - 1

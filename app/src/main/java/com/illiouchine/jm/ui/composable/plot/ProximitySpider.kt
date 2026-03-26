@@ -54,7 +54,7 @@ fun ProximitySpider(
     SpiderChart(
         modifier = modifier,
         title = {
-            Text("Proximity of candidates with ${analysis.proposals[selectedCategoryIndex]}")
+            Text("Proximity with ${analysis.proposals[selectedCategoryIndex]}")
         },
         categories = filteredAnalysis.proposals.map { it.truncate(16, "…") },
         values = filteredAnalysis.proximities[selectedCategoryIndex].map { it.toFloat() },
@@ -1866,7 +1866,7 @@ Besancenot,Buffet,Schivardi,Bayrou,Bové,Voynet,De Villiers,Royal,Nihous,Le Pen,
     val df = DataFrame.readCsvStr(csvString)
 
     val poll = Poll(
-        id = 42,
+        id = 2007,
         pollConfig = PollConfig(
             subject = "2007",
             proposals = df.columnNames(),

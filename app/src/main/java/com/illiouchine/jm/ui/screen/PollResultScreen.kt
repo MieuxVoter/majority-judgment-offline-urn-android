@@ -69,6 +69,7 @@ import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.composable.plot.NuanceProfile
 import com.illiouchine.jm.ui.composable.plot.OpinionProfile
 import com.illiouchine.jm.ui.composable.plot.ProximityProfile
+import com.illiouchine.jm.ui.composable.plot.ProximitySpider
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
 import com.illiouchine.jm.ui.composable.spacer.MediumVerticalSpacer
 import com.illiouchine.jm.ui.composable.spacer.SmallVerticalSpacer
@@ -433,6 +434,11 @@ fun ResultScreen(
                     text = "Proximity of every pair of proposals inside the ballots.",
 // "A value of 1.0 means that the two proposals received the exact same grades in each ballot. " +
 // "A value of -1.0 means that the two proposals received extreme opposite grades in each ballot.",
+                )
+                MediumVerticalSpacer()
+                ProximitySpider(
+                    modifier = Modifier.height(400.dp),
+                    analysis = state.proximityAnalysis!!,
                 )
                 MediumVerticalSpacer()
             }

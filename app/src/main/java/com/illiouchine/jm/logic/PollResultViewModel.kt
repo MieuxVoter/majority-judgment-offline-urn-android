@@ -16,6 +16,8 @@ import com.illiouchine.jm.model.Tally
 import com.illiouchine.jm.model.toResult
 import com.illiouchine.jm.model.toTally
 import com.illiouchine.jm.service.DuelAnalyzer
+import com.illiouchine.jm.service.ProximityAnalysis
+import com.illiouchine.jm.service.ProximityAnalyzer
 import com.illiouchine.jm.service.TextStylist
 import com.illiouchine.jm.ui.navigator.NavigationAction
 import com.illiouchine.jm.ui.navigator.Screens
@@ -43,6 +45,7 @@ class PollResultViewModel(
         val explanations: List<AnnotatedString> = emptyList(),
         val groups: List<DuelGroups> = emptyList(),
         val proportions: Map<ProportionalAlgorithms, List<Double>> = emptyMap(),
+        val proximityAnalysis: ProximityAnalysis? = null,
     )
 
     data class DuelGroups(
@@ -123,6 +126,10 @@ class PollResultViewModel(
             }
         }
 
+        val proximityAnalysis = ProximityAnalyzer().analyze(
+            poll = poll,
+        )
+
         _pollResultViewState.update {
             it.copy(
                 poll = poll,
@@ -131,6 +138,7 @@ class PollResultViewModel(
                 explanations = explanations,
                 groups = groups,
                 proportions = proportions,
+                proximityAnalysis = proximityAnalysis,
             )
         }
     }

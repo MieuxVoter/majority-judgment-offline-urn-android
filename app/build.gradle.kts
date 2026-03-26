@@ -60,6 +60,10 @@ android {
     buildFeatures {
         compose = true
     }
+    packaging {
+        // For org.apache.arrow:arrow-dataset:18.3.0/arrow-dataset-18.3.0.jar and 6 others (Koala)
+        resources.excludes.add("META-INF/*")
+    }
 
     room {
         schemaDirectory("$projectDir/schemas")
