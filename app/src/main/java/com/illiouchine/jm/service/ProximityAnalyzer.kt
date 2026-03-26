@@ -24,7 +24,6 @@ class ProximityAnalyzer {
     fun analyze(
         poll: Poll,
     ): ProximityAnalysis {
-
         val proposalsIndices = 0.rangeUntil(poll.pollConfig.proposals.size).toList()
 
         // We need the maximum standard deviation possible in order to normalize

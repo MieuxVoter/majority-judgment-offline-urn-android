@@ -53,10 +53,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.illiouchine.jm.R
+import com.illiouchine.jm.config.ProportionalAlgorithms
 import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.logic.PollResultViewModel
-import com.illiouchine.jm.config.ProportionalAlgorithms
 import com.illiouchine.jm.model.ProposalTally
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
@@ -367,7 +367,7 @@ fun ResultScreen(
                     tally.proposalsTallies
                         .map { it.tally[gradeIndex] }
                         .reduce { acc, bigInteger -> acc.add(bigInteger) }
-                    //tally.proposalsTallies.bigSumOf { it.tally[gradeIndex] }  // maybe this?
+                    // tally.proposalsTallies.bigSumOf { it.tally[gradeIndex] }  // maybe this?
                 }.toPersistentList(),
                 amountOfJudgments = tally.proposalsTallies
                     .map { it.amountOfJudgments }

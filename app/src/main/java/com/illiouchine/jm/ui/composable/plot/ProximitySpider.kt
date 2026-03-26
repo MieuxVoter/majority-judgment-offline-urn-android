@@ -66,9 +66,7 @@ fun ProximitySpider(
             selectedCategoryIndex = clickedCategoryIndex
         },
     )
-
 }
-
 
 @Preview(
     name = "Phone (Portrait)",
@@ -1883,7 +1881,7 @@ Besancenot,Buffet,Schivardi,Bayrou,Bové,Voynet,De Villiers,Royal,Nihous,Le Pen,
             )
         },
     )
-    
+
     val analyzer = ProximityAnalyzer()
     val analysis = analyzer.analyze(
         poll = poll,

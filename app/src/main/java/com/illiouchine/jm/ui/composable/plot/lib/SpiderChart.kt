@@ -34,7 +34,6 @@ import io.github.koalaplot.core.style.LineStyle
 import io.github.koalaplot.core.util.ExperimentalKoalaPlotApi
 import ir.ehsannarmani.compose_charts.extensions.format
 
-
 @OptIn(ExperimentalKoalaPlotApi::class)
 @Composable
 fun SpiderChart(
@@ -155,7 +154,6 @@ fun PreviewSpiderChart(modifier: Modifier = Modifier) {
         )
     }
 }
-
 
 @Preview(
     name = "Dynamic Phone (Portrait)",

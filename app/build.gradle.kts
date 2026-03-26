@@ -62,7 +62,9 @@ android {
     }
     packaging {
         // For org.apache.arrow:arrow-dataset:18.3.0/arrow-dataset-18.3.0.jar and 6 others (Koala)
-        resources.excludes.add("META-INF/*")
+        resources.excludes.add("META-INF/DEPENDENCIES")
+        resources.excludes.add("META-INF/*LICENSE")
+        resources.excludes.add("META-INF/*NOTICE")
     }
 
     room {
