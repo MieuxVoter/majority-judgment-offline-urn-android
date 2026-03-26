@@ -41,7 +41,7 @@ import ir.ehsannarmani.compose_charts.models.LabelProperties
  * The lib does not seem to allow this, so we might have to do it ourselves.
  */
 @Composable
-fun OpinionProfile(
+fun OpinionProfileBarChart(
     modifier: Modifier = Modifier,
     poll: Poll,
     tally: Tally,

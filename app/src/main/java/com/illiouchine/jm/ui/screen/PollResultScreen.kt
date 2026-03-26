@@ -57,17 +57,13 @@ import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.config.ProportionalAlgorithms
-import com.illiouchine.jm.model.ParticipantGroupAnalysis
-import com.illiouchine.jm.model.ProposalResult
 import com.illiouchine.jm.model.ProposalTally
-import com.illiouchine.jm.model.ProposalTallyAnalysis
-import com.illiouchine.jm.model.Tally
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.composable.plot.NuanceProfile
-import com.illiouchine.jm.ui.composable.plot.OpinionProfile
+import com.illiouchine.jm.ui.composable.plot.OpinionProfileBarChart
 import com.illiouchine.jm.ui.composable.plot.ProximityProfile
 import com.illiouchine.jm.ui.composable.plot.ProximitySpider
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
@@ -100,7 +96,7 @@ fun ResultScreen(
     val tally = state.tally!!
     val grading = poll.pollConfig.grading
 
-    // TODO: fetch this from settings
+    // Good first issue: fetch this from settings
     val highestGradeToLowestGrade = true
 
     val context = LocalContext.current
@@ -238,7 +234,7 @@ fun ResultScreen(
                                     .fillMaxWidth()
                                     .height(Theme.spacing.medium + Theme.spacing.small),
                                 proposalTally = tally.proposalsTallies[proposalResult.index],
-                                proposalResult = proposalResult,
+                                medianGrade = proposalResult.analysis.medianGrade,
                                 grading = grading,
                                 decisiveGroups = decisiveGroupsForSelectedProfile.filter { group ->
                                     group.participant == proposalDisplayIndex
@@ -366,17 +362,6 @@ fun ResultScreen(
             Text(stringResource(R.string.opinion_profile))
             SmallVerticalSpacer()
 
-            // FIXME: THIS is what happens when you don't refactor your composables adequately
-            val pollResultAsProposalResult = ProposalResult(
-                index = 0,
-                rank = 1,
-                relativeMerit = 0.5,
-                analysis = ProposalTallyAnalysis(
-                    medianGrade = 0,
-                    totalSize = BigInteger.ONE,
-                )
-            )
-
             val pollTallyAsProposalTally = ProposalTally(
                 tally = grading.grades.mapIndexed { gradeIndex, _ ->
                     tally.proposalsTallies
@@ -394,16 +379,13 @@ fun ResultScreen(
                     .fillMaxWidth()
                     .height(Theme.spacing.medium + Theme.spacing.small),
                 proposalTally = pollTallyAsProposalTally,
-                proposalResult = pollResultAsProposalResult,
                 grading = grading,
-                decisiveGroups = emptyList<ParticipantGroupAnalysis>().toImmutableList(),
-                showDecisiveGroups = true, // ie: hide median grade
                 greenToRed = highestGradeToLowestGrade,
             )
 
             MediumVerticalSpacer()
 
-            OpinionProfile(
+            OpinionProfileBarChart(
                 modifier = Modifier
                     .height(250.dp)
                     .fillMaxWidth(),
@@ -429,7 +411,7 @@ fun ResultScreen(
                 )
                 // TODO: i18n once we're somewhat OK with what's written in here — not the case now
                 // And not just because of the language ; I'm not so sure about the formula itself.
-                // I suspect I'll want to calibrate it to get/show meaningful thresholds.
+                // I suspect we'll want to calibrate it & show meaningful thresholds.
                 PlotTitle(
                     text = "Proximity of every pair of proposals inside the ballots.",
 // "A value of 1.0 means that the two proposals received the exact same grades in each ballot. " +
@@ -471,7 +453,7 @@ fun ResultScreen(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     showSystemUi = true,
 )
-// @PreviewScreenSizes // my eyes hurt ← no dark mode
+// @PreviewScreenSizes // my eyes hurt ← no dark mode ; but we should cook something like this
 @Composable
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
     val poll = PreviewDataFaker.poll()

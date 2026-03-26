@@ -34,21 +34,19 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.ParticipantGroup
 import com.illiouchine.jm.model.ParticipantGroupAnalysis
-import com.illiouchine.jm.model.ProposalResult
 import com.illiouchine.jm.model.ProposalTally
-import com.illiouchine.jm.model.Tally
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import java.util.Locale
 import kotlin.math.round
 
 @Composable
 fun LinearMeritProfileCanvas(
     modifier: Modifier = Modifier,
-//    tally: Tally,
     proposalTally: ProposalTally,
-    proposalResult: ProposalResult,
+    medianGrade: Int = -1, // median grade highlight is only shown if this is a valid grade index
     grading: Grading,
-    decisiveGroups: ImmutableList<ParticipantGroupAnalysis>,
+    decisiveGroups: ImmutableList<ParticipantGroupAnalysis> = emptyList<ParticipantGroupAnalysis>().toPersistentList(),
     showDecisiveGroups: Boolean = false,
     greenToRed: Boolean = false,
 ) {
@@ -58,6 +56,8 @@ fun LinearMeritProfileCanvas(
     val outlineAlphaAnimation = remember { Animatable(0f) }
     val outlineAnimation = remember { Animatable(0f) }
     val percentageAnimation = remember { Animatable(0f) }
+
+    // How to refactor these patterns & brushes out of here ?
 
     val patterns = listOf(
         ImageBitmap.imageResource(R.drawable.pattern_0),
@@ -148,7 +148,6 @@ fun LinearMeritProfileCanvas(
     Canvas(
         modifier = modifier,
     ) {
-//        val proposalTally = tally.proposalsTallies[proposalResult.index]
         val middleX = size.width * 0.5f
         val amountOfGrades = grading.getAmountOfGrades()
         if (0 >= amountOfGrades) {
@@ -229,7 +228,7 @@ fun LinearMeritProfileCanvas(
             }
 
             // Compute the median grade outline
-            if (gradeIndex == proposalResult.analysis.medianGrade) {
+            if (gradeIndex == medianGrade) {
                 val medianGradeRectInitialWidth = 2.dp.toPx()
                 medianGradeOutline.addRect(
                     Rect(
@@ -302,7 +301,7 @@ fun LinearMeritProfileCanvas(
             }
         }
 
-        // Draw the outline of the decisive groups
+        // Draw the outline of the decisive groups, if some were specified.
         if (showDecisiveGroups) {
             for (decisiveGroup in decisiveGroups) {
                 val groupOutline = Path()
