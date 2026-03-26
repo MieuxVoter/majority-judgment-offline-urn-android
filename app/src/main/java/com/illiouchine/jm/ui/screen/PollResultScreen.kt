@@ -55,6 +55,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.illiouchine.jm.R
 import com.illiouchine.jm.config.ProportionalAlgorithms
 import com.illiouchine.jm.data.InMemoryPollDataSource
+import com.illiouchine.jm.extensions.bigSumOf
 import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.model.ProposalTally
@@ -363,15 +364,10 @@ fun ResultScreen(
             SmallVerticalSpacer()
 
             val pollTallyAsProposalTally = ProposalTally(
-                tally = grading.grades.mapIndexed { gradeIndex, _ ->
-                    tally.proposalsTallies
-                        .map { it.tally[gradeIndex] }
-                        .reduce { acc, bigInteger -> acc.add(bigInteger) }
-                    // tally.proposalsTallies.bigSumOf { it.tally[gradeIndex] }  // maybe this?
+                tally = List(grading.grades.size) { gradeIndex ->
+                    tally.proposalsTallies.bigSumOf { it.tally[gradeIndex] }
                 }.toPersistentList(),
-                amountOfJudgments = tally.proposalsTallies
-                    .map { it.amountOfJudgments }
-                    .reduce { acc, bigInteger -> acc.add(bigInteger) },
+                amountOfJudgments = tally.proposalsTallies.bigSumOf { it.amountOfJudgments },
             )
 
             LinearMeritProfileCanvas(
