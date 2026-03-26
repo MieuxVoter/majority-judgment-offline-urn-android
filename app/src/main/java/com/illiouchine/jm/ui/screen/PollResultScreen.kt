@@ -237,7 +237,7 @@ fun ResultScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(Theme.spacing.medium + Theme.spacing.small),
-                                tally = tally,
+                                proposalTally = tally.proposalsTallies[proposalResult.index],
                                 proposalResult = proposalResult,
                                 grading = grading,
                                 decisiveGroups = decisiveGroupsForSelectedProfile.filter { group ->
@@ -376,12 +376,16 @@ fun ResultScreen(
                     totalSize = BigInteger.ONE,
                 )
             )
+
             val pollTallyAsProposalTally = ProposalTally(
                 tally = grading.grades.mapIndexed { gradeIndex, _ ->
-                    tally.proposalsTallies.map { it.tally[gradeIndex] }
+                    tally.proposalsTallies
+                        .map { it.tally[gradeIndex] }
                         .reduce { acc, bigInteger -> acc.add(bigInteger) }
+                    //tally.proposalsTallies.bigSumOf { it.tally[gradeIndex] }  // maybe this?
                 }.toPersistentList(),
-                amountOfJudgments = tally.proposalsTallies.map { it.amountOfJudgments }
+                amountOfJudgments = tally.proposalsTallies
+                    .map { it.amountOfJudgments }
                     .reduce { acc, bigInteger -> acc.add(bigInteger) },
             )
 
@@ -389,15 +393,11 @@ fun ResultScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(Theme.spacing.medium + Theme.spacing.small),
-                tally = Tally(
-                    proposalsTallies = listOf(
-                        pollTallyAsProposalTally,
-                    ).toPersistentList(),
-                ),
+                proposalTally = pollTallyAsProposalTally,
                 proposalResult = pollResultAsProposalResult,
                 grading = grading,
                 decisiveGroups = emptyList<ParticipantGroupAnalysis>().toImmutableList(),
-                showDecisiveGroups = true,
+                showDecisiveGroups = true, // ie: hide median grade
                 greenToRed = highestGradeToLowestGrade,
             )
 

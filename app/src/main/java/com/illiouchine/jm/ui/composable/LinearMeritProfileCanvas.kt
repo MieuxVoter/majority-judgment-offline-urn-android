@@ -35,6 +35,7 @@ import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.ParticipantGroup
 import com.illiouchine.jm.model.ParticipantGroupAnalysis
 import com.illiouchine.jm.model.ProposalResult
+import com.illiouchine.jm.model.ProposalTally
 import com.illiouchine.jm.model.Tally
 import kotlinx.collections.immutable.ImmutableList
 import java.util.Locale
@@ -43,7 +44,8 @@ import kotlin.math.round
 @Composable
 fun LinearMeritProfileCanvas(
     modifier: Modifier = Modifier,
-    tally: Tally,
+//    tally: Tally,
+    proposalTally: ProposalTally,
     proposalResult: ProposalResult,
     grading: Grading,
     decisiveGroups: ImmutableList<ParticipantGroupAnalysis>,
@@ -146,7 +148,7 @@ fun LinearMeritProfileCanvas(
     Canvas(
         modifier = modifier,
     ) {
-        val proposalTally = tally.proposalsTallies[proposalResult.index]
+//        val proposalTally = tally.proposalsTallies[proposalResult.index]
         val middleX = size.width * 0.5f
         val amountOfGrades = grading.getAmountOfGrades()
         if (0 >= amountOfGrades) {
