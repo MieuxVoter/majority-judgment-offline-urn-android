@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import com.illiouchine.jm.R
-import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
+import com.illiouchine.jm.config.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.model.Grading.Enthusiasm6Grading
 import com.illiouchine.jm.model.Grading.PositiveQuality5Grading
 import com.illiouchine.jm.model.Grading.Priority5Grading
@@ -34,7 +34,7 @@ val gradings: List<Grading> = listOf(
 @Serializable
 sealed class Grading(
     val uid: Int, // make sure those are really unique, and DON'T edit them afterwards
-    @StringRes val name: Int,
+    @get:StringRes val name: Int,
     val grades: List<Grade>,
     // This grade and all the grades above it are considered acceptation grades.
     // This is usually the index of the "Passable" grade.

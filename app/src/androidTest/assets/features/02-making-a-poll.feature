@@ -20,10 +20,10 @@ Feature: Making a Poll
     When I click on the node tagged "setup_submit"
     Then I should still see the setup screen
 
-    # Submit button should be disabled (1 proposal)
-    When I click on the node tagged "setup_add_proposal"
-    When I click on the node tagged "setup_submit"
-    Then I should still see the setup screen
+    # Submit button should be disabled (1 proposal) - Rule changed
+#    When I click on the node tagged "setup_add_proposal"
+#    When I click on the node tagged "setup_submit"
+#    Then I should still see the setup screen
 
     # Submit button should now be enabled (2 proposals)
     When I click on the node tagged "setup_add_proposal"

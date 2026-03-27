@@ -2,12 +2,10 @@ package com.illiouchine.jm.data.room.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-// ADR: wanted to use Kotlin's Uuid but there's no type converter for it in room yet
-//import kotlin.uuid.Uuid
-//@OptIn(kotlin.uuid.ExperimentalUuidApi::class) // that's why, probably
-// So we use java.util.UUID and it's going to be just fine.  (ou pas)
 import java.util.UUID
-
+// ADR: wanted to use Kotlin's Uuid but there's no type converter for it in room yet
+// import kotlin.uuid.Uuid
+// So we use java.util.UUID and it's going to be just fine.  (ou pas)
 
 @Entity("poll")
 data class PollEntity(

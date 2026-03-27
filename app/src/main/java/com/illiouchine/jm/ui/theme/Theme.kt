@@ -2,13 +2,16 @@ package com.illiouchine.jm.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
@@ -50,12 +53,17 @@ fun JmTheme(
     }
 
     CompositionLocalProvider(
-        LocalSpacing provides Spacing()
+        value = LocalSpacing provides Spacing(),
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
             typography = Typography,
-            content = content,
-        )
+        ) {
+            // This Surface prevents a screen flicker when navigating in dark theme.
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                content = content,
+            )
+        }
     }
 }

@@ -22,7 +22,7 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.JudgmentSummary
-import com.illiouchine.jm.ui.preview.PreviewDataBuilder
+import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.DeleteColor
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
@@ -118,9 +118,9 @@ fun PreviewBallotSummaryScreen(modifier: Modifier = Modifier) {
         Scaffold { innerPadding ->
             BallotSummaryScreen(
                 modifier = modifier.padding(innerPadding),
-                pollConfig = PreviewDataBuilder.pollConfig(),
+                pollConfig = PreviewDataFaker.pollConfig(),
                 ballot = Ballot(
-                    judgments = PreviewDataBuilder.judgments(3)
+                    judgments = PreviewDataFaker.judgments(3)
                 ),
             )
         }
@@ -138,9 +138,9 @@ fun PreviewBallotSmallSummaryScreen(modifier: Modifier = Modifier) {
         Scaffold { innerPadding ->
             BallotSummaryScreen(
                 modifier = modifier.padding(innerPadding),
-                pollConfig = PreviewDataBuilder.pollConfig(),
+                pollConfig = PreviewDataFaker.pollConfig(),
                 ballot = Ballot(
-                    judgments = PreviewDataBuilder.judgments(3)
+                    judgments = PreviewDataFaker.judgments(3)
                 ),
             )
         }

@@ -15,20 +15,4 @@ data class Poll(
         get() = ballots.flatMap { ballot ->
             ballot.judgments
         }
-    /*
-    val judgments: List<Judgment>
-        get() = getAllJudgments()
-
-    private val collectedJudgments: List<Judgment> = collectAllJudgments()
-
-    private fun getAllJudgments(): List<Judgment> {
-        return collectedJudgments
-    }
-
-    private fun collectAllJudgments(): List<Judgment> {
-        val judgments: MutableList<Judgment> = mutableListOf()
-        ballots.forEach { ballot -> judgments.addAll(ballot.judgments) }
-
-        return judgments
-    }*/
 }

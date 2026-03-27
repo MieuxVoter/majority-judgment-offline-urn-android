@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.preview.PreviewDataBuilder
+import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.DeleteColor
 import com.illiouchine.jm.ui.theme.JmTheme
 
@@ -149,7 +149,7 @@ private fun PreviewPollSummary() {
     JmTheme {
         PollSummary(
             poll = Poll(
-                pollConfig = PreviewDataBuilder.pollConfig(),
+                pollConfig = PreviewDataFaker.pollConfig(),
                 ballots = emptyList()
             )
         )

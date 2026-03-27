@@ -37,7 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
+import com.illiouchine.jm.config.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.gradings
 import com.illiouchine.jm.ui.theme.JmTheme

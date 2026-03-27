@@ -29,6 +29,8 @@ import ir.ehsannarmani.compose_charts.models.LabelHelperProperties
 import ir.ehsannarmani.compose_charts.models.LabelProperties
 
 /**
+ * Idea: This should take the form of a merit profile, as it IS one, for the poll itself.
+ *
  * An opinion profile shows how many judgments of each grade were cast in the poll,
  * "tous candidats confondus".
  * This helps getting a sense of the overall feel of the judges for the whole set of candidates.
@@ -39,14 +41,14 @@ import ir.ehsannarmani.compose_charts.models.LabelProperties
  * The lib does not seem to allow this, so we might have to do it ourselves.
  */
 @Composable
-fun OpinionProfile(
+fun OpinionProfileBarChart(
     modifier: Modifier = Modifier,
     poll: Poll,
     tally: Tally,
     highestGradeToLowestGrade: Boolean = false,
 ) {
     val context = LocalContext.current
-    val barData = remember (poll, poll.ballots.size,highestGradeToLowestGrade) {
+    val barData = remember(poll, poll.ballots.size, highestGradeToLowestGrade) {
         // Cumulative (without strata because the chart lib does not support it out of the box)
         poll.pollConfig.grading.grades.mapIndexed { gradeIndex, grade ->
             @SuppressLint("LocalContextGetResourceValueCall") // how else?

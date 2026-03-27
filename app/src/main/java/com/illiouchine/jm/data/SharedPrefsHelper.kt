@@ -2,9 +2,9 @@ package com.illiouchine.jm.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.illiouchine.jm.logic.DEFAULT_GRADING_QUALITY_VALUE
-import com.illiouchine.jm.logic.DEFAULT_PLAY_SOUND_VALUE
-import com.illiouchine.jm.logic.DEFAULT_SHOW_ONBOARDING_VALUE
+import com.illiouchine.jm.config.DEFAULT_GRADING_QUALITY_VALUE
+import com.illiouchine.jm.config.DEFAULT_PLAY_SOUND_VALUE
+import com.illiouchine.jm.config.DEFAULT_SHOW_ONBOARDING_VALUE
 import com.illiouchine.jm.model.Grading
 
 class SharedPrefsHelper(

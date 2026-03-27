@@ -30,7 +30,7 @@ fun NuanceProfile(
     moreNuanceToLessNuance: Boolean = false,
 ) {
     val textColor = Theme.colorScheme.onBackground
-    val barData = remember (poll, poll.ballots.size) {
+    val barData = remember(poll, poll.ballots.size) {
         val nuances = poll.ballots.map { ballot ->
             // Note: casting to a Set removes duplicates, which is _why_ we do it.
             ballot.judgments.map { j -> j.grade }.toSet().size

@@ -40,7 +40,7 @@ import com.illiouchine.jm.ui.composable.GradeSelectionList
 import com.illiouchine.jm.ui.composable.JudgmentBalls
 import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
-import com.illiouchine.jm.ui.preview.PreviewDataBuilder
+import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -222,7 +222,7 @@ private fun PreviewVotingScreen(modifier: Modifier = Modifier) {
         PollVotingScreen(
             modifier = modifier,
             pollVotingState = PollVotingViewModel.PollVotingViewState(
-                pollConfig = PreviewDataBuilder.pollConfig(),
+                pollConfig = PreviewDataFaker.pollConfig(),
                 ballots = emptyList(),
                 currentBallot = null,
             ),
@@ -240,9 +240,9 @@ private fun PreviewVotingScreenWithBallots(modifier: Modifier = Modifier) {
         PollVotingScreen(
             modifier = modifier,
             pollVotingState = PollVotingViewModel.PollVotingViewState(
-                pollConfig = PreviewDataBuilder.pollConfig(),
+                pollConfig = PreviewDataFaker.pollConfig(),
                 ballots = listOf(
-                    Ballot(judgments = PreviewDataBuilder.judgments(1))
+                    Ballot(judgments = PreviewDataFaker.judgments(1))
                 ),
                 currentBallot = null,
             ),
@@ -260,12 +260,12 @@ private fun PreviewVotingScreenConfirmation(modifier: Modifier = Modifier) {
         PollVotingScreen(
             modifier = modifier,
             pollVotingState = PollVotingViewModel.PollVotingViewState(
-                pollConfig = PreviewDataBuilder.pollConfig(),
+                pollConfig = PreviewDataFaker.pollConfig(),
                 ballots = listOf(
                     // Ballot(judgments = listOf(Judgment(proposal = 1, grade = 3)))
                 ),
                 currentBallot = Ballot(
-                    judgments = PreviewDataBuilder.judgments(3)
+                    judgments = PreviewDataFaker.judgments(3)
                 ),
             ),
         )
@@ -284,12 +284,12 @@ private fun PreviewVotingSmallScreenConfirmation(modifier: Modifier = Modifier) 
         PollVotingScreen(
             modifier = modifier,
             pollVotingState = PollVotingViewModel.PollVotingViewState(
-                pollConfig = PreviewDataBuilder.pollConfig(),
+                pollConfig = PreviewDataFaker.pollConfig(),
                 ballots = listOf(
                     // Ballot(judgments = listOf(Judgment(proposal = 1, grade = 3)))
                 ),
                 currentBallot = Ballot(
-                    judgments = PreviewDataBuilder.judgments(3)
+                    judgments = PreviewDataFaker.judgments(3)
                 ),
             ),
         )
@@ -306,10 +306,10 @@ private fun PreviewVotingScreenWithoutCurrentBallot(modifier: Modifier = Modifie
         PollVotingScreen(
             modifier = modifier,
             pollVotingState = PollVotingViewModel.PollVotingViewState(
-                pollConfig = PreviewDataBuilder.pollConfig(),
-                ballots = PreviewDataBuilder.ballots(),
+                pollConfig = PreviewDataFaker.pollConfig(),
+                ballots = PreviewDataFaker.ballots(5),
                 currentBallot = Ballot(
-                    judgments = PreviewDataBuilder.judgments(0),
+                    judgments = PreviewDataFaker.judgments(0),
                 ),
             ),
         )
