@@ -65,7 +65,7 @@ import com.illiouchine.jm.ui.composable.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.composable.plot.NuanceProfile
 import com.illiouchine.jm.ui.composable.plot.OpinionProfileBarChart
-import com.illiouchine.jm.ui.composable.plot.ProximityProfile
+import com.illiouchine.jm.ui.composable.plot.ProximityBarChart
 import com.illiouchine.jm.ui.composable.plot.ProximitySpider
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
 import com.illiouchine.jm.ui.composable.spacer.MediumVerticalSpacer
@@ -398,14 +398,14 @@ fun ResultScreen(
             if (poll.pollConfig.proposals.size > 1) {
                 Text("Proximity Profile")
                 SmallVerticalSpacer()
-                ProximityProfile(
+                ProximityBarChart(
                     modifier = Modifier
                         .height(250.dp)
                         .fillMaxWidth(),
                     poll = poll,
                     onlyProposalsIndices = result.proposalResultsRanked.map { it.index },
                 )
-                // TODO: i18n once we're somewhat OK with what's written in here — not the case now
+                // i18n once we're somewhat OK with what's written in here — not the case now
                 // And not just because of the language ; I'm not so sure about the formula itself.
                 // I suspect we'll want to calibrate it & show meaningful thresholds.
                 PlotTitle(

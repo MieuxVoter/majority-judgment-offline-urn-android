@@ -49,7 +49,7 @@ import kotlin.math.sqrt
 // Basically:    proximity = 1.0 - standardDeviation / maximumStandardDeviation
 // This assumes that grades are somewhat linearly distributed, value-wise.
 @Composable
-fun ProximityProfile(
+fun ProximityBarChart(
     modifier: Modifier = Modifier,
     poll: Poll,
     animated: Boolean = true,
@@ -231,7 +231,7 @@ fun ProximityProfile(
     fontScale = 1.0f,
 )
 @Composable
-fun PreviewProximityProfile(modifier: Modifier = Modifier) {
+fun PreviewProximityBarChart(modifier: Modifier = Modifier) {
     val poll = PreviewDataFaker.poll(
         amountOfBallots = 7,
         amountOfProposals = 13,
@@ -240,7 +240,7 @@ fun PreviewProximityProfile(modifier: Modifier = Modifier) {
         Column(modifier) {
             Text("\uD83E\uDD9D I am the glitch raccoon that looks for glitches:")
             PlotTitle("Proximity Profile\n${poll.pollConfig.subject}")
-            ProximityProfile(
+            ProximityBarChart(
                 modifier = Modifier.height(200.dp),
                 poll = poll,
                 animated = false,
