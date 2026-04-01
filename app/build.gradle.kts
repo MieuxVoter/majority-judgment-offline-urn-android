@@ -150,7 +150,7 @@ dependencies {
     implementation(libs.koalaplot.core)
 
     // Data Formats for I/O
-    implementation("org.jetbrains.kotlinx:dataframe:1.0.0-Beta4")
+    implementation("org.jetbrains.kotlinx:dataframe:1.0.0-dev-9904")
 
     // Faking — Development only
     implementation(libs.kotlin.faker)
