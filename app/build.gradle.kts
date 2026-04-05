@@ -62,10 +62,10 @@ android {
     }
     packaging {
         // For org.apache.arrow:arrow-dataset:18.3.0 and 6 others (from dataframe)
-        resources.excludes.add("META-INF/DEPENDENCIES")
-        resources.excludes.add("META-INF/*LICENSE")
-        resources.excludes.add("META-INF/*NOTICE")
-        resources.excludes.add("META-INF/services/com.fasterxml.jackson.databind.Module")
+        // dataframe is too big, so it has been removed for now, hence the comments
+//        resources.excludes.add("META-INF/DEPENDENCIES")
+//        resources.excludes.add("META-INF/*LICENSE")
+//        resources.excludes.add("META-INF/*NOTICE")
     }
 
     room {
@@ -149,8 +149,8 @@ dependencies {
     implementation(libs.compose.charts)
     implementation(libs.koalaplot.core)
 
-    // Data Formats for I/O
-    implementation("org.jetbrains.kotlinx:dataframe:1.0.0-Beta4")
+    // Data Formats for I/O ; commented out because it adds 20Mio to the release (!)
+    //implementation("org.jetbrains.kotlinx:dataframe:1.0.0-Beta4")
 
     // Faking — Development only
     implementation(libs.kotlin.faker)
