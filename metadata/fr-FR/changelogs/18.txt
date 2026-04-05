@@ -1,0 +1,6 @@
+* Support des scrutins avec une seule proposition
+* Correction d'un flash de lumière en mode sombre
+* Ajout d'un profil d'opinion
+* Ajout d'un profil de nuance
+* Ajout d'un profil de proximité
+* Ajout d'aucune explication pour les profils ci-dessus
