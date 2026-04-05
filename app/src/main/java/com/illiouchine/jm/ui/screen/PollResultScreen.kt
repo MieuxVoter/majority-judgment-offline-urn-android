@@ -188,7 +188,7 @@ fun ResultScreen(
                             }
                             .semantics {
                                 if (isInSelectedDuel) {
-                                    // Bit of a hack to force reading the explanations that show up.
+                                    // Hack to force reading the explanations that show up.
                                     // NOTE: does not work well on the last merit profile.
                                     liveRegion = LiveRegionMode.Assertive
                                 }
@@ -396,7 +396,7 @@ fun ResultScreen(
 
             // Rule: hide the proximity profile if there's only one proposal, as it's useless
             if (poll.pollConfig.proposals.size > 1) {
-                Text("Proximity Profile")
+                Text(stringResource(R.string.proximity_profile))
                 SmallVerticalSpacer()
                 ProximityBarChart(
                     modifier = Modifier

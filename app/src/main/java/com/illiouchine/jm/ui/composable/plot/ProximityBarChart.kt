@@ -157,6 +157,9 @@ fun ProximityBarChart(
                 textAlign = TextAlign.End,
                 color = textColor,
             ),
+            rotation = LabelProperties.Rotation(
+                mode = LabelProperties.Rotation.Mode.Force,
+            ),
             // Wip: We can customize the label Composable but … it will require a TextMeasurer
             // See https://github.com/ehsannarmani/ComposeCharts/blob/master/compose-charts/src/commonMain/kotlin/ir/ehsannarmani/compose_charts/utils/Labels.kt#L83
 //            builder = { modifier, label, shouldRotate, _ ->
