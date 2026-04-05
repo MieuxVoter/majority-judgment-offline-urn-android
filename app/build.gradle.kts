@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.detekt)
 }
 
-// Bit of a self-made hack, this, but product flavors didn't run smoothly.  Anyway this works.
+// Self-made hack, this, but product flavors didn't run smoothly.  Anyway: this works.
 val isGoogleFlavor = providers
     .environmentVariable("GOOGLE")
     .getOrElse("false") == "true"
@@ -23,7 +23,7 @@ android {
             // > "com.illiouchine.jm is already in use"
             // This is because a malicious actor published a malware-riddled version of our app
             // on Google Play, pretending to be us.  …  -_-
-            // Three months later, the offender had been removed but we kept this application id.
+            // Three months later, the offender had been removed, but we kept this application id.
             "fr.mieuxvoter.urn"
         } else {
             // We'd initially registered this app on F-Droid with this applicationId:
