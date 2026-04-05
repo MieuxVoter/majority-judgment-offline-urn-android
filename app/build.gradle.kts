@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.detekt)
 }
 
-// Bit of a self-made hack, this, but product flavors didn't run smoothly.  Anyway this works.
+// Self-made hack, this, but product flavors didn't run smoothly.  Anyway: this works.
 val isGoogleFlavor = providers
     .environmentVariable("GOOGLE")
     .getOrElse("false") == "true"
@@ -23,7 +23,7 @@ android {
             // > "com.illiouchine.jm is already in use"
             // This is because a malicious actor published a malware-riddled version of our app
             // on Google Play, pretending to be us.  …  -_-
-            // Three months later, the offender had been removed but we kept this application id.
+            // Three months later, the offender had been removed, but we kept this application id.
             "fr.mieuxvoter.urn"
         } else {
             // We'd initially registered this app on F-Droid with this applicationId:
@@ -32,8 +32,8 @@ android {
         minSdk = 27
         targetSdk = 35
         // You need to bump both of these versions when making a new release.
-        versionCode = 18
-        versionName = "1.5.5"
+        versionCode = 19
+        versionName = "1.5.6"
 
         // Ideally we'd have both, but support for multiple runners looks experimental
 //        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -62,10 +62,10 @@ android {
     }
     packaging {
         // For org.apache.arrow:arrow-dataset:18.3.0 and 6 others (from dataframe)
-        resources.excludes.add("META-INF/DEPENDENCIES")
-        resources.excludes.add("META-INF/*LICENSE")
-        resources.excludes.add("META-INF/*NOTICE")
-        resources.excludes.add("META-INF/services/com.fasterxml.jackson.databind.Module")
+        // dataframe is too big, so it has been removed for now, hence the comments
+//        resources.excludes.add("META-INF/DEPENDENCIES")
+//        resources.excludes.add("META-INF/*LICENSE")
+//        resources.excludes.add("META-INF/*NOTICE")
     }
 
     room {
@@ -149,12 +149,12 @@ dependencies {
     implementation(libs.compose.charts)
     implementation(libs.koalaplot.core)
 
-    // Data Formats for I/O
-    implementation("org.jetbrains.kotlinx:dataframe:1.0.0-Beta4")
+    // Data Formats for I/O ; good but commented out because it adds 20Mio to the release (!)
+    //implementation("org.jetbrains.kotlinx:dataframe:1.0.0-Beta4")
 
     // Faking — Development only
-    implementation(libs.kotlin.faker)
-    //debugImplementation(libs.kotlin.faker) // We want to shake it from release, but how?
+    debugImplementation(libs.kotlin.faker)
+    //implementation(libs.kotlin.faker)  // adds ~13Mio to our ~3Mio release, so no
 
     // Testing — Development only
     testImplementation(libs.junit)
@@ -171,7 +171,7 @@ dependencies {
     detektPlugins(libs.detekt.formatting)
 }
 
-// Static code analyzer, run with:
+// Static code analyzer, run with either:
 //     ./gradlew detekt
 //     ./gradlew detekt --auto-correct --rerun
 detekt {

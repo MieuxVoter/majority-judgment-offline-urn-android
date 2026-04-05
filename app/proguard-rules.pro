@@ -20,22 +20,31 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-# Stuff that broke :app:minifyReleaseWithR8 since we added Koala (or perhaps dataframe?).
--dontwarn aQute.bnd.annotation.baseline.BaselineIgnore
--dontwarn aQute.bnd.annotation.spi.ServiceConsumer
--dontwarn aQute.bnd.annotation.spi.ServiceProvider
--dontwarn edu.umd.cs.findbugs.annotations.Nullable
--dontwarn edu.umd.cs.findbugs.annotations.SuppressFBWarnings
--dontwarn org.apache.batik.anim.dom.SAXSVGDocumentFactory
--dontwarn org.apache.batik.bridge.BridgeContext
--dontwarn org.apache.batik.bridge.DocumentLoader
--dontwarn org.apache.batik.bridge.GVTBuilder
--dontwarn org.apache.batik.bridge.UserAgent
--dontwarn org.apache.batik.bridge.UserAgentAdapter
--dontwarn org.apache.batik.util.XMLResourceDescriptor
--dontwarn org.osgi.framework.Bundle
--dontwarn org.osgi.framework.BundleContext
--dontwarn org.osgi.framework.FrameworkUtil
--dontwarn org.osgi.framework.ServiceReference
--dontwarn org.osgi.framework.wiring.BundleRevision
-# ---------------------------------------------------------------------------------------
+# Stuff that broke :app:minifyReleaseWithR8 when we added dataframe
+#-dontwarn aQute.bnd.annotation.baseline.BaselineIgnore
+#-dontwarn aQute.bnd.annotation.spi.ServiceConsumer
+#-dontwarn aQute.bnd.annotation.spi.ServiceProvider
+#-dontwarn edu.umd.cs.findbugs.annotations.Nullable
+#-dontwarn edu.umd.cs.findbugs.annotations.SuppressFBWarnings
+#-dontwarn org.apache.batik.anim.dom.SAXSVGDocumentFactory
+#-dontwarn org.apache.batik.bridge.BridgeContext
+#-dontwarn org.apache.batik.bridge.DocumentLoader
+#-dontwarn org.apache.batik.bridge.GVTBuilder
+#-dontwarn org.apache.batik.bridge.UserAgent
+#-dontwarn org.apache.batik.bridge.UserAgentAdapter
+#-dontwarn org.apache.batik.util.XMLResourceDescriptor
+#-dontwarn org.osgi.framework.Bundle
+#-dontwarn org.osgi.framework.BundleContext
+#-dontwarn org.osgi.framework.FrameworkUtil
+#-dontwarn org.osgi.framework.ServiceReference
+#-dontwarn org.osgi.framework.wiring.BundleRevision
+# -----------------------------------------------------------------
+
+# Stuff that warns in :app:minifyReleaseWithR8 since we added Koala I guess?
+# > Warning: R8: Unexpected reference to missing service class: META-INF/services/<some classpath>
+-dontwarn com.fasterxml.jackson.core.JsonFactory
+-dontwarn com.fasterxml.jackson.core.ObjectCodec
+-dontwarn com.fasterxml.jackson.databind.Module
+-dontwarn com.fasterxml.jackson.databind.ObjectMapper
+-dontwarn com.fasterxml.jackson.module.kotlin.KotlinModule
+# ------------------------------------------------------------------------------------------------

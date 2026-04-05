@@ -6,7 +6,6 @@ import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
-import io.github.serpro69.kfaker.faker
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlin.math.floor
@@ -59,7 +58,9 @@ val subjectsWithProposals: List<Pair<String, List<String>>> = listOf(
     )
 )
 
-val faker = faker { }
+// How to enable this here and use faker in @Preview with faker as debug dep only ?
+// import io.github.serpro69.kfaker.faker
+// val faker = faker { }
 
 // TBD: Look into Fakers for Kotlin, and conform
 object PreviewDataFaker {
@@ -91,7 +92,8 @@ object PreviewDataFaker {
             // proposals = subjectsWithProposals[currentIndex].second,
             // subject = faker.quote.yoda(),
             proposals = 0.rangeUntil(amountOfProposals).map {
-                faker.coffee.blendName()
+                // faker.coffee.blendName()
+                "Proposal ${it + 1}" // hotfix 'til we manage to use faker
             },
             grading = grading,
         )

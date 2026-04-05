@@ -1,8 +1,6 @@
 package com.illiouchine.jm.ui.composable.plot
 
-import android.content.Context
 import android.content.res.Configuration
-import androidx.annotation.RawRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
@@ -12,28 +10,14 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.illiouchine.jm.R
-import com.illiouchine.jm.model.Ballot
-import com.illiouchine.jm.model.Grading
-import com.illiouchine.jm.model.Judgment
-import com.illiouchine.jm.model.Poll
-import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.service.ProximityAnalysis
 import com.illiouchine.jm.service.ProximityAnalyzer
 import com.illiouchine.jm.ui.composable.plot.lib.SpiderChart
 import com.illiouchine.jm.ui.composable.plot.utils.truncate
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
-import kotlinx.collections.immutable.toPersistentList
-import org.jetbrains.kotlinx.dataframe.DataFrame
-import org.jetbrains.kotlinx.dataframe.api.map
-import org.jetbrains.kotlinx.dataframe.io.readCsv
-import org.jetbrains.kotlinx.dataframe.io.readCsvStr
-import java.io.File
-import java.io.InputStream
 import java.lang.Integer.min
 
 // Shows how close (in the collective hearts of the judges) pairs of proposals are.
@@ -110,6 +94,9 @@ fun PreviewProximitySpider(modifier: Modifier = Modifier) {
     }
 }
 
+// This is commented out 'til we figure out how to use a CSV file that is excluded from the release.
+// The CSV file is in app/src/androidTest/fixtures/ for now ; move it around as needed.
+/*
 @Preview(
     name = "2007 Phone (Portrait)",
     showSystemUi = false,
@@ -172,3 +159,4 @@ fun PreviewCsvProximitySpider(modifier: Modifier = Modifier) {
 fun Context.getRawInput(@RawRes resourceId: Int): InputStream {
     return resources.openRawResource(resourceId)
 }
+*/

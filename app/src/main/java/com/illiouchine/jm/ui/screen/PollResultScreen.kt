@@ -414,11 +414,15 @@ fun ResultScreen(
 // "A value of -1.0 means that the two proposals received extreme opposite grades in each ballot.",
                 )
                 MediumVerticalSpacer()
-                ProximitySpider(
-                    modifier = Modifier.height(400.dp),
-                    analysis = state.proximityAnalysis!!,
-                )
-                MediumVerticalSpacer()
+
+                // Rule: hide the proximity spider if there's less than three proposals (buggy!)
+                if (poll.pollConfig.proposals.size > 2) {
+                    ProximitySpider(
+                        modifier = Modifier.height(400.dp),
+                        analysis = state.proximityAnalysis!!,
+                    )
+                    MediumVerticalSpacer()
+                }
             }
 
             Button(
