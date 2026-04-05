@@ -149,12 +149,12 @@ dependencies {
     implementation(libs.compose.charts)
     implementation(libs.koalaplot.core)
 
-    // Data Formats for I/O ; commented out because it adds 20Mio to the release (!)
+    // Data Formats for I/O ; good but commented out because it adds 20Mio to the release (!)
     //implementation("org.jetbrains.kotlinx:dataframe:1.0.0-Beta4")
 
     // Faking — Development only
     debugImplementation(libs.kotlin.faker)
-    //implementation(libs.kotlin.faker)  // adds about 13Mio to the release !
+    //implementation(libs.kotlin.faker)  // adds ~13Mio to our ~3Mio release, so no
 
     // Testing — Development only
     testImplementation(libs.junit)
@@ -171,7 +171,7 @@ dependencies {
     detektPlugins(libs.detekt.formatting)
 }
 
-// Static code analyzer, run with:
+// Static code analyzer, run with either:
 //     ./gradlew detekt
 //     ./gradlew detekt --auto-correct --rerun
 detekt {
