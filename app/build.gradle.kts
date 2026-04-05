@@ -153,8 +153,8 @@ dependencies {
     //implementation("org.jetbrains.kotlinx:dataframe:1.0.0-Beta4")
 
     // Faking — Development only
-    implementation(libs.kotlin.faker)
-    //debugImplementation(libs.kotlin.faker) // We want to shake it from release, but how?
+    debugImplementation(libs.kotlin.faker)
+    //implementation(libs.kotlin.faker)  // adds about 13Mio to the release !
 
     // Testing — Development only
     testImplementation(libs.junit)
