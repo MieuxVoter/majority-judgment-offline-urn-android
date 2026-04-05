@@ -156,6 +156,32 @@ fun PreviewSpiderChart(modifier: Modifier = Modifier) {
 }
 
 @Preview(
+    name = "Two (Phone, Portrait)",
+    showSystemUi = false,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 1.0f,
+)
+@Composable
+fun PreviewTwoProposalsSpiderChart(modifier: Modifier = Modifier) {
+    JmTheme {
+        SpiderChart(
+            modifier = modifier
+                .height(400.dp)
+                .fillMaxWidth(),
+            title = {
+                PlotTitle(text = "Proximity of the proposals to Sun")
+            },
+            highlightedCategoryIndex = 0,
+            categories = listOf(
+                "Sun",
+                "Mer",
+            ),
+            values = listOf(1.0f, 0.4f),
+        )
+    }
+}
+
+@Preview(
     name = "Dynamic Phone (Portrait)",
     showSystemUi = false,
     uiMode = Configuration.UI_MODE_NIGHT_YES,
