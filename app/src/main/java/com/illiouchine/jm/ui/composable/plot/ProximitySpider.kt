@@ -1,6 +1,7 @@
 package com.illiouchine.jm.ui.composable.plot
 
 import android.content.res.Configuration
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.extensions.shortenNames
@@ -22,6 +25,7 @@ import com.illiouchine.jm.service.ProximityAnalyzer
 import com.illiouchine.jm.ui.composable.plot.lib.SpiderChart
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
+import com.illiouchine.jm.ui.theme.Theme
 import java.lang.Integer.min
 
 // Shows how close (in the collective hearts of the judges) pairs of proposals are.
@@ -63,7 +67,6 @@ fun ProximitySpider(
         tickDecimals = 0,
         highlightedCategoryIndex = selectedCategoryIndex,
         onCategoryClick = { clickedCategoryIndex ->
-            @Suppress("AssignedValueIsNeverRead") // TBD: why?
             selectedCategoryIndex = clickedCategoryIndex
         },
     )
@@ -76,8 +79,24 @@ fun ProximitySpider(
             Column {
                 filteredAnalysis.proposals.forEachIndexed { index, name ->
                     Row {
-//                        Text("${index + 1}. ${name}")
-                        Text("${proposalsInitials[index]}. ${name}")
+                        Text(
+                            modifier = Modifier
+                                .clickable(
+                                    onClick = {
+                                        selectedCategoryIndex = index
+                                    }
+                                )
+                            ,
+                            style = if (selectedCategoryIndex == index) {
+                                TextStyle(
+                                    color = Theme.colorScheme.primary,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                            } else {
+                                TextStyle()
+                            },
+                            text = "${proposalsInitials[index]}. ${name}",
+                        )
                     }
                 }
             }
