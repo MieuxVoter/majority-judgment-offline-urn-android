@@ -136,7 +136,6 @@ fun PreviewProximitySpider(modifier: Modifier = Modifier) {
     JmTheme {
         Column(modifier) {
             Text("\uD83E\uDD9D I am the glitch raccoon that looks for glitches:")
-//            PlotTitle("Proximity Spider\n${poll.pollConfig.subject}")
             ProximitySpider(
                 modifier = Modifier.height(400.dp),
                 analysis = analysis,
@@ -147,6 +146,7 @@ fun PreviewProximitySpider(modifier: Modifier = Modifier) {
 
 // This is commented out 'til we figure out how to use a CSV file that is excluded from the release.
 // The CSV file is in app/src/androidTest/fixtures/ for now ; move it around as needed.
+// Also, we need to handle the dataframe business (CSV reader) for this to work.
 /*
 @Preview(
     name = "2007 Phone (Portrait)",
