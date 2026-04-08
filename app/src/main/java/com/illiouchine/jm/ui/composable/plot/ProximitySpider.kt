@@ -1,7 +1,10 @@
 package com.illiouchine.jm.ui.composable.plot
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -9,13 +12,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.illiouchine.jm.extensions.shortenNames
 import com.illiouchine.jm.service.ProximityAnalysis
 import com.illiouchine.jm.service.ProximityAnalyzer
 import com.illiouchine.jm.ui.composable.plot.lib.SpiderChart
-import com.illiouchine.jm.ui.composable.plot.utils.truncate
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
 import java.lang.Integer.min
@@ -42,12 +46,18 @@ fun ProximitySpider(
     val proposalsIndices = lotsOfProposalsIndices.slice(0..<maxAmountOfProposals)
     val filteredAnalysis = analysis.filterByProposalsIndices(proposalsIndices)
 
+    val proposalsInitials = filteredAnalysis.proposals.shortenNames()
+
     SpiderChart(
         modifier = modifier,
         title = {
             Text("Proximity with ${analysis.proposals[selectedCategoryIndex]}")
         },
-        categories = filteredAnalysis.proposals.map { it.truncate(16, "…") },
+        // We are not using the legend because it yields a (min > max) error from the Koala lib.
+        //legend = {},
+        // Truncating is not enough on small screens with big fonts — responsive for tablets ?
+        //categories = filteredAnalysis.proposals.map { it.truncate(16, "…") },
+        categories = proposalsInitials,
         values = filteredAnalysis.proximities[selectedCategoryIndex].map { it.toFloat() },
         tickValues = listOf(-1f, 0f, 1f),
         tickDecimals = 0,
@@ -57,6 +67,22 @@ fun ProximitySpider(
             selectedCategoryIndex = clickedCategoryIndex
         },
     )
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Box(
+            modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
+        ) {
+            Column {
+                filteredAnalysis.proposals.forEachIndexed { index, name ->
+                    Row {
+//                        Text("${index + 1}. ${name}")
+                        Text("${proposalsInitials[index]}. ${name}")
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Preview(
@@ -64,6 +90,12 @@ fun ProximitySpider(
     showSystemUi = false,
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     fontScale = 1.0f,
+)
+@Preview(
+    name = "Phone (Portrait, Big Font)",
+    showSystemUi = false,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 2.0f,
 )
 @Preview(
     name = "Phone (Landscape)",

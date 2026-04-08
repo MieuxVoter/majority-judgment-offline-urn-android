@@ -89,6 +89,7 @@ fun ProximityBarChart(
         val maxDifference = poll.pollConfig.grading.getAmountOfGrades() - 1
         val maxDeviation = sqrt((maxDifference * maxDifference * poll.ballots.size).toDouble())
 
+        // FIXME: we now have a proximity analyzer class ; use it instead of this
         val proximities = proposalsIndices.map { someProposalIndex ->
             proposalsIndices.map { otherProposalIndex ->
                 if (maxDeviation == 0.0) { // true iff there are no ballots or only one grade

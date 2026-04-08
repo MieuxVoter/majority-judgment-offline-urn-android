@@ -39,6 +39,7 @@ import ir.ehsannarmani.compose_charts.extensions.format
 fun SpiderChart(
     modifier: Modifier = Modifier,
     title: @Composable () -> Unit = {},
+    legend: @Composable () -> Unit = {},
     categories: List<String>,
     values: List<Float>,
     tickValues: List<Float> = listOf(-1f, 0f, 1f),
@@ -69,7 +70,7 @@ fun SpiderChart(
     ChartLayout(
         modifier = modifier,
         title = title,
-//        legend = { Legend() },
+        legend = legend,
 //        legendLocation = LegendLocation.BOTTOM,
     ) {
         val angularAxisGridLineStyle = LineStyle(

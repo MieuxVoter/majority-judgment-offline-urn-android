@@ -93,7 +93,7 @@ object PreviewDataFaker {
             // subject = faker.quote.yoda(),
             proposals = 0.rangeUntil(amountOfProposals).map {
                 // faker.coffee.blendName()
-                "Proposal ${it + 1}" // hotfix 'til we manage to use faker
+                "Proposal Number #${it + 1}" // hotfix 'til we manage to use faker
             },
             grading = grading,
         )
