@@ -29,9 +29,10 @@ import com.illiouchine.jm.ui.theme.Theme
 import java.lang.Integer.min
 
 // Shows how close (in the collective hearts of the judges) pairs of proposals are.
-// A proximity of 1 means that the two proposals received exactly the same grades in each ballot.
-// A proximity of 0 means that the two proposals received extreme and diametrically opposite grades in each ballot.
-// Basically:    proximity = 1.0 - standardDeviation / maximumStandardDeviation
+// A proximity of +1 means that the two proposals received exactly the same grades in each ballot.
+// A proximity of 0 is indistinguishable from random.
+// A proximity of -1 means that the two proposals received extreme and diametrically opposite grades in each ballot.
+// Basically:    proximity = (squaredDeviation / maximumDeviation - 0.5) * 2.0
 // This assumes that grades are somewhat linearly distributed, value-wise.
 @Composable
 fun ProximitySpider(
