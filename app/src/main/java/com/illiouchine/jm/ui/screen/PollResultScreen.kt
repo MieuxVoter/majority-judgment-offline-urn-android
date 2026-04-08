@@ -400,10 +400,10 @@ fun ResultScreen(
                 SmallVerticalSpacer()
                 ProximityBarChart(
                     modifier = Modifier
-                        .height(250.dp)
+                        .height(80.dp * poll.pollConfig.proposals.size)
                         .fillMaxWidth(),
-                    poll = poll,
-                    onlyProposalsIndices = result.proposalResultsRanked.map { it.index },
+                    analysis = state.proximityAnalysis!!,
+//                    onlyProposalsIndices = result.proposalResultsRanked.map { it.index },
                 )
                 // i18n once we're somewhat OK with what's written in here — not the case now
                 // And not just because of the language ; I'm not so sure about the formula itself.

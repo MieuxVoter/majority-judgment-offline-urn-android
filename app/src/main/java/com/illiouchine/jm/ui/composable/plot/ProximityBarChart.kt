@@ -4,6 +4,8 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -13,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -20,14 +23,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.illiouchine.jm.extensions.shortenNames
 import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.service.ProximityAnalysis
+import com.illiouchine.jm.service.ProximityAnalyzer
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
 import com.illiouchine.jm.ui.composable.plot.utils.truncate
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
+import io.github.koalaplot.core.animation.StartAnimationUseCase
+import io.github.koalaplot.core.bar.GroupedHorizontalBarPlot
+import io.github.koalaplot.core.bar.horizontalSolidBar
+import io.github.koalaplot.core.style.KoalaPlotTheme
+import io.github.koalaplot.core.util.ExperimentalKoalaPlotApi
+import io.github.koalaplot.core.xygraph.AxisContent
+import io.github.koalaplot.core.xygraph.CategoryAxisModel
+import io.github.koalaplot.core.xygraph.XYGraph
+import io.github.koalaplot.core.xygraph.rememberAxisStyle
+import io.github.koalaplot.core.xygraph.rememberFloatLinearAxisModel
 import ir.ehsannarmani.compose_charts.ColumnChart
 import ir.ehsannarmani.compose_charts.models.AnimationMode
 import ir.ehsannarmani.compose_charts.models.BarProperties
@@ -43,13 +59,134 @@ import java.lang.Integer.min
 import kotlin.math.floor
 import kotlin.math.sqrt
 
+//
 // Shows how close (in the collective hearts of the judges) pairs of proposals are.
-// A proximity of 1 means that the two proposals received exactly the same grades in each ballot.
-// A proximity of 0 means that the two proposals received extreme and diametrically opposite grades in each ballot.
-// Basically:    proximity = 1.0 - standardDeviation / maximumStandardDeviation
+// A proximity of +1 means that the two proposals received exactly the same grades in each ballot.
+// A proximity of -1 means that the two proposals received extreme and diametrically opposite grades in each ballot.
+// Basically:    proximity = (squaredDeviation / maximumDeviation - 0.5) * 2.0
 // This assumes that grades are somewhat linearly distributed, value-wise.
+//
+// There are two plots:
+// - One made with Compose Charts (the "old" one, kept until it's stale enough)
+// - One made with Koala (the "current" one in use)
+//
+
+@OptIn(ExperimentalKoalaPlotApi::class)
 @Composable
 fun ProximityBarChart(
+    modifier: Modifier = Modifier,
+    analysis: ProximityAnalysis,
+) {
+
+    val context = LocalContext.current
+    val textColor = Theme.colorScheme.onBackground
+    val primaryColor = Theme.colorScheme.primary
+    val proposalsInitials = analysis.proposals.shortenNames()
+//    val proposalsInitials = analysis.proposals
+
+
+    XYGraph(
+        modifier = modifier,
+        xAxisModel = rememberFloatLinearAxisModel(-1f..1f, minorTickCount = 0),
+        yAxisModel = remember { CategoryAxisModel(proposalsInitials) },
+        xAxisContent = AxisContent(
+            style = rememberAxisStyle(),
+            labels = {
+                Text(
+                    text = it.toString(),
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(all = Theme.spacing.tiny),
+                )
+            },
+            title = {},
+        ),
+        yAxisContent = AxisContent(
+            style = rememberAxisStyle(),
+            labels = {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(all = Theme.spacing.tiny),
+                )
+            },
+            title = {},
+        ),
+    ) {
+        val textColor = Theme.colorScheme.onBackground
+        GroupedHorizontalBarPlot(
+            maxBarGroupWidth = 0.666f,
+            startAnimationUseCase = StartAnimationUseCase(
+                executionType = StartAnimationUseCase.ExecutionType.Default,
+                KoalaPlotTheme.animationSpec,
+            )
+        ) {
+            proposalsInitials.forEachIndexed { groupIndex, _ ->
+                series(
+                    defaultBar = horizontalSolidBar(
+                        color = textColor,
+                    ),
+                ) {
+                    proposalsInitials.forEachIndexed { otherIndex, name ->
+                        item(
+                            y = name,
+                            xMin = 0f,
+                            xMax = analysis.proximities[groupIndex][otherIndex].toFloat(),
+                            bar = if (groupIndex == otherIndex) {
+                                horizontalSolidBar(
+                                    color = primaryColor,
+                                )
+                            } else {
+                                null // i.e. use the default bar
+                            },
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Preview(
+    name = "Phone (Portrait)",
+    showSystemUi = false,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 1.0f,
+)
+@Preview(
+    name = "Phone (Landscape)",
+    showSystemUi = false,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    device = "spec:width=511dp,height=891dp,orientation=landscape",
+    fontScale = 1.0f,
+)
+@Composable
+fun PreviewProximityBarChart(modifier: Modifier = Modifier) {
+    val poll = PreviewDataFaker.poll(
+        amountOfBallots = 7,
+        amountOfProposals = 13,
+    )
+    val analyzer = ProximityAnalyzer()
+    val analysis = analyzer.analyze(
+        poll = poll,
+    )
+    JmTheme {
+        Column(modifier) {
+            Text("\uD83E\uDD9D I am the glitch raccoon:")
+            PlotTitle("Proximity Bar Chart\n${poll.pollConfig.subject}")
+            ProximityBarChart(
+                analysis = analysis,
+                modifier = Modifier.padding(
+                    horizontal = 8.dp,
+                ),
+            )
+        }
+    }
+}
+
+
+@Composable
+fun ProximityBarChartOld(
+    // will be safe to remove soon
     modifier: Modifier = Modifier,
     poll: Poll,
     animated: Boolean = true,
@@ -222,20 +359,20 @@ fun ProximityBarChart(
 }
 
 @Preview(
-    name = "Phone (Portrait)",
+    name = "Old Phone (Portrait)",
     showSystemUi = false,
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     fontScale = 1.0f,
 )
 @Preview(
-    name = "Phone (Landscape)",
+    name = "Old Phone (Landscape)",
     showSystemUi = false,
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     device = "spec:width=511dp,height=891dp,orientation=landscape",
     fontScale = 1.0f,
 )
 @Composable
-fun PreviewProximityBarChart(modifier: Modifier = Modifier) {
+fun PreviewProximityBarChartOld(modifier: Modifier = Modifier) {
     val poll = PreviewDataFaker.poll(
         amountOfBallots = 7,
         amountOfProposals = 13,
@@ -244,7 +381,7 @@ fun PreviewProximityBarChart(modifier: Modifier = Modifier) {
         Column(modifier) {
             Text("\uD83E\uDD9D I am the glitch raccoon that looks for glitches:")
             PlotTitle("Proximity Profile\n${poll.pollConfig.subject}")
-            ProximityBarChart(
+            ProximityBarChartOld(
                 modifier = Modifier.height(200.dp),
                 poll = poll,
                 animated = false,
@@ -260,3 +397,4 @@ fun PreviewProximityBarChart(modifier: Modifier = Modifier) {
         }
     }
 }
+
