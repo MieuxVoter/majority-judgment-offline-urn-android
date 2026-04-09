@@ -400,7 +400,7 @@ fun ResultScreen(
                 SmallVerticalSpacer()
                 ProximityBarChart(
                     modifier = Modifier
-                        .height(80.dp * poll.pollConfig.proposals.size)
+                        .height(72.dp * poll.pollConfig.proposals.size)
                         .fillMaxWidth(),
                     analysis = state.proximityAnalysis!!,
 //                    onlyProposalsIndices = result.proposalResultsRanked.map { it.index },
@@ -419,7 +419,7 @@ fun ResultScreen(
                 if (poll.pollConfig.proposals.size > 2) {
                     ProximitySpider(
                         modifier = Modifier.height(400.dp),
-                        analysis = state.proximityAnalysis!!,
+                        analysis = state.proximityAnalysis,
                     )
                     MediumVerticalSpacer()
                 }

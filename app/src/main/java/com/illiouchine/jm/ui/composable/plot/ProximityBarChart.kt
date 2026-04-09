@@ -15,7 +15,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -78,12 +77,9 @@ fun ProximityBarChart(
     analysis: ProximityAnalysis,
 ) {
 
-    val context = LocalContext.current
-    val textColor = Theme.colorScheme.onBackground
+    //val textColor = Theme.colorScheme.onBackground
     val primaryColor = Theme.colorScheme.primary
     val proposalsInitials = analysis.proposals.shortenNames()
-//    val proposalsInitials = analysis.proposals
-
 
     XYGraph(
         modifier = modifier,
@@ -127,11 +123,16 @@ fun ProximityBarChart(
                     ),
                 ) {
                     proposalsInitials.forEachIndexed { otherIndex, name ->
+                        val isOwnBar = (groupIndex == otherIndex)
                         item(
                             y = name,
-                            xMin = 0f,
+                            xMin = if (isOwnBar) {
+                                analysis.minima[groupIndex].toFloat()
+                            } else {
+                                0f
+                            },
                             xMax = analysis.proximities[groupIndex][otherIndex].toFloat(),
-                            bar = if (groupIndex == otherIndex) {
+                            bar = if (isOwnBar) {
                                 horizontalSolidBar(
                                     color = primaryColor,
                                 )
@@ -171,7 +172,7 @@ fun PreviewProximityBarChart(modifier: Modifier = Modifier) {
     )
     JmTheme {
         Column(modifier) {
-            Text("\uD83E\uDD9D I am the glitch raccoon:")
+            //Text("\uD83E\uDD9D I am the glitch raccoon:")
             PlotTitle("Proximity Bar Chart\n${poll.pollConfig.subject}")
             ProximityBarChart(
                 analysis = analysis,
