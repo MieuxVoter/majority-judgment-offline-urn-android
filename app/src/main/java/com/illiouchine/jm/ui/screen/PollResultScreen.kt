@@ -395,12 +395,13 @@ fun ResultScreen(
             MediumVerticalSpacer()
 
             // Rule: hide the proximity profile if there's only one proposal, as it's useless
-            if (poll.pollConfig.proposals.size > 1) {
+            val amountOfProposals = poll.pollConfig.proposals.size
+            if (amountOfProposals > 1) {
                 Text(stringResource(R.string.proximity_profile))
                 SmallVerticalSpacer()
                 ProximityBarChart(
                     modifier = Modifier
-                        .height(72.dp * poll.pollConfig.proposals.size)
+                        .height(8.dp * amountOfProposals * amountOfProposals)
                         .fillMaxWidth(),
                     analysis = state.proximityAnalysis!!,
 //                    onlyProposalsIndices = result.proposalResultsRanked.map { it.index },
@@ -416,7 +417,7 @@ fun ResultScreen(
                 MediumVerticalSpacer()
 
                 // Rule: hide the proximity spider if there's less than three proposals (buggy!)
-                if (poll.pollConfig.proposals.size > 2) {
+                if (amountOfProposals > 2) {
                     ProximitySpider(
                         modifier = Modifier.height(400.dp),
                         analysis = state.proximityAnalysis,

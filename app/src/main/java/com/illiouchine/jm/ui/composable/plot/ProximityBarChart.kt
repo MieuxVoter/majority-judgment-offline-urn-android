@@ -76,8 +76,7 @@ fun ProximityBarChart(
     modifier: Modifier = Modifier,
     analysis: ProximityAnalysis,
 ) {
-
-    //val textColor = Theme.colorScheme.onBackground
+    // val textColor = Theme.colorScheme.onBackground
     val primaryColor = Theme.colorScheme.primary
     val proposalsInitials = analysis.proposals.shortenNames()
 
@@ -172,7 +171,7 @@ fun PreviewProximityBarChart(modifier: Modifier = Modifier) {
     )
     JmTheme {
         Column(modifier) {
-            //Text("\uD83E\uDD9D I am the glitch raccoon:")
+            // Text("\uD83E\uDD9D I am the glitch raccoon:")
             PlotTitle("Proximity Bar Chart\n${poll.pollConfig.subject}")
             ProximityBarChart(
                 analysis = analysis,
@@ -183,7 +182,6 @@ fun PreviewProximityBarChart(modifier: Modifier = Modifier) {
         }
     }
 }
-
 
 // will be safe to remove soon
 @Deprecated("Use ProximityBarChart instead.")
@@ -383,20 +381,12 @@ fun PreviewProximityBarChartOld(modifier: Modifier = Modifier) {
         Column(modifier) {
             Text("\uD83E\uDD9D I am the glitch raccoon that looks for glitches:")
             PlotTitle("Proximity Profile\n${poll.pollConfig.subject}")
+            @Suppress("DEPRECATION")
             ProximityBarChartOld(
                 modifier = Modifier.height(200.dp),
                 poll = poll,
                 animated = false,
             )
-            // Uncomment this to expose trouble with our noob remember {} setup
-//                Text("And now the version with a coerced amount of proposals (6):")
-//                ProximityProfile(
-//                    modifier = Modifier.height(300.dp),
-//                    poll = poll,
-//                    animated = false,
-//                    onlyProposalsIndices = 0.rangeUntil(6).toList(),
-//                )
         }
     }
 }
-
