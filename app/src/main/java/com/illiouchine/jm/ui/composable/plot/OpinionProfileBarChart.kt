@@ -1,42 +1,23 @@
 package com.illiouchine.jm.ui.composable.plot
 
 import android.annotation.SuppressLint
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.extensions.reversedIf
 import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.Tally
-import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
-import com.illiouchine.jm.ui.composable.plot.lib.SpiderChart
 import com.illiouchine.jm.ui.composable.plot.utils.favorIntLineCountForBars
-import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
-import io.github.koalaplot.core.animation.StartAnimationUseCase
-import io.github.koalaplot.core.bar.GroupedHorizontalBarPlot
-import io.github.koalaplot.core.bar.horizontalSolidBar
-import io.github.koalaplot.core.bar.solidBar
-import io.github.koalaplot.core.style.KoalaPlotTheme
-import io.github.koalaplot.core.util.ExperimentalKoalaPlotApi
-import io.github.koalaplot.core.xygraph.CategoryAxisModel
-import io.github.koalaplot.core.xygraph.GridStyle
-import io.github.koalaplot.core.xygraph.XYGraph
-import io.github.koalaplot.core.xygraph.XYGraphScope
-import io.github.koalaplot.core.xygraph.rememberFloatLinearAxisModel
 import ir.ehsannarmani.compose_charts.ColumnChart
 import ir.ehsannarmani.compose_charts.models.BarProperties
 import ir.ehsannarmani.compose_charts.models.Bars
@@ -138,4 +119,3 @@ fun OpinionProfileBarChart(
     // This must stay a magic value, since it's a hotfix hack and not theme related.
     Spacer(modifier = Modifier.padding(vertical = 24.dp))
 }
-

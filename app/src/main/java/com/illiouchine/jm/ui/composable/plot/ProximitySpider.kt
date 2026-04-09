@@ -59,9 +59,9 @@ fun ProximitySpider(
             Text("Proximity with ${analysis.proposals[selectedCategoryIndex]}")
         },
         // We are not using the legend because it yields a (min > max) error from the Koala lib.
-        //legend = {},
+        // legend = {},
         // Truncating is not enough on small screens with big fonts — responsive for tablets ?
-        //categories = filteredAnalysis.proposals.map { it.truncate(16, "…") },
+        // categories = filteredAnalysis.proposals.map { it.truncate(16, "…") },
         categories = proposalsInitials,
         values = filteredAnalysis.proximities[selectedCategoryIndex].map { it.toFloat() },
         tickValues = listOf(-1f, 0f, 1f),
@@ -86,8 +86,7 @@ fun ProximitySpider(
                                     onClick = {
                                         selectedCategoryIndex = index
                                     }
-                                )
-                            ,
+                                ),
                             style = if (selectedCategoryIndex == index) {
                                 TextStyle(
                                     color = Theme.colorScheme.primary,
@@ -96,7 +95,7 @@ fun ProximitySpider(
                             } else {
                                 TextStyle()
                             },
-                            text = "${proposalsInitials[index]}. ${name}",
+                            text = "${proposalsInitials[index]}. $name",
                         )
                     }
                 }

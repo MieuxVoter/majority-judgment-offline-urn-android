@@ -27,14 +27,14 @@ fun List<String>.shortenNames(): List<String> {
                 i++
             }
         }
-        duplicates = shorts.mapIndexed { index, short ->  // inefficient, but works ; fix at will
+        duplicates = shorts.mapIndexed { index, short -> // inefficient, but works ; fix at will
             shorts.indexOf(short) != index || shorts.lastIndexOf(short) != index
         }
-        //unicityValidated = (shorts.toSet().size == shorts.size) // works, but any() is cheaper
+        // unicityValidated = (shorts.toSet().size == shorts.size) // works, but any() is cheaper
         unicityValidated = !duplicates.any { it }
 
-        //print(loopCursor.toString() + ": " + shorts.toString() + "\n")
-        //print(duplicates.toString() + "\n")
+        // print(loopCursor.toString() + ": " + shorts.toString() + "\n")
+        // print(duplicates.toString() + "\n")
 
         loopCursor++
     }

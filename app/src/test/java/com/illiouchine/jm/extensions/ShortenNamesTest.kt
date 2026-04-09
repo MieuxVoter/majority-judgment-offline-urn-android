@@ -3,8 +3,6 @@ package com.illiouchine.jm.extensions
 import org.junit.Assert
 import org.junit.Test
 
-
-
 class ShortenNamesTest {
 
     data class ShortenNamesTestDatum(
@@ -92,6 +90,5 @@ class ShortenNamesTest {
                 actual,
             )
         }
-
     }
 }

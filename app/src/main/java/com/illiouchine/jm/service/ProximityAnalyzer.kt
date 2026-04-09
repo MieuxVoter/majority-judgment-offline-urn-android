@@ -66,11 +66,13 @@ class ProximityAnalyzer {
         }
 
         val minima = proposalsIndices.map { someProposalIndex ->
-            val sqDeviation = sqrt(poll.ballots.sumOf {
-                val someGradeValue = it.gradeOf(someProposalIndex)
-                val localMaxDifference = max(someGradeValue, maxDifference - someGradeValue)
-                localMaxDifference * localMaxDifference
-            }.toDouble())
+            val sqDeviation = sqrt(
+                poll.ballots.sumOf {
+                    val someGradeValue = it.gradeOf(someProposalIndex)
+                    val localMaxDifference = max(someGradeValue, maxDifference - someGradeValue)
+                    localMaxDifference * localMaxDifference
+                }.toDouble()
+            )
             (0.5 - sqDeviation / maxDeviation) * 2.0
         }
 

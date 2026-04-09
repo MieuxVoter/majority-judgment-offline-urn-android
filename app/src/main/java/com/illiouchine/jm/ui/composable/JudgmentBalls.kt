@@ -44,7 +44,7 @@ fun JudgmentBalls(
                 targetValue = when {
                     i < currentBalls -> pollConfig.grading.getGradeColor(ballot.judgments[i].grade)
                     i == currentBalls -> Color.LightGray
-                    else -> Color.DarkGray  // i > currentBalls
+                    else -> Color.DarkGray // i > currentBalls
                 },
             )
             val animatedSize by animateDpAsState(

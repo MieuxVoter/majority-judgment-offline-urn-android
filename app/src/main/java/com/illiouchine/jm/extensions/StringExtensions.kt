@@ -23,7 +23,7 @@ infix fun String.getInitials(seed: Int = 0): String {
             }
         }
 
-    return initialsList.reduce({ acc, s -> acc + s})
+    return initialsList.reduce({ acc, s -> acc + s })
 }
 
 infix fun Int.dividedBy(divisor: Int): Pair<Int, Int> {

@@ -406,9 +406,7 @@ fun ResultScreen(
                     analysis = state.proximityAnalysis!!,
 //                    onlyProposalsIndices = result.proposalResultsRanked.map { it.index },
                 )
-                // i18n once we're somewhat OK with what's written in here — not the case now
-                // And not just because of the language ; I'm not so sure about the formula itself.
-                // I suspect we'll want to calibrate it & show meaningful thresholds.
+                // i18n once we're somewhat OK with what's written in here — not the case right now
                 PlotTitle(
                     text = "Proximity of every pair of proposals inside the ballots.",
 // "A value of 1.0 means that the two proposals received the exact same grades in each ballot. " +
