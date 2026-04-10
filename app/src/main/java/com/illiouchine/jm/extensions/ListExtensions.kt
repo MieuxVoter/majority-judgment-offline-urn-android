@@ -17,14 +17,12 @@ fun List<String>.shortenNames(): List<String> {
 
     while ((!unicityValidated) && loopCursor < 4096) {
         shorts = buildList {
-            var i = 0
-            for (longName in longNamesList) {
+            for ((i, longName) in longNamesList.withIndex()) {
                 if (duplicates[i]) {
                     add(longName.getInitials(seed = loopCursor))
                 } else {
                     add(shorts[i])
                 }
-                i++
             }
         }
         duplicates = shorts.mapIndexed { index, short -> // inefficient, but works ; fix at will

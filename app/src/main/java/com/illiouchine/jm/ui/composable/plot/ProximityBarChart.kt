@@ -75,15 +75,26 @@ import kotlin.math.sqrt
 fun ProximityBarChart(
     modifier: Modifier = Modifier,
     analysis: ProximityAnalysis,
+    proposalsIndices: List<Int>? = null, // show all proposals (up to 16) if not set
 ) {
-    // val textColor = Theme.colorScheme.onBackground
     val primaryColor = Theme.colorScheme.primary
+
+    val allProposalsIndices = 0.rangeUntil(analysis.proposals.size).toList()
+    val lotsOfProposalsIndices = proposalsIndices ?: allProposalsIndices
+
+    val maxAmountOfProposals = min(16, lotsOfProposalsIndices.size)
+    val usedProposalsIndices = lotsOfProposalsIndices.take(maxAmountOfProposals).reversed()
+
     val proposalsInitials = analysis.proposals.shortenNames()
 
     XYGraph(
         modifier = modifier,
         xAxisModel = rememberFloatLinearAxisModel(-1f..1f, minorTickCount = 0),
-        yAxisModel = remember { CategoryAxisModel(proposalsInitials) },
+        yAxisModel = remember(analysis, proposalsIndices) {
+            CategoryAxisModel(
+                categories = usedProposalsIndices.map { proposalsInitials[it] },
+            )
+        },
         xAxisContent = AxisContent(
             style = rememberAxisStyle(),
             labels = {
@@ -115,22 +126,23 @@ fun ProximityBarChart(
                 KoalaPlotTheme.animationSpec,
             )
         ) {
-            proposalsInitials.forEachIndexed { groupIndex, _ ->
+            usedProposalsIndices.map { categoryIndex ->
                 series(
                     defaultBar = horizontalSolidBar(
                         color = textColor,
                     ),
                 ) {
-                    proposalsInitials.forEachIndexed { otherIndex, name ->
-                        val isOwnBar = (groupIndex == otherIndex)
+                    usedProposalsIndices.map { proposalIndex ->
+                        val name = proposalsInitials[proposalIndex]
+                        val isOwnBar = (categoryIndex == proposalIndex)
                         item(
                             y = name,
                             xMin = if (isOwnBar) {
-                                analysis.minima[groupIndex].toFloat()
+                                analysis.minima[categoryIndex].toFloat()
                             } else {
                                 0f
                             },
-                            xMax = analysis.proximities[groupIndex][otherIndex].toFloat(),
+                            xMax = analysis.proximities[categoryIndex][proposalIndex].toFloat(),
                             bar = if (isOwnBar) {
                                 horizontalSolidBar(
                                     color = primaryColor,

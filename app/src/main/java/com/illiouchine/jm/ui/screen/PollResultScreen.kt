@@ -404,7 +404,7 @@ fun ResultScreen(
                         .height(8.dp * amountOfProposals * amountOfProposals)
                         .fillMaxWidth(),
                     analysis = state.proximityAnalysis!!,
-//                    onlyProposalsIndices = result.proposalResultsRanked.map { it.index },
+                    proposalsIndices = result.proposalResultsRanked.map { it.index },
                 )
                 // i18n once we're somewhat OK with what's written in here — not the case right now
                 PlotTitle(
