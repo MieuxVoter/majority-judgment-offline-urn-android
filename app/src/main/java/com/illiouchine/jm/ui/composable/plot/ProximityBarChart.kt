@@ -85,7 +85,12 @@ fun ProximityBarChart(
     val maxAmountOfProposals = min(16, lotsOfProposalsIndices.size)
     val usedProposalsIndices = lotsOfProposalsIndices.take(maxAmountOfProposals).reversed()
 
-    val proposalsInitials = analysis.proposals.shortenNames()
+    val proposalsInitials = analysis.proposals.shortenNames().map {
+        it.truncate(
+            maxLength = 7, // check big fonts on small screens if you increment this
+            ellipsis = "…",
+        )
+    }
 
     XYGraph(
         modifier = modifier,

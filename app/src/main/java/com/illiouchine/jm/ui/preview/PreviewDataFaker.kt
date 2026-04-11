@@ -8,6 +8,7 @@ import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlin.math.floor
 
 val subjectsWithProposals: List<Pair<String, List<String>>> = listOf(
@@ -102,15 +103,16 @@ object PreviewDataFaker {
     fun ballots(
         size: Int,
         pollConfig: PollConfig = pollConfig(),
+        tweakBallots: (Int, Ballot, PollConfig) -> Ballot = { _, b, _ -> b },
     ): ImmutableList<Ballot> {
-        val ballots = mutableListOf<Ballot>()
-        0.rangeUntil(size).forEach { _ ->
+        val ballots = mutableListOf<Ballot>() // use list builder pattern instead ?
+        0.rangeUntil(size).forEach { index ->
             val ballot = Ballot(
                 judgments = judgments(pollConfig.proposals.size, pollConfig.grading),
             )
-            ballots.add(ballot)
+            ballots.add(tweakBallots(index, ballot, pollConfig))
         }
-        return ballots.toImmutableList()
+        return ballots.toPersistentList()
     }
 
     fun poll(
@@ -118,6 +120,7 @@ object PreviewDataFaker {
         amountOfProposals: Int = 9,
         amountOfBallots: Int = 5,
         grading: Grading = DEFAULT_GRADING_QUALITY_VALUE,
+        tweakBallots: (Int, Ballot, PollConfig) -> Ballot = { _, b, _ -> b },
     ): Poll {
         val config = pollConfig(
             grading = grading,
@@ -129,6 +132,7 @@ object PreviewDataFaker {
             ballots = ballots(
                 size = amountOfBallots,
                 pollConfig = config,
+                tweakBallots = tweakBallots,
             )
         )
     }

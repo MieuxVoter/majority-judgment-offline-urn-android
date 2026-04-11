@@ -401,7 +401,7 @@ fun ResultScreen(
                 SmallVerticalSpacer()
                 ProximityBarChart(
                     modifier = Modifier
-                        .height(8.dp * amountOfProposals * amountOfProposals)
+                        .height(16.dp * amountOfProposals * amountOfProposals)
                         .fillMaxWidth(),
                     analysis = state.proximityAnalysis!!,
                     proposalsIndices = result.proposalResultsRanked.map { it.index },
@@ -455,7 +455,34 @@ fun ResultScreen(
 // @PreviewScreenSizes // my eyes hurt ← no dark mode ; but we should cook something like this
 @Composable
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
-    val poll = PreviewDataFaker.poll()
+    val poll = PreviewDataFaker.poll(
+        amountOfBallots = 111111,
+        amountOfProposals = 6,
+        tweakBallots = { _, ballot, pollConfig ->
+            ballot.copy(judgments = ballot.judgments.map {
+                when (it.proposal) {
+                    0 -> {
+                        it.copy(grade = 0)
+                    }
+                    1 -> {
+                        it.copy(grade = 1)
+                    }
+                    2 -> {
+                        it.copy(grade = 2)
+                    }
+                    3 -> {
+                        it.copy(grade = 3)
+                    }
+                    4 -> {
+                        it.copy(grade = 4)
+                    }
+                    else -> {
+                        it
+                    }
+                }
+            }.toPersistentList())
+        }
+    )
 
     val pollResultViewModel = viewModel {
         PollResultViewModel(
