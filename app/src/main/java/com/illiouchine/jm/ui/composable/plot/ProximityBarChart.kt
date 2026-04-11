@@ -1,6 +1,7 @@
 package com.illiouchine.jm.ui.composable.plot
 
 import android.content.res.Configuration
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -55,6 +56,7 @@ import ir.ehsannarmani.compose_charts.models.IndicatorPosition
 import ir.ehsannarmani.compose_charts.models.LabelHelperProperties
 import ir.ehsannarmani.compose_charts.models.LabelProperties
 import java.lang.Integer.min
+import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.sqrt
 
@@ -75,10 +77,14 @@ import kotlin.math.sqrt
 fun ProximityBarChart(
     modifier: Modifier = Modifier,
     analysis: ProximityAnalysis,
-    proposalsIndices: List<Int>? = null, // show all proposals (up to 16) if not set
+    proposalsIndices: List<Int>? = null, // show all proposals (unranked and up to 16) if not set
 ) {
+    // Hoist some colors for use in our non-@Composable lambdas below
     val primaryColor = Theme.colorScheme.primary
+    val textColor = Theme.colorScheme.onBackground
+    val backgroundColor = Theme.colorScheme.background
 
+    // FIXME: duplicated code with spider
     val allProposalsIndices = 0.rangeUntil(analysis.proposals.size).toList()
     val lotsOfProposalsIndices = proposalsIndices ?: allProposalsIndices
 
@@ -125,7 +131,6 @@ fun ProximityBarChart(
             title = {},
         ),
     ) {
-        val textColor = Theme.colorScheme.onBackground
         GroupedHorizontalBarPlot(
             maxBarGroupWidth = 0.666f,
             startAnimationUseCase = StartAnimationUseCase(
@@ -141,21 +146,49 @@ fun ProximityBarChart(
                 ) {
                     usedProposalsIndices.forEach { proposalIndex ->
                         val name = proposalsInitials[proposalIndex]
+                        val value = analysis.proximities[categoryIndex][proposalIndex].toFloat()
                         val isOwnBar = (categoryIndex == proposalIndex)
+
+                        // Rule: do show a little the "invisible" bars that are too close to zero
+                        val tooCloseThreshold = 0.03f // do compute from size of canvas and density
+                        val isTooCloseToZero = (abs(value) < tooCloseThreshold)
+
                         item(
                             y = name,
                             xMin = if (isOwnBar) {
                                 analysis.minima[categoryIndex].toFloat()
+                            } else if (isTooCloseToZero) {
+                                if (value == 0f) {
+                                    -tooCloseThreshold * 0.5f
+                                } else if (value < 0f) {
+                                    -tooCloseThreshold
+                                } else {
+                                    0f
+                                }
                             } else {
                                 0f
                             },
-                            xMax = analysis.proximities[categoryIndex][proposalIndex].toFloat(),
+                            xMax = if (isTooCloseToZero) {
+                                if (value == 0f) {
+                                    tooCloseThreshold * 0.5f
+                                } else if (value > 0f) {
+                                    tooCloseThreshold
+                                } else {
+                                    0f
+                                }
+                            } else {
+                                value
+                            },
                             bar = if (isOwnBar) {
                                 horizontalSolidBar(
                                     color = primaryColor,
+                                    border = BorderStroke(0.62.dp, backgroundColor),
                                 )
                             } else {
-                                null // i.e. use the default bar
+                                horizontalSolidBar(
+                                    color = textColor,
+                                    border = BorderStroke(0.62.dp, backgroundColor),
+                                )
                             },
                         )
                     }

@@ -44,6 +44,7 @@ fun ProximitySpider(
     // FIXME: move this out of here (use params)
     var selectedCategoryIndex by remember { mutableIntStateOf(0) }
 
+    // FIXME: duplicated code with the bar chart
     val allProposalsIndices = 0.rangeUntil(analysis.proposals.size).toList()
     val lotsOfProposalsIndices = proposalsIndices ?: allProposalsIndices
 
@@ -63,7 +64,7 @@ fun ProximitySpider(
     SpiderChart(
         modifier = modifier,
         title = {
-            Text("Proximity with ${analysis.proposals[selectedCategoryIndex]}")
+            Text("Proximity with ${filteredAnalysis.proposals[selectedCategoryIndex]}")
         },
         // We are not using the legend because it yields a (min > max) error from the Koala lib.
         // legend = {},
