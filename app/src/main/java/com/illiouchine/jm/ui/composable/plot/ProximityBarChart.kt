@@ -82,10 +82,12 @@ fun ProximityBarChart(
     val allProposalsIndices = 0.rangeUntil(analysis.proposals.size).toList()
     val lotsOfProposalsIndices = proposalsIndices ?: allProposalsIndices
 
-    val maxAmountOfProposals = min(16, lotsOfProposalsIndices.size)
+    val maxAmountOfProposalsThatFit = 16
+    val maxAmountOfProposals = min(maxAmountOfProposalsThatFit, lotsOfProposalsIndices.size)
     val usedProposalsIndices = lotsOfProposalsIndices.take(maxAmountOfProposals).reversed()
+    val filteredAnalysis = analysis.filterByProposalsIndices(usedProposalsIndices)
 
-    val proposalsInitials = analysis.proposals.shortenNames().map {
+    val proposalsInitials = filteredAnalysis.proposals.shortenNames().map {
         it.truncate(
             maxLength = 7, // check big fonts on small screens if you increment this
             ellipsis = "…",
@@ -131,13 +133,13 @@ fun ProximityBarChart(
                 KoalaPlotTheme.animationSpec,
             )
         ) {
-            usedProposalsIndices.map { categoryIndex ->
+            usedProposalsIndices.forEach { categoryIndex ->
                 series(
                     defaultBar = horizontalSolidBar(
                         color = textColor,
                     ),
                 ) {
-                    usedProposalsIndices.map { proposalIndex ->
+                    usedProposalsIndices.forEach { proposalIndex ->
                         val name = proposalsInitials[proposalIndex]
                         val isOwnBar = (categoryIndex == proposalIndex)
                         item(

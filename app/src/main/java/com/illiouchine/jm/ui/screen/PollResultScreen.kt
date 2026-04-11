@@ -419,6 +419,7 @@ fun ResultScreen(
                     ProximitySpider(
                         modifier = Modifier.height(400.dp),
                         analysis = state.proximityAnalysis,
+                        proposalsIndices = result.proposalResultsRanked.map { it.index },
                     )
                     MediumVerticalSpacer()
                 }
@@ -456,9 +457,9 @@ fun ResultScreen(
 @Composable
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
     val poll = PreviewDataFaker.poll(
-        amountOfBallots = 111111,
+        amountOfBallots = 10000,
         amountOfProposals = 6,
-        tweakBallots = { _, ballot, pollConfig ->
+        tweakBallots = { _, ballot, _ ->
             ballot.copy(judgments = ballot.judgments.map {
                 when (it.proposal) {
                     0 -> {

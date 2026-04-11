@@ -9,11 +9,11 @@ fun <T> List<T>.reversedIf(shouldReverse: Boolean): List<T> {
 }
 
 fun List<String>.shortenNames(): List<String> {
-    val longNamesList = this
-    var loopCursor = 0
+    val longNamesList = this // hoisted because of buildList
     var shorts = emptyList<String>()
     var duplicates = this.map { true }
     var unicityValidated = false
+    var loopCursor = 0
 
     while ((!unicityValidated) && loopCursor < 4096) {
         shorts = buildList {
@@ -25,10 +25,9 @@ fun List<String>.shortenNames(): List<String> {
                 }
             }
         }
-        duplicates = shorts.mapIndexed { index, short -> // inefficient, but works ; fix at will
+        duplicates = shorts.mapIndexed { index, short -> // inefficient, but works ; optimize maybe?
             shorts.indexOf(short) != index || shorts.lastIndexOf(short) != index
         }
-        // unicityValidated = (shorts.toSet().size == shorts.size) // works, but any() is cheaper
         unicityValidated = !duplicates.any { it }
 
         // print(loopCursor.toString() + ": " + shorts.toString() + "\n")

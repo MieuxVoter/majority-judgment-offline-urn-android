@@ -23,6 +23,7 @@ import com.illiouchine.jm.extensions.shortenNames
 import com.illiouchine.jm.service.ProximityAnalysis
 import com.illiouchine.jm.service.ProximityAnalyzer
 import com.illiouchine.jm.ui.composable.plot.lib.SpiderChart
+import com.illiouchine.jm.ui.composable.plot.utils.truncate
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
@@ -38,20 +39,26 @@ import java.lang.Integer.min
 fun ProximitySpider(
     modifier: Modifier = Modifier,
     analysis: ProximityAnalysis,
-    onlyProposalsIndices: List<Int>? = null,
+    proposalsIndices: List<Int>? = null,
 ) {
+    // FIXME: move this out of here (use params)
     var selectedCategoryIndex by remember { mutableIntStateOf(0) }
 
     val allProposalsIndices = 0.rangeUntil(analysis.proposals.size).toList()
-    val lotsOfProposalsIndices = onlyProposalsIndices ?: allProposalsIndices
+    val lotsOfProposalsIndices = proposalsIndices ?: allProposalsIndices
 
     val maxAmountOfProposalsThatFit = 16
     val maxAmountOfProposals = min(maxAmountOfProposalsThatFit, lotsOfProposalsIndices.size)
 
-    val proposalsIndices = lotsOfProposalsIndices.slice(0..<maxAmountOfProposals)
-    val filteredAnalysis = analysis.filterByProposalsIndices(proposalsIndices)
+    val usedProposalsIndices = lotsOfProposalsIndices.take(maxAmountOfProposals)
+    val filteredAnalysis = analysis.filterByProposalsIndices(usedProposalsIndices)
 
-    val proposalsInitials = filteredAnalysis.proposals.shortenNames()
+    val proposalsInitials = filteredAnalysis.proposals.shortenNames().map {
+        it.truncate(
+            maxLength = 7, // check big fonts on small screens if you increment this
+            ellipsis = "…",
+        )
+    }
 
     SpiderChart(
         modifier = modifier,
@@ -62,7 +69,7 @@ fun ProximitySpider(
         // legend = {},
         // Truncating is not enough on small screens with big fonts — responsive for tablets ?
         // categories = filteredAnalysis.proposals.map { it.truncate(16, "…") },
-        categories = proposalsInitials,
+        categories = proposalsInitials, // so we use initials, it worked nicely so far
         values = filteredAnalysis.proximities[selectedCategoryIndex].map { it.toFloat() },
         tickValues = listOf(-1f, 0f, 1f),
         tickDecimals = 0,
