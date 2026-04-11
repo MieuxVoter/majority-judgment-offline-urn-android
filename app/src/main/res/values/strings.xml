@@ -78,7 +78,7 @@
     <string name="opinion_profile">Opinion Profile</string>
     <string name="plot_title_opinion_profile">Total amount of judgments cast per grade.</string>
     <string name="nuance_profile">Nuance Profile</string>
-    <string name="plot_title_nuance_profile">Amount of ballots per amount of different grades used in each ballot.</string>
+    <string name="plot_title_nuance_profile">Amount of ballots using X different grades.</string>
     <string name="proximity_profile">Proximity Profile</string>
     <string name="about_help_us_make_it_better">Help us make it better !</string>
     <string name="about_this_app_is_libre_software">This app is libre software.</string>
