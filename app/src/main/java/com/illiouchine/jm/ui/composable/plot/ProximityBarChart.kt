@@ -1,9 +1,12 @@
 package com.illiouchine.jm.ui.composable.plot
 
 import android.content.res.Configuration
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,14 +23,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.illiouchine.jm.extensions.shortenNames
 import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.service.ProximityAnalysis
+import com.illiouchine.jm.service.ProximityAnalyzer
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
 import com.illiouchine.jm.ui.composable.plot.utils.truncate
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
+import io.github.koalaplot.core.animation.StartAnimationUseCase
+import io.github.koalaplot.core.bar.GroupedHorizontalBarPlot
+import io.github.koalaplot.core.bar.horizontalSolidBar
+import io.github.koalaplot.core.style.KoalaPlotTheme
+import io.github.koalaplot.core.util.ExperimentalKoalaPlotApi
+import io.github.koalaplot.core.xygraph.AxisContent
+import io.github.koalaplot.core.xygraph.CategoryAxisModel
+import io.github.koalaplot.core.xygraph.XYGraph
+import io.github.koalaplot.core.xygraph.rememberAxisStyle
+import io.github.koalaplot.core.xygraph.rememberFloatLinearAxisModel
 import ir.ehsannarmani.compose_charts.ColumnChart
 import ir.ehsannarmani.compose_charts.models.AnimationMode
 import ir.ehsannarmani.compose_charts.models.BarProperties
@@ -40,16 +56,190 @@ import ir.ehsannarmani.compose_charts.models.IndicatorPosition
 import ir.ehsannarmani.compose_charts.models.LabelHelperProperties
 import ir.ehsannarmani.compose_charts.models.LabelProperties
 import java.lang.Integer.min
+import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.sqrt
 
+//
 // Shows how close (in the collective hearts of the judges) pairs of proposals are.
-// A proximity of 1 means that the two proposals received exactly the same grades in each ballot.
-// A proximity of 0 means that the two proposals received extreme and diametrically opposite grades in each ballot.
-// Basically:    proximity = 1.0 - standardDeviation / maximumStandardDeviation
+// A proximity of +1 means that the two proposals received exactly the same grades in each ballot.
+// A proximity of -1 means that the two proposals received extreme and diametrically opposite grades in each ballot.
+// Basically:    proximity = (squaredDeviation / maximumDeviation - 0.5) * 2.0
 // This assumes that grades are somewhat linearly distributed, value-wise.
+//
+// There are two plots:
+// - One made with Compose Charts (the "old" one, kept until it's stale enough)
+// - One made with Koala (the "current" one in use)
+//
+
+@OptIn(ExperimentalKoalaPlotApi::class)
 @Composable
 fun ProximityBarChart(
+    modifier: Modifier = Modifier,
+    analysis: ProximityAnalysis,
+    proposalsIndices: List<Int>? = null, // show all proposals (unranked and up to 16) if not set
+) {
+    // Hoist some colors for use in our non-@Composable lambdas below
+    val primaryColor = Theme.colorScheme.primary
+    val textColor = Theme.colorScheme.onBackground
+    val backgroundColor = Theme.colorScheme.background
+
+    // FIXME: duplicated code with spider
+    val allProposalsIndices = 0.rangeUntil(analysis.proposals.size).toList()
+    val lotsOfProposalsIndices = proposalsIndices ?: allProposalsIndices
+
+    val maxAmountOfProposalsThatFit = 16
+    val maxAmountOfProposals = min(maxAmountOfProposalsThatFit, lotsOfProposalsIndices.size)
+    val usedProposalsIndices = lotsOfProposalsIndices.take(maxAmountOfProposals)
+
+    val usedAnalysis = analysis.filterByProposalsIndices(usedProposalsIndices)
+    val proposalsInitials = usedAnalysis.proposals.shortenNames().map {
+        it.truncate(
+            maxLength = 7, // check big fonts on small screens if you increment this
+            ellipsis = "…",
+        )
+    }
+
+    XYGraph(
+        modifier = modifier,
+        xAxisModel = rememberFloatLinearAxisModel(-1f..1f, minorTickCount = 0),
+        yAxisModel = remember(analysis, proposalsIndices) {
+            CategoryAxisModel(
+                categories = proposalsInitials.reversed(),
+            )
+        },
+        xAxisContent = AxisContent(
+            style = rememberAxisStyle(),
+            labels = {
+                Text(
+                    text = it.toString(),
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(all = Theme.spacing.tiny),
+                )
+            },
+            title = {},
+        ),
+        yAxisContent = AxisContent(
+            style = rememberAxisStyle(),
+            labels = {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(all = Theme.spacing.tiny),
+                )
+            },
+            title = {},
+        ),
+    ) {
+        GroupedHorizontalBarPlot(
+            maxBarGroupWidth = 0.666f,
+            startAnimationUseCase = StartAnimationUseCase(
+                executionType = StartAnimationUseCase.ExecutionType.Default,
+                KoalaPlotTheme.animationSpec,
+            ),
+        ) {
+            val borderStroke = BorderStroke(0.62.dp, backgroundColor)
+            val chartProposalsIndices = 0.rangeUntil(proposalsInitials.size).reversed()
+
+            chartProposalsIndices.forEach { categoryIndex ->
+                series(
+                    defaultBar = horizontalSolidBar(
+                        color = textColor,
+                        border = borderStroke,
+                    ),
+                ) {
+                    chartProposalsIndices.forEach { proposalIndex ->
+                        val name = proposalsInitials[proposalIndex]
+                        val value = usedAnalysis.proximities[categoryIndex][proposalIndex].toFloat()
+                        val isOwnBar = (categoryIndex == proposalIndex)
+
+                        // Rule: do show a little the "invisible" bars that are too close to zero.
+                        val tooCloseThreshold = 0.03f // do compute from size of canvas and density
+                        val isTooCloseToZero = (abs(value) < tooCloseThreshold)
+
+                        item(
+                            y = name,
+                            xMin = if (isOwnBar) {
+                                usedAnalysis.minima[categoryIndex].toFloat()
+                            } else if (isTooCloseToZero) {
+                                if (value == 0f) {
+                                    -tooCloseThreshold * 0.5f
+                                } else if (value < 0f) {
+                                    -tooCloseThreshold
+                                } else {
+                                    0f
+                                }
+                            } else {
+                                0f
+                            },
+                            xMax = if (isTooCloseToZero) {
+                                if (value == 0f) {
+                                    tooCloseThreshold * 0.5f
+                                } else if (value > 0f) {
+                                    tooCloseThreshold
+                                } else {
+                                    0f
+                                }
+                            } else {
+                                value
+                            },
+                            bar = if (isOwnBar) {
+                                horizontalSolidBar(
+                                    color = primaryColor,
+                                    border = borderStroke,
+                                )
+                            } else {
+                                null
+                            },
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Preview(
+    name = "Phone (Portrait)",
+    showSystemUi = false,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 1.0f,
+)
+@Preview(
+    name = "Phone (Landscape)",
+    showSystemUi = false,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    device = "spec:width=511dp,height=891dp,orientation=landscape",
+    fontScale = 1.0f,
+)
+@Composable
+fun PreviewProximityBarChart(modifier: Modifier = Modifier) {
+    val poll = PreviewDataFaker.poll(
+        amountOfBallots = 7,
+        amountOfProposals = 13,
+    )
+    val analyzer = ProximityAnalyzer()
+    val analysis = analyzer.analyze(
+        poll = poll,
+    )
+    JmTheme {
+        Column(modifier) {
+            // Text("\uD83E\uDD9D I am the glitch raccoon:")
+            PlotTitle("Proximity Bar Chart\n${poll.pollConfig.subject}")
+            ProximityBarChart(
+                analysis = analysis,
+                modifier = Modifier.padding(
+                    horizontal = 8.dp,
+                ),
+            )
+        }
+    }
+}
+
+// will be safe to remove soon
+@Deprecated("Use ProximityBarChart instead.")
+@Composable
+fun ProximityBarChartOld(
     modifier: Modifier = Modifier,
     poll: Poll,
     animated: Boolean = true,
@@ -89,6 +279,7 @@ fun ProximityBarChart(
         val maxDifference = poll.pollConfig.grading.getAmountOfGrades() - 1
         val maxDeviation = sqrt((maxDifference * maxDifference * poll.ballots.size).toDouble())
 
+        // Note: we now have a proximity analyzer class ; use it instead of this
         val proximities = proposalsIndices.map { someProposalIndex ->
             proposalsIndices.map { otherProposalIndex ->
                 if (maxDeviation == 0.0) { // true iff there are no ballots or only one grade
@@ -157,6 +348,9 @@ fun ProximityBarChart(
                 textAlign = TextAlign.End,
                 color = textColor,
             ),
+            rotation = LabelProperties.Rotation(
+                mode = LabelProperties.Rotation.Mode.Force,
+            ),
             // Wip: We can customize the label Composable but … it will require a TextMeasurer
             // See https://github.com/ehsannarmani/ComposeCharts/blob/master/compose-charts/src/commonMain/kotlin/ir/ehsannarmani/compose_charts/utils/Labels.kt#L83
 //            builder = { modifier, label, shouldRotate, _ ->
@@ -218,20 +412,20 @@ fun ProximityBarChart(
 }
 
 @Preview(
-    name = "Phone (Portrait)",
+    name = "Old Phone (Portrait)",
     showSystemUi = false,
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     fontScale = 1.0f,
 )
 @Preview(
-    name = "Phone (Landscape)",
+    name = "Old Phone (Landscape)",
     showSystemUi = false,
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     device = "spec:width=511dp,height=891dp,orientation=landscape",
     fontScale = 1.0f,
 )
 @Composable
-fun PreviewProximityBarChart(modifier: Modifier = Modifier) {
+fun PreviewProximityBarChartOld(modifier: Modifier = Modifier) {
     val poll = PreviewDataFaker.poll(
         amountOfBallots = 7,
         amountOfProposals = 13,
@@ -240,19 +434,12 @@ fun PreviewProximityBarChart(modifier: Modifier = Modifier) {
         Column(modifier) {
             Text("\uD83E\uDD9D I am the glitch raccoon that looks for glitches:")
             PlotTitle("Proximity Profile\n${poll.pollConfig.subject}")
-            ProximityBarChart(
+            @Suppress("DEPRECATION")
+            ProximityBarChartOld(
                 modifier = Modifier.height(200.dp),
                 poll = poll,
                 animated = false,
             )
-            // Uncomment this to expose trouble with our noob remember {} setup
-//                Text("And now the version with a coerced amount of proposals (6):")
-//                ProximityProfile(
-//                    modifier = Modifier.height(300.dp),
-//                    poll = poll,
-//                    animated = false,
-//                    onlyProposalsIndices = 0.rangeUntil(6).toList(),
-//                )
         }
     }
 }

@@ -37,23 +37,22 @@ fun JudgmentBalls(
         modifier = modifier
             .padding(Theme.spacing.medium),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.Center,
     ) {
         for (i in 0 until pollConfig.proposals.size) {
             val animatedColor by animateColorAsState(
                 targetValue = when {
                     i < currentBalls -> pollConfig.grading.getGradeColor(ballot.judgments[i].grade)
                     i == currentBalls -> Color.LightGray
-                    i > currentBalls -> Color.DarkGray
-                    else -> Color.Blue
-                }
+                    else -> Color.DarkGray // i > currentBalls
+                },
             )
             val animatedSize by animateDpAsState(
                 targetValue = if (i == currentBalls) {
                     24.dp
                 } else {
                     16.dp
-                }
+                },
             )
             Spacer(modifier = Modifier.size(Theme.spacing.extraSmall))
             JudgmentBall(
@@ -70,7 +69,7 @@ fun JudgmentBalls(
 fun JudgmentBall(
     modifier: Modifier = Modifier,
     color: Color = Color.Blue,
-    size: Dp = 14.dp
+    size: Dp = 14.dp,
 ) {
     Box(
         modifier = modifier
@@ -88,7 +87,7 @@ private fun PreviewJudgmentBallFull() {
             pollConfig = PollConfig(proposals = listOf("a", "b", "c", "d")),
             ballot = Ballot(
                 judgments = PreviewDataFaker.judgments(size = 4)
-            )
+            ),
         )
     }
 }
@@ -101,7 +100,7 @@ private fun PreviewJudgmentBallEmpty() {
             pollConfig = PollConfig(proposals = listOf("a", "b", "c", "d")),
             ballot = Ballot(
                 judgments = PreviewDataFaker.judgments(0)
-            )
+            ),
         )
     }
 }
@@ -114,7 +113,7 @@ private fun PreviewJudgmentBallMiddle() {
             pollConfig = PollConfig(proposals = listOf("a", "b", "c", "d")),
             ballot = Ballot(
                 judgments = PreviewDataFaker.judgments(2)
-            )
+            ),
         )
     }
 }

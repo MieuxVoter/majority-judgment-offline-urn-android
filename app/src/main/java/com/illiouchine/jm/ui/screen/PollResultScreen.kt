@@ -188,7 +188,7 @@ fun ResultScreen(
                             }
                             .semantics {
                                 if (isInSelectedDuel) {
-                                    // Bit of a hack to force reading the explanations that show up.
+                                    // Hack to force reading the explanations that show up.
                                     // NOTE: does not work well on the last merit profile.
                                     liveRegion = LiveRegionMode.Assertive
                                 }
@@ -395,19 +395,18 @@ fun ResultScreen(
             MediumVerticalSpacer()
 
             // Rule: hide the proximity profile if there's only one proposal, as it's useless
-            if (poll.pollConfig.proposals.size > 1) {
-                Text("Proximity Profile")
+            val amountOfProposals = poll.pollConfig.proposals.size
+            if (amountOfProposals > 1) {
+                Text(stringResource(R.string.proximity_profile))
                 SmallVerticalSpacer()
                 ProximityBarChart(
                     modifier = Modifier
-                        .height(250.dp)
+                        .height(16.dp * amountOfProposals * amountOfProposals)
                         .fillMaxWidth(),
-                    poll = poll,
-                    onlyProposalsIndices = result.proposalResultsRanked.map { it.index },
+                    analysis = state.proximityAnalysis!!,
+                    proposalsIndices = result.proposalResultsRanked.map { it.index },
                 )
-                // i18n once we're somewhat OK with what's written in here — not the case now
-                // And not just because of the language ; I'm not so sure about the formula itself.
-                // I suspect we'll want to calibrate it & show meaningful thresholds.
+                // i18n once we're somewhat OK with what's written in here — not the case right now
                 PlotTitle(
                     text = "Proximity of every pair of proposals inside the ballots.",
 // "A value of 1.0 means that the two proposals received the exact same grades in each ballot. " +
@@ -416,10 +415,11 @@ fun ResultScreen(
                 MediumVerticalSpacer()
 
                 // Rule: hide the proximity spider if there's less than three proposals (buggy!)
-                if (poll.pollConfig.proposals.size > 2) {
+                if (amountOfProposals > 2) {
                     ProximitySpider(
                         modifier = Modifier.height(400.dp),
-                        analysis = state.proximityAnalysis!!,
+                        analysis = state.proximityAnalysis,
+                        proposalsIndices = result.proposalResultsRanked.map { it.index },
                     )
                     MediumVerticalSpacer()
                 }
@@ -456,7 +456,62 @@ fun ResultScreen(
 // @PreviewScreenSizes // my eyes hurt ← no dark mode ; but we should cook something like this
 @Composable
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
-    val poll = PreviewDataFaker.poll()
+    val poll = PreviewDataFaker.poll(
+        amountOfBallots = 10000,
+        amountOfProposals = 7,
+        tweakBallots = { _, ballot, _ ->
+            ballot.copy(judgments = ballot.judgments.map {
+                when (it.proposal) {
+                    0 -> {
+                        it.copy(grade = 0)
+                    }
+                    1 -> {
+                        it.copy(grade = 1)
+                    }
+                    2 -> {
+                        it.copy(grade = 2)
+                    }
+                    3 -> {
+                        it.copy(grade = 3)
+                    }
+                    4 -> {
+                        it.copy(grade = 4)
+                    }
+                    5 -> {
+                        it
+                    }
+                    else -> {
+                        it
+                    }
+                }
+            }.toPersistentList())
+        },
+        nameProposals = {
+            when (it) {
+                0 -> {
+                    "Reject"
+                }
+                1 -> {
+                    "Insufficient"
+                }
+                2 -> {
+                    "Passable"
+                }
+                3 -> {
+                    "Good"
+                }
+                4 -> {
+                    "Excellent"
+                }
+                5 -> {
+                    "Random 1"
+                }
+                else -> {
+                    "Random 2"
+                }
+            }
+        }
+    )
 
     val pollResultViewModel = viewModel {
         PollResultViewModel(
