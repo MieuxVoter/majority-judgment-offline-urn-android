@@ -84,6 +84,7 @@ object PreviewDataFaker {
     fun pollConfig(
         index: Int? = null,
         amountOfProposals: Int = 5,
+        nameProposals: (Int) -> String = { "Proposal Number #${it + 1}" },
         grading: Grading = DEFAULT_GRADING_QUALITY_VALUE,
     ): PollConfig {
         // Note: The Elvis operator in Kotlin is actually a nil-coalescing, not a true Elvis
@@ -91,10 +92,8 @@ object PreviewDataFaker {
         return PollConfig(
             subject = subjectsWithProposals[currentIndex].first,
             // proposals = subjectsWithProposals[currentIndex].second,
-            // subject = faker.quote.yoda(),
             proposals = 0.rangeUntil(amountOfProposals).map {
-                // faker.coffee.blendName()
-                "Proposal Number #${it + 1}" // hotfix 'til we manage to use faker
+                nameProposals(it)
             },
             grading = grading,
         )
@@ -121,10 +120,12 @@ object PreviewDataFaker {
         amountOfBallots: Int = 5,
         grading: Grading = DEFAULT_GRADING_QUALITY_VALUE,
         tweakBallots: (Int, Ballot, PollConfig) -> Ballot = { _, b, _ -> b },
+        nameProposals: (Int) -> String = { "Proposal Number #${it + 1}" },
     ): Poll {
         val config = pollConfig(
             grading = grading,
             amountOfProposals = amountOfProposals,
+            nameProposals = nameProposals,
         )
         return Poll(
             id = id,

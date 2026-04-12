@@ -90,10 +90,10 @@ fun ProximityBarChart(
 
     val maxAmountOfProposalsThatFit = 16
     val maxAmountOfProposals = min(maxAmountOfProposalsThatFit, lotsOfProposalsIndices.size)
-    val usedProposalsIndices = lotsOfProposalsIndices.take(maxAmountOfProposals).reversed()
-    val filteredAnalysis = analysis.filterByProposalsIndices(usedProposalsIndices)
+    val usedProposalsIndices = lotsOfProposalsIndices.take(maxAmountOfProposals)
 
-    val proposalsInitials = filteredAnalysis.proposals.shortenNames().map {
+    val usedAnalysis = analysis.filterByProposalsIndices(usedProposalsIndices)
+    val proposalsInitials = usedAnalysis.proposals.shortenNames().map {
         it.truncate(
             maxLength = 7, // check big fonts on small screens if you increment this
             ellipsis = "…",
@@ -105,7 +105,7 @@ fun ProximityBarChart(
         xAxisModel = rememberFloatLinearAxisModel(-1f..1f, minorTickCount = 0),
         yAxisModel = remember(analysis, proposalsIndices) {
             CategoryAxisModel(
-                categories = usedProposalsIndices.map { proposalsInitials[it] },
+                categories = proposalsInitials.reversed(),
             )
         },
         xAxisContent = AxisContent(
@@ -136,27 +136,31 @@ fun ProximityBarChart(
             startAnimationUseCase = StartAnimationUseCase(
                 executionType = StartAnimationUseCase.ExecutionType.Default,
                 KoalaPlotTheme.animationSpec,
-            )
+            ),
         ) {
-            usedProposalsIndices.forEach { categoryIndex ->
+            val borderStroke = BorderStroke(0.62.dp, backgroundColor)
+            val chartProposalsIndices = 0.rangeUntil(proposalsInitials.size).reversed()
+
+            chartProposalsIndices.forEach { categoryIndex ->
                 series(
                     defaultBar = horizontalSolidBar(
                         color = textColor,
+                        border = borderStroke,
                     ),
                 ) {
-                    usedProposalsIndices.forEach { proposalIndex ->
+                    chartProposalsIndices.forEach { proposalIndex ->
                         val name = proposalsInitials[proposalIndex]
-                        val value = analysis.proximities[categoryIndex][proposalIndex].toFloat()
+                        val value = usedAnalysis.proximities[categoryIndex][proposalIndex].toFloat()
                         val isOwnBar = (categoryIndex == proposalIndex)
 
-                        // Rule: do show a little the "invisible" bars that are too close to zero
+                        // Rule: do show a little the "invisible" bars that are too close to zero.
                         val tooCloseThreshold = 0.03f // do compute from size of canvas and density
                         val isTooCloseToZero = (abs(value) < tooCloseThreshold)
 
                         item(
                             y = name,
                             xMin = if (isOwnBar) {
-                                analysis.minima[categoryIndex].toFloat()
+                                usedAnalysis.minima[categoryIndex].toFloat()
                             } else if (isTooCloseToZero) {
                                 if (value == 0f) {
                                     -tooCloseThreshold * 0.5f
@@ -182,13 +186,10 @@ fun ProximityBarChart(
                             bar = if (isOwnBar) {
                                 horizontalSolidBar(
                                     color = primaryColor,
-                                    border = BorderStroke(0.62.dp, backgroundColor),
+                                    border = borderStroke,
                                 )
                             } else {
-                                horizontalSolidBar(
-                                    color = textColor,
-                                    border = BorderStroke(0.62.dp, backgroundColor),
-                                )
+                                null
                             },
                         )
                     }

@@ -458,7 +458,7 @@ fun ResultScreen(
 fun PreviewResultScreen(modifier: Modifier = Modifier) {
     val poll = PreviewDataFaker.poll(
         amountOfBallots = 10000,
-        amountOfProposals = 6,
+        amountOfProposals = 7,
         tweakBallots = { _, ballot, _ ->
             ballot.copy(judgments = ballot.judgments.map {
                 when (it.proposal) {
@@ -477,11 +477,39 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
                     4 -> {
                         it.copy(grade = 4)
                     }
+                    5 -> {
+                        it
+                    }
                     else -> {
                         it
                     }
                 }
             }.toPersistentList())
+        },
+        nameProposals = {
+            when (it) {
+                0 -> {
+                    "Reject"
+                }
+                1 -> {
+                    "Insufficient"
+                }
+                2 -> {
+                    "Passable"
+                }
+                3 -> {
+                    "Good"
+                }
+                4 -> {
+                    "Excellent"
+                }
+                5 -> {
+                    "Random 1"
+                }
+                else -> {
+                    "Random 2"
+                }
+            }
         }
     )
 
