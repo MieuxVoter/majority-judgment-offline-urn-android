@@ -1,13 +1,15 @@
 package com.illiouchine.jm.service
 
 import com.illiouchine.jm.model.Poll
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.sqrt
 
 data class ProximityAnalysis(
-    val proposals: List<String>,
-    val proximities: List<List<Double>>,
-    val minima: List<Double>,
+    val proposals: List<String>, // aka. candidates
+    val proximities: List<List<Double>>, // for each proposal, proximities to every other proposal
+    val minima: List<Double>, // minimum proximity possible for each merit profile
+    val neutrals: List<Double>, // relative origins (indistinguishable from random)
 ) {
     fun filterByProposalsIndices(indicesToKeep: List<Int>): ProximityAnalysis {
         return ProximityAnalysis(
@@ -18,6 +20,7 @@ data class ProximityAnalysis(
                 }
             },
             minima = indicesToKeep.map { minima[it] },
+            neutrals = indicesToKeep.map { neutrals[it] },
         )
     }
 }
@@ -58,7 +61,7 @@ class ProximityAnalyzer {
                     )
                     // Normalize over range [-1, +1] with:
                     // +1 being the exact same
-                    // ±0 being indistinguishable from random
+                    // ±0 being indistinguishable from random (when both merit profiles are random)
                     // -1 being the exact opposite
                     (0.5 - sqDeviation / maxDeviation) * 2.0
                 }
@@ -76,10 +79,51 @@ class ProximityAnalyzer {
             (0.5 - sqDeviation / maxDeviation) * 2.0
         }
 
+        //val mean = (poll.pollConfig.grading.getAmountOfGrades() - 1.0) * 0.5
+        val origins = proposalsIndices.map { someProposalIndex ->
+
+//            val stdDeviation = sqrt(poll.ballots.sumOf {
+//                val someGradeValue = it.gradeOf(someProposalIndex)
+//                val stdDifference = mean - someGradeValue
+//                stdDifference * stdDifference
+//            })
+
+//            val meanDeviation = sqrt(poll.ballots.sumOf {
+//                val someGradeValue = it.gradeOf(someProposalIndex)
+//                val total = sumTo(someGradeValue) + sumTo(poll.pollConfig.grading.getAmountOfGrades() - 1 - someGradeValue)
+//                val meanDifference = total.toDouble() / poll.pollConfig.grading.getAmountOfGrades()
+//                meanDifference * meanDifference
+//            })
+
+            // FIXME: this is not it ; improve
+            val neutralDeviation = sqrt(poll.ballots.sumOf {
+                val someGradeValue = it.gradeOf(someProposalIndex)
+                val total = poll.pollConfig.grading.grades
+                    .mapIndexed { i, _ ->
+                        abs(i - someGradeValue)
+                    }
+                    .reduce { acc, e -> acc + (e * e) }
+                // Mean of squares.
+                total.toDouble() / poll.pollConfig.grading.getAmountOfGrades()
+            })
+
+            (0.5 - neutralDeviation / maxDeviation) * 2.0
+        }
+
         return ProximityAnalysis(
             proposals = proposals,
             proximities = proximities,
             minima = minima,
+            neutrals = origins,
         )
     }
 }
+
+/**
+ * Sums integers from 0 to n.
+ */
+fun sumTo(n: Int): Int {
+    if (n < 0) return -sumTo(-n)
+    return ((n + 1) * n) / 2
+}
+
