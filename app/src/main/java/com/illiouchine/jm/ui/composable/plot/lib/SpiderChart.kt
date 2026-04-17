@@ -1,6 +1,7 @@
 package com.illiouchine.jm.ui.composable.plot.lib
 
 import android.content.res.Configuration
+import androidx.compose.animation.core.TweenSpec
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -53,25 +54,16 @@ fun SpiderChart(
         Pair(index, name)
     }
 
-    // Hack to skip the "appear" animation of PolarPlotSeries2 when we change category focus
-    // Disgusting.  This prevents having two SpiderChart on the same compose tree I suppose.
-    val polarPlotData = remember {
+    val polarPlotData = remember(values) {
         values.mapIndexed { index, value ->
             PolarPoint(value, indexedCategories[index])
-        }.toMutableList()
+        }
     }
-//    LaunchedEffect(values) { // add this for some neat race condition
-    polarPlotData.replaceAll({
-        val index = it.theta.first
-        PolarPoint(values[index], indexedCategories[index])
-    })
-//    }
 
     ChartLayout(
         modifier = modifier,
         title = title,
         legend = legend,
-//        legendLocation = LegendLocation.BOTTOM,
     ) {
         val angularAxisGridLineStyle = LineStyle(
             brush = SolidColor(value = Theme.colorScheme.onBackground),
@@ -120,7 +112,7 @@ fun SpiderChart(
                 symbols = {
                     Symbol(shape = CircleShape, fillBrush = SolidColor(Theme.colorScheme.primary))
                 },
-//                animationSpec = TweenSpec<Float>(durationMillis = 0),
+                animationSpec = TweenSpec<Float>(durationMillis = 0),
             )
         }
     }
