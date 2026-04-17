@@ -1,0 +1,4 @@
+* Improve the proximity profile
+* Fix a crash when looking consecutively at different poll results
+* Improve the results screen on small devices with big fonts
+* Still no ~~explanations~~ spoilers for the various charts

@@ -59,7 +59,7 @@ fun JmTheme(
             colorScheme = colorScheme,
             typography = Typography,
         ) {
-            // This Surface prevents a screen flicker when navigating in dark theme.
+            // This Surface helps prevent a white screen flicker when navigating in dark theme.
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 content = content,
