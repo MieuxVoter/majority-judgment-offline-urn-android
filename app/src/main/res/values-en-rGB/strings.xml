@@ -37,4 +37,16 @@
     <string name="button_add">Add</string>
     <string name="button_finish">Finish</string>
     <string name="button_next">next</string>
+    <string name="button_skip">skip</string>
+    <string name="button_let_s_go">Let\'s go !</string>
+    <string name="button_next_participant">Next participant</string>
+    <string name="button_end_the_poll">End the Poll</string>
+    <string name="button_back">Back</string>
+    <string name="all_things_considered_i_think">All things considered, I think</string>
+    <string name="verb_is">is</string>
+    <string name="toast_proposal_name_already_exists">A proposal with this name already exists.</string>
+    <string name="seven_quality_grades">Seven quality grades</string>
+    <string name="five_quality_grades">Five quality grades</string>
+    <string name="five_positive_quality_grades">Five positive quality grades</string>
+    <string name="three_quality_grades">Three quality grades</string>
 </resources>
