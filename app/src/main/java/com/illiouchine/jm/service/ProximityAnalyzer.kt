@@ -1,7 +1,6 @@
 package com.illiouchine.jm.service
 
 import com.illiouchine.jm.model.Poll
-import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -97,7 +96,8 @@ class ProximityAnalyzer {
 
 //            val meanDeviation = sqrt(poll.ballots.sumOf {
 //                val someGradeValue = it.gradeOf(someProposalIndex)
-//                val total = sumTo(someGradeValue) + sumTo(poll.pollConfig.grading.getAmountOfGrades() - 1 - someGradeValue)
+//                val total = sumTo(someGradeValue) +
+//                        sumTo(poll.pollConfig.grading.getAmountOfGrades() - 1 - someGradeValue)
 //                val meanDifference = total.toDouble() / poll.pollConfig.grading.getAmountOfGrades()
 //                meanDifference * meanDifference
 //            })
@@ -133,4 +133,3 @@ fun sumTo(n: Int): Int {
     if (n < 0) return -sumTo(-n)
     return ((n + 1) * n) / 2
 }
-

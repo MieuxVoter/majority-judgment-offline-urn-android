@@ -460,31 +460,33 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
         amountOfBallots = 10000,
         amountOfProposals = 7,
         tweakBallots = { _, ballot, _ ->
-            ballot.copy(judgments = ballot.judgments.map {
-                when (it.proposal) {
-                    0 -> {
-                        it.copy(grade = 0)
+            ballot.copy(
+                judgments = ballot.judgments.map {
+                    when (it.proposal) {
+                        0 -> {
+                            it.copy(grade = 0)
+                        }
+                        1 -> {
+                            it.copy(grade = 1)
+                        }
+                        2 -> {
+                            it.copy(grade = 2)
+                        }
+                        3 -> {
+                            it.copy(grade = 3)
+                        }
+                        4 -> {
+                            it.copy(grade = 4)
+                        }
+                        5 -> {
+                            it
+                        }
+                        else -> {
+                            it
+                        }
                     }
-                    1 -> {
-                        it.copy(grade = 1)
-                    }
-                    2 -> {
-                        it.copy(grade = 2)
-                    }
-                    3 -> {
-                        it.copy(grade = 3)
-                    }
-                    4 -> {
-                        it.copy(grade = 4)
-                    }
-                    5 -> {
-                        it
-                    }
-                    else -> {
-                        it
-                    }
-                }
-            }.toPersistentList())
+                }.toPersistentList()
+            )
         },
         nameProposals = {
             when (it) {
