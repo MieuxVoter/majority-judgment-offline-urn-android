@@ -19,16 +19,17 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
-import com.illiouchine.jm.extensions.shortenNames
 import com.illiouchine.jm.service.ProximityAnalysis
 import com.illiouchine.jm.service.ProximityAnalyzer
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
-import com.illiouchine.jm.ui.composable.plot.utils.truncate
+import com.illiouchine.jm.ui.composable.plot.utils.filterAnalysis
+import com.illiouchine.jm.ui.composable.plot.utils.makeProposalsInitials
 import com.illiouchine.jm.ui.composable.shape.PathShape
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
+import com.illiouchine.jm.ui.utils.linearStep
 import io.github.koalaplot.core.animation.StartAnimationUseCase
 import io.github.koalaplot.core.bar.GroupedHorizontalBarPlot
 import io.github.koalaplot.core.bar.horizontalSolidBar
@@ -39,7 +40,6 @@ import io.github.koalaplot.core.xygraph.CategoryAxisModel
 import io.github.koalaplot.core.xygraph.XYGraph
 import io.github.koalaplot.core.xygraph.rememberAxisStyle
 import io.github.koalaplot.core.xygraph.rememberFloatLinearAxisModel
-import java.lang.Integer.min
 import kotlin.math.abs
 
 //
@@ -64,21 +64,8 @@ fun ProximityBarChart(
     val textColor = Theme.colorScheme.onBackground
     val backgroundColor = Theme.colorScheme.background
 
-    // FIXME: duplicated code with spider
-    val allProposalsIndices = 0.rangeUntil(analysis.proposals.size).toList()
-    val lotsOfProposalsIndices = proposalsIndices ?: allProposalsIndices
-
-    val maxAmountOfProposalsThatFit = 16
-    val maxAmountOfProposals = min(maxAmountOfProposalsThatFit, lotsOfProposalsIndices.size)
-    val usedProposalsIndices = lotsOfProposalsIndices.take(maxAmountOfProposals)
-
-    val usedAnalysis = analysis.filterByProposalsIndices(usedProposalsIndices)
-    val proposalsInitials = usedAnalysis.proposals.shortenNames().map {
-        it.truncate(
-            maxLength = 7, // check big fonts on small screens if you increment this
-            ellipsis = "…",
-        )
-    }
+    val usedAnalysis = filterAnalysis(analysis, proposalsIndices)
+    val proposalsInitials = makeProposalsInitials(usedAnalysis)
 
     // We need the size to set a default minimum width to our bars (rule: show invisible bars),
     // and we configure the bars via normalized -1...+1 values, and we want responsiveness.
@@ -139,8 +126,7 @@ fun ProximityBarChart(
 
             chartProposalsIndices.forEach { categoryIndex ->
                 val minimumPossibleProximity = usedAnalysis.minima[categoryIndex].toFloat()
-                // val localNeutral = usedAnalysis.neutrals[categoryIndex].toFloat()
-                val localNeutral = 0f
+                val localNeutralProximity = usedAnalysis.neutrals[categoryIndex].toFloat()
                 series(
                     defaultBar = horizontalSolidBar(
                         color = textColor,
@@ -187,7 +173,7 @@ fun ProximityBarChart(
                             xMax = xMax,
                             bar = if (isOwnBar) {
                                 val notchHalfWidth = 0.015f
-                                val notchPosition = ilerp(localNeutral, xMin, xMax)
+                                val notchPosition = linearStep(localNeutralProximity, xMin, xMax)
                                 // Perhaps refactor most of this into a NotchedBarShape ?
                                 val notchedBarPath = Path()
                                 notchedBarPath.moveTo(0f, 0f)
@@ -213,14 +199,6 @@ fun ProximityBarChart(
             }
         }
     }
-}
-
-/**
- * Inverse of linear interpolation.
- */
-fun ilerp(x: Float, x0: Float, x1: Float): Float {
-    if (x1 == x0) return 0f
-    return (x - x0) / (x1 - x0)
 }
 
 @Preview(
