@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.toSize
 import com.illiouchine.jm.service.ProximityAnalysis
 import com.illiouchine.jm.service.ProximityAnalyzer
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
-import com.illiouchine.jm.ui.composable.plot.utils.filterAnalysis
 import com.illiouchine.jm.ui.composable.plot.utils.makeProposalsInitials
 import com.illiouchine.jm.ui.composable.shape.PathShape
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
@@ -55,7 +54,8 @@ import kotlin.math.abs
 fun ProximityBarChart(
     modifier: Modifier = Modifier,
     analysis: ProximityAnalysis,
-    proposalsIndices: List<Int>? = null, // show all proposals (unranked and up to 16) if not set
+//    onProposalSelected: (Int) -> Unit = {},
+//    selectedProposalIndex: Int = 0,
 ) {
     val density = LocalDensity.current
 
@@ -63,12 +63,11 @@ fun ProximityBarChart(
     val primaryColor = Theme.colorScheme.primary
     val textColor = Theme.colorScheme.onBackground
     val backgroundColor = Theme.colorScheme.background
-
-    val usedAnalysis = filterAnalysis(analysis, proposalsIndices)
-    val proposalsInitials = makeProposalsInitials(usedAnalysis)
+    
+    val proposalsInitials = makeProposalsInitials(analysis)
 
     // We need the size to set a default minimum width to our bars (rule: show invisible bars),
-    // and we configure the bars via normalized -1...+1 values, and we want responsiveness.
+    // as we configure the bars via normalized -1...+1 values, and we want responsiveness.
     var chartSize by remember { mutableStateOf(Size.Zero) }
 
     val tooCloseToOriginThresholdDp = 8.dp
@@ -85,8 +84,8 @@ fun ProximityBarChart(
             @Suppress("AssignedValueIsNeverRead")
             chartSize = it.size.toSize()
         },
-        xAxisModel = rememberFloatLinearAxisModel(-1f..1f, minorTickCount = 0),
-        yAxisModel = remember(analysis, proposalsIndices) {
+        xAxisModel = rememberFloatLinearAxisModel(range = -1f..1f, minorTickCount = 0),
+        yAxisModel = remember(analysis) {
             CategoryAxisModel(
                 categories = proposalsInitials.reversed(),
             )
@@ -125,8 +124,8 @@ fun ProximityBarChart(
             val chartProposalsIndices = 0.rangeUntil(proposalsInitials.size).reversed()
 
             chartProposalsIndices.forEach { categoryIndex ->
-                val minimumPossibleProximity = usedAnalysis.minima[categoryIndex].toFloat()
-                val localNeutralProximity = usedAnalysis.neutrals[categoryIndex].toFloat()
+                val minimumPossibleProximity = analysis.minima[categoryIndex].toFloat()
+                val localNeutralProximity = analysis.neutrals[categoryIndex].toFloat()
                 series(
                     defaultBar = horizontalSolidBar(
                         color = textColor,
@@ -135,7 +134,7 @@ fun ProximityBarChart(
                 ) {
                     chartProposalsIndices.forEach { proposalIndex ->
                         val name = proposalsInitials[proposalIndex]
-                        val value = usedAnalysis.proximities[categoryIndex][proposalIndex].toFloat()
+                        val value = analysis.proximities[categoryIndex][proposalIndex].toFloat()
                         val isOwnBar = (categoryIndex == proposalIndex)
 
                         // Rule: do show a little the "invisible" bars that are too close to zero.

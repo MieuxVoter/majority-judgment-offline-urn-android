@@ -1,9 +1,11 @@
 package com.illiouchine.jm.service
 
+import androidx.compose.runtime.Stable
 import com.illiouchine.jm.model.Poll
 import kotlin.math.max
 import kotlin.math.sqrt
 
+@Stable
 data class ProximityAnalysis(
     val proposals: List<String>, // aka. candidates
     val proximities: List<List<Double>>, // for each proposal, proximities to every other proposal

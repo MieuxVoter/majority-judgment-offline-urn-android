@@ -68,6 +68,7 @@ import com.illiouchine.jm.ui.composable.plot.OpinionProfileBarChart
 import com.illiouchine.jm.ui.composable.plot.ProximityBarChart
 import com.illiouchine.jm.ui.composable.plot.ProximitySpider
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
+import com.illiouchine.jm.ui.composable.plot.utils.filterAnalysis
 import com.illiouchine.jm.ui.composable.spacer.MediumVerticalSpacer
 import com.illiouchine.jm.ui.composable.spacer.SmallVerticalSpacer
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
@@ -397,14 +398,20 @@ fun ResultScreen(
             // Rule: hide the proximity profile if there's only one proposal, as it's useless
             val amountOfProposals = poll.pollConfig.proposals.size
             if (amountOfProposals > 1) {
+
+                val usedAnalysis = filterAnalysis(
+                    state.proximityAnalysis!!,
+                    result.proposalResultsRanked.map { it.index },
+                )
+                var selectedUsedAnalysisProposal by remember { mutableIntStateOf(0) }
+
                 Text(stringResource(R.string.proximity_profile))
                 SmallVerticalSpacer()
                 ProximityBarChart(
                     modifier = Modifier
                         .height(16.dp * amountOfProposals * amountOfProposals)
                         .fillMaxWidth(),
-                    analysis = state.proximityAnalysis!!,
-                    proposalsIndices = result.proposalResultsRanked.map { it.index },
+                    analysis = usedAnalysis,
                 )
                 // i18n once we're somewhat OK with what's written in here — not the case right now
                 PlotTitle(
@@ -418,8 +425,11 @@ fun ResultScreen(
                 if (amountOfProposals > 2) {
                     ProximitySpider(
                         modifier = Modifier.height(400.dp),
-                        analysis = state.proximityAnalysis,
-                        proposalsIndices = result.proposalResultsRanked.map { it.index },
+                        analysis = usedAnalysis,
+                        selectedProposalIndex = selectedUsedAnalysisProposal,
+                        onProposalSelected = {
+                            selectedUsedAnalysisProposal = it
+                        },
                     )
                     MediumVerticalSpacer()
                 }

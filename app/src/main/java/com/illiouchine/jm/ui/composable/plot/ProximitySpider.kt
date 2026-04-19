@@ -9,20 +9,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.illiouchine.jm.R
 import com.illiouchine.jm.service.ProximityAnalysis
 import com.illiouchine.jm.service.ProximityAnalyzer
 import com.illiouchine.jm.ui.composable.plot.lib.SpiderChart
-import com.illiouchine.jm.ui.composable.plot.utils.filterAnalysis
 import com.illiouchine.jm.ui.composable.plot.utils.makeProposalsInitials
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
@@ -38,31 +35,31 @@ import com.illiouchine.jm.ui.theme.Theme
 fun ProximitySpider(
     modifier: Modifier = Modifier,
     analysis: ProximityAnalysis,
-    proposalsIndices: List<Int>? = null,
+    onProposalSelected: (Int) -> Unit = {},
+    selectedProposalIndex: Int = 0,
 ) {
-    // FIXME: move this out of here (use params)
-    var selectedCategoryIndex by remember { mutableIntStateOf(0) }
-
-    val usedAnalysis = filterAnalysis(analysis, proposalsIndices)
-    val proposalsInitials = makeProposalsInitials(usedAnalysis)
+    val proposalsInitials = makeProposalsInitials(analysis)
 
     SpiderChart(
         modifier = modifier,
         title = {
-            Text("Proximity with ${usedAnalysis.proposals[selectedCategoryIndex]}")
+            Text(
+                stringResource(
+                    R.string.plot_title_proximity_with,
+                    analysis.proposals[selectedProposalIndex]
+                )
+            )
         },
         // We are not using the legend because it yields a (min > max) error from the Koala lib.
         // legend = {},
         // Truncating is not enough on small screens with big fonts — responsive for tablets ?
         // categories = filteredAnalysis.proposals.map { it.truncate(16, "…") },
         categories = proposalsInitials, // so we use initials, it worked nicely so far
-        values = usedAnalysis.proximities[selectedCategoryIndex].map { it.toFloat() },
+        values = analysis.proximities[selectedProposalIndex].map { it.toFloat() },
         tickValues = listOf(-1f, 0f, 1f),
         tickDecimals = 0,
-        highlightedCategoryIndex = selectedCategoryIndex,
-        onCategoryClick = { clickedCategoryIndex ->
-            selectedCategoryIndex = clickedCategoryIndex
-        },
+        highlightedCategoryIndex = selectedProposalIndex,
+        onCategoryClick = onProposalSelected,
     )
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -71,16 +68,16 @@ fun ProximitySpider(
             modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
         ) {
             Column {
-                usedAnalysis.proposals.forEachIndexed { index, name ->
+                analysis.proposals.forEachIndexed { index, name ->
                     Row {
                         Text(
                             modifier = Modifier
                                 .clickable(
                                     onClick = {
-                                        selectedCategoryIndex = index
+                                        onProposalSelected(index)
                                     }
                                 ),
-                            style = if (selectedCategoryIndex == index) {
+                            style = if (selectedProposalIndex == index) {
                                 TextStyle(
                                     color = Theme.colorScheme.primary,
                                     fontWeight = FontWeight.Bold,
