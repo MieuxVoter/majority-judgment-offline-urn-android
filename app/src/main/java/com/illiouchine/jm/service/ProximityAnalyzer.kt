@@ -1,10 +1,11 @@
 package com.illiouchine.jm.service
 
+import androidx.compose.runtime.Stable
 import com.illiouchine.jm.model.Poll
-import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.sqrt
 
+@Stable
 data class ProximityAnalysis(
     val proposals: List<String>, // aka. candidates
     val proximities: List<List<Double>>, // for each proposal, proximities to every other proposal
@@ -25,6 +26,14 @@ data class ProximityAnalysis(
     }
 }
 
+//
+// Shows how close (in the collective hearts of the judges) pairs of proposals are.
+// A proximity of +1 means that the two proposals received exactly the same grades in each ballot.
+// A proximity of ~0 is indistinguishable from random (when both are random → not for a given merit)
+// A proximity of -1 means that the two proposals received extreme and diametrically opposite grades in each ballot.
+// Basically:    proximity = (0.5 - squaredDeviation / maximumDeviation) * 2.0
+// This assumes that grades are somewhat linearly distributed, value-wise.
+//
 class ProximityAnalyzer {
 
     fun analyze(
@@ -80,41 +89,20 @@ class ProximityAnalyzer {
             (0.5 - sqDeviation / maxDeviation) * 2.0
         }
 
-        // We're supposed here to compute the proximity of "indistinguishable from random",
+        // Compute the proximity of "indistinguishable from random",
         // for a given merit profile at someProposalIndex.
-        // 1. Brute force scales exponentially with the ballots, so we can't do that
-        // 2. We can probably approximate somewhat OK using the scalar merit and some fitting
-        // 3. We need to be cleverer, approximation is a last resort
         val origins = proposalsIndices.map { someProposalIndex ->
-
-//            val mean = (poll.pollConfig.grading.getAmountOfGrades() - 1.0) * 0.5
-//            val stdDeviation = sqrt(poll.ballots.sumOf {
-//                val someGradeValue = it.gradeOf(someProposalIndex)
-//                val stdDifference = mean - someGradeValue
-//                stdDifference * stdDifference
-//            })
-//            (0.5 - stdDeviation / maxDeviation) * 2.0
-
-//            val meanDeviation = sqrt(poll.ballots.sumOf {
-//                val someGradeValue = it.gradeOf(someProposalIndex)
-//                val total = sumTo(someGradeValue) + sumTo(poll.pollConfig.grading.getAmountOfGrades() - 1 - someGradeValue)
-//                val meanDifference = total.toDouble() / poll.pollConfig.grading.getAmountOfGrades()
-//                meanDifference * meanDifference
-//            })
-//            (0.5 - meanDeviation / maxDeviation) * 2.0
-
-//            val neutralDeviation = sqrt(poll.ballots.sumOf {
-//                val someGradeValue = it.gradeOf(someProposalIndex)
-//                val total = poll.pollConfig.grading.grades
-//                    .mapIndexed { i, _ ->
-//                        abs(i - someGradeValue)
-//                    }
-//                    .reduce { acc, e -> acc + (e * e) }
-//                total.toDouble() / poll.pollConfig.grading.getAmountOfGrades()
-//            })
-//            (0.5 - neutralDeviation / maxDeviation) * 2.0
-
-            0.0 // dummy value 'til we git gud
+            val neutralDeviation = sqrt(
+                poll.ballots.sumOf { ballot ->
+                    val someGradeValue = ballot.gradeOf(someProposalIndex)
+                    // Optimize: we could memoize this per grade value?
+                    val total = List(poll.pollConfig.grading.grades.size) { i ->
+                        (i - someGradeValue) * (i - someGradeValue)
+                    }.sum().toDouble()
+                    total / poll.pollConfig.grading.grades.size
+                }
+            )
+            (0.5 - neutralDeviation / maxDeviation) * 2.0
         }
 
         return ProximityAnalysis(
@@ -133,4 +121,3 @@ fun sumTo(n: Int): Int {
     if (n < 0) return -sumTo(-n)
     return ((n + 1) * n) / 2
 }
-
