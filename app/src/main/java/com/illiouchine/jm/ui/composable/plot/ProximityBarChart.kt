@@ -55,7 +55,7 @@ fun ProximityBarChart(
     val primaryColor = Theme.colorScheme.primary
     val textColor = Theme.colorScheme.onBackground
     val backgroundColor = Theme.colorScheme.background
-    
+
     val proposalsInitials = makeProposalsInitials(analysis)
 
     // We need the size to set a default minimum width to our bars (rule: show invisible bars),

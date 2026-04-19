@@ -92,14 +92,16 @@ class ProximityAnalyzer {
         // Compute the proximity of "indistinguishable from random",
         // for a given merit profile at someProposalIndex.
         val origins = proposalsIndices.map { someProposalIndex ->
-            val neutralDeviation = sqrt(poll.ballots.sumOf { ballot ->
-                val someGradeValue = ballot.gradeOf(someProposalIndex)
-                // Optimize: we could memoize this per grade value?
-                val total = List(poll.pollConfig.grading.grades.size) { i ->
-                    (i - someGradeValue) * (i - someGradeValue)
-                }.sum().toDouble()
-                total / poll.pollConfig.grading.grades.size
-            })
+            val neutralDeviation = sqrt(
+                poll.ballots.sumOf { ballot ->
+                    val someGradeValue = ballot.gradeOf(someProposalIndex)
+                    // Optimize: we could memoize this per grade value?
+                    val total = List(poll.pollConfig.grading.grades.size) { i ->
+                        (i - someGradeValue) * (i - someGradeValue)
+                    }.sum().toDouble()
+                    total / poll.pollConfig.grading.grades.size
+                }
+            )
             (0.5 - neutralDeviation / maxDeviation) * 2.0
         }
 

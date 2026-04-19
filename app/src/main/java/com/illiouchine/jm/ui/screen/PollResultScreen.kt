@@ -398,7 +398,6 @@ fun ResultScreen(
             // Rule: hide the proximity profile if there's only one proposal, as it's useless
             val amountOfProposals = poll.pollConfig.proposals.size
             if (amountOfProposals > 1) {
-
                 val usedAnalysis = filterAnalysis(
                     state.proximityAnalysis!!,
                     result.proposalResultsRanked.map { it.index },
