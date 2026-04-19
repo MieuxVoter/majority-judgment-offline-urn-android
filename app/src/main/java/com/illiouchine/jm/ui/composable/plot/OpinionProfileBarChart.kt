@@ -58,7 +58,7 @@ fun OpinionProfileBarChart(
                     Bars.Data(
                         value = tally.proposalsTallies.map { proposalTally ->
                             proposalTally.tally[gradeIndex].toDouble()
-                        }.reduce { acc, value -> acc + value },
+                        }.sum(),
                         color = SolidColor(grade.color),
                     ),
                 ),

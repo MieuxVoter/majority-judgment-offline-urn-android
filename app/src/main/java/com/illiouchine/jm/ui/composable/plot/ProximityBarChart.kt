@@ -41,14 +41,6 @@ import io.github.koalaplot.core.xygraph.rememberAxisStyle
 import io.github.koalaplot.core.xygraph.rememberFloatLinearAxisModel
 import kotlin.math.abs
 
-//
-// Shows how close (in the collective hearts of the judges) pairs of proposals are.
-// A proximity of +1 means that the two proposals received exactly the same grades in each ballot.
-// A proximity of -1 means that the two proposals received extreme and diametrically opposite grades in each ballot.
-// Basically:    proximity = (0.5 - squaredDeviation / maximumDeviation) * 2.0
-// This assumes that grades are somewhat linearly distributed, value-wise.
-//
-
 @OptIn(ExperimentalKoalaPlotApi::class)
 @Composable
 fun ProximityBarChart(
