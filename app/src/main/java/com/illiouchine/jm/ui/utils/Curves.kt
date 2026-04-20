@@ -11,7 +11,7 @@ fun smoothStep(edge0: Float, edge1: Float, x: Float): Float {
 /**
  * Inverse of linear interpolation.
  */
-fun linearStep(x: Float, x0: Float, x1: Float): Float {
-    if (x1 == x0) return 0f
-    return (x - x0) / (x1 - x0)
+fun linearStep(edge0: Float, edge1: Float, x: Float): Float {
+    if (edge1 == edge0) return 0f
+    return (x - edge0) / (edge1 - edge0)
 }

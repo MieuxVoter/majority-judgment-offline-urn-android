@@ -95,7 +95,7 @@ class ProximityAnalyzer {
             val neutralDeviation = sqrt(
                 poll.ballots.sumOf { ballot ->
                     val someGradeValue = ballot.gradeOf(someProposalIndex)
-                    // Optimize: we could memoize this per grade value?
+                    // Optimize: we could memoize this mean of squares per grade value?
                     val total = List(poll.pollConfig.grading.grades.size) { i ->
                         (i - someGradeValue) * (i - someGradeValue)
                     }.sum().toDouble()
@@ -112,12 +112,4 @@ class ProximityAnalyzer {
             neutrals = origins,
         )
     }
-}
-
-/**
- * Sums integers from 0 to n.
- */
-fun sumTo(n: Int): Int {
-    if (n < 0) return -sumTo(-n)
-    return ((n + 1) * n) / 2
 }

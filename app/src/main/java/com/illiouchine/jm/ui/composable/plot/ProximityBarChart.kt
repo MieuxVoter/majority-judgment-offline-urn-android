@@ -164,7 +164,7 @@ fun ProximityBarChart(
                             xMax = xMax,
                             bar = if (isOwnBar) {
                                 val notchHalfWidth = 0.015f
-                                val notchPosition = linearStep(localNeutralProximity, xMin, xMax)
+                                val notchPosition = linearStep(xMin, xMax, localNeutralProximity)
                                 // Perhaps refactor most of this into a NotchedBarShape ?
                                 val notchedBarPath = Path()
                                 notchedBarPath.moveTo(0f, 0f)
