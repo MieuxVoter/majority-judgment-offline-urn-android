@@ -209,7 +209,7 @@ fun ProximityBarChart(
 fun PreviewProximityBarChart(modifier: Modifier = Modifier) {
     val poll = PreviewDataFaker.poll(
         amountOfBallots = 7,
-        amountOfProposals = 8,
+        amountOfProposals = 5,
     )
     val analyzer = ProximityAnalyzer()
     val analysis = analyzer.analyze(

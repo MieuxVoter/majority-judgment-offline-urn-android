@@ -395,10 +395,10 @@ fun ResultScreen(
             )
             MediumVerticalSpacer()
 
-            // Rule: hide the proximity profile if there's only one proposal, as it's useless
+            // Rule: hide the proximity profile if there's only one proposal, as it's useless.
             val amountOfProposals = poll.pollConfig.proposals.size
             if (amountOfProposals > 1) {
-                val usedAnalysis = filterAnalysis(
+                val partialProximityAnalysis = filterAnalysis(
                     state.proximityAnalysis!!,
                     result.proposalResultsRanked.map { it.index },
                 )
@@ -408,15 +408,14 @@ fun ResultScreen(
                 SmallVerticalSpacer()
                 ProximityBarChart(
                     modifier = Modifier
-                        .height(16.dp * amountOfProposals * amountOfProposals)
+                        .height(
+                            16.dp * partialProximityAnalysis.proposals.size * partialProximityAnalysis.proposals.size
+                        )
                         .fillMaxWidth(),
-                    analysis = usedAnalysis,
+                    analysis = partialProximityAnalysis,
                 )
-                // i18n once we're somewhat OK with what's written in here — not the case right now
                 PlotTitle(
-                    text = "Proximity of every pair of proposals inside the ballots.",
-// "A value of 1.0 means that the two proposals received the exact same grades in each ballot. " +
-// "A value of -1.0 means that the two proposals received extreme opposite grades in each ballot.",
+                    text = stringResource(R.string.plot_title_proximity_profile),
                 )
                 MediumVerticalSpacer()
 
@@ -424,7 +423,7 @@ fun ResultScreen(
                 if (amountOfProposals > 2) {
                     ProximitySpider(
                         modifier = Modifier.height(400.dp),
-                        analysis = usedAnalysis,
+                        analysis = partialProximityAnalysis,
                         selectedProposalIndex = selectedUsedAnalysisProposal,
                         onProposalSelected = {
                             selectedUsedAnalysisProposal = it
