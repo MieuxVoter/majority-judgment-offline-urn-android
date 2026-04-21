@@ -11,12 +11,9 @@ fun String.truncate(
     val ellipsisLength = ellipsis.length
     val contentLength = maxLength - ellipsisLength
 
-    var out: String
-    if (contentLength <= 0) {
-        out = this.substring(0, maxLength)
+    return if (contentLength <= 0) {
+        this.substring(0, maxLength)
     } else {
-        out = this.substring(0, contentLength) + ellipsis
+        this.substring(0, contentLength) + ellipsis
     }
-
-    return out
 }

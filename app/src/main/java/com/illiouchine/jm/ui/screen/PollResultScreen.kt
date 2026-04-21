@@ -76,7 +76,6 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import com.illiouchine.jm.ui.utils.smoothStep
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import java.math.BigInteger
@@ -150,7 +149,7 @@ fun ResultScreen(
 
             BallotCountRow(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                ballots = poll.ballots.toImmutableList(),
+                ballots = poll.ballots.toPersistentList(),
             )
 
             SmallVerticalSpacer()
@@ -240,7 +239,7 @@ fun ResultScreen(
                                 grading = grading,
                                 decisiveGroups = decisiveGroupsForSelectedProfile.filter { group ->
                                     group.participant == proposalDisplayIndex
-                                }.toImmutableList(),
+                                }.toPersistentList(),
                                 showDecisiveGroups = isAnyProfileSelected,
                                 greenToRed = highestGradeToLowestGrade,
                             )

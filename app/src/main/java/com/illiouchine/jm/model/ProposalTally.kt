@@ -2,7 +2,7 @@ package com.illiouchine.jm.model
 
 import fr.mieuxvoter.mj.ProposalTallyInterface
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import java.math.BigInteger
 
 data class ProposalTally(
@@ -12,7 +12,7 @@ data class ProposalTally(
 
 fun ProposalTallyInterface.toProposalTally(): ProposalTally {
     return ProposalTally(
-        tally = this.tally.toImmutableList(),
+        tally = this.tally.toPersistentList(),
         amountOfJudgments = this.amountOfJudgments
     )
 }

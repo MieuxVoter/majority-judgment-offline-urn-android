@@ -1,6 +1,6 @@
 package com.illiouchine.jm.service
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class DecreasingListConstraintTest {

@@ -10,7 +10,7 @@ import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 
 fun Poll.toPollEntity(): PollEntity = PollEntity(
     uid = this.id,
@@ -55,7 +55,7 @@ fun List<BallotWithJudgment>.toDomainObject(): List<Ballot> {
                     proposal = judgment.proposalIndex,
                     grade = judgment.gradeIndex
                 )
-            }.toImmutableList()
+            }.toPersistentList()
         )
     }
 }

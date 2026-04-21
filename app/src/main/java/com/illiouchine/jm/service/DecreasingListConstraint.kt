@@ -2,6 +2,10 @@ package com.illiouchine.jm.service
 
 import com.illiouchine.jm.service.DecreasingListConstrictorStrategies.MEAN_DESCENDING
 
+/**
+ * We are not using this, since it's not pretty.
+ * I don't want to delete it just yet, though.
+ */
 class DecreasingListConstraint(
     private val strategy: DecreasingListConstrictorStrategies = MEAN_DESCENDING,
 ) {

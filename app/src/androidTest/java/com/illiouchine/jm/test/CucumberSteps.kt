@@ -81,7 +81,7 @@ class CucumberSteps(
         rule.onNodeWithTag(tag).assertExists().performClick()
     }
 
-    @When("^I scroll to the node tagged \"([^\"]+)\"\$")
+    @When("^I scroll to the node tagged \"([^\"]+)\"$")
     fun whenActorScrolls(tag: String) {
         var current = rule.onNodeWithTag(tag)
         var scrolled = false
