@@ -1,6 +1,7 @@
 package com.illiouchine.jm.ui.screen
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -401,14 +402,16 @@ fun ResultScreen(
                     state.proximityAnalysis!!,
                     result.proposalResultsRanked.map { it.index },
                 )
-                var selectedUsedAnalysisProposal by remember { mutableIntStateOf(0) }
+                var selectedPartialAnalysisProposal by remember { mutableIntStateOf(0) }
 
                 Text(stringResource(R.string.proximity_profile))
                 SmallVerticalSpacer()
                 ProximityBarChart(
                     modifier = Modifier
                         .height(
-                            16.dp * partialProximityAnalysis.proposals.size * partialProximityAnalysis.proposals.size
+                            16.dp *
+                                    partialProximityAnalysis.proposals.size *
+                                    partialProximityAnalysis.proposals.size
                         )
                         .fillMaxWidth(),
                     analysis = partialProximityAnalysis,
@@ -423,9 +426,14 @@ fun ResultScreen(
                     ProximitySpider(
                         modifier = Modifier.height(400.dp),
                         analysis = partialProximityAnalysis,
-                        selectedProposalIndex = selectedUsedAnalysisProposal,
+                        selectedProposalIndex = selectedPartialAnalysisProposal,
                         onProposalSelected = {
-                            selectedUsedAnalysisProposal = it
+                            selectedPartialAnalysisProposal = it
+                            Toast.makeText(
+                                context,
+                                partialProximityAnalysis.proposals[it],
+                                Toast.LENGTH_SHORT,
+                            ).show()
                         },
                     )
                     MediumVerticalSpacer()
