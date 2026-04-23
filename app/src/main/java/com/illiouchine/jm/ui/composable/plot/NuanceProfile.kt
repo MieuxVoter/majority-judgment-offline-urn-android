@@ -35,7 +35,7 @@ fun NuanceProfile(
             // Note: casting to a Set removes duplicates, which is _why_ we do it.
             ballot.judgments.map { j -> j.grade }.toSet().size
         }
-        poll.pollConfig.grading.grades.mapIndexed { gradeIndex, _ ->
+        List(poll.pollConfig.grading.grades.size) { gradeIndex ->
             val currentNuance = gradeIndex + 1
             Bars(
                 label = currentNuance.toString(),

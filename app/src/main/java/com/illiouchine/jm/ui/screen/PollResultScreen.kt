@@ -1,6 +1,7 @@
 package com.illiouchine.jm.ui.screen
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -68,6 +69,7 @@ import com.illiouchine.jm.ui.composable.plot.OpinionProfileBarChart
 import com.illiouchine.jm.ui.composable.plot.ProximityBarChart
 import com.illiouchine.jm.ui.composable.plot.ProximitySpider
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
+import com.illiouchine.jm.ui.composable.plot.utils.filterAnalysis
 import com.illiouchine.jm.ui.composable.spacer.MediumVerticalSpacer
 import com.illiouchine.jm.ui.composable.spacer.SmallVerticalSpacer
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
@@ -75,7 +77,6 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import com.illiouchine.jm.ui.utils.smoothStep
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import java.math.BigInteger
@@ -149,7 +150,7 @@ fun ResultScreen(
 
             BallotCountRow(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                ballots = poll.ballots.toImmutableList(),
+                ballots = poll.ballots.toPersistentList(),
             )
 
             SmallVerticalSpacer()
@@ -239,7 +240,7 @@ fun ResultScreen(
                                 grading = grading,
                                 decisiveGroups = decisiveGroupsForSelectedProfile.filter { group ->
                                     group.participant == proposalDisplayIndex
-                                }.toImmutableList(),
+                                }.toPersistentList(),
                                 showDecisiveGroups = isAnyProfileSelected,
                                 greenToRed = highestGradeToLowestGrade,
                             )
@@ -394,23 +395,29 @@ fun ResultScreen(
             )
             MediumVerticalSpacer()
 
-            // Rule: hide the proximity profile if there's only one proposal, as it's useless
+            // Rule: hide the proximity profile if there's only one proposal, as it's useless.
             val amountOfProposals = poll.pollConfig.proposals.size
             if (amountOfProposals > 1) {
+                val partialProximityAnalysis = filterAnalysis(
+                    state.proximityAnalysis!!,
+                    result.proposalResultsRanked.map { it.index },
+                )
+                var selectedPartialAnalysisProposal by remember { mutableIntStateOf(0) }
+
                 Text(stringResource(R.string.proximity_profile))
                 SmallVerticalSpacer()
                 ProximityBarChart(
                     modifier = Modifier
-                        .height(16.dp * amountOfProposals * amountOfProposals)
+                        .height(
+                            16.dp *
+                                    partialProximityAnalysis.proposals.size *
+                                    partialProximityAnalysis.proposals.size
+                        )
                         .fillMaxWidth(),
-                    analysis = state.proximityAnalysis!!,
-                    proposalsIndices = result.proposalResultsRanked.map { it.index },
+                    analysis = partialProximityAnalysis,
                 )
-                // i18n once we're somewhat OK with what's written in here — not the case right now
                 PlotTitle(
-                    text = "Proximity of every pair of proposals inside the ballots.",
-// "A value of 1.0 means that the two proposals received the exact same grades in each ballot. " +
-// "A value of -1.0 means that the two proposals received extreme opposite grades in each ballot.",
+                    text = stringResource(R.string.plot_title_proximity_profile),
                 )
                 MediumVerticalSpacer()
 
@@ -418,8 +425,16 @@ fun ResultScreen(
                 if (amountOfProposals > 2) {
                     ProximitySpider(
                         modifier = Modifier.height(400.dp),
-                        analysis = state.proximityAnalysis,
-                        proposalsIndices = result.proposalResultsRanked.map { it.index },
+                        analysis = partialProximityAnalysis,
+                        selectedProposalIndex = selectedPartialAnalysisProposal,
+                        onProposalSelected = {
+                            selectedPartialAnalysisProposal = it
+                            Toast.makeText(
+                                context,
+                                partialProximityAnalysis.proposals[it],
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        },
                     )
                     MediumVerticalSpacer()
                 }
@@ -460,31 +475,33 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
         amountOfBallots = 10000,
         amountOfProposals = 7,
         tweakBallots = { _, ballot, _ ->
-            ballot.copy(judgments = ballot.judgments.map {
-                when (it.proposal) {
-                    0 -> {
-                        it.copy(grade = 0)
+            ballot.copy(
+                judgments = ballot.judgments.map {
+                    when (it.proposal) {
+                        0 -> {
+                            it.copy(grade = 0)
+                        }
+                        1 -> {
+                            it.copy(grade = 1)
+                        }
+                        2 -> {
+                            it.copy(grade = 2)
+                        }
+                        3 -> {
+                            it.copy(grade = 3)
+                        }
+                        4 -> {
+                            it.copy(grade = 4)
+                        }
+                        5 -> {
+                            it
+                        }
+                        else -> {
+                            it
+                        }
                     }
-                    1 -> {
-                        it.copy(grade = 1)
-                    }
-                    2 -> {
-                        it.copy(grade = 2)
-                    }
-                    3 -> {
-                        it.copy(grade = 3)
-                    }
-                    4 -> {
-                        it.copy(grade = 4)
-                    }
-                    5 -> {
-                        it
-                    }
-                    else -> {
-                        it
-                    }
-                }
-            }.toPersistentList())
+                }.toPersistentList()
+            )
         },
         nameProposals = {
             when (it) {

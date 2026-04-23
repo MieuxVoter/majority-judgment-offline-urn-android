@@ -17,14 +17,15 @@ import kotlin.math.max
  * when we compare two proposals, to understand why one ranks higher than the other.
  *
  * There's no logic to this.  Only madness.  Plz rewrite.
+ * It works quite well, though.
  */
 @Suppress("CanBeParameter")
 class DuelAnalyzer(
     private val poll: Poll,
     private val tally: TallyInterface,
     private val result: ResultInterface,
-    private val baseIndex: Int, // profile that was selected
-    private val otherIndex: Int, // neighbor, dueling profile
+    private val baseIndex: Int, // merit profile that was selected
+    private val otherIndex: Int, // dueling profile, usually a neighbor in ranking
 ) {
 
     private val base: ProposalResultInterface = result.proposalResultsRanked[baseIndex]

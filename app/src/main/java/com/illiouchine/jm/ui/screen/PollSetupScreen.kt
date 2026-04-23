@@ -44,7 +44,7 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import com.illiouchine.jm.ui.utils.displayed
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 
 @Composable
@@ -87,7 +87,7 @@ fun PollSetupScreen(
         },
         floatingActionButton = {
             AnimatedVisibility(
-                visible = pollSetupState.config.proposals.size > 0 && !finishButtonVisibility,
+                visible = pollSetupState.config.proposals.isNotEmpty() && !finishButtonVisibility,
             ) {
                 ExtendedFloatingActionButton(
                     modifier = Modifier.padding(Theme.spacing.medium),
@@ -114,7 +114,7 @@ fun PollSetupScreen(
             SubjectSelectionRow(
                 modifier = Modifier,
                 subject = pollSetupState.config.subject,
-                subjectSuggestion = pollSetupState.subjectSuggestion.toImmutableList(),
+                subjectSuggestion = pollSetupState.subjectSuggestion.toPersistentList(),
                 onSuggestionSelected = {
                     onAddSubject(context, it)
                     onGetSubjectSuggestion("")
@@ -148,7 +148,7 @@ fun PollSetupScreen(
                     onAddProposal(context, it)
                     proposal = ""
                 },
-                proposalSuggestion = pollSetupState.proposalSuggestion.toImmutableList(),
+                proposalSuggestion = pollSetupState.proposalSuggestion.toPersistentList(),
                 onProposalSelected = {
                     proposal = it
                     onClearProposalSuggestion()
@@ -191,7 +191,7 @@ fun PollSetupScreen(
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(0.62f)
                     .padding(Theme.spacing.medium),
-                enabled = pollSetupState.config.proposals.size > 0,
+                enabled = pollSetupState.config.proposals.isNotEmpty(),
                 onClick = { onSetupFinished(context) },
             ) {
                 Text(stringResource(R.string.button_let_s_go))

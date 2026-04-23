@@ -44,7 +44,7 @@ import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 
 @Composable
@@ -191,7 +191,7 @@ fun PollVotingScreen(
 
             BallotCountRow(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                ballots = pollVotingState.ballots.toImmutableList(),
+                ballots = pollVotingState.ballots.toPersistentList(),
             )
         }
     }

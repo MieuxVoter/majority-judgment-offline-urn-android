@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun EpicycloidMenu(
@@ -73,25 +73,25 @@ fun EpicycloidMenu(
                 onDeleteCompass = {
                     val newCompasses = compasses.toMutableList()
                     newCompasses.removeAt(index)
-                    compasses = newCompasses.toImmutableList()
+                    compasses = newCompasses.toPersistentList()
                 },
                 onChangeRadius = { radius ->
                     val newCompasses = compasses.toMutableList()
                     val newCompass = newCompasses[index].copy(radius = radius)
                     newCompasses[index] = newCompass
-                    compasses = newCompasses.toImmutableList()
+                    compasses = newCompasses.toPersistentList()
                 },
                 onChangeSpeed = { speed ->
                     val newCompasses = compasses.toMutableList()
                     val newCompass = newCompasses[index].copy(speed = speed)
                     newCompasses[index] = newCompass
-                    compasses = newCompasses.toImmutableList()
+                    compasses = newCompasses.toPersistentList()
                 },
                 onChangePhase = { phase ->
                     val newCompasses = compasses.toMutableList()
                     val newCompass = newCompasses[index].copy(phase = phase)
                     newCompasses[index] = newCompass
-                    compasses = newCompasses.toImmutableList()
+                    compasses = newCompasses.toPersistentList()
                 },
             )
         }
@@ -103,7 +103,7 @@ fun EpicycloidMenu(
                     val newCompasses = compasses.toMutableList()
                     val newCompass = Compass(0.0)
                     newCompasses.add(newCompass)
-                    compasses = newCompasses.toImmutableList()
+                    compasses = newCompasses.toPersistentList()
                 },
             ) {
                 Icon(Icons.Filled.Add, null)

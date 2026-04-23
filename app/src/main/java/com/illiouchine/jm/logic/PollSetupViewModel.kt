@@ -148,8 +148,7 @@ class PollSetupViewModel(
         viewModelScope.launch {
             val proposalSuggestion = if (proposal.isNotEmpty()) {
                 pollDataSource.getAllPolls()
-                    .map { it.pollConfig.proposals }
-                    .flatten()
+                    .flatMap { it.pollConfig.proposals }
                     .distinct()
                     .filter { it.contains(other = proposal, ignoreCase = true) }
             } else {

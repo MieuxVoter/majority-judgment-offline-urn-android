@@ -112,7 +112,7 @@ fun SpiderChart(
                 symbols = {
                     Symbol(shape = CircleShape, fillBrush = SolidColor(Theme.colorScheme.primary))
                 },
-                animationSpec = TweenSpec<Float>(durationMillis = 0),
+                animationSpec = TweenSpec(durationMillis = 0),
             )
         }
     }

@@ -105,7 +105,7 @@ enum class ProportionalAlgorithms {
     abstract fun getFeatures(context: Context): String
 
     /**
-     * Whether or not this algorithm is available.
+     * Whether this algorithm is available to users.
      */
     abstract fun isAvailable(): Boolean
 
@@ -116,6 +116,3 @@ enum class ProportionalAlgorithms {
      */
     abstract fun compute(poll: Poll, result: ResultInterface): List<Double>
 }
-
-// Can't figure out how to make this work
-// abstract class Proportions : List<Double>

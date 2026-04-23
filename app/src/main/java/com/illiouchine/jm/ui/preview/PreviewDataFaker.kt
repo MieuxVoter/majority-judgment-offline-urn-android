@@ -7,7 +7,6 @@ import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlin.math.floor
 
@@ -78,7 +77,7 @@ object PreviewDataFaker {
             )
             judgments.add(judgment)
         }
-        return judgments.toImmutableList()
+        return judgments.toPersistentList()
     }
 
     fun pollConfig(

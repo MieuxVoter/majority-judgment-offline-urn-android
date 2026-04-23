@@ -22,7 +22,7 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.theme.JmTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 @Suppress("UnusedReceiverParameter")
@@ -61,7 +61,7 @@ fun ColumnScope.SubjectSelectionRow(
             SuggestionPopup(
                 offset = IntOffset(0, textFieldHeight),
                 modifier = Modifier,
-                suggestions = subjectSuggestion.take(3).toImmutableList(),
+                suggestions = subjectSuggestion.take(3).toPersistentList(),
                 onSuggestionSelected = { onSuggestionSelected(it) },
                 onClearSuggestion = { onClearSuggestion() }
             )

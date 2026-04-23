@@ -1,4 +1,4 @@
-* Improve the proximity profile
+* Improve the proximity profile's layout
 * Fix a crash when looking consecutively at different poll results
 * Improve the results screen on small devices with big fonts
-* Still no ~~explanations~~ spoilers for the various charts
+* Show the relative neutral as a notch in the proximity profiles

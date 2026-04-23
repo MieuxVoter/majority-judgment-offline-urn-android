@@ -6,6 +6,7 @@ import com.illiouchine.jm.config.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.config.DEFAULT_PLAY_SOUND_VALUE
 import com.illiouchine.jm.config.DEFAULT_SHOW_ONBOARDING_VALUE
 import com.illiouchine.jm.model.Grading
+import androidx.core.content.edit
 
 class SharedPrefsHelper(
     context: Context,
@@ -29,9 +30,9 @@ class SharedPrefsHelper(
     }
 
     fun editShowOnboarding(value: Boolean = false) {
-        sharedPreferences.edit()
-            .putBoolean(SHOW_ONBOARDING_PREF_KEY, value)
-            .apply()
+        sharedPreferences.edit {
+            putBoolean(SHOW_ONBOARDING_PREF_KEY, value)
+        }
     }
 
     fun getPlaySound(): Boolean {
@@ -42,9 +43,9 @@ class SharedPrefsHelper(
     }
 
     fun editPlaySound(value: Boolean) {
-        sharedPreferences.edit()
-            .putBoolean(PLAY_SOUND_PREF_KEY, value)
-            .apply()
+        sharedPreferences.edit {
+            putBoolean(PLAY_SOUND_PREF_KEY, value)
+        }
     }
 
     fun getPinScreen(): Boolean {
@@ -52,9 +53,9 @@ class SharedPrefsHelper(
     }
 
     fun editPinScreen(value: Boolean = true) {
-        sharedPreferences.edit()
-            .putBoolean(PIN_SCREEN_PREF_KEY, value)
-            .apply()
+        sharedPreferences.edit {
+            putBoolean(PIN_SCREEN_PREF_KEY, value)
+        }
     }
 
     fun getDefaultGrading(): Grading {
@@ -66,8 +67,8 @@ class SharedPrefsHelper(
     }
 
     fun editDefaultGrading(grading: Grading) {
-        sharedPreferences.edit()
-            .putInt(DEFAULT_GRADING_PREF_KEY, grading.uid)
-            .apply()
+        sharedPreferences.edit {
+            putInt(DEFAULT_GRADING_PREF_KEY, grading.uid)
+        }
     }
 }

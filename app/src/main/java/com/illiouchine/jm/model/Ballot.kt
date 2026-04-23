@@ -1,18 +1,18 @@
 package com.illiouchine.jm.model
 
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.Serializable
 import kotlin.math.max
 
 @Serializable
 data class Ballot(
-    val judgments: ImmutableList<Judgment> = emptyList<Judgment>().toImmutableList(),
+    val judgments: ImmutableList<Judgment> = emptyList<Judgment>().toPersistentList(),
 ) {
 
     fun withJudgment(judgment: Judgment): Ballot {
         return Ballot(
-            judgments = (judgments + judgment).toImmutableList(),
+            judgments = (judgments + judgment).toPersistentList(),
         )
     }
 
