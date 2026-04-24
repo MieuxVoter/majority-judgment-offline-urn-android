@@ -6,6 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.illiouchine.jm.R
+import com.illiouchine.jm.filters.BallotsFilterInterface
+import com.illiouchine.jm.filters.NoBallotFilter
 import com.illiouchine.jm.model.Ballot
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -14,6 +16,8 @@ import kotlinx.collections.immutable.persistentListOf
 fun BallotCountRow(
     modifier: Modifier = Modifier,
     ballots: ImmutableList<Ballot> = persistentListOf(),
+    unfilteredBallots: ImmutableList<Ballot> = persistentListOf(),
+    ballotsFilter: BallotsFilterInterface = NoBallotFilter(),
 ) {
     val amountOfBallots = ballots.size
     Row(
@@ -26,8 +30,15 @@ fun BallotCountRow(
             stringResource(R.string.ballots)
         }
 
-        Text(
+        val text = if (ballotsFilter is NoBallotFilter) {
             "$amountOfBallots $ballotsString " + stringResource(R.string.in_the_urn)
+        } else {
+            val totalAmountOfBallots = unfilteredBallots.size
+            stringResource(R.string.using) + " $amountOfBallots / $totalAmountOfBallots $ballotsString"
+        }
+
+        Text(
+            text = text,
         )
     }
 }

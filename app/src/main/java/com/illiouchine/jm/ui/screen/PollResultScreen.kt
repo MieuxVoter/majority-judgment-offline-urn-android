@@ -58,6 +58,8 @@ import com.illiouchine.jm.config.ProportionalAlgorithms
 import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.extensions.bigSumOf
 import com.illiouchine.jm.extensions.smartFormat
+import com.illiouchine.jm.filters.BallotsFilterInterface
+import com.illiouchine.jm.filters.ProposalGradeBallotFilter
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.model.ProposalTally
 import com.illiouchine.jm.ui.composable.BallotCountRow
@@ -90,9 +92,12 @@ fun ResultScreen(
     state: PollResultViewModel.PollResultViewState,
     onShowProportionsHelp: () -> Unit = {},
     onFinish: () -> Unit = {},
+    onBallotFilterUpdate: (BallotsFilterInterface) -> Unit = {},
     feedback: String? = "",
     onDismissFeedback: () -> Unit = {},
 ) {
+    val unfilteredPoll = state.unfilteredPoll!!
+    val ballotsFilter = state.ballotFilter
     val poll = state.poll!!
     val result = state.result!!
     val tally = state.tally!!
@@ -151,6 +156,8 @@ fun ResultScreen(
             BallotCountRow(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 ballots = poll.ballots.toPersistentList(),
+                unfilteredBallots = unfilteredPoll.ballots.toPersistentList(),
+                ballotsFilter = ballotsFilter,
             )
 
             SmallVerticalSpacer()
@@ -536,6 +543,81 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
         )
     }
     pollResultViewModel.initializePollResult(LocalContext.current, poll)
+    val state = pollResultViewModel.pollResultViewState.collectAsState().value
+
+    JmTheme {
+        ResultScreen(
+            modifier = modifier,
+            state = state,
+        )
+    }
+}
+
+@Preview(
+    name = "Phone (Portrait)",
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 1.0f,
+)
+@Composable
+fun PreviewFilteredResultScreen(modifier: Modifier = Modifier) {
+    val poll = PreviewDataFaker.poll(
+        amountOfBallots = 1000,
+        amountOfProposals = 5,
+        tweakBallots = { _, ballot, _ ->
+            ballot.copy(
+                judgments = ballot.judgments.map {
+                    when (it.proposal) {
+                        0 -> {
+                            it.copy(grade = 0)
+                        }
+                        1 -> {
+                            it.copy(grade = 1)
+                        }
+                        2 -> {
+                            it.copy(grade = 4)
+                        }
+                        else -> {
+                            it
+                        }
+                    }
+                }.toPersistentList()
+            )
+        },
+        nameProposals = {
+            when (it) {
+                0 -> {
+                    "Reject"
+                }
+                1 -> {
+                    "Passable"
+                }
+                2 -> {
+                    "Excellent"
+                }
+                3 -> {
+                    "Random A"
+                }
+                else -> {
+                    "Random B"
+                }
+            }
+        }
+    )
+
+    val pollResultViewModel = viewModel {
+        PollResultViewModel(
+            pollDataSource = InMemoryPollDataSource(), // dummy
+        )
+    }
+    pollResultViewModel.initializePollResult(
+        context = LocalContext.current,
+        poll = poll,
+        ballotFilter = ProposalGradeBallotFilter(
+            proposalIndex = 3,
+            gradeIndex = 0,
+        ),
+    )
     val state = pollResultViewModel.pollResultViewState.collectAsState().value
 
     JmTheme {

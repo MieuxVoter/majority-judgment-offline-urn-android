@@ -9,6 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.R
 import com.illiouchine.jm.config.ProportionalAlgorithms
 import com.illiouchine.jm.data.PollDataSource
+import com.illiouchine.jm.filters.BallotsFilterInterface
+import com.illiouchine.jm.filters.NoBallotFilter
 import com.illiouchine.jm.model.ParticipantGroupAnalysis
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.Result
@@ -46,8 +48,11 @@ class PollResultViewModel(
         val groups: List<DuelGroups> = emptyList(),
         val proportions: Map<ProportionalAlgorithms, List<Double>> = emptyMap(),
         val proximityAnalysis: ProximityAnalysis? = null,
+        val ballotFilter: BallotsFilterInterface = NoBallotFilter(),
+        val unfilteredPoll: Poll? = null,
     )
 
+    @Stable
     data class DuelGroups(
         val groups: List<ParticipantGroupAnalysis>,
     )
@@ -58,7 +63,11 @@ class PollResultViewModel(
     private val _navEvents = MutableSharedFlow<NavigationAction>()
     val navEvents = _navEvents.asSharedFlow()
 
-    fun initializePollResultById(context: Context, pollId: Int) {
+    fun initializePollResultById(
+        context: Context,
+        pollId: Int,
+        ballotFilter: BallotsFilterInterface = NoBallotFilter(),
+    ) {
         viewModelScope.launch {
             val poll = pollDataSource.getPollById(pollId)
 
@@ -70,19 +79,28 @@ class PollResultViewModel(
                 ).show()
                 _navEvents.emit(NavigationAction.To(Screens.Home))
             } else {
-                initializePollResult(context, poll)
+                initializePollResult(
+                    context = context,
+                    poll = poll,
+                    ballotFilter = ballotFilter,
+                )
             }
         }
     }
 
-    fun initializePollResult(context: Context, poll: Poll) {
-        val amountOfProposals = poll.pollConfig.proposals.size
-        val amountOfGrades = poll.pollConfig.grading.getAmountOfGrades()
+    fun initializePollResult(
+        context: Context,
+        poll: Poll,
+        ballotFilter: BallotsFilterInterface = NoBallotFilter(),
+    ) {
+        val filteredPoll = ballotFilter.filter(poll)
+        val amountOfProposals = filteredPoll.pollConfig.proposals.size
+        val amountOfGrades = filteredPoll.pollConfig.grading.getAmountOfGrades()
         val deliberation: DeliberatorInterface = MajorityJudgmentDeliberator()
         val tally = CollectedTally(amountOfProposals, amountOfGrades)
 
-        poll.pollConfig.proposals.forEachIndexed { proposalIndex, _ ->
-            val voteResult = poll.judgments.filter { it.proposal == proposalIndex }
+        filteredPoll.pollConfig.proposals.forEachIndexed { proposalIndex, _ ->
+            val voteResult = filteredPoll.judgments.filter { it.proposal == proposalIndex }
             voteResult.forEach { judgment ->
                 tally.collect(proposalIndex, judgment.grade)
             }
@@ -100,7 +118,7 @@ class PollResultViewModel(
                 max(0, displayIndex - 1)
             }
             val duelAnalyzer = DuelAnalyzer(
-                poll = poll,
+                poll = filteredPoll,
                 tally = tally,
                 result = result,
                 baseIndex = displayIndex,
@@ -122,17 +140,22 @@ class PollResultViewModel(
         val proportions = mutableMapOf<ProportionalAlgorithms, List<Double>>()
         for (proportionalAlgorithm in ProportionalAlgorithms.entries) {
             if (proportionalAlgorithm.isAvailable()) {
-                proportions[proportionalAlgorithm] = proportionalAlgorithm.compute(poll, result)
+                proportions[proportionalAlgorithm] = proportionalAlgorithm.compute(
+                    filteredPoll,
+                    result,
+                )
             }
         }
 
         val proximityAnalysis = ProximityAnalyzer().analyze(
-            poll = poll,
+            poll = filteredPoll,
         )
 
         _pollResultViewState.update {
             it.copy(
-                poll = poll,
+                ballotFilter = ballotFilter,
+                unfilteredPoll = poll,
+                poll = filteredPoll,
                 tally = tally.toTally(),
                 result = result.toResult(),
                 explanations = explanations,

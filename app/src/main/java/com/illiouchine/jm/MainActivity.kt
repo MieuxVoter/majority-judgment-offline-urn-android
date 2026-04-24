@@ -23,6 +23,8 @@ import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDe
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.illiouchine.jm.filters.BallotsFilterInterface
+import com.illiouchine.jm.filters.NoBallotFilter
 import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.logic.OnboardingViewModel
 import com.illiouchine.jm.logic.PollResultViewModel
@@ -184,14 +186,19 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         entry<Screens.PollResult> { key ->
+                            val context = LocalContext.current
                             val pollResultViewModel: PollResultViewModel by viewModel()
                             val pollResultViewState by pollResultViewModel.pollResultViewState.collectAsState()
 
-                            val context = LocalContext.current
-                            LaunchedEffect(key.id) {
+                            var ballotFilter: BallotsFilterInterface = remember(key.id) {
+                                NoBallotFilter()
+                            }
+
+                            LaunchedEffect(key.id, ballotFilter) {
                                 pollResultViewModel.initializePollResultById(
                                     context = context,
                                     pollId = key.id,
+                                    ballotFilter = ballotFilter,
                                 )
                             }
 
@@ -207,7 +214,12 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier,
                                     state = pollResultViewState,
                                     onFinish = pollResultViewModel::onFinish,
-                                    onShowProportionsHelp = { topLevelBackStack.add(Screens.ProportionsHelp) },
+                                    onShowProportionsHelp = {
+                                        topLevelBackStack.add(Screens.ProportionsHelp)
+                                    },
+                                    onBallotFilterUpdate = { filter ->
+                                        ballotFilter = filter
+                                    }
                                 )
                             }
                         }
