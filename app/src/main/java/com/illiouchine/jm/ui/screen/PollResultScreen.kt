@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
@@ -59,7 +60,8 @@ import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.extensions.bigSumOf
 import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.filters.BallotsFilterInterface
-import com.illiouchine.jm.filters.ProposalGradeBallotFilter
+import com.illiouchine.jm.filters.NoBallotsFilter
+import com.illiouchine.jm.filters.ProposalGradeBallotsFilter
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.model.ProposalTally
 import com.illiouchine.jm.ui.composable.BallotCountRow
@@ -92,7 +94,7 @@ fun ResultScreen(
     state: PollResultViewModel.PollResultViewState,
     onShowProportionsHelp: () -> Unit = {},
     onFinish: () -> Unit = {},
-    onBallotFilterUpdate: (BallotsFilterInterface) -> Unit = {},
+    onBallotsFilterUpdate: (BallotsFilterInterface) -> Unit = {},
     feedback: String? = "",
     onDismissFeedback: () -> Unit = {},
 ) {
@@ -171,9 +173,9 @@ fun ResultScreen(
                 if (proposalResult.analysis.totalSize > BigInteger.ZERO) {
                     // I don't know how to indent this readably (I am triggered by the linter >.<)
                     val isInSelectedDuel = isAnyProfileSelected && (
-                        selectedDuelIndex == proposalDisplayIndex ||
-                            selectedDuelIndex + 1 == proposalDisplayIndex
-                        )
+                            selectedDuelIndex == proposalDisplayIndex ||
+                                    selectedDuelIndex + 1 == proposalDisplayIndex
+                            )
                     val ttsShowExplanation = stringResource(R.string.tts_show_explanation)
 
                     Column(
@@ -261,8 +263,8 @@ fun ResultScreen(
 
                         // Ux: Explanations are shown one at a time (exclusive toggle)
                         val shouldShowExplanation = isAnyProfileSelected &&
-                            selectedDuelIndex == proposalDisplayIndex &&
-                            result.proposalResultsRanked.size > 1
+                                selectedDuelIndex == proposalDisplayIndex &&
+                                result.proposalResultsRanked.size > 1
 
                         AnimatedVisibility(shouldShowExplanation) {
                             Row {
@@ -350,6 +352,47 @@ fun ResultScreen(
                     )
                 }
             }
+
+            MediumVerticalSpacer()
+
+            // Rule: for simplicity, for now, only one filter is allowed.
+            // Eventually; we'd love a filters tree (AND/OR) like in Factorio for example.
+            Text("Ballots Filters")
+            SmallVerticalSpacer()
+
+            if (ballotsFilter is NoBallotsFilter) {
+                Text("No filter is applied on the ballots.")
+                IconButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.CenterHorizontally),
+                    onClick = {
+                        onBallotsFilterUpdate(
+                            ProposalGradeBallotsFilter(
+                                proposalIndex = 0,
+                                gradeIndex = 0,
+                            )
+                        )
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add a filter.",
+                    )
+                }
+            } else {
+                Text("This results screen now only uses the ballots that:")
+            }
+            ballotsFilter.render(
+                poll = poll,
+                onFilterDelete = {
+                    // Mmh ; perhaps add a onBallotFilterDelete upstream ?
+                    onBallotsFilterUpdate(NoBallotsFilter())
+                },
+                onFilterUpdate = {
+                    onBallotsFilterUpdate(it)
+                },
+            ).invoke()
 
             MediumVerticalSpacer()
 
@@ -488,21 +531,27 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
                         0 -> {
                             it.copy(grade = 0)
                         }
+
                         1 -> {
                             it.copy(grade = 1)
                         }
+
                         2 -> {
                             it.copy(grade = 2)
                         }
+
                         3 -> {
                             it.copy(grade = 3)
                         }
+
                         4 -> {
                             it.copy(grade = 4)
                         }
+
                         5 -> {
                             it
                         }
+
                         else -> {
                             it
                         }
@@ -515,21 +564,27 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
                 0 -> {
                     "Reject"
                 }
+
                 1 -> {
                     "Insufficient"
                 }
+
                 2 -> {
                     "Passable"
                 }
+
                 3 -> {
                     "Good"
                 }
+
                 4 -> {
                     "Excellent"
                 }
+
                 5 -> {
                     "Random 1"
                 }
+
                 else -> {
                     "Random 2"
                 }
@@ -571,12 +626,15 @@ fun PreviewFilteredResultScreen(modifier: Modifier = Modifier) {
                         0 -> {
                             it.copy(grade = 0)
                         }
+
                         1 -> {
                             it.copy(grade = 1)
                         }
+
                         2 -> {
                             it.copy(grade = 4)
                         }
+
                         else -> {
                             it
                         }
@@ -589,15 +647,19 @@ fun PreviewFilteredResultScreen(modifier: Modifier = Modifier) {
                 0 -> {
                     "Reject"
                 }
+
                 1 -> {
                     "Passable"
                 }
+
                 2 -> {
                     "Excellent"
                 }
+
                 3 -> {
                     "Random A"
                 }
+
                 else -> {
                     "Random B"
                 }
@@ -605,25 +667,39 @@ fun PreviewFilteredResultScreen(modifier: Modifier = Modifier) {
         }
     )
 
+    val ballotsFilter: BallotsFilterInterface = remember {
+        ProposalGradeBallotsFilter(
+            proposalIndex = 3,
+            gradeIndex = 0,
+        )
+    }
+
     val pollResultViewModel = viewModel {
         PollResultViewModel(
             pollDataSource = InMemoryPollDataSource(), // dummy
         )
     }
+
+    val context = LocalContext.current
+//    LaunchedEffect(poll, ballotsFilter) { // → preview refresh loop
     pollResultViewModel.initializePollResult(
-        context = LocalContext.current,
+        context = context,
         poll = poll,
-        ballotFilter = ProposalGradeBallotFilter(
-            proposalIndex = 3,
-            gradeIndex = 0,
-        ),
+        ballotFilter = ballotsFilter,
     )
+//    }
+
     val state = pollResultViewModel.pollResultViewState.collectAsState().value
 
     JmTheme {
-        ResultScreen(
-            modifier = modifier,
-            state = state,
-        )
+        if (state.poll != null) {
+            ResultScreen(
+                modifier = modifier,
+                state = state,
+                onBallotsFilterUpdate = {
+                    //ballotsFilter = it
+                },
+            )
+        }
     }
 }

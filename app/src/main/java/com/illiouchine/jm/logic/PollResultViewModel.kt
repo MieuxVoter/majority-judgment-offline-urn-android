@@ -10,7 +10,7 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.config.ProportionalAlgorithms
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.filters.BallotsFilterInterface
-import com.illiouchine.jm.filters.NoBallotFilter
+import com.illiouchine.jm.filters.NoBallotsFilter
 import com.illiouchine.jm.model.ParticipantGroupAnalysis
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.Result
@@ -48,7 +48,7 @@ class PollResultViewModel(
         val groups: List<DuelGroups> = emptyList(),
         val proportions: Map<ProportionalAlgorithms, List<Double>> = emptyMap(),
         val proximityAnalysis: ProximityAnalysis? = null,
-        val ballotFilter: BallotsFilterInterface = NoBallotFilter(),
+        val ballotFilter: BallotsFilterInterface = NoBallotsFilter(),
         val unfilteredPoll: Poll? = null,
     )
 
@@ -66,7 +66,7 @@ class PollResultViewModel(
     fun initializePollResultById(
         context: Context,
         pollId: Int,
-        ballotFilter: BallotsFilterInterface = NoBallotFilter(),
+        ballotFilter: BallotsFilterInterface = NoBallotsFilter(),
     ) {
         viewModelScope.launch {
             val poll = pollDataSource.getPollById(pollId)
@@ -91,9 +91,13 @@ class PollResultViewModel(
     fun initializePollResult(
         context: Context,
         poll: Poll,
-        ballotFilter: BallotsFilterInterface = NoBallotFilter(),
+        ballotFilter: BallotsFilterInterface = NoBallotsFilter(),
     ) {
-        val filteredPoll = ballotFilter.filter(poll)
+        val filteredPoll = poll.copy(
+            ballots = poll.ballots.filter {
+                ballotFilter.shouldKeep(it)
+            },
+        )
         val amountOfProposals = filteredPoll.pollConfig.proposals.size
         val amountOfGrades = filteredPoll.pollConfig.grading.getAmountOfGrades()
         val deliberation: DeliberatorInterface = MajorityJudgmentDeliberator()

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -16,6 +17,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -24,7 +26,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.illiouchine.jm.filters.BallotsFilterInterface
-import com.illiouchine.jm.filters.NoBallotFilter
+import com.illiouchine.jm.filters.NoBallotsFilter
 import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.logic.OnboardingViewModel
 import com.illiouchine.jm.logic.PollResultViewModel
@@ -188,19 +190,20 @@ class MainActivity : ComponentActivity() {
                         entry<Screens.PollResult> { key ->
                             val context = LocalContext.current
                             val pollResultViewModel: PollResultViewModel by viewModel()
-                            val pollResultViewState by pollResultViewModel.pollResultViewState.collectAsState()
 
-                            var ballotFilter: BallotsFilterInterface = remember(key.id) {
-                                NoBallotFilter()
+                            var ballotsFilter: BallotsFilterInterface = remember(key.id) {
+                                NoBallotsFilter()
                             }
 
-                            LaunchedEffect(key.id, ballotFilter) {
+                            LaunchedEffect(key.id, ballotsFilter) {
                                 pollResultViewModel.initializePollResultById(
                                     context = context,
                                     pollId = key.id,
-                                    ballotFilter = ballotFilter,
+                                    ballotFilter = ballotsFilter,
                                 )
                             }
+
+                            val pollResultViewState by pollResultViewModel.pollResultViewState.collectAsState()
 
                             LaunchedEffect(Unit) {
                                 pollResultViewModel.navEvents.collect { event ->
@@ -217,8 +220,21 @@ class MainActivity : ComponentActivity() {
                                     onShowProportionsHelp = {
                                         topLevelBackStack.add(Screens.ProportionsHelp)
                                     },
-                                    onBallotFilterUpdate = { filter ->
-                                        ballotFilter = filter
+                                    onBallotsFilterUpdate = { filter ->
+                                        Toast.makeText(
+                                            context,
+                                            "Ballots filter updated.",
+                                            Toast.LENGTH_SHORT,
+                                        ).show()
+
+                                        ballotsFilter = filter
+
+                                        // TBD: we should do this here, yet we have to (?)
+                                        pollResultViewModel.initializePollResultById(
+                                            context = context,
+                                            pollId = key.id,
+                                            ballotFilter = ballotsFilter,
+                                        )
                                     }
                                 )
                             }
