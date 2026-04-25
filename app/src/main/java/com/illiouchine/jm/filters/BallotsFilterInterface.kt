@@ -6,8 +6,6 @@ import com.illiouchine.jm.model.Poll
 
 interface BallotsFilterInterface {
 
-//    fun filter(poll: Poll): Poll
-
     fun shouldKeep(ballot: Ballot): Boolean
 
     fun render(

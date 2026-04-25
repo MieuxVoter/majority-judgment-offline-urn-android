@@ -1,10 +1,11 @@
 package com.illiouchine.jm.filters
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Poll
+import kotlinx.serialization.Serializable
 
+@Serializable
 class NoBallotsFilter : BallotsFilterInterface {
 
     override fun shouldKeep(ballot: Ballot): Boolean {
@@ -21,5 +22,6 @@ class NoBallotsFilter : BallotsFilterInterface {
             //Text("No filter is applied on the ballots.")
         })
     }
+
 }
 

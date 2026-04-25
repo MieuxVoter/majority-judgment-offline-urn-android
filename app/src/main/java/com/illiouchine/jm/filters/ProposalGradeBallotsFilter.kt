@@ -1,5 +1,6 @@
 package com.illiouchine.jm.filters
 
+import android.os.Parcel
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
@@ -24,7 +25,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Poll
+import kotlinx.serialization.Serializable
 
+@Serializable
 class ProposalGradeBallotsFilter(
     val proposalIndex: Int,
     val gradeIndex: Int,
@@ -158,8 +161,6 @@ class ProposalGradeBallotsFilter(
                             )
                         }
                     }
-
-
                 }
                 Row(
                     modifier = Modifier

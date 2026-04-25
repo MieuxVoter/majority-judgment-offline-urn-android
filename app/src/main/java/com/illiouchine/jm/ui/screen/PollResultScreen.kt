@@ -333,127 +333,129 @@ fun ResultScreen(
 
             SmallVerticalSpacer()
 
-            Row {
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .weight(1f),
-                    textAlign = TextAlign.End,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    text = stringResource(R.string.label_show_proportions) + ":",
-                )
-
-                Box {
-                    val ttsChooseAProportionalAlgorithm = stringResource(
-                        R.string.tts_choose_a_proportional_algorithm
+            if (amountOfBallots > 0) {
+                Row {
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .weight(1f),
+                        textAlign = TextAlign.End,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        text = stringResource(R.string.label_show_proportions) + ":",
                     )
-                    TextButton(
-                        modifier = Modifier.semantics {
-                            onClick(
-                                label = ttsChooseAProportionalAlgorithm,
-                                action = null,
-                            )
-                        },
+
+                    Box {
+                        val ttsChooseAProportionalAlgorithm = stringResource(
+                            R.string.tts_choose_a_proportional_algorithm
+                        )
+                        TextButton(
+                            modifier = Modifier.semantics {
+                                onClick(
+                                    label = ttsChooseAProportionalAlgorithm,
+                                    action = null,
+                                )
+                            },
+                            onClick = {
+                                proportionalDropdownExpanded = !proportionalDropdownExpanded
+                            },
+                        ) {
+                            Text(proportionalAlgorithm.getName(context))
+                        }
+
+                        DropdownMenu(
+                            expanded = proportionalDropdownExpanded,
+                            onDismissRequest = {
+                                proportionalDropdownExpanded = false
+                            },
+                        ) {
+                            for (algo in ProportionalAlgorithms.entries) {
+                                DropdownMenuItem(
+                                    modifier = Modifier.semantics {
+                                        contentDescription = "Proportional Algorithm"
+                                    },
+                                    enabled = algo.isAvailable(),
+                                    text = { Text(algo.getName(context)) },
+                                    onClick = {
+                                        proportionalAlgorithm = algo
+                                        proportionalDropdownExpanded = false
+                                    },
+                                )
+                            }
+                        }
+                    }
+
+                    IconButton(
                         onClick = {
-                            proportionalDropdownExpanded = !proportionalDropdownExpanded
+                            coroutineScope.launch {
+                                onShowProportionsHelp()
+                            }
                         },
                     ) {
-                        Text(proportionalAlgorithm.getName(context))
-                    }
-
-                    DropdownMenu(
-                        expanded = proportionalDropdownExpanded,
-                        onDismissRequest = {
-                            proportionalDropdownExpanded = false
-                        },
-                    ) {
-                        for (algo in ProportionalAlgorithms.entries) {
-                            DropdownMenuItem(
-                                modifier = Modifier.semantics {
-                                    contentDescription = "Proportional Algorithm"
-                                },
-                                enabled = algo.isAvailable(),
-                                text = { Text(algo.getName(context)) },
-                                onClick = {
-                                    proportionalAlgorithm = algo
-                                    proportionalDropdownExpanded = false
-                                },
-                            )
-                        }
+                        Icon(
+                            imageVector = Icons.Default.Info,
+                            contentDescription = stringResource(
+                                R.string.tts_more_information_about_proportional_algorithms
+                            ),
+                        )
                     }
                 }
-
-                IconButton(
-                    onClick = {
-                        coroutineScope.launch {
-                            onShowProportionsHelp()
-                        }
-                    },
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Info,
-                        contentDescription = stringResource(
-                            R.string.tts_more_information_about_proportional_algorithms
-                        ),
-                    )
-                }
+                MediumVerticalSpacer()
             }
 
-            MediumVerticalSpacer()
+            if (amountOfBallots > 0) {
+                Text(stringResource(R.string.nuance_profile))
+                SmallVerticalSpacer()
+                NuanceProfile(
+                    modifier = Modifier
+                        .height(250.dp)
+                        .fillMaxWidth(),
+                    poll = poll,
+                    moreNuanceToLessNuance = highestGradeToLowestGrade,
+                )
+                PlotTitle(
+                    modifier = Modifier.padding(top = Theme.spacing.tiny),
+                    text = stringResource(R.string.plot_title_nuance_profile),
+                )
+                MediumVerticalSpacer()
+            }
 
-            Text(stringResource(R.string.nuance_profile))
-            SmallVerticalSpacer()
-            NuanceProfile(
-                modifier = Modifier
-                    .height(250.dp)
-                    .fillMaxWidth(),
-                poll = poll,
-                moreNuanceToLessNuance = highestGradeToLowestGrade,
-            )
-            PlotTitle(
-                modifier = Modifier.padding(top = Theme.spacing.tiny),
-                text = stringResource(R.string.plot_title_nuance_profile),
-            )
-            MediumVerticalSpacer()
+            if (amountOfBallots > 0) {
+                Text(stringResource(R.string.opinion_profile))
+                SmallVerticalSpacer()
 
-            Text(stringResource(R.string.opinion_profile))
-            SmallVerticalSpacer()
+                val pollTallyAsProposalTally = ProposalTally(
+                    tally = List(grading.grades.size) { gradeIndex ->
+                        tally.proposalsTallies.bigSumOf { it.tally[gradeIndex] }
+                    }.toPersistentList(),
+                    amountOfJudgments = tally.proposalsTallies.bigSumOf { it.amountOfJudgments },
+                )
 
-            val pollTallyAsProposalTally = ProposalTally(
-                tally = List(grading.grades.size) { gradeIndex ->
-                    tally.proposalsTallies.bigSumOf { it.tally[gradeIndex] }
-                }.toPersistentList(),
-                amountOfJudgments = tally.proposalsTallies.bigSumOf { it.amountOfJudgments },
-            )
+                LinearMeritProfileCanvas(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(Theme.spacing.medium + Theme.spacing.small),
+                    proposalTally = pollTallyAsProposalTally,
+                    grading = grading,
+                    greenToRed = highestGradeToLowestGrade,
+                )
+                MediumVerticalSpacer()
 
-            LinearMeritProfileCanvas(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(Theme.spacing.medium + Theme.spacing.small),
-                proposalTally = pollTallyAsProposalTally,
-                grading = grading,
-                greenToRed = highestGradeToLowestGrade,
-            )
-
-            MediumVerticalSpacer()
-
-            OpinionProfileBarChart(
-                modifier = Modifier
-                    .height(250.dp)
-                    .fillMaxWidth(),
-                poll = poll,
-                tally = tally,
-                highestGradeToLowestGrade = highestGradeToLowestGrade,
-            )
-            PlotTitle(
-                text = stringResource(R.string.plot_title_opinion_profile),
-            )
-            MediumVerticalSpacer()
+                OpinionProfileBarChart(
+                    modifier = Modifier
+                        .height(250.dp)
+                        .fillMaxWidth(),
+                    poll = poll,
+                    tally = tally,
+                    highestGradeToLowestGrade = highestGradeToLowestGrade,
+                )
+                PlotTitle(
+                    text = stringResource(R.string.plot_title_opinion_profile),
+                )
+                MediumVerticalSpacer()
+            }
 
             // Rule: hide the proximity profile if there's only one proposal, as it's useless.
-
-            //val amountOfProposals = poll.pollConfig.proposals.size
             if (amountOfProposals > 1 && amountOfBallots > 0) {
                 val partialProximityAnalysis = filterAnalysis(
                     state.proximityAnalysis!!,
