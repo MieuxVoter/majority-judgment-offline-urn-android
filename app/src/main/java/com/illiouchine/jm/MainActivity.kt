@@ -17,8 +17,8 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.retain.retain
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -191,7 +191,7 @@ class MainActivity : ComponentActivity() {
                             val context = LocalContext.current
                             val pollResultViewModel: PollResultViewModel by viewModel()
 
-                            var ballotsFilter: BallotsFilterInterface = remember(key.id) {
+                            var ballotsFilter: BallotsFilterInterface = rememberSaveable(key.id) {
                                 NoBallotsFilter()
                             }
 

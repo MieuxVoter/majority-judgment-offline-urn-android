@@ -110,6 +110,7 @@ fun ResultScreen(
 
     val context = LocalContext.current
     val amountOfProposals = result.proposalResultsRanked.size
+    val amountOfBallots = poll.ballots.size
 
     var isAnyProfileSelected by remember { mutableStateOf(false) }
     var selectedProfileIndex by remember { mutableIntStateOf(0) }
@@ -125,6 +126,8 @@ fun ResultScreen(
 
     var proportionalDropdownExpanded by remember { mutableStateOf(false) }
     var proportionalAlgorithm by rememberSaveable { mutableStateOf(ProportionalAlgorithms.NONE) }
+
+    var ballotsFiltersExpanded by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -160,9 +163,53 @@ fun ResultScreen(
                 ballots = poll.ballots.toPersistentList(),
                 unfilteredBallots = unfilteredPoll.ballots.toPersistentList(),
                 ballotsFilter = ballotsFilter,
+                onClick = {
+                    ballotsFiltersExpanded = !ballotsFiltersExpanded
+                }
             )
 
+            if (ballotsFiltersExpanded) {
+                // Rule: for simplicity, for now, only one filter is allowed.
+                // Eventually; we'd love a filters tree (AND/OR) like in Factorio for example.
+                //Text("Ballots Filters")
+                SmallVerticalSpacer()
+
+                if (ballotsFilter is NoBallotsFilter) {
+                    Text("No filter is applied on the ballots.")
+                    IconButton(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterHorizontally),
+                        onClick = {
+                            onBallotsFilterUpdate(
+                                ProposalGradeBallotsFilter(
+                                    proposalIndex = 0,
+                                    gradeIndex = 0,
+                                )
+                            )
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Add a filter.",
+                        )
+                    }
+                } else {
+                    Text("This results screen now only uses the ballots that:")
+                    ballotsFilter.render(
+                        poll = poll,
+                        onFilterDelete = {
+                            // Mmh ; perhaps add a onBallotFilterDelete upstream ?
+                            onBallotsFilterUpdate(NoBallotsFilter())
+                        },
+                        onFilterUpdate = {
+                            onBallotsFilterUpdate(it)
+                        },
+                    ).invoke()
+                }
+            }
             SmallVerticalSpacer()
+
 
             val appearAnimation = remember { Animatable(0f) }
             LaunchedEffect("waterfall") {
@@ -355,47 +402,6 @@ fun ResultScreen(
 
             MediumVerticalSpacer()
 
-            // Rule: for simplicity, for now, only one filter is allowed.
-            // Eventually; we'd love a filters tree (AND/OR) like in Factorio for example.
-            Text("Ballots Filters")
-            SmallVerticalSpacer()
-
-            if (ballotsFilter is NoBallotsFilter) {
-                Text("No filter is applied on the ballots.")
-                IconButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally),
-                    onClick = {
-                        onBallotsFilterUpdate(
-                            ProposalGradeBallotsFilter(
-                                proposalIndex = 0,
-                                gradeIndex = 0,
-                            )
-                        )
-                    },
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Add a filter.",
-                    )
-                }
-            } else {
-                Text("This results screen now only uses the ballots that:")
-            }
-            ballotsFilter.render(
-                poll = poll,
-                onFilterDelete = {
-                    // Mmh ; perhaps add a onBallotFilterDelete upstream ?
-                    onBallotsFilterUpdate(NoBallotsFilter())
-                },
-                onFilterUpdate = {
-                    onBallotsFilterUpdate(it)
-                },
-            ).invoke()
-
-            MediumVerticalSpacer()
-
             Text(stringResource(R.string.nuance_profile))
             SmallVerticalSpacer()
             NuanceProfile(
@@ -446,8 +452,9 @@ fun ResultScreen(
             MediumVerticalSpacer()
 
             // Rule: hide the proximity profile if there's only one proposal, as it's useless.
-            val amountOfProposals = poll.pollConfig.proposals.size
-            if (amountOfProposals > 1) {
+
+            //val amountOfProposals = poll.pollConfig.proposals.size
+            if (amountOfProposals > 1 && amountOfBallots > 0) {
                 val partialProximityAnalysis = filterAnalysis(
                     state.proximityAnalysis!!,
                     result.proposalResultsRanked.map { it.index },
@@ -612,7 +619,7 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
     name = "Phone (Portrait)",
     showSystemUi = true,
     uiMode = Configuration.UI_MODE_NIGHT_YES,
-    fontScale = 1.0f,
+    fontScale = 2.0f,
 )
 @Composable
 fun PreviewFilteredResultScreen(modifier: Modifier = Modifier) {

@@ -1,5 +1,6 @@
 package com.illiouchine.jm.ui.composable
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,10 +19,15 @@ fun BallotCountRow(
     ballots: ImmutableList<Ballot> = persistentListOf(),
     unfilteredBallots: ImmutableList<Ballot> = persistentListOf(),
     ballotsFilter: BallotsFilterInterface = NoBallotsFilter(),
+    onClick: () -> Unit = {},
 ) {
     val amountOfBallots = ballots.size
     Row(
-        modifier = modifier,
+        modifier = modifier
+            .clickable(
+                enabled = true,
+                onClick = onClick,
+            ),
     ) {
         // Another pluralization that should use R.plurals instead
         val ballotsString = if (amountOfBallots <= 1) {
