@@ -1,10 +1,12 @@
 package com.illiouchine.jm.model
 
+import androidx.compose.runtime.Stable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.Serializable
 import kotlin.math.max
 
+@Stable
 @Serializable
 data class Ballot(
     val judgments: ImmutableList<Judgment> = emptyList<Judgment>().toPersistentList(),
@@ -37,4 +39,5 @@ data class Ballot(
             max(judgment.grade, highestGrade)
         }
     }
+
 }

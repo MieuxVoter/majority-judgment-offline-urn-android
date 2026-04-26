@@ -15,14 +15,18 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.retain.retain
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.illiouchine.jm.filters.BallotsFilterInterface
+import com.illiouchine.jm.filters.NoBallotsFilter
 import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.logic.OnboardingViewModel
 import com.illiouchine.jm.logic.PollResultViewModel
@@ -184,16 +188,24 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         entry<Screens.PollResult> { key ->
-                            val pollResultViewModel: PollResultViewModel by viewModel()
-                            val pollResultViewState by pollResultViewModel.pollResultViewState.collectAsState()
-
                             val context = LocalContext.current
-                            LaunchedEffect(key.id) {
+                            val pollResultViewModel: PollResultViewModel by viewModel()
+
+                            // TBD: how to make this rememberSaveable ?
+                            // (anyhow soon we'll have a whole list/tree of filters)
+                            var ballotsFilter by remember(key.id) {
+                                mutableStateOf<BallotsFilterInterface>(NoBallotsFilter())
+                            }
+
+                            LaunchedEffect(key.id, ballotsFilter) {
                                 pollResultViewModel.initializePollResultById(
                                     context = context,
                                     pollId = key.id,
+                                    ballotFilter = ballotsFilter,
                                 )
                             }
+
+                            val pollResultViewState by pollResultViewModel.pollResultViewState.collectAsState()
 
                             LaunchedEffect(Unit) {
                                 pollResultViewModel.navEvents.collect { event ->
@@ -207,7 +219,25 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier,
                                     state = pollResultViewState,
                                     onFinish = pollResultViewModel::onFinish,
-                                    onShowProportionsHelp = { topLevelBackStack.add(Screens.ProportionsHelp) },
+                                    onShowProportionsHelp = {
+                                        topLevelBackStack.add(Screens.ProportionsHelp)
+                                    },
+                                    onBallotsFilterUpdate = { filter ->
+//                                        Toast.makeText(
+//                                            context,
+//                                            "Ballots filter updated.",
+//                                            Toast.LENGTH_SHORT,
+//                                        ).show()
+
+                                        ballotsFilter = filter
+
+                                        // TBD: we should do this here, yet we have to (?)
+                                        pollResultViewModel.initializePollResultById(
+                                            context = context,
+                                            pollId = key.id,
+                                            ballotFilter = ballotsFilter,
+                                        )
+                                    }
                                 )
                             }
                         }

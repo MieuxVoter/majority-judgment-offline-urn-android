@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
@@ -58,6 +59,9 @@ import com.illiouchine.jm.config.ProportionalAlgorithms
 import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.extensions.bigSumOf
 import com.illiouchine.jm.extensions.smartFormat
+import com.illiouchine.jm.filters.BallotsFilterInterface
+import com.illiouchine.jm.filters.NoBallotsFilter
+import com.illiouchine.jm.filters.ProposalGradeBallotsFilter
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.model.ProposalTally
 import com.illiouchine.jm.ui.composable.BallotCountRow
@@ -90,9 +94,12 @@ fun ResultScreen(
     state: PollResultViewModel.PollResultViewState,
     onShowProportionsHelp: () -> Unit = {},
     onFinish: () -> Unit = {},
+    onBallotsFilterUpdate: (BallotsFilterInterface) -> Unit = {},
     feedback: String? = "",
     onDismissFeedback: () -> Unit = {},
 ) {
+    val unfilteredPoll = state.unfilteredPoll!!
+    val ballotsFilter = state.ballotFilter
     val poll = state.poll!!
     val result = state.result!!
     val tally = state.tally!!
@@ -103,6 +110,7 @@ fun ResultScreen(
 
     val context = LocalContext.current
     val amountOfProposals = result.proposalResultsRanked.size
+    val amountOfBallots = poll.ballots.size
 
     var isAnyProfileSelected by remember { mutableStateOf(false) }
     var selectedProfileIndex by remember { mutableIntStateOf(0) }
@@ -118,6 +126,8 @@ fun ResultScreen(
 
     var proportionalDropdownExpanded by remember { mutableStateOf(false) }
     var proportionalAlgorithm by rememberSaveable { mutableStateOf(ProportionalAlgorithms.NONE) }
+
+    var ballotsFiltersExpanded by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -151,9 +161,55 @@ fun ResultScreen(
             BallotCountRow(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 ballots = poll.ballots.toPersistentList(),
+                unfilteredBallots = unfilteredPoll.ballots.toPersistentList(),
+                ballotsFilter = ballotsFilter,
+                onClick = {
+                    ballotsFiltersExpanded = !ballotsFiltersExpanded
+                }
             )
 
+            if (ballotsFiltersExpanded) {
+                // Rule: for simplicity, for now, only one filter is allowed.
+                // Eventually; we'd love a filters tree (AND/OR) like in Factorio for example.
+                //Text("Ballots Filters")
+                SmallVerticalSpacer()
+
+                if (ballotsFilter is NoBallotsFilter) {
+                    Text("No filter is applied on the ballots.")
+                    IconButton(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterHorizontally),
+                        onClick = {
+                            onBallotsFilterUpdate(
+                                ProposalGradeBallotsFilter(
+                                    proposalIndex = 0,
+                                    gradeIndex = 0,
+                                )
+                            )
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Add a filter.",
+                        )
+                    }
+                } else {
+                    Text("This results screen now only uses the ballots that:")
+                    ballotsFilter.render(
+                        poll = poll,
+                        onFilterDelete = {
+                            // Mmh ; perhaps add a onBallotFilterDelete upstream ?
+                            onBallotsFilterUpdate(NoBallotsFilter())
+                        },
+                        onFilterUpdate = {
+                            onBallotsFilterUpdate(it)
+                        },
+                    ).invoke()
+                }
+            }
             SmallVerticalSpacer()
+
 
             val appearAnimation = remember { Animatable(0f) }
             LaunchedEffect("waterfall") {
@@ -164,9 +220,9 @@ fun ResultScreen(
                 if (proposalResult.analysis.totalSize > BigInteger.ZERO) {
                     // I don't know how to indent this readably (I am triggered by the linter >.<)
                     val isInSelectedDuel = isAnyProfileSelected && (
-                        selectedDuelIndex == proposalDisplayIndex ||
-                            selectedDuelIndex + 1 == proposalDisplayIndex
-                        )
+                            selectedDuelIndex == proposalDisplayIndex ||
+                                    selectedDuelIndex + 1 == proposalDisplayIndex
+                            )
                     val ttsShowExplanation = stringResource(R.string.tts_show_explanation)
 
                     Column(
@@ -254,8 +310,8 @@ fun ResultScreen(
 
                         // Ux: Explanations are shown one at a time (exclusive toggle)
                         val shouldShowExplanation = isAnyProfileSelected &&
-                            selectedDuelIndex == proposalDisplayIndex &&
-                            result.proposalResultsRanked.size > 1
+                                selectedDuelIndex == proposalDisplayIndex &&
+                                result.proposalResultsRanked.size > 1
 
                         AnimatedVisibility(shouldShowExplanation) {
                             Row {
@@ -277,127 +333,130 @@ fun ResultScreen(
 
             SmallVerticalSpacer()
 
-            Row {
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .weight(1f),
-                    textAlign = TextAlign.End,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    text = stringResource(R.string.label_show_proportions) + ":",
-                )
-
-                Box {
-                    val ttsChooseAProportionalAlgorithm = stringResource(
-                        R.string.tts_choose_a_proportional_algorithm
+            if (amountOfBallots > 0) {
+                Row {
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .weight(1f),
+                        textAlign = TextAlign.End,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        text = stringResource(R.string.label_show_proportions) + ":",
                     )
-                    TextButton(
-                        modifier = Modifier.semantics {
-                            onClick(
-                                label = ttsChooseAProportionalAlgorithm,
-                                action = null,
-                            )
-                        },
+
+                    Box {
+                        val ttsChooseAProportionalAlgorithm = stringResource(
+                            R.string.tts_choose_a_proportional_algorithm
+                        )
+                        TextButton(
+                            modifier = Modifier.semantics {
+                                onClick(
+                                    label = ttsChooseAProportionalAlgorithm,
+                                    action = null,
+                                )
+                            },
+                            onClick = {
+                                proportionalDropdownExpanded = !proportionalDropdownExpanded
+                            },
+                        ) {
+                            Text(proportionalAlgorithm.getName(context))
+                        }
+
+                        DropdownMenu(
+                            expanded = proportionalDropdownExpanded,
+                            onDismissRequest = {
+                                proportionalDropdownExpanded = false
+                            },
+                        ) {
+                            for (algo in ProportionalAlgorithms.entries) {
+                                DropdownMenuItem(
+                                    modifier = Modifier.semantics {
+                                        contentDescription = "Proportional Algorithm"
+                                    },
+                                    enabled = algo.isAvailable(),
+                                    text = { Text(algo.getName(context)) },
+                                    onClick = {
+                                        proportionalAlgorithm = algo
+                                        proportionalDropdownExpanded = false
+                                    },
+                                )
+                            }
+                        }
+                    }
+
+                    IconButton(
                         onClick = {
-                            proportionalDropdownExpanded = !proportionalDropdownExpanded
+                            coroutineScope.launch {
+                                onShowProportionsHelp()
+                            }
                         },
                     ) {
-                        Text(proportionalAlgorithm.getName(context))
-                    }
-
-                    DropdownMenu(
-                        expanded = proportionalDropdownExpanded,
-                        onDismissRequest = {
-                            proportionalDropdownExpanded = false
-                        },
-                    ) {
-                        for (algo in ProportionalAlgorithms.entries) {
-                            DropdownMenuItem(
-                                modifier = Modifier.semantics {
-                                    contentDescription = "Proportional Algorithm"
-                                },
-                                enabled = algo.isAvailable(),
-                                text = { Text(algo.getName(context)) },
-                                onClick = {
-                                    proportionalAlgorithm = algo
-                                    proportionalDropdownExpanded = false
-                                },
-                            )
-                        }
+                        Icon(
+                            imageVector = Icons.Default.Info,
+                            contentDescription = stringResource(
+                                R.string.tts_more_information_about_proportional_algorithms
+                            ),
+                        )
                     }
                 }
-
-                IconButton(
-                    onClick = {
-                        coroutineScope.launch {
-                            onShowProportionsHelp()
-                        }
-                    },
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Info,
-                        contentDescription = stringResource(
-                            R.string.tts_more_information_about_proportional_algorithms
-                        ),
-                    )
-                }
+                MediumVerticalSpacer()
             }
 
-            MediumVerticalSpacer()
+            if (amountOfBallots > 0) {
+                Text(stringResource(R.string.nuance_profile))
+                SmallVerticalSpacer()
+                NuanceProfile(
+                    modifier = Modifier
+                        .height(250.dp)
+                        .fillMaxWidth(),
+                    poll = poll,
+                    moreNuanceToLessNuance = highestGradeToLowestGrade,
+                )
+                PlotTitle(
+                    modifier = Modifier.padding(top = Theme.spacing.tiny),
+                    text = stringResource(R.string.plot_title_nuance_profile),
+                )
+                MediumVerticalSpacer()
+            }
 
-            Text(stringResource(R.string.nuance_profile))
-            SmallVerticalSpacer()
-            NuanceProfile(
-                modifier = Modifier
-                    .height(250.dp)
-                    .fillMaxWidth(),
-                poll = poll,
-                moreNuanceToLessNuance = highestGradeToLowestGrade,
-            )
-            PlotTitle(
-                modifier = Modifier.padding(top = Theme.spacing.tiny),
-                text = stringResource(R.string.plot_title_nuance_profile),
-            )
-            MediumVerticalSpacer()
+            if (amountOfBallots > 0) {
+                Text(stringResource(R.string.opinion_profile))
+                SmallVerticalSpacer()
 
-            Text(stringResource(R.string.opinion_profile))
-            SmallVerticalSpacer()
+                val pollTallyAsProposalTally = ProposalTally(
+                    tally = List(grading.grades.size) { gradeIndex ->
+                        tally.proposalsTallies.bigSumOf { it.tally[gradeIndex] }
+                    }.toPersistentList(),
+                    amountOfJudgments = tally.proposalsTallies.bigSumOf { it.amountOfJudgments },
+                )
 
-            val pollTallyAsProposalTally = ProposalTally(
-                tally = List(grading.grades.size) { gradeIndex ->
-                    tally.proposalsTallies.bigSumOf { it.tally[gradeIndex] }
-                }.toPersistentList(),
-                amountOfJudgments = tally.proposalsTallies.bigSumOf { it.amountOfJudgments },
-            )
+                LinearMeritProfileCanvas(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(Theme.spacing.medium + Theme.spacing.small),
+                    proposalTally = pollTallyAsProposalTally,
+                    grading = grading,
+                    greenToRed = highestGradeToLowestGrade,
+                )
+                MediumVerticalSpacer()
 
-            LinearMeritProfileCanvas(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(Theme.spacing.medium + Theme.spacing.small),
-                proposalTally = pollTallyAsProposalTally,
-                grading = grading,
-                greenToRed = highestGradeToLowestGrade,
-            )
-
-            MediumVerticalSpacer()
-
-            OpinionProfileBarChart(
-                modifier = Modifier
-                    .height(250.dp)
-                    .fillMaxWidth(),
-                poll = poll,
-                tally = tally,
-                highestGradeToLowestGrade = highestGradeToLowestGrade,
-            )
-            PlotTitle(
-                text = stringResource(R.string.plot_title_opinion_profile),
-            )
-            MediumVerticalSpacer()
+                OpinionProfileBarChart(
+                    modifier = Modifier
+                        .height(250.dp)
+                        .fillMaxWidth(),
+                    poll = poll,
+                    tally = tally,
+                    highestGradeToLowestGrade = highestGradeToLowestGrade,
+                )
+                PlotTitle(
+                    text = stringResource(R.string.plot_title_opinion_profile),
+                )
+                MediumVerticalSpacer()
+            }
 
             // Rule: hide the proximity profile if there's only one proposal, as it's useless.
-            val amountOfProposals = poll.pollConfig.proposals.size
-            if (amountOfProposals > 1) {
+            if (amountOfProposals > 1 && amountOfBallots > 0) {
                 val partialProximityAnalysis = filterAnalysis(
                     state.proximityAnalysis!!,
                     result.proposalResultsRanked.map { it.index },
@@ -481,21 +540,27 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
                         0 -> {
                             it.copy(grade = 0)
                         }
+
                         1 -> {
                             it.copy(grade = 1)
                         }
+
                         2 -> {
                             it.copy(grade = 2)
                         }
+
                         3 -> {
                             it.copy(grade = 3)
                         }
+
                         4 -> {
                             it.copy(grade = 4)
                         }
+
                         5 -> {
                             it
                         }
+
                         else -> {
                             it
                         }
@@ -508,21 +573,27 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
                 0 -> {
                     "Reject"
                 }
+
                 1 -> {
                     "Insufficient"
                 }
+
                 2 -> {
                     "Passable"
                 }
+
                 3 -> {
                     "Good"
                 }
+
                 4 -> {
                     "Excellent"
                 }
+
                 5 -> {
                     "Random 1"
                 }
+
                 else -> {
                     "Random 2"
                 }
@@ -543,5 +614,101 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
             modifier = modifier,
             state = state,
         )
+    }
+}
+
+@Preview(
+    name = "Phone (Portrait)",
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 2.0f,
+)
+@Composable
+fun PreviewFilteredResultScreen(modifier: Modifier = Modifier) {
+    val poll = PreviewDataFaker.poll(
+        amountOfBallots = 1000,
+        amountOfProposals = 5,
+        tweakBallots = { _, ballot, _ ->
+            ballot.copy(
+                judgments = ballot.judgments.map {
+                    when (it.proposal) {
+                        0 -> {
+                            it.copy(grade = 0)
+                        }
+
+                        1 -> {
+                            it.copy(grade = 1)
+                        }
+
+                        2 -> {
+                            it.copy(grade = 4)
+                        }
+
+                        else -> {
+                            it
+                        }
+                    }
+                }.toPersistentList()
+            )
+        },
+        nameProposals = {
+            when (it) {
+                0 -> {
+                    "Reject"
+                }
+
+                1 -> {
+                    "Passable"
+                }
+
+                2 -> {
+                    "Excellent"
+                }
+
+                3 -> {
+                    "Random A"
+                }
+
+                else -> {
+                    "Random B"
+                }
+            }
+        }
+    )
+
+    val ballotsFilter: BallotsFilterInterface = remember {
+        ProposalGradeBallotsFilter(
+            proposalIndex = 3,
+            gradeIndex = 0,
+        )
+    }
+
+    val pollResultViewModel = viewModel {
+        PollResultViewModel(
+            pollDataSource = InMemoryPollDataSource(), // dummy
+        )
+    }
+
+    val context = LocalContext.current
+//    LaunchedEffect(poll, ballotsFilter) { // → preview refresh loop
+    pollResultViewModel.initializePollResult(
+        context = context,
+        poll = poll,
+        ballotFilter = ballotsFilter,
+    )
+//    }
+
+    val state = pollResultViewModel.pollResultViewState.collectAsState().value
+
+    JmTheme {
+        if (state.poll != null) {
+            ResultScreen(
+                modifier = modifier,
+                state = state,
+                onBallotsFilterUpdate = {
+                    //ballotsFilter = it
+                },
+            )
+        }
     }
 }

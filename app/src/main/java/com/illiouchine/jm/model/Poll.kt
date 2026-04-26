@@ -15,4 +15,5 @@ data class Poll(
         get() = ballots.flatMap { ballot ->
             ballot.judgments
         }
+
 }
