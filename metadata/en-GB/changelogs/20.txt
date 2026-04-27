@@ -1,0 +1,5 @@
+* Improve the proximity profile's layout
+* Fix a crash when looking consecutively at different poll results
+* Improve the results screen on small devices with big fonts
+* Show the relative neutral as a notch in the proximity profiles
+* Allow simple filtering of the ballots on the results screen
