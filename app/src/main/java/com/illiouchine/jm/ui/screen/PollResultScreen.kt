@@ -60,6 +60,7 @@ import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.extensions.bigSumOf
 import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.filters.BallotsFilterInterface
+import com.illiouchine.jm.filters.GradeComparator
 import com.illiouchine.jm.filters.NoBallotsFilter
 import com.illiouchine.jm.filters.ProposalGradeBallotsFilter
 import com.illiouchine.jm.logic.PollResultViewModel
@@ -185,6 +186,7 @@ fun ResultScreen(
                                 ProposalGradeBallotsFilter(
                                     proposalIndex = 0,
                                     gradeIndex = 0,
+                                    comparator = GradeComparator.AtLeastGradeComparator(),
                                 )
                             )
                         },
@@ -680,6 +682,7 @@ fun PreviewFilteredResultScreen(modifier: Modifier = Modifier) {
         ProposalGradeBallotsFilter(
             proposalIndex = 3,
             gradeIndex = 0,
+            comparator = GradeComparator.AtLeastGradeComparator(),
         )
     }
 
