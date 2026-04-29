@@ -17,11 +17,11 @@ class NoBallotsFilter : BallotsFilterInterface {
         onFilterDelete: () -> Unit,
         onFilterUpdate: (BallotsFilterInterface) -> Unit,
     ): @Composable (() -> Unit) {
-        return (@Composable {
-            // We do not render this filter right now.
-            //Text("No filter is applied on the ballots.")
-        })
+        return (
+            @Composable {
+                // We do not render this filter right now.
+                // Text("No filter is applied on the ballots.")
+            }
+            )
     }
-
 }
-

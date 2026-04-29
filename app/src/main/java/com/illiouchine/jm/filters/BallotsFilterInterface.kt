@@ -13,5 +13,4 @@ sealed interface BallotsFilterInterface {
         onFilterDelete: () -> Unit = {},
         onFilterUpdate: (BallotsFilterInterface) -> Unit = {},
     ): @Composable () -> Unit
-
 }

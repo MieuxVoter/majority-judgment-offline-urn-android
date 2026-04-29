@@ -46,7 +46,7 @@ fun TextButtonWithDropdown(
 
     TextButton(
         modifier = modifier
-            //.align(Alignment.CenterVertically)
+            // .align(Alignment.CenterVertically)
             .heightIn(min = buttonMinHeight)
             .widthIn(min = buttonMinWidth)
             .semantics {
@@ -73,7 +73,7 @@ fun TextButtonWithDropdown(
             DropdownMenuItem(
                 modifier = Modifier
                     .semantics {
-                        //contentDescription = "to do ; how exactly is this used, again ?"
+                        // contentDescription = "to do ; how exactly is this used, again ?"
                     },
                 enabled = true,
                 text = {

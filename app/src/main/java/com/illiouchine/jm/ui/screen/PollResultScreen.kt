@@ -171,7 +171,7 @@ fun ResultScreen(
             if (ballotsFiltersExpanded) {
                 // Rule: for simplicity, for now, only one filter is allowed.
                 // Eventually; we'd love a filters tree (AND/OR) like in Factorio for example.
-                //Text("Ballots Filters")
+                // Text("Ballots Filters")
                 SmallVerticalSpacer()
 
                 if (ballotsFilter is NoBallotsFilter) {
@@ -211,7 +211,6 @@ fun ResultScreen(
             }
             SmallVerticalSpacer()
 
-
             val appearAnimation = remember { Animatable(0f) }
             LaunchedEffect("waterfall") {
                 appearAnimation.animateTo(1f, tween(1500))
@@ -221,9 +220,9 @@ fun ResultScreen(
                 if (proposalResult.analysis.totalSize > BigInteger.ZERO) {
                     // I don't know how to indent this readably (I am triggered by the linter >.<)
                     val isInSelectedDuel = isAnyProfileSelected && (
-                            selectedDuelIndex == proposalDisplayIndex ||
-                                    selectedDuelIndex + 1 == proposalDisplayIndex
-                            )
+                        selectedDuelIndex == proposalDisplayIndex ||
+                            selectedDuelIndex + 1 == proposalDisplayIndex
+                        )
                     val ttsShowExplanation = stringResource(R.string.tts_show_explanation)
 
                     Column(
@@ -311,8 +310,8 @@ fun ResultScreen(
 
                         // Ux: Explanations are shown one at a time (exclusive toggle)
                         val shouldShowExplanation = isAnyProfileSelected &&
-                                selectedDuelIndex == proposalDisplayIndex &&
-                                result.proposalResultsRanked.size > 1
+                            selectedDuelIndex == proposalDisplayIndex &&
+                            result.proposalResultsRanked.size > 1
 
                         AnimatedVisibility(shouldShowExplanation) {
                             Row {
@@ -470,8 +469,8 @@ fun ResultScreen(
                     modifier = Modifier
                         .height(
                             16.dp *
-                                    partialProximityAnalysis.proposals.size *
-                                    partialProximityAnalysis.proposals.size
+                                partialProximityAnalysis.proposals.size *
+                                partialProximityAnalysis.proposals.size
                         )
                         .fillMaxWidth(),
                     analysis = partialProximityAnalysis,
@@ -708,7 +707,7 @@ fun PreviewFilteredResultScreen(modifier: Modifier = Modifier) {
                 modifier = modifier,
                 state = state,
                 onBallotsFilterUpdate = {
-                    //ballotsFilter = it
+                    // ballotsFilter = it
                 },
             )
         }

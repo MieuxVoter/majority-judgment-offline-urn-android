@@ -39,5 +39,4 @@ data class Ballot(
             max(judgment.grade, highestGrade)
         }
     }
-
 }

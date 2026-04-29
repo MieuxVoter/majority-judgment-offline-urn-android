@@ -15,5 +15,4 @@ data class PollConfig(
     fun getProposalName(proposalIndex: Int): String {
         return proposals[proposalIndex]
     }
-
 }
