@@ -39,4 +39,8 @@ data class Ballot(
             max(judgment.grade, highestGrade)
         }
     }
+
+    fun getNuance(): Int {
+        return judgments.map { it.grade }.toSet().size
+    }
 }
