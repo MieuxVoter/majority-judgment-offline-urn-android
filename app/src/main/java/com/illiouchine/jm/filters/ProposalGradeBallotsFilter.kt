@@ -1,6 +1,5 @@
 package com.illiouchine.jm.filters
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.FlowRow
@@ -17,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.ui.composable.button.TextButtonWithDropdown
@@ -27,45 +25,17 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class GradeComparator(
-    @get:StringRes val word: Int,
-    val compare: (ballotGrade: Int, grade: Int) -> Boolean,
-) {
-
-    class ExactGradeComparator : GradeComparator(
-        word = R.string.grade_comparator_exactly,
-        compare = { ballotGrade, grade ->
-            ballotGrade == grade
-        },
-    )
-
-    class AtLeastGradeComparator : GradeComparator(
-        word = R.string.grade_comparator_at_least,
-        compare = { ballotGrade, grade ->
-            ballotGrade >= grade
-        },
-    )
-
-    class AtMostGradeComparator : GradeComparator(
-        word = R.string.grade_comparator_at_most,
-        compare = { ballotGrade, grade ->
-            ballotGrade <= grade
-        },
-    )
-}
-
-val comparators = listOf(
-    GradeComparator.ExactGradeComparator(),
-    GradeComparator.AtLeastGradeComparator(),
-    GradeComparator.AtMostGradeComparator(),
-).toPersistentList()
-
-@Serializable
 data class ProposalGradeBallotsFilter(
     val proposalIndex: Int,
     val gradeIndex: Int,
     val comparatorIndex: Int,
 ) : BallotsFilterInterface {
+
+    val comparators = listOf(
+        GradeComparator.ExactGradeComparator(),
+        GradeComparator.AtLeastGradeComparator(),
+        GradeComparator.AtMostGradeComparator(),
+    ).toPersistentList()
 
     override fun shouldKeep(ballot: Ballot): Boolean {
         return comparators[comparatorIndex].compare(
