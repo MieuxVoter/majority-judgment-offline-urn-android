@@ -1,15 +1,12 @@
 package com.illiouchine.jm.filters
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.ui.composable.BallotsFilter
 import com.illiouchine.jm.ui.composable.button.TextButtonWithDropdown
+import com.illiouchine.jm.ui.composable.button.TextInlinedWithTextButton
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.Serializable
 
@@ -44,14 +41,8 @@ data class NuanceBallotsFilter(
                 BallotsFilter(
                     onFilterDelete = onFilterDelete,
                 ) {
-                    // Adapt the raw text in-between buttons to the size of the buttons
-                    val fontSizeTextButton = 14.sp
-
-                    Text(
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically),
+                    TextInlinedWithTextButton(
                         text = "using",
-                        fontSize = fontSizeTextButton,
                     )
 
                     TextButtonWithDropdown(
@@ -84,11 +75,8 @@ data class NuanceBallotsFilter(
                         },
                     )
 
-                    Text(
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically),
+                    TextInlinedWithTextButton(
                         text = "different grades",
-                        fontSize = fontSizeTextButton,
                     )
                 }
             }

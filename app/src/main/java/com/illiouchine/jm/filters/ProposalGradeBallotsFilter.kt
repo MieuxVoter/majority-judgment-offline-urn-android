@@ -1,19 +1,16 @@
 package com.illiouchine.jm.filters
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.ui.composable.BallotsFilter
 import com.illiouchine.jm.ui.composable.button.TextButtonWithDropdown
+import com.illiouchine.jm.ui.composable.button.TextInlinedWithTextButton
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.Serializable
 
-@Serializable
+@Serializable // we might not need this now but at some point this should be Parcelable
 data class ProposalGradeBallotsFilter(
     val proposalIndex: Int,
     val gradeIndex: Int,
@@ -44,14 +41,8 @@ data class ProposalGradeBallotsFilter(
                 BallotsFilter(
                     onFilterDelete = onFilterDelete,
                 ) {
-                    // Adapt the raw text in-between buttons to the size of the buttons
-                    val fontSizeTextButton = 14.sp
-
-                    Text(
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically),
+                    TextInlinedWithTextButton(
                         text = "judge",
-                        fontSize = fontSizeTextButton,
                     )
 
                     TextButtonWithDropdown(
@@ -67,11 +58,8 @@ data class ProposalGradeBallotsFilter(
                         },
                     )
 
-                    Text(
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically),
+                    TextInlinedWithTextButton(
                         text = "to be",
-                        fontSize = fontSizeTextButton,
                     )
 
                     TextButtonWithDropdown(
