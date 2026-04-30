@@ -22,6 +22,7 @@ import ir.ehsannarmani.compose_charts.models.HorizontalIndicatorProperties
 import ir.ehsannarmani.compose_charts.models.IndicatorCount
 import ir.ehsannarmani.compose_charts.models.LabelHelperProperties
 import ir.ehsannarmani.compose_charts.models.LabelProperties
+import kotlin.math.min
 
 @Composable
 fun NuanceProfile(
@@ -30,12 +31,16 @@ fun NuanceProfile(
     moreNuanceToLessNuance: Boolean = false,
 ) {
     val textColor = Theme.colorScheme.onBackground
+    val maximumNuance = min(
+        poll.pollConfig.grading.getAmountOfGrades(),
+        poll.pollConfig.proposals.size,
+    )
     val barData = remember(poll, poll.ballots.size) {
         val nuances = poll.ballots.map { ballot ->
             // Note: casting to a Set removes duplicates, which is _why_ we do it.
             ballot.judgments.map { j -> j.grade }.toSet().size
         }
-        List(poll.pollConfig.grading.grades.size) { gradeIndex ->
+        List(size = maximumNuance) { gradeIndex ->
             val currentNuance = gradeIndex + 1
             Bars(
                 label = currentNuance.toString(),

@@ -9,6 +9,7 @@ import com.illiouchine.jm.ui.composable.button.TextButtonWithDropdown
 import com.illiouchine.jm.ui.composable.button.TextInlinedWithTextButton
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.Serializable
+import kotlin.math.min
 
 @Serializable
 data class NuanceBallotsFilter(
@@ -35,6 +36,10 @@ data class NuanceBallotsFilter(
         onFilterUpdate: (BallotsFilterInterface) -> Unit,
     ): @Composable (() -> Unit) {
         val filter = this
+        val maximumNuance = min(
+            poll.pollConfig.grading.getAmountOfGrades(),
+            poll.pollConfig.proposals.size,
+        )
 
         return (
             @Composable {
@@ -42,7 +47,7 @@ data class NuanceBallotsFilter(
                     onFilterDelete = onFilterDelete,
                 ) {
                     TextInlinedWithTextButton(
-                        text = "using",
+                        text = "use",
                     )
 
                     TextButtonWithDropdown(
@@ -61,15 +66,15 @@ data class NuanceBallotsFilter(
                     )
 
                     TextButtonWithDropdown(
-                        currentValueIndex = nuance,
-                        values = List(poll.pollConfig.grading.grades.size) { i ->
-                            i.toString()
+                        currentValueIndex = nuance - 1,
+                        values = List(size = maximumNuance) { i ->
+                            (i + 1).toString()
                         }.toPersistentList(),
                         onClickLabel = "pick a nuance for this filter",
                         onChange = {
                             onFilterUpdate(
                                 filter.copy(
-                                    nuance = it,
+                                    nuance = it + 1,
                                 )
                             )
                         },

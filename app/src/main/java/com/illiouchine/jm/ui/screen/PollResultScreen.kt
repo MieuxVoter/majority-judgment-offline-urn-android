@@ -61,6 +61,7 @@ import com.illiouchine.jm.extensions.bigSumOf
 import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.filters.BallotsFilterInterface
 import com.illiouchine.jm.filters.NoBallotsFilter
+import com.illiouchine.jm.filters.NuanceBallotsFilter
 import com.illiouchine.jm.filters.ProposalGradeBallotsFilter
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.model.ProposalTally
@@ -128,6 +129,7 @@ fun ResultScreen(
     var proportionalAlgorithm by rememberSaveable { mutableStateOf(ProportionalAlgorithms.NONE) }
 
     var ballotsFiltersExpanded by rememberSaveable { mutableStateOf(false) }
+    var dropdownNewBallotsFiltersShown by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -171,30 +173,67 @@ fun ResultScreen(
             if (ballotsFiltersExpanded) {
                 // Rule: for simplicity, for now, only one filter is allowed.
                 // Eventually; we'd love a filters tree (AND/OR) like in Factorio for example.
-                // Text("Ballots Filters")
+
                 SmallVerticalSpacer()
 
                 if (ballotsFilter is NoBallotsFilter) {
                     Text("No filter is applied on the ballots.")
-                    IconButton(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.CenterHorizontally),
-                        onClick = {
-                            onBallotsFilterUpdate(
-                                ProposalGradeBallotsFilter(
-                                    proposalIndex = 0,
-                                    gradeIndex = 0,
-                                    comparatorIndex = 1,
-                                )
+
+                    // The purpose of this Column is to position the DropdownMenu adequately.
+                    // Without it, it appears at the bottom of the screen, which is weird.
+                    Column {
+
+                        IconButton(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            onClick = {
+                                dropdownNewBallotsFiltersShown = !dropdownNewBallotsFiltersShown
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = "Add a filter.",
                             )
-                        },
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = "Add a filter.",
-                        )
+                        }
+
+                        DropdownMenu(
+                            expanded = dropdownNewBallotsFiltersShown,
+                            onDismissRequest = {
+                                dropdownNewBallotsFiltersShown = false
+                            },
+                        ) {
+                            DropdownMenuItem(
+                                text = {
+                                    Text("Filter by grade")
+                                },
+                                onClick = {
+                                    dropdownNewBallotsFiltersShown = false
+                                    onBallotsFilterUpdate(
+                                        ProposalGradeBallotsFilter(
+                                            proposalIndex = 0,
+                                            gradeIndex = 0,
+                                            comparatorIndex = 1,
+                                        )
+                                    )
+                                },
+                            )
+                            DropdownMenuItem(
+                                text = {
+                                    Text("Filter by nuance")
+                                },
+                                onClick = {
+                                    dropdownNewBallotsFiltersShown = false
+                                    onBallotsFilterUpdate(
+                                        NuanceBallotsFilter(
+                                            comparatorIndex = 1,
+                                            nuance = 1,
+                                        )
+                                    )
+                                },
+                            )
+                        }
                     }
+
                 } else {
                     Text("Now only using the ballots that:")
                     ballotsFilter.render(
