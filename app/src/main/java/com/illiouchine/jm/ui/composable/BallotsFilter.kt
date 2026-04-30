@@ -20,12 +20,7 @@ import com.illiouchine.jm.ui.theme.spacing
 @Composable
 fun BallotsFilter(
     onFilterDelete: () -> Unit,
-//    onFilterUpdate: (BallotsFilterInterface) -> Unit,
-    content: @Composable (
-    FlowRowScope.(
-//        onFilterUpdate: (BallotsFilterInterface) -> Unit,
-    ) -> Unit
-    ),
+    content: @Composable (FlowRowScope.() -> Unit),
 ) {
     Row(
         modifier = Modifier
@@ -41,10 +36,7 @@ fun BallotsFilter(
             modifier = Modifier
                 .weight(1f),
             verticalArrangement = Arrangement.Center,
-            content = {
-//                content(onFilterUpdate)
-                content()
-            },
+            content = content,
         )
         Row(
             modifier = Modifier
