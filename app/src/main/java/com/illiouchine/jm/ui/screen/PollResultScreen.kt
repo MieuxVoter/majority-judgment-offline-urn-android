@@ -443,23 +443,6 @@ fun ResultScreen(
             }
 
             if (amountOfBallots > 0) {
-                Text(stringResource(R.string.nuance_profile))
-                SmallVerticalSpacer()
-                NuanceProfile(
-                    modifier = Modifier
-                        .height(250.dp)
-                        .fillMaxWidth(),
-                    poll = poll,
-                    moreNuanceToLessNuance = highestGradeToLowestGrade,
-                )
-                PlotTitle(
-                    modifier = Modifier.padding(top = Theme.spacing.tiny),
-                    text = stringResource(R.string.plot_title_nuance_profile),
-                )
-                MediumVerticalSpacer()
-            }
-
-            if (amountOfBallots > 0) {
                 Text(stringResource(R.string.opinion_profile))
                 SmallVerticalSpacer()
 
@@ -490,6 +473,23 @@ fun ResultScreen(
                 )
                 PlotTitle(
                     text = stringResource(R.string.plot_title_opinion_profile),
+                )
+                MediumVerticalSpacer()
+            }
+
+            if (amountOfBallots > 0) {
+                Text(stringResource(R.string.nuance_profile))
+                SmallVerticalSpacer()
+                NuanceProfile(
+                    modifier = Modifier
+                        .height(250.dp)
+                        .fillMaxWidth(),
+                    poll = poll,
+                    moreNuanceToLessNuance = highestGradeToLowestGrade,
+                )
+                PlotTitle(
+                    modifier = Modifier.padding(top = Theme.spacing.tiny),
+                    text = stringResource(R.string.plot_title_nuance_profile),
                 )
                 MediumVerticalSpacer()
             }
