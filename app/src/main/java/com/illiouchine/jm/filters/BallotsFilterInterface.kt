@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Poll
 
-interface BallotsFilterInterface {
+sealed interface BallotsFilterInterface {
 
     fun shouldKeep(ballot: Ballot): Boolean
 
@@ -13,5 +13,4 @@ interface BallotsFilterInterface {
         onFilterDelete: () -> Unit = {},
         onFilterUpdate: (BallotsFilterInterface) -> Unit = {},
     ): @Composable () -> Unit
-
 }

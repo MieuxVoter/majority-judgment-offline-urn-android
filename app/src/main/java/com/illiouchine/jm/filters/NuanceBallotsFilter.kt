@@ -9,12 +9,12 @@ import com.illiouchine.jm.ui.composable.button.TextButtonWithDropdown
 import com.illiouchine.jm.ui.composable.button.TextInlinedWithTextButton
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.Serializable
+import kotlin.math.min
 
-@Serializable // we might not need this now but at some point this should be Parcelable
-data class ProposalGradeBallotsFilter(
-    val proposalIndex: Int,
-    val gradeIndex: Int,
+@Serializable
+data class NuanceBallotsFilter(
     val comparatorIndex: Int,
+    val nuance: Int,
 ) : BallotsFilterInterface {
 
     val comparators = listOf(
@@ -25,8 +25,8 @@ data class ProposalGradeBallotsFilter(
 
     override fun shouldKeep(ballot: Ballot): Boolean {
         return comparators[comparatorIndex].compare(
-            ballot.gradeOf(proposalIndex),
-            gradeIndex,
+            ballot.getNuance(),
+            nuance,
         )
     }
 
@@ -36,30 +36,18 @@ data class ProposalGradeBallotsFilter(
         onFilterUpdate: (BallotsFilterInterface) -> Unit,
     ): @Composable (() -> Unit) {
         val filter = this
+        val maximumNuance = min(
+            poll.pollConfig.grading.getAmountOfGrades(),
+            poll.pollConfig.proposals.size,
+        )
+
         return (
             @Composable {
                 BallotsFilter(
                     onFilterDelete = onFilterDelete,
                 ) {
                     TextInlinedWithTextButton(
-                        text = "judge",
-                    )
-
-                    TextButtonWithDropdown(
-                        currentValueIndex = proposalIndex,
-                        values = poll.pollConfig.proposals.toPersistentList(),
-                        onClickLabel = "pick a proposal for this filter",
-                        onChange = {
-                            onFilterUpdate(
-                                filter.copy(
-                                    proposalIndex = it,
-                                )
-                            )
-                        },
-                    )
-
-                    TextInlinedWithTextButton(
-                        text = "to be",
+                        text = "use",
                     )
 
                     TextButtonWithDropdown(
@@ -78,20 +66,22 @@ data class ProposalGradeBallotsFilter(
                     )
 
                     TextButtonWithDropdown(
-                        currentValueIndex = gradeIndex,
-                        values = List(poll.pollConfig.grading.grades.size) { i ->
-                            stringResource(
-                                poll.pollConfig.grading.getGradeName(i),
-                            )
+                        currentValueIndex = nuance - 1,
+                        values = List(size = maximumNuance) { i ->
+                            (i + 1).toString()
                         }.toPersistentList(),
-                        onClickLabel = "pick a grade for this filter",
+                        onClickLabel = "pick a nuance for this filter",
                         onChange = {
                             onFilterUpdate(
                                 filter.copy(
-                                    gradeIndex = it,
+                                    nuance = it + 1,
                                 )
                             )
                         },
+                    )
+
+                    TextInlinedWithTextButton(
+                        text = "different grades",
                     )
                 }
             }

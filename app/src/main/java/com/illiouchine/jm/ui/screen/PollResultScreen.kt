@@ -61,6 +61,7 @@ import com.illiouchine.jm.extensions.bigSumOf
 import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.filters.BallotsFilterInterface
 import com.illiouchine.jm.filters.NoBallotsFilter
+import com.illiouchine.jm.filters.NuanceBallotsFilter
 import com.illiouchine.jm.filters.ProposalGradeBallotsFilter
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.model.ProposalTally
@@ -122,12 +123,13 @@ fun ResultScreen(
     }
 
     // Not all these groups belong to the selected profile ; they belong to a duel
-    val decisiveGroupsForSelectedProfile = state.groups[selectedDuelIndex].groups
+    val decisiveGroupsForSelectedDuel = state.groups[selectedDuelIndex].groups
 
     var proportionalDropdownExpanded by remember { mutableStateOf(false) }
     var proportionalAlgorithm by rememberSaveable { mutableStateOf(ProportionalAlgorithms.NONE) }
 
     var ballotsFiltersExpanded by rememberSaveable { mutableStateOf(false) }
+    var newBallotsFilterDropdownExpanded by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -171,31 +173,69 @@ fun ResultScreen(
             if (ballotsFiltersExpanded) {
                 // Rule: for simplicity, for now, only one filter is allowed.
                 // Eventually; we'd love a filters tree (AND/OR) like in Factorio for example.
-                //Text("Ballots Filters")
+
                 SmallVerticalSpacer()
 
                 if (ballotsFilter is NoBallotsFilter) {
                     Text("No filter is applied on the ballots.")
-                    IconButton(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.CenterHorizontally),
-                        onClick = {
-                            onBallotsFilterUpdate(
-                                ProposalGradeBallotsFilter(
-                                    proposalIndex = 0,
-                                    gradeIndex = 0,
-                                )
+
+                    // The purpose of this Column is to position the DropdownMenu adequately.
+                    // Without it, it appears at the bottom of the screen, which is weird.
+                    Column {
+
+                        IconButton(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            onClick = {
+                                newBallotsFilterDropdownExpanded = !newBallotsFilterDropdownExpanded
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = "Add a filter.",
                             )
-                        },
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = "Add a filter.",
-                        )
+                        }
+
+                        DropdownMenu(
+                            expanded = newBallotsFilterDropdownExpanded,
+                            onDismissRequest = {
+                                newBallotsFilterDropdownExpanded = false
+                            },
+                        ) {
+                            DropdownMenuItem(
+                                text = {
+                                    Text("Filter by grade")
+                                },
+                                onClick = {
+                                    newBallotsFilterDropdownExpanded = false
+                                    onBallotsFilterUpdate(
+                                        ProposalGradeBallotsFilter(
+                                            proposalIndex = 0,
+                                            gradeIndex = 0,
+                                            comparatorIndex = 1,
+                                        )
+                                    )
+                                },
+                            )
+                            DropdownMenuItem(
+                                text = {
+                                    Text("Filter by nuance")
+                                },
+                                onClick = {
+                                    newBallotsFilterDropdownExpanded = false
+                                    onBallotsFilterUpdate(
+                                        NuanceBallotsFilter(
+                                            comparatorIndex = 1,
+                                            nuance = 1,
+                                        )
+                                    )
+                                },
+                            )
+                        }
                     }
+
                 } else {
-                    Text("This results screen now only uses the ballots that:")
+                    Text("Now only using the ballots that:")
                     ballotsFilter.render(
                         poll = poll,
                         onFilterDelete = {
@@ -210,7 +250,6 @@ fun ResultScreen(
             }
             SmallVerticalSpacer()
 
-
             val appearAnimation = remember { Animatable(0f) }
             LaunchedEffect("waterfall") {
                 appearAnimation.animateTo(1f, tween(1500))
@@ -220,9 +259,9 @@ fun ResultScreen(
                 if (proposalResult.analysis.totalSize > BigInteger.ZERO) {
                     // I don't know how to indent this readably (I am triggered by the linter >.<)
                     val isInSelectedDuel = isAnyProfileSelected && (
-                            selectedDuelIndex == proposalDisplayIndex ||
-                                    selectedDuelIndex + 1 == proposalDisplayIndex
-                            )
+                        selectedDuelIndex == proposalDisplayIndex ||
+                            selectedDuelIndex + 1 == proposalDisplayIndex
+                        )
                     val ttsShowExplanation = stringResource(R.string.tts_show_explanation)
 
                     Column(
@@ -294,7 +333,7 @@ fun ResultScreen(
                                 proposalTally = tally.proposalsTallies[proposalResult.index],
                                 medianGrade = proposalResult.analysis.medianGrade,
                                 grading = grading,
-                                decisiveGroups = decisiveGroupsForSelectedProfile.filter { group ->
+                                decisiveGroups = decisiveGroupsForSelectedDuel.filter { group ->
                                     group.participant == proposalDisplayIndex
                                 }.toPersistentList(),
                                 showDecisiveGroups = isAnyProfileSelected,
@@ -310,8 +349,8 @@ fun ResultScreen(
 
                         // Ux: Explanations are shown one at a time (exclusive toggle)
                         val shouldShowExplanation = isAnyProfileSelected &&
-                                selectedDuelIndex == proposalDisplayIndex &&
-                                result.proposalResultsRanked.size > 1
+                            selectedDuelIndex == proposalDisplayIndex &&
+                            result.proposalResultsRanked.size > 1
 
                         AnimatedVisibility(shouldShowExplanation) {
                             Row {
@@ -404,23 +443,6 @@ fun ResultScreen(
             }
 
             if (amountOfBallots > 0) {
-                Text(stringResource(R.string.nuance_profile))
-                SmallVerticalSpacer()
-                NuanceProfile(
-                    modifier = Modifier
-                        .height(250.dp)
-                        .fillMaxWidth(),
-                    poll = poll,
-                    moreNuanceToLessNuance = highestGradeToLowestGrade,
-                )
-                PlotTitle(
-                    modifier = Modifier.padding(top = Theme.spacing.tiny),
-                    text = stringResource(R.string.plot_title_nuance_profile),
-                )
-                MediumVerticalSpacer()
-            }
-
-            if (amountOfBallots > 0) {
                 Text(stringResource(R.string.opinion_profile))
                 SmallVerticalSpacer()
 
@@ -455,6 +477,23 @@ fun ResultScreen(
                 MediumVerticalSpacer()
             }
 
+            if (amountOfBallots > 0) {
+                Text(stringResource(R.string.nuance_profile))
+                SmallVerticalSpacer()
+                NuanceProfile(
+                    modifier = Modifier
+                        .height(250.dp)
+                        .fillMaxWidth(),
+                    poll = poll,
+                    moreNuanceToLessNuance = highestGradeToLowestGrade,
+                )
+                PlotTitle(
+                    modifier = Modifier.padding(top = Theme.spacing.tiny),
+                    text = stringResource(R.string.plot_title_nuance_profile),
+                )
+                MediumVerticalSpacer()
+            }
+
             // Rule: hide the proximity profile if there's only one proposal, as it's useless.
             if (amountOfProposals > 1 && amountOfBallots > 0) {
                 val partialProximityAnalysis = filterAnalysis(
@@ -469,8 +508,8 @@ fun ResultScreen(
                     modifier = Modifier
                         .height(
                             16.dp *
-                                    partialProximityAnalysis.proposals.size *
-                                    partialProximityAnalysis.proposals.size
+                                partialProximityAnalysis.proposals.size *
+                                partialProximityAnalysis.proposals.size
                         )
                         .fillMaxWidth(),
                     analysis = partialProximityAnalysis,
@@ -680,6 +719,7 @@ fun PreviewFilteredResultScreen(modifier: Modifier = Modifier) {
         ProposalGradeBallotsFilter(
             proposalIndex = 3,
             gradeIndex = 0,
+            comparatorIndex = 1,
         )
     }
 
@@ -706,7 +746,7 @@ fun PreviewFilteredResultScreen(modifier: Modifier = Modifier) {
                 modifier = modifier,
                 state = state,
                 onBallotsFilterUpdate = {
-                    //ballotsFilter = it
+                    // ballotsFilter = it
                 },
             )
         }

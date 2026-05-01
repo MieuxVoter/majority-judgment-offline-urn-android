@@ -40,4 +40,7 @@ data class Ballot(
         }
     }
 
+    fun getNuance(): Int {
+        return judgments.map { it.grade }.toSet().size
+    }
 }

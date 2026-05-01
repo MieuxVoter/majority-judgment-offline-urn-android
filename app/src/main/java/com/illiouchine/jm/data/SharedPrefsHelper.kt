@@ -2,11 +2,11 @@ package com.illiouchine.jm.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.illiouchine.jm.config.DEFAULT_GRADING_QUALITY_VALUE
 import com.illiouchine.jm.config.DEFAULT_PLAY_SOUND_VALUE
 import com.illiouchine.jm.config.DEFAULT_SHOW_ONBOARDING_VALUE
 import com.illiouchine.jm.model.Grading
-import androidx.core.content.edit
 
 class SharedPrefsHelper(
     context: Context,

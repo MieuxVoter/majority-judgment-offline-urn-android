@@ -79,7 +79,7 @@ class OsmosisRepartitor { // FavorityJudgmentRepartitor?  (still workshopping th
                     val proposalGradeB = ballot.gradeOf(proposalIndexB)
                     val highestGrade = ballot.getHighestGrade()
                     val isBallotFavoritism = proposalGradeA == highestGrade ||
-                            proposalGradeB == highestGrade
+                        proposalGradeB == highestGrade
                     val isBallotRejection = highestGrade < acceptationGradeThreshold
 
                     if (isBallotFavoritism && !isBallotRejection) {
@@ -94,7 +94,7 @@ class OsmosisRepartitor { // FavorityJudgmentRepartitor?  (still workshopping th
                 }
 
                 val seepingIntent: Double = (preferenceForB - preferenceForA).toDouble() /
-                        seepingNormalization
+                    seepingNormalization
                 var seepingAmount = 0.0
                 if (seepingIntent > 0) {
                     seepingAmount = initialProportions[proposalIndexA] * seepingIntent
