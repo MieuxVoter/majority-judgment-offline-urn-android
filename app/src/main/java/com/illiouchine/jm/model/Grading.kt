@@ -5,35 +5,17 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import com.illiouchine.jm.R
 import com.illiouchine.jm.config.DEFAULT_GRADING_QUALITY_VALUE
-import com.illiouchine.jm.model.Grading.Enthusiasm6Grading
-import com.illiouchine.jm.model.Grading.PositiveQuality5Grading
-import com.illiouchine.jm.model.Grading.Priority5Grading
-import com.illiouchine.jm.model.Grading.Quality3Grading
-import com.illiouchine.jm.model.Grading.Quality5Grading
-import com.illiouchine.jm.model.Grading.Quality7Grading
-import com.illiouchine.jm.model.Grading.Urgency5Grading
+import com.illiouchine.jm.config.gradings
 import kotlinx.serialization.Serializable
 
 /**
- * The available gradings in the application.
- */
-val gradings: List<Grading> = listOf(
-    Quality7Grading,
-    Quality5Grading,
-    PositiveQuality5Grading,
-    Quality3Grading,
-    Priority5Grading,
-    Urgency5Grading,
-    Enthusiasm6Grading,
-)
-
-/**
- * The grades must be unambiguously ordered for MJ to work.
+ * Rule: The grades must be unambiguously ordered for MJ to work.
+ * This is why we do not let users choose their own grades for now.
  */
 @Stable
 @Serializable
 sealed class Grading(
-    val uid: Int, // make sure those are really unique, and DON'T edit them afterwards
+    val uid: Int, // make sure those are unique, and DO NOT edit them afterwards
     @get:StringRes val name: Int,
     val grades: List<Grade>,
     // This grade and all the grades above it are considered acceptation grades.
@@ -93,6 +75,18 @@ sealed class Grading(
             gradeToReject,
             gradeSomewhatGood,
             gradeExcellent,
+        ),
+        acceptationThreshold = 1,
+    )
+
+    @Serializable
+    data object Oral3Grading : Grading(
+        uid = 33,
+        name = R.string.three_oral_grades,
+        grades = listOf(
+            gradeNay,
+            gradeMeh,
+            gradeAye,
         ),
         acceptationThreshold = 1,
     )
