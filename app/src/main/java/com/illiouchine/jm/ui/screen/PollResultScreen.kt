@@ -123,13 +123,13 @@ fun ResultScreen(
     }
 
     // Not all these groups belong to the selected profile ; they belong to a duel
-    val decisiveGroupsForSelectedProfile = state.groups[selectedDuelIndex].groups
+    val decisiveGroupsForSelectedDuel = state.groups[selectedDuelIndex].groups
 
     var proportionalDropdownExpanded by remember { mutableStateOf(false) }
     var proportionalAlgorithm by rememberSaveable { mutableStateOf(ProportionalAlgorithms.NONE) }
 
     var ballotsFiltersExpanded by rememberSaveable { mutableStateOf(false) }
-    var dropdownNewBallotsFiltersShown by remember { mutableStateOf(false) }
+    var newBallotsFilterDropdownExpanded by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -187,7 +187,7 @@ fun ResultScreen(
                             modifier = Modifier
                                 .fillMaxWidth(),
                             onClick = {
-                                dropdownNewBallotsFiltersShown = !dropdownNewBallotsFiltersShown
+                                newBallotsFilterDropdownExpanded = !newBallotsFilterDropdownExpanded
                             },
                         ) {
                             Icon(
@@ -197,9 +197,9 @@ fun ResultScreen(
                         }
 
                         DropdownMenu(
-                            expanded = dropdownNewBallotsFiltersShown,
+                            expanded = newBallotsFilterDropdownExpanded,
                             onDismissRequest = {
-                                dropdownNewBallotsFiltersShown = false
+                                newBallotsFilterDropdownExpanded = false
                             },
                         ) {
                             DropdownMenuItem(
@@ -207,7 +207,7 @@ fun ResultScreen(
                                     Text("Filter by grade")
                                 },
                                 onClick = {
-                                    dropdownNewBallotsFiltersShown = false
+                                    newBallotsFilterDropdownExpanded = false
                                     onBallotsFilterUpdate(
                                         ProposalGradeBallotsFilter(
                                             proposalIndex = 0,
@@ -222,7 +222,7 @@ fun ResultScreen(
                                     Text("Filter by nuance")
                                 },
                                 onClick = {
-                                    dropdownNewBallotsFiltersShown = false
+                                    newBallotsFilterDropdownExpanded = false
                                     onBallotsFilterUpdate(
                                         NuanceBallotsFilter(
                                             comparatorIndex = 1,
@@ -333,7 +333,7 @@ fun ResultScreen(
                                 proposalTally = tally.proposalsTallies[proposalResult.index],
                                 medianGrade = proposalResult.analysis.medianGrade,
                                 grading = grading,
-                                decisiveGroups = decisiveGroupsForSelectedProfile.filter { group ->
+                                decisiveGroups = decisiveGroupsForSelectedDuel.filter { group ->
                                     group.participant == proposalDisplayIndex
                                 }.toPersistentList(),
                                 showDecisiveGroups = isAnyProfileSelected,
