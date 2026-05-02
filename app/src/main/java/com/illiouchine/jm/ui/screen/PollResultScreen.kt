@@ -182,7 +182,6 @@ fun ResultScreen(
                     // The purpose of this Column is to position the DropdownMenu adequately.
                     // Without it, it appears at the bottom of the screen, which is weird.
                     Column {
-
                         IconButton(
                             modifier = Modifier
                                 .fillMaxWidth(),
@@ -233,7 +232,6 @@ fun ResultScreen(
                             )
                         }
                     }
-
                 } else {
                     Text("Now only using the ballots that:")
                     ballotsFilter.render(

@@ -94,6 +94,24 @@ val gradeExcellent = Grade(
     textColor = grade6FgColor,
 )
 
+// ORAL GRADES
+
+val gradeNay = Grade(
+    name = R.string.grade_nay,
+    color = grade0BgColor,
+    textColor = grade0FgColor,
+)
+val gradeMeh = Grade(
+    name = R.string.grade_meh,
+    color = grade3BgColor,
+    textColor = grade3FgColor,
+)
+val gradeAye = Grade(
+    name = R.string.grade_aye,
+    color = grade6BgColor,
+    textColor = grade6FgColor,
+)
+
 // URGENCY GRADES
 
 val gradeNotUrgent = Grade(
