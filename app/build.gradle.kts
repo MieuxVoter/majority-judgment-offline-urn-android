@@ -174,6 +174,7 @@ dependencies {
 // Static code analyzer, run with either:
 //     ./gradlew detekt
 //     ./gradlew detekt --auto-correct --rerun
+//     make lint
 detekt {
     // Builds the AST in parallel. Rules are always executed in parallel.
     // Can lead to speedups in larger projects. `false` by default.
@@ -214,7 +215,4 @@ detekt {
 
     // Android: Don't create tasks for the specified build variants (e.g. "productionRelease")
     ignoredVariants = listOf("productionRelease")
-
-    // This does not work anymore — Instead, use:  ./gradlew detekt --auto-correct --rerun
-    //autoCorrect = true
 }
