@@ -1,0 +1,2 @@
+* Ajout des mentions Oui/Bof/Non
+* Filtre sur les bulletins par nuance
