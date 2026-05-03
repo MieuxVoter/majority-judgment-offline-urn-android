@@ -1,0 +1,5 @@
+* Amélioration du profil de proximité
+* Correction d'un plantage quand on consultait consécutivement divers scrutins
+* Amélioration de l'affichage sur les petits écrans avec de grosses typos
+* Indication du neutre relatif sous forme d'encoche dans le profil de proximité
+* Implémentation d'un filtre simple sur les bulletins
