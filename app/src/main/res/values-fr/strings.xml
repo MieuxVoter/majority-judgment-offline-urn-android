@@ -3,8 +3,8 @@
     <string name="app_name">Urne</string>
     <string name="majority_judgment">Jugement Majoritaire</string>
     <string name="button_finish">terminer</string>
-    <string name="button_next">suivant</string>
-    <string name="button_skip">abréger</string>
+    <string name="button_next">Suivant</string>
+    <string name="button_skip">Abréger</string>
     <string name="button_let_s_go">C\'est parti !</string>
     <string name="label_poll_subject">Sujet du Scrutin</string>
     <string name="label_poll_proposals">Propositions</string>
@@ -147,4 +147,19 @@
     <string name="poll_template_project_proposal_build_a_toolkit">Outiller</string>
     <string name="poll_template_project_proposal_call_for_allies">Rallier</string>
     <string name="poll_template_project_proposal_craft_a_solution">Solutionner</string>
+    <string name="grade_nay">Non</string>
+    <string name="grade_meh">Bof</string>
+    <string name="grade_aye">Oui</string>
+    <string name="three_oral_grades">Trois mentions orales</string>
+    <string name="using">Usage de</string>
+    <string name="grade_comparator_exactly">exactement</string>
+    <string name="grade_comparator_at_most">au plus</string>
+    <string name="grade_comparator_at_least">au moins</string>
+    <string name="opinion_profile">Profil d\'Opinion</string>
+    <string name="plot_title_opinion_profile">Montant total des jugements émis par mention.</string>
+    <string name="nuance_profile">Profil de Nuance</string>
+    <string name="plot_title_nuance_profile">Nombre de bulletins utilisant X mentions différentes.</string>
+    <string name="proximity_profile">Profil de Proximité</string>
+    <string name="plot_title_proximity_profile">Proximité de chaque paire de propositions dans l\'espace des bulletins.</string>
+    <string name="plot_title_proximity_with">Proximité avec %1$s</string>
 </resources>
