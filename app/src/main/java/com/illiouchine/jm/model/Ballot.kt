@@ -43,4 +43,10 @@ data class Ballot(
     fun getNuance(): Int {
         return judgments.map { it.grade }.toSet().size
     }
+
+    fun countProposalsWithGrade(grade: Int): Int {
+        return judgments.sumOf {
+            if (it.grade == grade) { 1 } else { 0 }
+        }
+    }
 }
