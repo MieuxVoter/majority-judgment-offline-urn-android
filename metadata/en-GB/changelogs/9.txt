@@ -1,4 +1,4 @@
-* Oi! Epicycloïds! Bloody stop going off-screen!
+* Normalise the epicycloïds so they don't go off-screen
 * Fix an issue with long proposal names
 * Rework how a grading is chosen for a poll
 * Improve support of bigger system font sizes
