@@ -1,4 +1,4 @@
-* Fix some more issues with the welcome mat
-* Explain some settings and drink some tea
+* Fix some more issues with the onboarding
+* Explain some settings
 * Add Turkish translation (thanks @Kamilkampfwagen-II)
 * Add a Privacy Policy

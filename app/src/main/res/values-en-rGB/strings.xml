@@ -49,4 +49,11 @@
     <string name="five_quality_grades">Five quality grades</string>
     <string name="five_positive_quality_grades">Five positive quality grades</string>
     <string name="three_quality_grades">Three quality grades</string>
+    <string name="grade_nay">Nay</string>
+    <string name="grade_meh">Meh</string>
+    <string name="grade_aye">Aye</string>
+    <string name="three_oral_grades">Three oral grades</string>
+    <string name="five_urgency_grades">Five urgency grades</string>
+    <string name="five_priority_grades">Five priority grades</string>
+    <string name="six_enthusiasm_grades">Six enthusiasm grades</string>
 </resources>
