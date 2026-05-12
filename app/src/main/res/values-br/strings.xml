@@ -94,4 +94,6 @@
     <string name="setting_play_sound">Efedoù son</string>
     <string name="setting_pin_screen">Emspilhennañ ar skramm</string>
     <string name="summary_you_are_almost_done">Kazimant echu eo!</string>
+    <string name="using">Oc\'h implijout</string>
+    <string name="proximity_profile">Profil Nested</string>
 </resources>
