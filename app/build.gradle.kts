@@ -120,6 +120,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    //implementation("androidx.core:core-splashscreen:1.0.0") // TBD: do we need this?
 
     // Android App Navigation
     implementation(libs.navigation3.ui)
