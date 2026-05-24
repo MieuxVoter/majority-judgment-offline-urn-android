@@ -18,6 +18,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
@@ -33,7 +34,6 @@ import io.github.koalaplot.core.polar.rememberFloatRadialAxisModel
 import io.github.koalaplot.core.style.AreaStyle
 import io.github.koalaplot.core.style.LineStyle
 import io.github.koalaplot.core.util.ExperimentalKoalaPlotApi
-import ir.ehsannarmani.compose_charts.extensions.format
 
 @OptIn(ExperimentalKoalaPlotApi::class)
 @Composable
@@ -44,7 +44,7 @@ fun SpiderChart(
     categories: List<String>,
     values: List<Float>,
     tickValues: List<Float> = listOf(-1f, 0f, 1f),
-    tickDecimals: Int = 0,
+    tickDecimals: Int = 1,
     highlightedCategoryIndex: Int = -1,
     onCategoryClick: (categoryIndex: Int) -> Unit = {},
 ) {
@@ -76,7 +76,7 @@ fun SpiderChart(
             angularAxisModel = rememberCategoryAngularAxisModel(indexedCategories),
             radialAxisLabels = {
                 Text(
-                    text = it.toDouble().format(tickDecimals),
+                    text = it.toDouble().smartFormat(tickDecimals),
                     style = TextStyle.Default,
                 )
             },

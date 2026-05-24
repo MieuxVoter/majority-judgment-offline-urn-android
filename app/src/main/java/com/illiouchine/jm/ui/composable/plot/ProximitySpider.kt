@@ -40,6 +40,13 @@ fun ProximitySpider(
 ) {
     val proposalsInitials = makeProposalsInitials(analysis)
 
+    val neutral = analysis.neutrals[selectedProposalIndex]
+    val tickValues = buildList {
+        add(-1f)
+        add(neutral.toFloat())
+        add(1f)
+    }
+
     SpiderChart(
         modifier = modifier,
         title = {
@@ -56,8 +63,8 @@ fun ProximitySpider(
         // categories = filteredAnalysis.proposals.map { it.truncate(16, "…") },
         categories = proposalsInitials, // so we use initials, it worked nicely so far
         values = analysis.proximities[selectedProposalIndex].map { it.toFloat() },
-        tickValues = listOf(-1f, 0f, 1f),
-        tickDecimals = 0,
+        tickValues = tickValues,
+        tickDecimals = 2,
         highlightedCategoryIndex = selectedProposalIndex,
         onCategoryClick = onProposalSelected,
     )
