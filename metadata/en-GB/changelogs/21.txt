@@ -1,2 +1,4 @@
 * Add Aye/Meh/Nay grading
 * Allow filtering ballots by nuance
+* Add the Breton language
+* Show the relative neutral on the proximity spider plots
