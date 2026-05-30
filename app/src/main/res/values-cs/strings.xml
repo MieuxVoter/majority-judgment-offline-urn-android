@@ -1,3 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Urna</string>
+    <string name="majority_judgment">Majoritní úsudek</string>
+    <string name="label_poll_subject">Předmět hlasování</string>
+    <string name="label_poll_proposals">Návrhy</string>
+    <string name="poll_setup_subject_placeholder">Zadejte předmět hlasování…</string>
+    <string name="poll_setup_proposal_placeholder">Zadejte návrh…</string>
+    <string name="proposal">Návrh</string>
+    <string name="ballots">hlasovací lístky</string>
+    <string name="ballot">hlasovací lístek</string>
+    <string name="in_the_urn">v urně</string>
+    <string name="higher">vyšší</string>
+    <string name="lower">nižší</string>
+    <string name="grade_to_reject">zamítnout</string>
+    <string name="grade_insufficient">nedostatečné</string>
+    <string name="grade_passable">přijatelné</string>
+    <string name="grade_somewhat_good">relativně dobré</string>
+    <string name="grade_good">dobré</string>
+    <string name="grade_very_good">velmi dobré</string>
+    <string name="grade_excellent">výborné</string>
 </resources>
