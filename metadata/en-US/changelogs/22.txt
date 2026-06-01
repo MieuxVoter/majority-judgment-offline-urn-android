@@ -1,0 +1,4 @@
+* Show the relative neutral on the proximity spider plots
+* Beautify the merit profiles
+* Add Czech
+* Improve Breton
