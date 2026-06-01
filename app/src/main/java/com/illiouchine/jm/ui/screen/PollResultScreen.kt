@@ -327,7 +327,7 @@ fun ResultScreen(
                             LinearMeritProfileCanvas(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(Theme.spacing.medium + Theme.spacing.small),
+                                    .height(Theme.spacing.large),
                                 proposalTally = tally.proposalsTallies[proposalResult.index],
                                 medianGrade = proposalResult.analysis.medianGrade,
                                 grading = grading,
@@ -335,7 +335,7 @@ fun ResultScreen(
                                     group.participant == proposalDisplayIndex
                                 }.toPersistentList(),
                                 showDecisiveGroups = isAnyProfileSelected,
-                                greenToRed = highestGradeToLowestGrade,
+                                highestGradeOnTheLeft = highestGradeToLowestGrade,
                             )
                         }
 
@@ -457,7 +457,7 @@ fun ResultScreen(
                         .height(Theme.spacing.medium + Theme.spacing.small),
                     proposalTally = pollTallyAsProposalTally,
                     grading = grading,
-                    greenToRed = highestGradeToLowestGrade,
+                    highestGradeOnTheLeft = highestGradeToLowestGrade,
                 )
                 MediumVerticalSpacer()
 

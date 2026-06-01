@@ -48,7 +48,7 @@ fun LinearMeritProfileCanvas(
     grading: Grading,
     decisiveGroups: ImmutableList<ParticipantGroupAnalysis> = emptyList<ParticipantGroupAnalysis>().toPersistentList(),
     showDecisiveGroups: Boolean = false,
-    greenToRed: Boolean = false,
+    highestGradeOnTheLeft: Boolean = false,
 ) {
     val textMeasurer = rememberTextMeasurer()
     val contrastedColor = if (isSystemInDarkTheme()) Color.White else Color.Black
@@ -158,7 +158,7 @@ fun LinearMeritProfileCanvas(
 
         val gradesRects: MutableList<Rect> = mutableListOf()
         var gradesIndices: IntProgression = (0..<amountOfGrades)
-        if (greenToRed) {
+        if (highestGradeOnTheLeft) {
             gradesIndices = gradesIndices.reversed()
         }
 
@@ -255,7 +255,7 @@ fun LinearMeritProfileCanvas(
             offsetX += gradeWidth
         }
 
-        if (greenToRed) {
+        if (highestGradeOnTheLeft) {
             gradesRects.reverse()
         }
 
@@ -309,7 +309,7 @@ fun LinearMeritProfileCanvas(
                     expandToGroup(
                         gradesRects[decisiveGroup.group.grade],
                         decisiveGroup.group.type == ParticipantGroup.Type.Contestation,
-                        greenToRed,
+                        highestGradeOnTheLeft,
                     )
                 } else {
                     gradesRects[decisiveGroup.group.grade]
@@ -332,7 +332,7 @@ fun LinearMeritProfileCanvas(
             }
         }
 
-        // Amount by which the median line overshoots the merit profile vertically
+        // Amount by which the median line overshoots the merit profile vertically on each side
         val medianLineVerticalOvershoot = 3.dp.toPx()
 
         // Vertical line in the middle, helping humans find the median grade
