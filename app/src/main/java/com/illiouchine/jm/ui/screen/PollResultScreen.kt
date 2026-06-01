@@ -517,6 +517,18 @@ fun ResultScreen(
                 )
                 MediumVerticalSpacer()
 
+                // The purpose of this toast is to show the full proposal name when we select one.
+                val rememberedContext = remember { context } // not 100% sure we need this
+                var proposalNameToast by remember {
+                    mutableStateOf(
+                        Toast.makeText(
+                            rememberedContext,
+                            "",
+                            Toast.LENGTH_SHORT,
+                        )
+                    )
+                }
+
                 // Rule: hide the proximity spider if there's less than three proposals (buggy!)
                 if (amountOfProposals > 2) {
                     ProximitySpider(
@@ -525,11 +537,17 @@ fun ResultScreen(
                         selectedProposalIndex = selectedPartialAnalysisProposal,
                         onProposalSelected = {
                             selectedPartialAnalysisProposal = it
-                            Toast.makeText(
-                                context,
+
+                            proposalNameToast.cancel()
+                            // We can't use setText here, perhaps because cancel hasn't finished yet
+                            //proposalNameToast.setText(partialProximityAnalysis.proposals[it])
+                            // But creating a new Toast instance entirely works
+                            proposalNameToast = Toast.makeText(
+                                rememberedContext,
                                 partialProximityAnalysis.proposals[it],
                                 Toast.LENGTH_SHORT,
-                            ).show()
+                            )
+                            proposalNameToast.show()
                         },
                     )
                     MediumVerticalSpacer()
