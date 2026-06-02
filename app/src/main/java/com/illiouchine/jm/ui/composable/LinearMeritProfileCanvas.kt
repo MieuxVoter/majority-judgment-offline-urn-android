@@ -242,12 +242,8 @@ fun LinearMeritProfileCanvas(
 
             // Show the percentage under each grade with at least one judgment
             if (gradeWidth > 0f) {
-                val percentage = 100f * gradeWidth / size.width
-                val approximate = if (round(percentage) != percentage) {
-                    "~"
-                } else {
-                    ""
-                }
+                val percentage = 100f * gradeWidthNoGap / size.width
+                val approximate = if (round(percentage) != percentage) { "~" } else { "" }
                 val measuredText =
                     textMeasurer.measure(
                         text = AnnotatedString(
