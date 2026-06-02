@@ -35,9 +35,12 @@ import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.ParticipantGroup
 import com.illiouchine.jm.model.ParticipantGroupAnalysis
 import com.illiouchine.jm.model.ProposalTally
+import com.illiouchine.jm.ui.utils.smoothStep
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import java.util.Locale
+import kotlin.math.abs
+import kotlin.math.max
 import kotlin.math.round
 
 @Composable
@@ -132,7 +135,14 @@ fun LinearMeritProfileCanvas(
     }
 
     LaunchedEffect("apparition") {
-        widthAnimation.animateTo(1f, tween(1500, 1000))
+        widthAnimation.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(
+                durationMillis = 2500,
+                delayMillis = 1000,
+                easing = { x -> x }, // linear is fine wince we're using smoothStep on this
+            ),
+        )
         outlineAlphaAnimation.animateTo(1f, tween(600, 150))
         outlineAnimation.animateTo(
             targetValue = 1f,
@@ -154,21 +164,54 @@ fun LinearMeritProfileCanvas(
             return@Canvas
         }
         val medianGradeOutline = Path()
-        val balancedGradeWidth = size.width / amountOfGrades
 
+        val gapBetweenGrades = 4.dp.toPx()
+        val halfGapBetweenGrades = 0.5f * gapBetweenGrades
         val gradesRects: MutableList<Rect> = mutableListOf()
         var gradesIndices: IntProgression = (0..<amountOfGrades)
         if (highestGradeOnTheLeft) {
             gradesIndices = gradesIndices.reversed()
         }
 
-        var offsetX = 0f // cursor for the grades' loop
-        for (gradeIndex in gradesIndices) {
-            var gradeWidth = (size.width * proposalTally.tally[gradeIndex].toFloat()) /
+        var cursorX = 0f // without spacing between grades
+        for ((cursorIndex, gradeIndex) in gradesIndices.withIndex()) {
+            val gradeWidthNoGap = (size.width * proposalTally.tally[gradeIndex].toFloat()) /
                 proposalTally.amountOfJudgments.toFloat()
-            gradeWidth = lerp(balancedGradeWidth, gradeWidth, widthAnimation.value)
+
+            val isFirstGradeShown = cursorX == 0f &&
+                gradeWidthNoGap > 0f
+            val isLastGradeShown = abs(cursorX + gradeWidthNoGap - size.width) < 0.00001f &&
+                gradeWidthNoGap > 0f
+
+            // TBD: the local X should probably be remembered
+            val localX = cursorX + if (!isFirstGradeShown) { halfGapBetweenGrades } else { 0f }
+
+            // TBD: the final grade width should probably be remembered
+            var finalGradeWidth = gradeWidthNoGap - gapBetweenGrades
+            if (isFirstGradeShown) {
+                finalGradeWidth += halfGapBetweenGrades
+            }
+            if (isLastGradeShown) {
+                finalGradeWidth += halfGapBetweenGrades
+            }
+            // Rule: super-duper tiny grades should still show up if they're not zero
+            finalGradeWidth = max(finalGradeWidth, 1.0f)
+            if (gradeWidthNoGap == 0f) {
+                finalGradeWidth = 0f
+            }
+
+            val gradeWidth = lerp(
+                start = 0f,
+                stop = finalGradeWidth,
+                fraction = smoothStep(
+                    edge0 = cursorIndex * 1f / amountOfGrades,
+                    edge1 = (cursorIndex + 1f) * 1f / amountOfGrades,
+                    x = widthAnimation.value,
+                ),
+            )
+
             val gradeRectSize = Size(gradeWidth, size.height)
-            val gradeRectOffset = Offset(offsetX, 0f)
+            val gradeRectOffset = Offset(localX, 0f)
             gradesRects.add(
                 Rect(
                     offset = gradeRectOffset,
@@ -252,7 +295,7 @@ fun LinearMeritProfileCanvas(
                 )
             }
 
-            offsetX += gradeWidth
+            cursorX += gradeWidthNoGap
         }
 
         if (highestGradeOnTheLeft) {
