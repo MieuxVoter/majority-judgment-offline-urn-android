@@ -363,7 +363,7 @@ fun ResultScreen(
                             }
                         }
 
-                        Spacer(Modifier.padding(vertical = Theme.spacing.tiny))
+                        Spacer(Modifier.padding(vertical = Theme.spacing.small))
                     }
                 }
             }

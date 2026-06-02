@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
@@ -165,6 +166,8 @@ fun LinearMeritProfileCanvas(
         }
         val medianGradeOutline = Path()
 
+        val gradeCornerRadiusPx = 4.dp.toPx()
+        val gradeCornerRadius = CornerRadius(gradeCornerRadiusPx, gradeCornerRadiusPx)
         val gapBetweenGrades = 4.dp.toPx()
         val halfGapBetweenGrades = 0.5f * gapBetweenGrades
         val gradesRects: MutableList<Rect> = mutableListOf()
@@ -220,14 +223,15 @@ fun LinearMeritProfileCanvas(
             )
 
             // Fill a rectangle with the color of the grade
-            drawRect(
+            drawRoundRect(
                 color = grading.getGradeColor(gradeIndex),
                 size = gradeRectSize,
                 topLeft = gradeRectOffset,
+                cornerRadius = gradeCornerRadius,
             )
 
             // Add a pattern overlay for color-impaired people
-            drawRect(
+            drawRoundRect(
                 brush = brushes[gradeIndex % brushes.size],
                 colorFilter = ColorFilter.tint(
                     color = lerp(
@@ -238,6 +242,7 @@ fun LinearMeritProfileCanvas(
                 ),
                 size = gradeRectSize,
                 topLeft = gradeRectOffset,
+                cornerRadius = gradeCornerRadius,
             )
 
             // Show the percentage under each grade with at least one judgment
