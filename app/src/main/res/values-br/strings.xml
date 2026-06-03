@@ -96,4 +96,15 @@
     <string name="summary_you_are_almost_done">Kazimant echu eo!</string>
     <string name="using">Oc\'h implijout</string>
     <string name="proximity_profile">Profil Nested</string>
+    <string name="adhesion">tud a-du</string>
+    <string name="contestation">tud a-enep</string>
+    <string name="seven_quality_grades">Seizh meneg kalite</string>
+    <string name="five_quality_grades">Pemp meneg kalite</string>
+    <string name="five_positive_quality_grades">Pemp meneg kaliteel ha pozitivel</string>
+    <string name="three_quality_grades">Tri meneg kalite</string>
+    <string name="three_oral_grades">Tre meneg mouezhel</string>
+    <string name="five_urgency_grades">Pemp meneg mallusted</string>
+    <string name="five_priority_grades">Pemp meneg priorelezh</string>
+    <string name="six_enthusiasm_grades">C\'hwec\'h meneg entan</string>
+    <string name="onboarding_welcome_to_your_offline_poll_app">Donemat en ho jarl hezoug ezlinenn a implij Barn ar muiañ niver.</string>
 </resources>
