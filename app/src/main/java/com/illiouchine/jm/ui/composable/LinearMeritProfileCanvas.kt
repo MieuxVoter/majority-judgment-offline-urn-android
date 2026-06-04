@@ -8,21 +8,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.ImageShader
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.graphics.StrokeJoin
-import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.lerp
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
@@ -30,14 +26,17 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
-import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.ParticipantGroup
 import com.illiouchine.jm.model.ParticipantGroupAnalysis
 import com.illiouchine.jm.model.ProposalTally
+import com.illiouchine.jm.ui.composable.plot.component.getPatternBrushes
+import com.illiouchine.jm.ui.utils.smoothStep
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import java.util.Locale
+import kotlin.math.abs
+import kotlin.math.max
 import kotlin.math.round
 
 @Composable
@@ -48,100 +47,50 @@ fun LinearMeritProfileCanvas(
     grading: Grading,
     decisiveGroups: ImmutableList<ParticipantGroupAnalysis> = emptyList<ParticipantGroupAnalysis>().toPersistentList(),
     showDecisiveGroups: Boolean = false,
-    greenToRed: Boolean = false,
+    highestGradeOnTheLeft: Boolean = false,
 ) {
     val textMeasurer = rememberTextMeasurer()
-    val contrastedColor = if (isSystemInDarkTheme()) Color.White else Color.Black
+    val contrastedColor = if (isSystemInDarkTheme()) {
+        Color.White
+    } else {
+        Color.Black
+    }
     val widthAnimation = remember { Animatable(0f) }
     val outlineAlphaAnimation = remember { Animatable(0f) }
     val outlineAnimation = remember { Animatable(0f) }
     val percentageAnimation = remember { Animatable(0f) }
-
-    // How to refactor these patterns & brushes out of here ?
-
-    val patterns = listOf(
-        ImageBitmap.imageResource(R.drawable.pattern_0),
-        ImageBitmap.imageResource(R.drawable.pattern_1),
-        ImageBitmap.imageResource(R.drawable.pattern_2),
-        ImageBitmap.imageResource(R.drawable.pattern_3),
-        ImageBitmap.imageResource(R.drawable.pattern_4),
-        ImageBitmap.imageResource(R.drawable.pattern_5),
-        ImageBitmap.imageResource(R.drawable.pattern_6),
-        ImageBitmap.imageResource(R.drawable.pattern_7),
-    )
-
-    val brushes = remember {
-        listOf(
-            ShaderBrush(
-                shader = ImageShader(
-                    image = patterns[0],
-                    tileModeX = TileMode.Repeated,
-                    tileModeY = TileMode.Repeated,
-                ),
-            ),
-            ShaderBrush(
-                shader = ImageShader(
-                    image = patterns[1],
-                    tileModeX = TileMode.Repeated,
-                    tileModeY = TileMode.Repeated,
-                ),
-            ),
-            ShaderBrush(
-                shader = ImageShader(
-                    image = patterns[2],
-                    tileModeX = TileMode.Repeated,
-                    tileModeY = TileMode.Repeated,
-                ),
-            ),
-            ShaderBrush(
-                shader = ImageShader(
-                    image = patterns[3],
-                    tileModeX = TileMode.Repeated,
-                    tileModeY = TileMode.Repeated,
-                ),
-            ),
-            ShaderBrush(
-                shader = ImageShader(
-                    image = patterns[4],
-                    tileModeX = TileMode.Repeated,
-                    tileModeY = TileMode.Repeated,
-                ),
-            ),
-            ShaderBrush(
-                shader = ImageShader(
-                    image = patterns[5],
-                    tileModeX = TileMode.Repeated,
-                    tileModeY = TileMode.Repeated,
-                ),
-            ),
-            ShaderBrush(
-                shader = ImageShader(
-                    image = patterns[6],
-                    tileModeX = TileMode.Repeated,
-                    tileModeY = TileMode.Repeated,
-                ),
-            ),
-            ShaderBrush(
-                shader = ImageShader(
-                    image = patterns[7],
-                    tileModeX = TileMode.Repeated,
-                    tileModeY = TileMode.Repeated,
-                ),
-            ),
-        )
-    }
+    val brushes = getPatternBrushes()
 
     LaunchedEffect("apparition") {
-        widthAnimation.animateTo(1f, tween(1500, 1000))
-        outlineAlphaAnimation.animateTo(1f, tween(600, 150))
+        widthAnimation.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(
+                durationMillis = 2500,
+                delayMillis = 1000,
+                easing = { x -> x }, // linear is fine wince we're using smoothSteps on this
+            ),
+        )
+        outlineAlphaAnimation.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(
+                durationMillis = 600,
+                delayMillis = 150,
+            ),
+        )
         outlineAnimation.animateTo(
             targetValue = 1f,
             animationSpec = tween(
                 durationMillis = 400,
                 easing = { x -> x * x * x },
-            )
+            ),
         )
-        percentageAnimation.animateTo(1f, tween(3000, 150))
+        percentageAnimation.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(
+                durationMillis = 3000,
+                delayMillis = 150,
+            ),
+        )
     }
 
     // Draw a linear merit profile
@@ -154,21 +103,60 @@ fun LinearMeritProfileCanvas(
             return@Canvas
         }
         val medianGradeOutline = Path()
-        val balancedGradeWidth = size.width / amountOfGrades
 
+        val gradeCornerRadiusPx = 4.dp.toPx()
+        val gradeCornerRadius = CornerRadius(gradeCornerRadiusPx, gradeCornerRadiusPx)
+        val gapBetweenGrades = 4.dp.toPx()
+        val halfGapBetweenGrades = 0.5f * gapBetweenGrades
         val gradesRects: MutableList<Rect> = mutableListOf()
         var gradesIndices: IntProgression = (0..<amountOfGrades)
-        if (greenToRed) {
+        if (highestGradeOnTheLeft) {
             gradesIndices = gradesIndices.reversed()
         }
 
-        var offsetX = 0f // cursor for the grades' loop
-        for (gradeIndex in gradesIndices) {
-            var gradeWidth = (size.width * proposalTally.tally[gradeIndex].toFloat()) /
+        var cursorX = 0f // without spacing between grades
+        for ((cursorIndex, gradeIndex) in gradesIndices.withIndex()) {
+            val gradeWidthNoGap = (size.width * proposalTally.tally[gradeIndex].toFloat()) /
                 proposalTally.amountOfJudgments.toFloat()
-            gradeWidth = lerp(balancedGradeWidth, gradeWidth, widthAnimation.value)
+
+            val isFirstGradeShown = cursorX == 0f &&
+                gradeWidthNoGap > 0f
+            val isLastGradeShown = abs(cursorX + gradeWidthNoGap - size.width) < 0.00001f &&
+                gradeWidthNoGap > 0f
+
+            // TBD: the local X should probably be remembered
+            val localX = cursorX + if (!isFirstGradeShown) {
+                halfGapBetweenGrades
+            } else {
+                0f
+            }
+
+            // TBD: the final grade width should probably be remembered
+            var finalGradeWidth = gradeWidthNoGap - gapBetweenGrades
+            if (isFirstGradeShown) {
+                finalGradeWidth += halfGapBetweenGrades
+            }
+            if (isLastGradeShown) {
+                finalGradeWidth += halfGapBetweenGrades
+            }
+            // Rule: super-duper tiny grades should still show up if they're not zero
+            finalGradeWidth = max(finalGradeWidth, 1.0f)
+            if (gradeWidthNoGap == 0f) {
+                finalGradeWidth = 0f
+            }
+
+            val gradeWidth = lerp(
+                start = 0f,
+                stop = finalGradeWidth,
+                fraction = smoothStep(
+                    edge0 = cursorIndex * 1f / amountOfGrades,
+                    edge1 = (cursorIndex + 1f) * 1f / amountOfGrades,
+                    x = widthAnimation.value,
+                ),
+            )
+
             val gradeRectSize = Size(gradeWidth, size.height)
-            val gradeRectOffset = Offset(offsetX, 0f)
+            val gradeRectOffset = Offset(localX, 0f)
             gradesRects.add(
                 Rect(
                     offset = gradeRectOffset,
@@ -177,14 +165,15 @@ fun LinearMeritProfileCanvas(
             )
 
             // Fill a rectangle with the color of the grade
-            drawRect(
+            drawRoundRect(
                 color = grading.getGradeColor(gradeIndex),
                 size = gradeRectSize,
                 topLeft = gradeRectOffset,
+                cornerRadius = gradeCornerRadius,
             )
 
             // Add a pattern overlay for color-impaired people
-            drawRect(
+            drawRoundRect(
                 brush = brushes[gradeIndex % brushes.size],
                 colorFilter = ColorFilter.tint(
                     color = lerp(
@@ -195,11 +184,12 @@ fun LinearMeritProfileCanvas(
                 ),
                 size = gradeRectSize,
                 topLeft = gradeRectOffset,
+                cornerRadius = gradeCornerRadius,
             )
 
             // Show the percentage under each grade with at least one judgment
             if (gradeWidth > 0f) {
-                val percentage = 100f * gradeWidth / size.width
+                val percentage = 100f * gradeWidthNoGap / size.width
                 val approximate = if (round(percentage) != percentage) {
                     "~"
                 } else {
@@ -252,10 +242,10 @@ fun LinearMeritProfileCanvas(
                 )
             }
 
-            offsetX += gradeWidth
+            cursorX += gradeWidthNoGap
         }
 
-        if (greenToRed) {
+        if (highestGradeOnTheLeft) {
             gradesRects.reverse()
         }
 
@@ -305,15 +295,16 @@ fun LinearMeritProfileCanvas(
         if (showDecisiveGroups) {
             for (decisiveGroup in decisiveGroups) {
                 val groupOutline = Path()
-                val groupOutlineRect: Rect = if (decisiveGroup.group.type != ParticipantGroup.Type.Median) {
-                    expandToGroup(
-                        gradesRects[decisiveGroup.group.grade],
-                        decisiveGroup.group.type == ParticipantGroup.Type.Contestation,
-                        greenToRed,
-                    )
-                } else {
-                    gradesRects[decisiveGroup.group.grade]
-                }
+                val groupOutlineRect: Rect =
+                    if (decisiveGroup.group.type != ParticipantGroup.Type.Median) {
+                        expandToGroup(
+                            gradesRects[decisiveGroup.group.grade],
+                            decisiveGroup.group.type == ParticipantGroup.Type.Contestation,
+                            highestGradeOnTheLeft,
+                        )
+                    } else {
+                        gradesRects[decisiveGroup.group.grade]
+                    }
                 groupOutline.addRect(groupOutlineRect)
 
                 drawPath(
@@ -332,7 +323,7 @@ fun LinearMeritProfileCanvas(
             }
         }
 
-        // Amount by which the median line overshoots the merit profile vertically
+        // Amount by which the median line overshoots the merit profile vertically on each side
         val medianLineVerticalOvershoot = 3.dp.toPx()
 
         // Vertical line in the middle, helping humans find the median grade
