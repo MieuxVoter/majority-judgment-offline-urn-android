@@ -3,7 +3,7 @@ package com.illiouchine.jm.config
 import android.content.Context
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Poll
-import com.illiouchine.jm.service.OsmosisRepartitor
+import com.illiouchine.jm.service.PreferentialFavoritismRepartitor
 import fr.mieuxvoter.mj.ResultInterface
 
 // NOTE: we could use a sealed class instead of an enum
@@ -86,7 +86,7 @@ enum class ProportionalAlgorithms {
         }
 
         override fun compute(poll: Poll, result: ResultInterface): List<Double> {
-            return OsmosisRepartitor().computeProportionalRepresentation(poll)
+            return PreferentialFavoritismRepartitor().computeProportionalRepresentation(poll)
         }
     },
 

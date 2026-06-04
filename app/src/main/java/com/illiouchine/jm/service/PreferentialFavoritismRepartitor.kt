@@ -23,7 +23,7 @@ import com.illiouchine.jm.model.Poll
  * This code can be heavily optimized ; this is an initial draft.
  * The goal for now is to be as explicit and clear as possible.  Optimization will come later.
  */
-class OsmosisRepartitor { // PreferentialFavoritismRepartitor?  (still workshopping the name)
+class PreferentialFavoritismRepartitor {
 
     fun computeProportionalRepresentation(poll: Poll): List<Double> {
         val ballots = poll.ballots
