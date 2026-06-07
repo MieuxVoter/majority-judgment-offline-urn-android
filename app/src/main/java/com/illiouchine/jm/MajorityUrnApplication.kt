@@ -11,7 +11,7 @@ import com.illiouchine.jm.data.room.PollDao
 import com.illiouchine.jm.data.room.PollDataBase
 import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.logic.OnboardingViewModel
-import com.illiouchine.jm.logic.PollExportViewModel
+import com.illiouchine.jm.logic.PollQrExportViewModel
 import com.illiouchine.jm.logic.PollQrImportViewModel
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.PollSetupViewModel
@@ -87,7 +87,7 @@ val module = module {
         )
     }
     viewModel {
-        PollExportViewModel(
+        PollQrExportViewModel(
             pollDataSource = get(),
         )
     }

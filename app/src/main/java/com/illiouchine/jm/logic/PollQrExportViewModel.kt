@@ -28,12 +28,12 @@ import qrcode.QRCode
 import qrcode.color.Colors
 import qrcode.raw.ErrorCorrectionLevel
 
-class PollExportViewModel(
+class PollQrExportViewModel(
     private val pollDataSource: PollDataSource,
 ) : ViewModel() {
 
     @Stable
-    data class PollExportViewState(
+    data class PollQrExportViewState(
         val poll: Poll, // TBD: perhaps we should just use Poll? here
         //val pollQrBytes: ByteArray,
         val pollQrContent: String,
@@ -44,7 +44,7 @@ class PollExportViewModel(
         }
     }
 
-    private val _viewState = MutableStateFlow(PollExportViewState(
+    private val _viewState = MutableStateFlow(PollQrExportViewState(
         poll = Poll( // this is awkward
             id = 0,
             pollConfig = PollConfig(),
@@ -52,7 +52,7 @@ class PollExportViewModel(
         pollQrContent = "",
         pollQrBitmap = null,
     ))
-    val viewState: StateFlow<PollExportViewState> = _viewState
+    val viewState: StateFlow<PollQrExportViewState> = _viewState
 
     private val _navEvents = MutableSharedFlow<NavigationAction>()
     val navEvents = _navEvents.asSharedFlow()

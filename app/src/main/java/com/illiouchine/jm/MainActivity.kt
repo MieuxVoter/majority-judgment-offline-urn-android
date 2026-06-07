@@ -31,7 +31,7 @@ import com.illiouchine.jm.filters.BallotsFilterInterface
 import com.illiouchine.jm.filters.NoBallotsFilter
 import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.logic.OnboardingViewModel
-import com.illiouchine.jm.logic.PollExportViewModel
+import com.illiouchine.jm.logic.PollQrExportViewModel
 import com.illiouchine.jm.logic.PollQrImportViewModel
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.PollSetupViewModel
@@ -289,7 +289,7 @@ class MainActivity : ComponentActivity() {
                         }
                         entry<Screens.PollExport> { key ->
                             val context = LocalContext.current
-                            val viewModel: PollExportViewModel by viewModel()
+                            val viewModel: PollQrExportViewModel by viewModel()
 
                             LaunchedEffect(key.id) {
                                 viewModel.initializeFromPollId(

@@ -29,7 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.InMemoryPollDataSource
-import com.illiouchine.jm.logic.PollExportViewModel
+import com.illiouchine.jm.logic.PollQrExportViewModel
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
@@ -55,7 +55,7 @@ fun imageBitmapFromBytes(encodedImageData: ByteArray): ImageBitmap {
 @Composable
 fun PollExportScreen(
     modifier: Modifier = Modifier,
-    state: PollExportViewModel.PollExportViewState,
+    state: PollQrExportViewModel.PollQrExportViewState,
     onBack: () -> Unit = {},
 ) {
     MjuScaffold(
@@ -253,13 +253,13 @@ fun PreviewPollExportScreen(modifier: Modifier = Modifier) {
         ),
     )
 
-    val pollExportViewModel = viewModel {
-        PollExportViewModel(
+    val pollQrExportViewModel = viewModel {
+        PollQrExportViewModel(
             pollDataSource = InMemoryPollDataSource(), // dummy
         )
     }
-    pollExportViewModel.initializeFromPoll(poll)
-    val state = pollExportViewModel.viewState.collectAsState().value
+    pollQrExportViewModel.initializeFromPoll(poll)
+    val state = pollQrExportViewModel.viewState.collectAsState().value
 
     JmTheme {
         PollExportScreen(
