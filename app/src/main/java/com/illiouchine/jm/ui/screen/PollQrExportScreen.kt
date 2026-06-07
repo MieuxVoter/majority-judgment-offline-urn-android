@@ -43,17 +43,10 @@ import com.illiouchine.jm.ui.theme.spacing
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 
-fun imageBitmapFromBytes(encodedImageData: ByteArray): ImageBitmap {
-    return BitmapFactory.decodeByteArray(
-        encodedImageData,
-        0,
-        encodedImageData.size,
-    ).asImageBitmap()
-}
 
 @OptIn(ExperimentalSerializationApi::class)
 @Composable
-fun PollExportScreen(
+fun PollQrExportScreen(
     modifier: Modifier = Modifier,
     state: PollQrExportViewModel.PollQrExportViewState,
     onBack: () -> Unit = {},
@@ -231,7 +224,7 @@ fun PollExportScreen(
 )
 // @PreviewScreenSizes // my eyes hurt ← no dark mode
 @Composable
-fun PreviewPollExportScreen(modifier: Modifier = Modifier) {
+fun PreviewPollQrExportScreen(modifier: Modifier = Modifier) {
     val poll = Poll(
         id = 17,
         pollConfig = PollConfig(
@@ -262,7 +255,7 @@ fun PreviewPollExportScreen(modifier: Modifier = Modifier) {
     val state = pollQrExportViewModel.viewState.collectAsState().value
 
     JmTheme {
-        PollExportScreen(
+        PollQrExportScreen(
             modifier = modifier,
             state = state,
         )

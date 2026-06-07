@@ -8,8 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.PollDataSource
+import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Poll
-import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.model.serializer.UUIDSerializer
 import com.illiouchine.jm.ui.navigator.NavigationAction
 import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.utils.compress
@@ -23,34 +24,42 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.encodeToByteArray
+import java.util.UUID
 
-class PollQrExportViewModel(
+@Stable
+@Serializable
+data class BallotsDto(
+    @Serializable(UUIDSerializer::class)
+    val pollUuid: UUID,
+    val ballots: List<Ballot>,
+)
+
+class BallotsQrExportViewModel(
     private val pollDataSource: PollDataSource,
 ) : ViewModel() {
 
     @Stable
-    data class PollQrExportViewState(
-        val poll: Poll, // TBD: perhaps we should just use Poll? here
-        //val pollQrBytes: ByteArray,
-        val pollQrContent: String,
-        val pollQrBitmap: ImageBitmap?,
-    ) {
-        fun hasPoll(): Boolean {
-            return poll.id != 0
-        }
-    }
+    data class ViewState(
+        /**
+         * The poll whose ballots we want to export.
+         */
+        val poll: Poll? = null,
+        /**
+         * The Data Transfer Object that's actually going to transit via QR Code.
+         */
+        val ballotsDto: BallotsDto? = null,
+        //val offset: Int = 0,
+        //val limit: Int = 100,
+        val qrContent: String? = null,
+        val qrBitmap: ImageBitmap? = null,
+        val errorMessage: String? = null,
+    )
 
-    private val _viewState = MutableStateFlow(PollQrExportViewState(
-        poll = Poll( // this is awkward
-            id = 0,
-            pollConfig = PollConfig(),
-        ),
-        pollQrContent = "",
-        pollQrBitmap = null,
-    ))
-    val viewState: StateFlow<PollQrExportViewState> = _viewState
+    private val _viewState = MutableStateFlow(ViewState())
+    val viewState: StateFlow<ViewState> = _viewState
 
     private val _navEvents = MutableSharedFlow<NavigationAction>()
     val navEvents = _navEvents.asSharedFlow()
@@ -71,7 +80,7 @@ class PollQrExportViewModel(
                 _navEvents.emit(NavigationAction.To(Screens.Home))
             } else {
                 initializeFromPoll(
-                    //context = context,
+                    context = context,
                     poll = poll,
                 )
             }
@@ -80,24 +89,37 @@ class PollQrExportViewModel(
 
     @OptIn(ExperimentalSerializationApi::class)
     fun initializeFromPoll(
-        //context: Context,
+        context: Context,
         poll: Poll,
     ) {
-        val pollToExport = poll.copy(id = 0, ballots = emptyList())
-        val pollBytes = Cbor.encodeToByteArray(pollToExport)
-        val compressedPollBytes = compress(pollBytes)
-        val compressedPollString = encode(compressedPollBytes)
-        val qrContent = "mju://p/$compressedPollString"
+        if (poll.uuid == null) {
+            _viewState.update {
+                it.copy(
+                    poll = poll,
+                    errorMessage = "The poll is too ancient.",
+                )
+            }
+            return
+        }
 
-        // Up to 2,953 bytes (so the spec says ; we need to check, seems less)
+        val ballotsDto = BallotsDto(
+            pollUuid = poll.uuid,
+            ballots = poll.ballots,
+        )
+
+        val ballotsBytes = Cbor.encodeToByteArray(value = ballotsDto)
+        val ballotsCompressedBytes = compress(input = ballotsBytes)
+        val ballotsCompressedString = encode(bytes = ballotsCompressedBytes)
+        val qrContent = "mju://b/$ballotsCompressedString"
         val qrPngBytes = renderQrCodePngBytes(qrContent)
         val qrBitmap = imageBitmapFromPngBytes(qrPngBytes)
 
         _viewState.update {
             it.copy(
                 poll = poll,
-                pollQrContent = qrContent,
-                pollQrBitmap = qrBitmap,
+                ballotsDto = ballotsDto,
+                qrContent = qrContent,
+                qrBitmap = qrBitmap,
             )
         }
     }

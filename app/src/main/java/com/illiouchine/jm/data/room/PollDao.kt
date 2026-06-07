@@ -15,7 +15,7 @@ import com.illiouchine.jm.data.room.entity.ProposalEntity
 import java.util.UUID
 
 /**
- * Data Access Object
+ * Poll Data Access Object
  */
 @Dao
 interface PollDao {

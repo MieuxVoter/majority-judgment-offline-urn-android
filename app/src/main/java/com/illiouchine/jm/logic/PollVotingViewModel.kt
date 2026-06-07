@@ -103,7 +103,9 @@ class PollVotingViewModel(
         // Add judgment to current ballot
         _pollVotingViewState.update {
             it.copy(
-                currentBallot = it.currentBallot?.withJudgment(judgment) ?: Ballot(persistentListOf(judgment))
+                currentBallot = it.currentBallot?.withJudgment(judgment) ?: Ballot(
+                    judgments = persistentListOf(judgment),
+                )
             )
         }
     }

@@ -51,7 +51,8 @@ fun List<Ballot>.toListOfJudgments(): List<List<JudgmentEntity>> {
 fun List<BallotWithJudgment>.toDomainObject(): List<Ballot> {
     return this.map { ballot ->
         Ballot(
-            ballot.judgments.map { judgment ->
+            uuid = ballot.ballot.uuid,
+            judgments = ballot.judgments.map { judgment ->
                 Judgment(
                     proposal = judgment.proposalIndex,
                     grade = judgment.gradeIndex,

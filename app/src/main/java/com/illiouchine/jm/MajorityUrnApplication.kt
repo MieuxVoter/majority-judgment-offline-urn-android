@@ -9,6 +9,7 @@ import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.data.SqlitePollDataSource
 import com.illiouchine.jm.data.room.PollDao
 import com.illiouchine.jm.data.room.PollDataBase
+import com.illiouchine.jm.logic.BallotsQrExportViewModel
 import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.logic.OnboardingViewModel
 import com.illiouchine.jm.logic.PollQrExportViewModel
@@ -93,6 +94,11 @@ val module = module {
     }
     viewModel {
         PollQrImportViewModel(
+            pollDataSource = get(),
+        )
+    }
+    viewModel {
+        BallotsQrExportViewModel(
             pollDataSource = get(),
         )
     }

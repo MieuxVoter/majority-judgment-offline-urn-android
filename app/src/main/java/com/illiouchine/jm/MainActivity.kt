@@ -29,6 +29,7 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.illiouchine.jm.filters.BallotsFilterInterface
 import com.illiouchine.jm.filters.NoBallotsFilter
+import com.illiouchine.jm.logic.BallotsQrExportViewModel
 import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.logic.OnboardingViewModel
 import com.illiouchine.jm.logic.PollQrExportViewModel
@@ -40,10 +41,11 @@ import com.illiouchine.jm.logic.SettingsViewModel
 import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.navigator.TopLevelBackStack
 import com.illiouchine.jm.ui.screen.AboutScreen
+import com.illiouchine.jm.ui.screen.BallotsQrExportScreen
 import com.illiouchine.jm.ui.screen.HomeScreen
 import com.illiouchine.jm.ui.screen.LoaderScreen
 import com.illiouchine.jm.ui.screen.OnBoardingScreen
-import com.illiouchine.jm.ui.screen.PollExportScreen
+import com.illiouchine.jm.ui.screen.PollQrExportScreen
 import com.illiouchine.jm.ui.screen.PollQrImportScreen
 import com.illiouchine.jm.ui.screen.PollSetupScreen
 import com.illiouchine.jm.ui.screen.PollVotingScreen
@@ -97,7 +99,7 @@ class MainActivity : ComponentActivity() {
                             val data = uri.path
                             if (data != null) {
                                 val compressedDataString = data.substring(1)
-                                topLevelBackStack.add(Screens.PollImportQr(
+                                topLevelBackStack.add(Screens.PollQrImport(
                                     qrContent = compressedDataString,
                                 ))
                             }
@@ -144,6 +146,7 @@ class MainActivity : ComponentActivity() {
                                 onShowResult = homeViewModel::showResult,
                                 onDeletePoll = homeViewModel::deletePoll,
                                 onExportPoll = homeViewModel::exportPoll,
+                                onExportBallots = homeViewModel::exportBallots,
                             )
                         }
                         entry<Screens.About> {
@@ -287,7 +290,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         }
-                        entry<Screens.PollExport> { key ->
+                        entry<Screens.PollQrExport> { key ->
                             val context = LocalContext.current
                             val viewModel: PollQrExportViewModel by viewModel()
 
@@ -310,18 +313,17 @@ class MainActivity : ComponentActivity() {
                             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
                             if (viewState.hasPoll()) {
-                                PollExportScreen(
+                                PollQrExportScreen(
                                     modifier = Modifier,
                                     state = viewState,
                                     onBack = viewModel::onBack,
-                                    //onBack = { viewModel.onBack() },
                                 )
                             } else {
                                 // TBD: perhaps we should create a ErrorScreen ?
                                 Text(text = "No poll to export.")
                             }
                         }
-                        entry<Screens.PollImportQr> { key ->
+                        entry<Screens.PollQrImport> { key ->
                             val context = LocalContext.current
                             val viewModel: PollQrImportViewModel by viewModel()
 
@@ -346,6 +348,39 @@ class MainActivity : ComponentActivity() {
                                 onConfirm = viewModel::onConfirm,
                                 onCancel = viewModel::onCancel,
                             )
+                        }
+                        entry<Screens.BallotsQrExport> { key ->
+                            val context = LocalContext.current
+                            val viewModel: BallotsQrExportViewModel by viewModel()
+
+                            LaunchedEffect(key.pollId) {
+                                viewModel.initializeFromPollId(
+                                    context = context,
+                                    pollId = key.pollId,
+                                )
+                            }
+
+                            val viewState by viewModel.viewState.collectAsState()
+
+                            LaunchedEffect(Unit) {
+                                viewModel.navEvents.collect { event ->
+                                    topLevelBackStack.handle(event)
+                                }
+                            }
+
+                            // Showing a QR Code in the Export screen; light the beacons!
+                            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+                            if (viewState.poll != null) {
+                                BallotsQrExportScreen(
+                                    modifier = Modifier,
+                                    state = viewState,
+                                    onBack = viewModel::onBack,
+                                )
+                            } else {
+                                // TBD: perhaps we should create a ErrorScreen ?
+                                Text(text = "No poll to export ballots of.")
+                            }
                         }
                         entry<Screens.ProportionsHelp> {
                             ProportionsHelpScreen(

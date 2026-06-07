@@ -61,6 +61,7 @@ fun HomeScreen(
     onShowResult: (poll: Poll) -> Unit = {},
     onDeletePoll: (poll: Poll) -> Unit = {},
     onExportPoll: (poll: Poll) -> Unit = {},
+    onExportBallots: (poll: Poll) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -153,9 +154,7 @@ fun HomeScreen(
                         showDeletionDialog.value = true
                     },
                     onExportPoll = { onExportPoll(it) },
-                    onExportBallots = {
-                        // FIXME
-                    },
+                    onExportBallots = { onExportBallots(it) },
                 )
                 Spacer(
                     Modifier
