@@ -33,6 +33,14 @@ sealed interface Screens : NavKey {
     data class PollResult(val id: Int = 0) : Screens
 
     @Serializable
+    data class PollExport(val id: Int = 0) : Screens
+
+    @Serializable
+    data class PollImportQr(
+        val qrContent: String,
+    ) : Screens
+
+    @Serializable
     data object ProportionsHelp : Screens
 
     @Serializable

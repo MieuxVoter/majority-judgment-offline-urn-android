@@ -2,6 +2,7 @@ package com.illiouchine.jm.data
 
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Poll
+import java.util.UUID
 
 interface PollDataSource {
 
@@ -10,6 +11,8 @@ interface PollDataSource {
     suspend fun savePoll(poll: Poll): Int
 
     suspend fun getPollById(pollId: Int): Poll?
+
+    suspend fun getPollByUuid(pollUuid: UUID): Poll?
 
     suspend fun getAllPolls(): List<Poll>
 

@@ -108,7 +108,8 @@ android {
 
 dependencies {
     // The Usual Suspects
-    implementation(libs.serialization.json)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.serialization.cbor)
     implementation(libs.kotlinx.collections.immutable)
 
     // Android & Jetpack Compose
@@ -152,6 +153,9 @@ dependencies {
 
     // Data Formats for I/O ; good but commented out because it adds 20Mio to the release (!)
     //implementation("org.jetbrains.kotlinx:dataframe:1.0.0-Beta4")
+
+    // Qr Code Generation
+    implementation(libs.qrcode.kotlin)
 
     // Faking — Development only
     debugImplementation(libs.kotlin.faker)

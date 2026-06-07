@@ -4,10 +4,11 @@ import androidx.room.Embedded
 import androidx.room.Relation
 
 data class PollWithProposals(
-    @Embedded val poll: PollEntity,
+    @Embedded
+    val poll: PollEntity,
     @Relation(
         parentColumn = "uid",
         entityColumn = "pollId"
     )
-    val proposals: List<ProposalEntity>
+    val proposals: List<ProposalEntity>,
 )

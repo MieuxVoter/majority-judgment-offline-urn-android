@@ -12,6 +12,7 @@ import com.illiouchine.jm.data.room.entity.JudgmentEntity
 import com.illiouchine.jm.data.room.entity.PollEntity
 import com.illiouchine.jm.data.room.entity.PollWithProposals
 import com.illiouchine.jm.data.room.entity.ProposalEntity
+import java.util.UUID
 
 /**
  * Data Access Object
@@ -26,6 +27,10 @@ interface PollDao {
     @Transaction
     @Query("SELECT * FROM poll WHERE uid = :id LIMIT 1")
     suspend fun loadPoll(id: Int): PollWithProposals
+
+    @Transaction
+    @Query("SELECT * FROM poll WHERE uuid = :uuid LIMIT 1")
+    suspend fun loadPollByUuid(uuid: UUID): PollWithProposals?
 
     @Transaction
     @Query("SELECT * FROM ballot WHERE pollId = :pollId")
@@ -57,7 +62,7 @@ interface PollDao {
         return pollId
     }
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertPollDatumOnly(poll: PollEntity): Long
 
     @Insert

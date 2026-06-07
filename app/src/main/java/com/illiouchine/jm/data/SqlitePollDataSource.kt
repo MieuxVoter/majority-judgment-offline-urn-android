@@ -10,6 +10,7 @@ import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
+import java.util.UUID
 
 /**
  * Sqlite database, handled by Room.
@@ -47,10 +48,41 @@ class SqlitePollDataSource(
 
             val poll = Poll(
                 id = pollId,
+                uuid = pnp.poll.uuid,
                 pollConfig = PollConfig(
                     subject = pnp.poll.subject,
                     proposals = pnp.proposals.map { e -> e.name },
-                    grading = Grading.byUid(uid = pnp.poll.gradingUid)
+                    grading = Grading.byUid(uid = pnp.poll.gradingUid),
+                ),
+                ballots = ballots,
+            )
+
+            return poll
+        } catch (_: NullPointerException) {
+            return null
+        }
+    }
+
+    override suspend fun getPollByUuid(pollUuid: UUID): Poll? {
+        try {
+            val pnp = pollDao
+                .loadPollByUuid(pollUuid)
+
+            if (pnp == null) {
+                return null
+            }
+
+            val ballots = pollDao
+                .loadBallots(pollId = pnp.poll.uid)
+                .toDomainObject()
+
+            val poll = Poll(
+                id = pnp.poll.uid,
+                uuid = pnp.poll.uuid,
+                pollConfig = PollConfig(
+                    subject = pnp.poll.subject,
+                    proposals = pnp.proposals.map { e -> e.name },
+                    grading = Grading.byUid(uid = pnp.poll.gradingUid),
                 ),
                 ballots = ballots,
             )

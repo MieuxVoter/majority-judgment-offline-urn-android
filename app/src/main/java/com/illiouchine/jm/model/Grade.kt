@@ -3,37 +3,15 @@ package com.illiouchine.jm.model
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.Color
 import com.illiouchine.jm.R
-import kotlinx.serialization.KSerializer
+import com.illiouchine.jm.model.serializer.ColorSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
 
 @Serializable
 data class Grade(
     @get:StringRes val name: Int,
     @Serializable(with = ColorSerializer::class) val color: Color,
-    @Serializable(with = ColorSerializer::class) val textColor: Color
+    @Serializable(with = ColorSerializer::class) val textColor: Color,
 )
-
-object ColorSerializer : KSerializer<Color> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(
-        serialName = "com.illiouchine.jm.Color",
-        kind = PrimitiveKind.LONG,
-    )
-
-    override fun deserialize(decoder: Decoder): Color {
-        val longValue = decoder.decodeLong()
-        return Color(longValue.toULong())
-    }
-
-    override fun serialize(encoder: Encoder, value: Color) {
-        val longValue = value.value.toLong()
-        encoder.encodeLong(longValue)
-    }
-}
 
 val grade0BgColor = Color(0xff870714)
 val grade0FgColor = Color(0xffffb4a1)

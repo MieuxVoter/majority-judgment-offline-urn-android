@@ -5,12 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
@@ -29,6 +31,8 @@ import com.illiouchine.jm.filters.BallotsFilterInterface
 import com.illiouchine.jm.filters.NoBallotsFilter
 import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.logic.OnboardingViewModel
+import com.illiouchine.jm.logic.PollExportViewModel
+import com.illiouchine.jm.logic.PollQrImportViewModel
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.logic.PollVotingViewModel
@@ -39,6 +43,8 @@ import com.illiouchine.jm.ui.screen.AboutScreen
 import com.illiouchine.jm.ui.screen.HomeScreen
 import com.illiouchine.jm.ui.screen.LoaderScreen
 import com.illiouchine.jm.ui.screen.OnBoardingScreen
+import com.illiouchine.jm.ui.screen.PollExportScreen
+import com.illiouchine.jm.ui.screen.PollQrImportScreen
 import com.illiouchine.jm.ui.screen.PollSetupScreen
 import com.illiouchine.jm.ui.screen.PollVotingScreen
 import com.illiouchine.jm.ui.screen.ProportionsHelpScreen
@@ -47,10 +53,12 @@ import com.illiouchine.jm.ui.screen.SettingsScreen
 import com.illiouchine.jm.ui.theme.JmTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
         setContent {
             // Rule: the screen should never lock during the voting/result phase of the poll
@@ -60,6 +68,49 @@ class MainActivity : ComponentActivity() {
             // Retained variables survive activity recreations (eg: orientation change)
             // https://developer.android.com/develop/ui/compose/state-lifespans
             val topLevelBackStack = retain { TopLevelBackStack(Screens.Home) }
+
+            val context = applicationContext
+            val intent = getIntent()
+            if (Intent.ACTION_VIEW == intent.action) {
+                // We arrived here via QR Code scanning.  (We do not get to choose the action.)
+                // We do not want to run another activity instance, so we GTFO.
+                // This intent will either recall the existing activity or run a new one.
+                val mainIntent = Intent(this, MainActivity::class.java)
+                mainIntent.setAction(Intent.ACTION_MAIN)
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                mainIntent.setData(intent.data)
+                startActivity(mainIntent)
+                finish()
+
+            } else if (Intent.ACTION_MAIN == intent.action) {
+                val uri = intent.data
+                if (uri != null) {
+                    LaunchedEffect(uri.toString()) {
+                        // Debug
+                        //Toast.makeText(context, uri.host, Toast.LENGTH_LONG).show()
+                        //Toast.makeText(context, uri.path, Toast.LENGTH_LONG).show()
+
+                        if (uri.host == "p") {
+                            // p is for Poll ; let's import the poll if we can
+                            val data = uri.path
+                            if (data != null) {
+                                val compressedDataString = data.substring(1)
+                                topLevelBackStack.add(Screens.PollImportQr(
+                                    qrContent = compressedDataString,
+                                ))
+                            }
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Error: unsupported URI host.",
+                                Toast.LENGTH_LONG,
+                            ).show()
+                        }
+                    }
+                }
+            }
 
             JmTheme {
                 NavDisplay(
@@ -92,6 +143,7 @@ class MainActivity : ComponentActivity() {
                                 onResumePoll = homeViewModel::resumePoll,
                                 onShowResult = homeViewModel::showResult,
                                 onDeletePoll = homeViewModel::deletePoll,
+                                onExportPoll = homeViewModel::exportPoll,
                             )
                         }
                         entry<Screens.About> {
@@ -223,15 +275,9 @@ class MainActivity : ComponentActivity() {
                                         topLevelBackStack.add(Screens.ProportionsHelp)
                                     },
                                     onBallotsFilterUpdate = { filter ->
-//                                        Toast.makeText(
-//                                            context,
-//                                            "Ballots filter updated.",
-//                                            Toast.LENGTH_SHORT,
-//                                        ).show()
-
                                         ballotsFilter = filter
 
-                                        // TBD: we should do this here, yet we have to (?)
+                                        // TBD: we should not do this here, yet we have to (?)
                                         pollResultViewModel.initializePollResultById(
                                             context = context,
                                             pollId = key.id,
@@ -240,6 +286,66 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             }
+                        }
+                        entry<Screens.PollExport> { key ->
+                            val context = LocalContext.current
+                            val viewModel: PollExportViewModel by viewModel()
+
+                            LaunchedEffect(key.id) {
+                                viewModel.initializeFromPollId(
+                                    context = context,
+                                    pollId = key.id,
+                                )
+                            }
+
+                            val viewState by viewModel.viewState.collectAsState()
+
+                            LaunchedEffect(Unit) {
+                                viewModel.navEvents.collect { event ->
+                                    topLevelBackStack.handle(event)
+                                }
+                            }
+
+                            // Showing a QR Code in the Export screen; best keep the screen alight.
+                            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+                            if (viewState.hasPoll()) {
+                                PollExportScreen(
+                                    modifier = Modifier,
+                                    state = viewState,
+                                    onBack = viewModel::onBack,
+                                    //onBack = { viewModel.onBack() },
+                                )
+                            } else {
+                                // TBD: perhaps we should create a ErrorScreen ?
+                                Text(text = "No poll to export.")
+                            }
+                        }
+                        entry<Screens.PollImportQr> { key ->
+                            val context = LocalContext.current
+                            val viewModel: PollQrImportViewModel by viewModel()
+
+                            LaunchedEffect(key.qrContent) {
+                                viewModel.initialize(
+                                    context = context,
+                                    qrUriPath = key.qrContent,
+                                )
+                            }
+
+                            val viewState by viewModel.viewState.collectAsState()
+
+                            LaunchedEffect(Unit) {
+                                viewModel.navEvents.collect { event ->
+                                    topLevelBackStack.handle(event)
+                                }
+                            }
+
+                            PollQrImportScreen(
+                                modifier = Modifier,
+                                state = viewState,
+                                onConfirm = viewModel::onConfirm,
+                                onCancel = viewModel::onCancel,
+                            )
                         }
                         entry<Screens.ProportionsHelp> {
                             ProportionsHelpScreen(

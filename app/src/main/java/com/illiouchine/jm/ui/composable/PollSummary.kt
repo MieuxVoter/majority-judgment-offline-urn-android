@@ -39,6 +39,8 @@ fun PollSummary(
     onResumePoll: (poll: Poll) -> Unit = {},
     onSetupClonePoll: (poll: Poll) -> Unit = {},
     onShowResult: (poll: Poll) -> Unit = {},
+    onExportPoll: (poll: Poll) -> Unit = {},
+    onExportBallots: (poll: Poll) -> Unit = {},
 ) {
     val res = LocalResources.current
     Row(
@@ -69,6 +71,9 @@ fun PollSummary(
                             true
                         }
                     ),
+
+                    // FIXME: add new export actions
+
                     CustomAccessibilityAction(
                         label = res.getString(R.string.action_delete),
                         action = {
@@ -119,24 +124,35 @@ fun PollSummary(
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 TextButton(
+                    enabled = poll.ballots.isNotEmpty(),
+                    onClick = { onShowResult(poll) },
+                ) {
+                    Text(stringResource(R.string.action_inspect))
+                }
+                TextButton(onClick = { onResumePoll(poll) }) {
+                    Text(stringResource(R.string.action_resume))
+                }
+                TextButton(onClick = { onSetupClonePoll(poll) }) {
+                    Text(stringResource(R.string.action_clone))
+                }
+                TextButton(
+                    onClick = { onExportPoll(poll) },
+                ) {
+                    Text("Export Poll")
+                }
+                TextButton(
+                    enabled = poll.ballots.isNotEmpty(),
+                    onClick = { onExportBallots(poll) },
+                ) {
+                    Text("Export Ballots")
+                }
+                TextButton(
                     onClick = { onDeletePoll(poll) },
                     colors = ButtonDefaults.textButtonColors().copy(
                         contentColor = DeleteColor,
                     ),
                 ) {
                     Text(stringResource(R.string.action_delete))
-                }
-                TextButton(onClick = { onSetupClonePoll(poll) }) {
-                    Text(stringResource(R.string.action_clone))
-                }
-                TextButton(onClick = { onResumePoll(poll) }) {
-                    Text(stringResource(R.string.action_resume))
-                }
-                TextButton(
-                    enabled = poll.ballots.isNotEmpty(),
-                    onClick = { onShowResult(poll) },
-                ) {
-                    Text(stringResource(R.string.action_inspect))
                 }
             }
         }
