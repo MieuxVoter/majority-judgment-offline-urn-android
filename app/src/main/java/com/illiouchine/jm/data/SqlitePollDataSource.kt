@@ -21,7 +21,10 @@ class SqlitePollDataSource(
 
     override suspend fun saveBallot(ballot: Ballot, pollId: Int): Int {
         val ballotId = pollDao.insertBallot(
-            BallotEntity(pollId = pollId)
+            BallotEntity(
+                uuid = ballot.uuid ?: UUID.randomUUID(),
+                pollId = pollId,
+            )
         ).toInt()
         pollDao.insertJudgment(
             ballot.toListOfJudgments(ballotId)

@@ -37,11 +37,18 @@ sealed interface Screens : NavKey {
 
     @Serializable
     data class PollQrImport(
-        val qrContent: String,
+        val encodedContent: String,
     ) : Screens
 
     @Serializable
-    data class BallotsQrExport(val pollId: Int) : Screens
+    data class BallotsQrExport(
+        val pollId: Int,
+    ) : Screens
+
+    @Serializable
+    data class BallotsQrImport(
+        val encodedContent: String,
+    ) : Screens
 
     @Serializable
     data object ProportionsHelp : Screens

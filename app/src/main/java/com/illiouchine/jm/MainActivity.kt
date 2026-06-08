@@ -30,6 +30,7 @@ import androidx.navigation3.ui.NavDisplay
 import com.illiouchine.jm.filters.BallotsFilterInterface
 import com.illiouchine.jm.filters.NoBallotsFilter
 import com.illiouchine.jm.logic.BallotsQrExportViewModel
+import com.illiouchine.jm.logic.BallotsQrImportViewModel
 import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.logic.OnboardingViewModel
 import com.illiouchine.jm.logic.PollQrExportViewModel
@@ -42,6 +43,7 @@ import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.navigator.TopLevelBackStack
 import com.illiouchine.jm.ui.screen.AboutScreen
 import com.illiouchine.jm.ui.screen.BallotsQrExportScreen
+import com.illiouchine.jm.ui.screen.BallotsQrImportScreen
 import com.illiouchine.jm.ui.screen.HomeScreen
 import com.illiouchine.jm.ui.screen.LoaderScreen
 import com.illiouchine.jm.ui.screen.OnBoardingScreen
@@ -100,7 +102,16 @@ class MainActivity : ComponentActivity() {
                             if (data != null) {
                                 val compressedDataString = data.substring(1)
                                 topLevelBackStack.add(Screens.PollQrImport(
-                                    qrContent = compressedDataString,
+                                    encodedContent = compressedDataString,
+                                ))
+                            }
+                        } else if (uri.host == "b") {
+                            // b is for Ballots ; let's import the ballots if we can
+                            val data = uri.path
+                            if (data != null) {
+                                val compressedDataString = data.substring(1)
+                                topLevelBackStack.add(Screens.BallotsQrImport(
+                                    encodedContent = compressedDataString,
                                 ))
                             }
                         } else {
@@ -327,10 +338,10 @@ class MainActivity : ComponentActivity() {
                             val context = LocalContext.current
                             val viewModel: PollQrImportViewModel by viewModel()
 
-                            LaunchedEffect(key.qrContent) {
+                            LaunchedEffect(key.encodedContent) {
                                 viewModel.initialize(
                                     context = context,
-                                    qrUriPath = key.qrContent,
+                                    qrUriPath = key.encodedContent,
                                 )
                             }
 
@@ -381,6 +392,32 @@ class MainActivity : ComponentActivity() {
                                 // TBD: perhaps we should create a ErrorScreen ?
                                 Text(text = "No poll to export ballots of.")
                             }
+                        }
+                        entry<Screens.BallotsQrImport> { key ->
+                            val context = LocalContext.current
+                            val viewModel: BallotsQrImportViewModel by viewModel()
+
+                            LaunchedEffect(key.encodedContent) {
+                                viewModel.initialize(
+                                    context = context,
+                                    qrUriPath = key.encodedContent,
+                                )
+                            }
+
+                            val viewState by viewModel.viewState.collectAsState()
+
+                            LaunchedEffect(Unit) {
+                                viewModel.navEvents.collect { event ->
+                                    topLevelBackStack.handle(event)
+                                }
+                            }
+
+                            BallotsQrImportScreen(
+                                modifier = Modifier,
+                                state = viewState,
+                                onConfirm = viewModel::onConfirm,
+                                onCancel = viewModel::onCancel,
+                            )
                         }
                         entry<Screens.ProportionsHelp> {
                             ProportionsHelpScreen(

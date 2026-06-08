@@ -28,6 +28,12 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="mju" android:host="p" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="mju" android:host="b" />
+            </intent-filter>
         </activity>
     </application>
 

@@ -148,12 +148,16 @@ class PollVotingViewModel(
 
     fun finalizePoll() {
         viewModelScope.launch {
-            val poll = Poll(
-                id = _pollVotingViewState.value.pollId,
-                pollConfig = _pollVotingViewState.value.pollConfig,
-                ballots = _pollVotingViewState.value.ballots,
-            )
-            val newPollId = pollDataSource.savePoll(poll)
+
+            // TBD: why did we use to (re-)save the poll here ?  What was the point ?
+//            val poll = Poll(
+//                id = _pollVotingViewState.value.pollId,
+//                pollConfig = _pollVotingViewState.value.pollConfig,
+//                ballots = _pollVotingViewState.value.ballots,
+//            )
+//            val newPollId = pollDataSource.savePoll(poll)
+            val newPollId = _pollVotingViewState.value.pollId
+
             _navEvents.emit(NavigationAction.To(Screens.PollResult(id = newPollId)))
             currentPollId = null
         }
