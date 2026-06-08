@@ -33,7 +33,7 @@ class PollQrExportViewModel(
     @Stable
     data class PollQrExportViewState(
         val poll: Poll, // TBD: perhaps we should just use Poll? here
-        //val pollQrBytes: ByteArray,
+        // val pollQrBytes: ByteArray,
         val pollQrContent: String,
         val pollQrBitmap: ImageBitmap?,
     ) {
@@ -42,14 +42,16 @@ class PollQrExportViewModel(
         }
     }
 
-    private val _viewState = MutableStateFlow(PollQrExportViewState(
-        poll = Poll( // this is awkward
-            id = 0,
-            pollConfig = PollConfig(),
-        ),
-        pollQrContent = "",
-        pollQrBitmap = null,
-    ))
+    private val _viewState = MutableStateFlow(
+        PollQrExportViewState(
+            poll = Poll( // this is awkward
+                id = 0,
+                pollConfig = PollConfig(),
+            ),
+            pollQrContent = "",
+            pollQrBitmap = null,
+        )
+    )
     val viewState: StateFlow<PollQrExportViewState> = _viewState
 
     private val _navEvents = MutableSharedFlow<NavigationAction>()
@@ -71,7 +73,7 @@ class PollQrExportViewModel(
                 _navEvents.emit(NavigationAction.To(Screens.Home))
             } else {
                 initializeFromPoll(
-                    //context = context,
+                    // context = context,
                     poll = poll,
                 )
             }
@@ -80,7 +82,7 @@ class PollQrExportViewModel(
 
     @OptIn(ExperimentalSerializationApi::class)
     fun initializeFromPoll(
-        //context: Context,
+        // context: Context,
         poll: Poll,
     ) {
         val pollToExport = poll.copy(id = 0, ballots = emptyList())

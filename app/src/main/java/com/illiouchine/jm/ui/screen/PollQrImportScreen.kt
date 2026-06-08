@@ -39,7 +39,6 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.encodeToByteArray
 
-
 @OptIn(ExperimentalSerializationApi::class)
 @Composable
 fun PollQrImportScreen(
@@ -53,7 +52,7 @@ fun PollQrImportScreen(
     ) { innerPadding ->
 
         val scrollState = rememberScrollState()
-        //val coroutineScope = rememberCoroutineScope()
+        // val coroutineScope = rememberCoroutineScope()
 
         Column(
             modifier = modifier
@@ -63,7 +62,7 @@ fun PollQrImportScreen(
                 .verticalScroll(state = scrollState),
         ) {
             ScreenTitle(
-                //text = "(BETA)" + " " + "Poll Import",
+                // text = "(BETA)" + " " + "Poll Import",
                 text = "Poll Import",
             )
 
@@ -93,7 +92,6 @@ fun PollQrImportScreen(
 
                 return@Column
             }
-
 
             if (state.existingPoll != null) {
                 Text(
@@ -178,9 +176,7 @@ fun PollQrImportScreen(
                         )
                     }
                 }
-
             }
-
         }
     }
 }
@@ -192,18 +188,18 @@ fun PollQrImportScreen(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     fontScale = 1.0f,
 )
-//@Preview(
+// @Preview(
 //    name = "Phone (Portrait, Big Font)",
 //    showSystemUi = true,
 //    uiMode = Configuration.UI_MODE_NIGHT_YES,
 //    fontScale = 2.0f,
-//)
-//@Preview(
+// )
+// @Preview(
 //    name = "Tablet",
 //    device = "spec:width=1280dp,height=800dp,dpi=240",
 //    uiMode = Configuration.UI_MODE_NIGHT_YES,
 //    showSystemUi = true,
-//)
+// )
 // @PreviewScreenSizes // my eyes hurt ← no dark mode
 @Composable
 fun PreviewPollQrImportScreen(modifier: Modifier = Modifier) {
@@ -250,5 +246,3 @@ fun PreviewPollQrImportScreen(modifier: Modifier = Modifier) {
         )
     }
 }
-
-

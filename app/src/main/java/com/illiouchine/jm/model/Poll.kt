@@ -5,7 +5,6 @@ import com.illiouchine.jm.model.serializer.UUIDSerializer
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
-
 @Stable
 @Serializable
 data class Poll(

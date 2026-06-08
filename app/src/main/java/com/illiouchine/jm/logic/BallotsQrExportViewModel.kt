@@ -51,8 +51,8 @@ class BallotsQrExportViewModel(
          * The Data Transfer Object that's actually going to transit via QR Code.
          */
         val ballotsDto: BallotsDto? = null,
-        //val offset: Int = 0,
-        //val limit: Int = 100,
+        // val offset: Int = 0,
+        // val limit: Int = 100,
         val qrContent: String? = null,
         val qrBitmap: ImageBitmap? = null,
         val errorMessage: String? = null,

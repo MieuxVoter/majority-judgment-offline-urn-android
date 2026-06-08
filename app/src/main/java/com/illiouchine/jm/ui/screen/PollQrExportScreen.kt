@@ -2,13 +2,14 @@ package com.illiouchine.jm.ui.screen
 
 import android.content.ClipData
 import android.content.res.Configuration
-import android.graphics.BitmapFactory
 import android.graphics.Typeface.MONOSPACE
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -18,14 +19,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.Clipboard
 import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.min
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.InMemoryPollDataSource
@@ -43,7 +44,6 @@ import com.illiouchine.jm.ui.theme.spacing
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 
-
 @OptIn(ExperimentalSerializationApi::class)
 @Composable
 fun PollQrExportScreen(
@@ -58,7 +58,7 @@ fun PollQrExportScreen(
         val scrollState = rememberScrollState()
         val coroutineScope = rememberCoroutineScope()
         val clipboard: Clipboard = LocalClipboard.current
-        //val context = LocalContext.current
+        // val context = LocalContext.current
 
         Column(
             modifier = modifier
@@ -68,9 +68,9 @@ fun PollQrExportScreen(
                 .verticalScroll(state = scrollState),
         ) {
             ScreenTitle(
-                text = "Export Poll" + "\n"
-                    + state.poll.pollConfig.subject + "\n"
-                    + "(${state.poll.uuid?.toString()?.take(8)})",
+                text = "Export Poll" + "\n" +
+                    state.poll.pollConfig.subject + "\n" +
+                    "(${state.poll.uuid?.toString()?.take(8)})",
             )
 
             if (state.poll.uuid == null) {
@@ -87,7 +87,9 @@ fun PollQrExportScreen(
 //                text = "(${state.poll.uuid?.toString()?.take(8)})",
 //            )
 
-            Text(text = "With this experimental daisy-chaining feature, you may use multiple offline devices to collect ballots, which is useful in large assemblies.")
+            Text(
+                text = "With this experimental daisy-chaining feature, you may use multiple offline devices to collect ballots, which is useful in large assemblies."
+            )
             if (!state.poll.ballots.isEmpty()) {
                 Text(text = "The other devices will not see the ballots already recorded on this device.")
             }
@@ -102,15 +104,21 @@ fun PollQrExportScreen(
 
             if (state.pollQrBitmap != null) {
                 MediumVerticalSpacer()
+                val winSize = LocalWindowInfo.current.containerDpSize
                 Image(
                     modifier = Modifier
+                        .fillMaxSize()
+                        .wrapContentSize()
+                        .size(min(winSize.width, winSize.height) * 0.9f)
                         .align(alignment = Alignment.CenterHorizontally),
                     bitmap = state.pollQrBitmap,
                     contentDescription = "QR Code",
                 )
 
                 SmallVerticalSpacer()
-                Text("Here's a clickable excerpt of the content of this QR Code" + " " + "(${state.pollQrContent.length} characters)" + ":")
+                Text(
+                    "Here's a clickable excerpt of the content of this QR Code" + " " + "(${state.pollQrContent.length} characters)" + ":"
+                )
 
 //                val mainIntent = Intent(LocalActivity.current, MainActivity::class.java)
 //                mainIntent.setAction(Intent.ACTION_MAIN)
@@ -174,8 +182,10 @@ fun PollQrExportScreen(
                 )
 
                 SmallVerticalSpacer()
-                Text("The fact that it looks like an invocation of Creatures Beyond Time is perfectly normal, as it is compressed.")
-                //Text("You can click on it to copy it.")
+                Text(
+                    "The fact that it looks like an invocation of Creatures Beyond Time is perfectly normal, as it is compressed."
+                )
+                // Text("You can click on it to copy it.")
 
                 SmallVerticalSpacer()
                 Text(
@@ -183,10 +193,14 @@ fun PollQrExportScreen(
                     fontSize = Theme.typography.headlineMedium.fontSize,
                 )
                 SmallVerticalSpacer()
-                Text("Once the other devices are done collecting ballots, scan with this device the QR Codes they can each generate when using the Export Ballots feature.")
+                Text(
+                    "Once the other devices are done collecting ballots, scan with this device the QR Codes they can each generate when using the Export Ballots feature."
+                )
 
                 SmallVerticalSpacer()
-                Text("We do not provide a QR Code scanner with this app, since we do not want it to access the Camera.  Your favorite Qr Code scanner should work.")
+                Text(
+                    "We do not provide a QR Code scanner with this app, since we do not want it to access the Camera.  Your favorite Qr Code scanner should work."
+                )
             } else {
                 MediumVerticalSpacer()
                 Text("There was an error generating your Qr Code.")
@@ -261,5 +275,3 @@ fun PreviewPollQrExportScreen(modifier: Modifier = Modifier) {
         )
     }
 }
-
-

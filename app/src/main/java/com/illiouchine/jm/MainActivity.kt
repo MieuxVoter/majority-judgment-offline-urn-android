@@ -57,7 +57,6 @@ import com.illiouchine.jm.ui.screen.SettingsScreen
 import com.illiouchine.jm.ui.theme.JmTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,32 +86,35 @@ class MainActivity : ComponentActivity() {
                 mainIntent.setData(intent.data)
                 startActivity(mainIntent)
                 finish()
-
             } else if (Intent.ACTION_MAIN == intent.action) {
                 val uri = intent.data
                 if (uri != null) {
                     LaunchedEffect(uri.toString()) {
                         // Debug
-                        //Toast.makeText(context, uri.host, Toast.LENGTH_LONG).show()
-                        //Toast.makeText(context, uri.path, Toast.LENGTH_LONG).show()
+                        // Toast.makeText(context, uri.host, Toast.LENGTH_LONG).show()
+                        // Toast.makeText(context, uri.path, Toast.LENGTH_LONG).show()
 
                         if (uri.host == "p") {
                             // p is for Poll ; let's import the poll if we can
                             val data = uri.path
                             if (data != null) {
                                 val compressedDataString = data.substring(1)
-                                topLevelBackStack.add(Screens.PollQrImport(
-                                    encodedContent = compressedDataString,
-                                ))
+                                topLevelBackStack.add(
+                                    Screens.PollQrImport(
+                                        encodedContent = compressedDataString,
+                                    )
+                                )
                             }
                         } else if (uri.host == "b") {
                             // b is for Ballots ; let's import the ballots if we can
                             val data = uri.path
                             if (data != null) {
                                 val compressedDataString = data.substring(1)
-                                topLevelBackStack.add(Screens.BallotsQrImport(
-                                    encodedContent = compressedDataString,
-                                ))
+                                topLevelBackStack.add(
+                                    Screens.BallotsQrImport(
+                                        encodedContent = compressedDataString,
+                                    )
+                                )
                             }
                         } else {
                             Toast.makeText(
@@ -297,7 +299,7 @@ class MainActivity : ComponentActivity() {
                                             pollId = key.id,
                                             ballotFilter = ballotsFilter,
                                         )
-                                    }
+                                    },
                                 )
                             }
                         }

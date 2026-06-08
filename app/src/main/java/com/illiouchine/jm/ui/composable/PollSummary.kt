@@ -71,9 +71,20 @@ fun PollSummary(
                             true
                         }
                     ),
-
-                    // FIXME: add new export actions
-
+                    CustomAccessibilityAction(
+                        label = res.getString(R.string.action_export_poll),
+                        action = {
+                            onExportPoll(poll)
+                            true
+                        }
+                    ),
+                    CustomAccessibilityAction(
+                        label = res.getString(R.string.action_export_ballots),
+                        action = {
+                            onExportBallots(poll)
+                            true
+                        }
+                    ),
                     CustomAccessibilityAction(
                         label = res.getString(R.string.action_delete),
                         action = {
@@ -100,7 +111,9 @@ fun PollSummary(
                 }
 
                 Text(
-                    modifier = Modifier.weight(1f).padding(top = 4.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(top = 4.dp),
                     text = sequenceOfProposals.toString(),
                 )
 
@@ -135,16 +148,14 @@ fun PollSummary(
                 TextButton(onClick = { onSetupClonePoll(poll) }) {
                     Text(stringResource(R.string.action_clone))
                 }
-                TextButton(
-                    onClick = { onExportPoll(poll) },
-                ) {
-                    Text("Export Poll")
+                TextButton(onClick = { onExportPoll(poll) }) {
+                    Text(stringResource(R.string.action_export_poll))
                 }
                 TextButton(
                     enabled = poll.ballots.isNotEmpty(),
                     onClick = { onExportBallots(poll) },
                 ) {
-                    Text("Export Ballots")
+                    Text(stringResource(R.string.action_export_ballots))
                 }
                 TextButton(
                     onClick = { onDeletePoll(poll) },

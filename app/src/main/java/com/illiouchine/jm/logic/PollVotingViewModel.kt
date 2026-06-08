@@ -12,7 +12,6 @@ import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
-import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.navigator.NavigationAction
 import com.illiouchine.jm.ui.navigator.Screens
@@ -148,7 +147,6 @@ class PollVotingViewModel(
 
     fun finalizePoll() {
         viewModelScope.launch {
-
             // TBD: why did we use to (re-)save the poll here ?  What was the point ?
 //            val poll = Poll(
 //                id = _pollVotingViewState.value.pollId,

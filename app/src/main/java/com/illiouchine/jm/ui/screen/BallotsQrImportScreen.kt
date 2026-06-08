@@ -80,7 +80,7 @@ fun BallotsQrImportScreen(
     ) { innerPadding ->
 
         val scrollState = rememberScrollState()
-        //val coroutineScope = rememberCoroutineScope()
+        // val coroutineScope = rememberCoroutineScope()
 
         @Composable
         fun ColumnScope.CancelAsPrimaryButton() {
@@ -224,18 +224,18 @@ fun BallotsQrImportScreen(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     fontScale = 1.0f,
 )
-//@Preview(
+// @Preview(
 //    name = "Phone (Portrait, Big Font)",
 //    showSystemUi = true,
 //    uiMode = Configuration.UI_MODE_NIGHT_YES,
 //    fontScale = 2.0f,
-//)
-//@Preview(
+// )
+// @Preview(
 //    name = "Tablet",
 //    device = "spec:width=1280dp,height=800dp,dpi=240",
 //    uiMode = Configuration.UI_MODE_NIGHT_YES,
 //    showSystemUi = true,
-//)
+// )
 // @PreviewScreenSizes // my eyes hurt ← no dark mode
 @Composable
 fun PreviewBallotsQrImportScreen(modifier: Modifier = Modifier) {
@@ -292,7 +292,6 @@ fun PreviewBallotsQrImportScreen(modifier: Modifier = Modifier) {
         ),
     )
 
-
     val pollDataSource = InMemoryPollDataSource()
 
     // TBD: could not use "by" here, for some reason
@@ -327,7 +326,4 @@ fun PreviewBallotsQrImportScreen(modifier: Modifier = Modifier) {
             )
         }
     }
-
 }
-
-

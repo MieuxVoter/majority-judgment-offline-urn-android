@@ -1,6 +1,7 @@
 package com.illiouchine.jm.logic
 
 import android.content.Context
+import android.database.SQLException
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -57,7 +58,7 @@ class BallotsQrImportViewModel(
             val decompressedQrBytes = decompress(compressedPollString)
             val ballotsDto = Cbor.decodeFromByteArray<BallotsDto>(decompressedQrBytes)
             initializeFromBallotsDto(
-                //context = context,
+                // context = context,
                 ballotsDto = ballotsDto,
             )
         } catch (e: DataFormatException) {
@@ -94,7 +95,7 @@ class BallotsQrImportViewModel(
     }
 
     fun initializeFromBallotsDto(
-        //context: Context,
+        // context: Context,
         ballotsDto: BallotsDto,
     ) {
         viewModelScope.launch {
@@ -117,12 +118,6 @@ class BallotsQrImportViewModel(
 
     fun onConfirm() {
         viewModelScope.launch {
-//            if (viewState.value.importedPoll != null) {
-//                pollDataSource.savePoll(viewState.value.importedPoll!!)
-//            } else {
-//                // TBD: Raise, but only during dev ?
-//            }
-
             if (viewState.value.ballotsDto != null && viewState.value.poll != null) {
                 val ballotsImported = viewState.value.ballotsDto!!.ballots.filterNot {
                     viewState.value.poll!!.ballots.map { it.uuid }.contains(it.uuid)
@@ -134,7 +129,7 @@ class BallotsQrImportViewModel(
                             ballot = ballot,
                             pollId = viewState.value.poll!!.id,
                         )
-                    } catch (_: Exception) {
+                    } catch (_: SQLException) {
                         // TBD: what should we do with these errors ?
                     }
                 }
