@@ -21,7 +21,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipEntry
-import androidx.compose.ui.platform.Clipboard
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalWindowInfo
@@ -47,6 +46,7 @@ import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import kotlinx.coroutines.launch
 import java.util.UUID
+import kotlin.random.Random
 
 @Composable
 fun BallotsQrExportScreen(
@@ -60,7 +60,8 @@ fun BallotsQrExportScreen(
 
         val scrollState = rememberScrollState()
         val coroutineScope = rememberCoroutineScope()
-        val clipboard: Clipboard = LocalClipboard.current
+        val clipboard = LocalClipboard.current
+        val winSize = LocalWindowInfo.current.containerDpSize
         // val context = LocalContext.current
 
         @Composable
@@ -90,7 +91,7 @@ fun BallotsQrExportScreen(
             }
 
             ScreenTitle(
-                text = "Export Ballots" + subtitle,
+                text = stringResource(R.string.action_export_ballots) + subtitle,
             )
 
             if (state.errorMessage != null) {
@@ -106,63 +107,89 @@ fun BallotsQrExportScreen(
             }
 
             if (state.poll.uuid == null) {
-                Text("This poll is from another era and its ballots cannot be exported.  Please make a new one.")
+                Text(
+                    "This poll is from another era and its ballots cannot be exported.  " +
+                        "Please make a new one."
+                )
                 FinishButton()
                 return@Column
             }
 
-            if (state.qrBitmap == null) {
+            if (state.qrExports.isEmpty()) {
                 Text("There was an error generating the QR Code.")
+                Text("Please nag the devs to implement a proper error journal.")
                 FinishButton()
                 return@Column
             }
 
-            Text(text = "Scan this QR Code with another device that also has that poll, to send it your ballots.")
-
-            val winSize = LocalWindowInfo.current.containerDpSize
-            MediumVerticalSpacer()
-            Image(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .wrapContentSize()
-                    .size(min(winSize.width, winSize.height) * 0.9f)
-                    .align(alignment = Alignment.CenterHorizontally),
-                bitmap = state.qrBitmap,
-                contentDescription = "QR Code",
+            Text(
+                text = "Scan this QR Code with another device that also has that poll, " +
+                    "to send it your ballots."
             )
 
-            SmallVerticalSpacer()
+            for (qrExport in state.qrExports) {
+                if (qrExport.ballotsDto == null) {
+                    continue // if this happens, something is very wrong with the code
+                }
+                if (qrExport.qrContent == null) {
+                    continue // TBD: perhaps show a brief error message?
+                }
+                if (qrExport.qrBitmap == null) {
+                    continue // TBD: perhaps show a brief error message?
+                }
 
-            Text(
-                "Here's a clickable excerpt of the content of this QR Code" + " " + "(${state.qrContent!!.length} characters)" + ":"
-            )
+                MediumVerticalSpacer()
 
-            SmallVerticalSpacer()
-            Text(
-                modifier = Modifier
-                    .padding(horizontal = Theme.spacing.medium)
-                    .clickable(
-                        enabled = true,
-                        onClick = {
-                            coroutineScope.launch {
-                                clipboard.setClipEntry(
-                                    ClipEntry(
-                                        // This works as text, I don't know apps using HTML
-                                        ClipData.newHtmlText(
-                                            "Ballots",
-                                            state.qrContent,
-                                            "<a href=\"${state.qrContent}\">Ballots of ${state.poll.pollConfig.subject}</a>"
+                Image(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .wrapContentSize()
+                        .size(min(winSize.width, winSize.height) * 0.9f)
+                        .align(alignment = Alignment.CenterHorizontally),
+                    bitmap = qrExport.qrBitmap,
+                    contentDescription = "QR Code",
+                )
+
+                SmallVerticalSpacer()
+
+                Text(
+                    "Here's a clickable excerpt of the content of this QR Code" +
+                        " " + "(${qrExport.qrContent.length} characters, " +
+                        "${qrExport.qrContent.encodeToByteArray().size} octets)" +
+                        ":"
+                )
+
+                SmallVerticalSpacer()
+
+                Text(
+                    modifier = Modifier
+                        .padding(horizontal = Theme.spacing.medium)
+                        .clickable(
+                            enabled = true,
+                            onClick = {
+                                coroutineScope.launch {
+                                    clipboard.setClipEntry(
+                                        ClipEntry(
+                                            // This works as text; I don't know of apps using HTML.
+                                            // Still, might be worth a try.
+                                            ClipData.newHtmlText(
+                                                "Ballots",
+                                                qrExport.qrContent,
+                                                "<a href=\"${qrExport.qrContent}\">" +
+                                                    "Ballots of ${state.poll.pollConfig.subject}" +
+                                                    "</a>"
+                                            )
                                         )
                                     )
-                                )
-                            }
-                        },
-                    ),
-                text = state.qrContent,
-                fontFamily = FontFamily(typeface = MONOSPACE),
-                maxLines = 1,
-                softWrap = false,
-            )
+                                }
+                            },
+                        ),
+                    text = qrExport.qrContent,
+                    fontFamily = FontFamily(typeface = MONOSPACE),
+                    maxLines = 1,
+                    softWrap = false,
+                )
+            }
 
             FinishButton()
         }
@@ -188,6 +215,7 @@ fun BallotsQrExportScreen(
     showSystemUi = true,
 )
 @Composable
+@Suppress("SpellCheckingInspection")
 fun PreviewBallotsQrExportScreen(modifier: Modifier = Modifier) {
     val poll = Poll(
         id = 42,
@@ -197,18 +225,27 @@ fun PreviewBallotsQrExportScreen(modifier: Modifier = Modifier) {
             proposals = listOf(
                 "La Phaze",
                 "Keny Arkana",
+                "Stupeflip",
+                "Prodigy",
             ),
             grading = Grading.Quality7Grading,
         ),
-        ballots = listOf(
-            Ballot(
-                uuid = UUID(1, 0),
-                judgments = listOf(
-                    Judgment(proposal = 0, grade = 3),
-                    Judgment(proposal = 1, grade = 3),
-                ),
-            ),
-        ),
+        ballots = buildList {
+            val rng = Random(42)
+            for (i in 1..40) {
+                add(
+                    Ballot(
+                        uuid = UUID(i.toLong(), 0),
+                        judgments = listOf(
+                            Judgment(proposal = 0, grade = rng.nextInt(0, 7)),
+                            Judgment(proposal = 1, grade = rng.nextInt(0, 7)),
+                            Judgment(proposal = 2, grade = rng.nextInt(0, 7)),
+                            Judgment(proposal = 3, grade = rng.nextInt(0, 7)),
+                        ),
+                    )
+                )
+            }
+        },
     )
     val pollDataSource = InMemoryPollDataSource()
 

@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.encodeToByteArray
 import java.util.UUID
@@ -41,20 +42,51 @@ class BallotsQrExportViewModel(
     private val pollDataSource: PollDataSource,
 ) : ViewModel() {
 
+    // private val MAX_CHARACTERS_ALLOWED = 650
+
+    @Stable
+    data class BallotsQrExport(
+        /**
+         * The Data Transfer Object that's actually going to transit via QR Code.
+         */
+        val ballotsDto: BallotsDto? = null,
+        val qrContent: String? = null,
+        val qrBitmap: ImageBitmap? = null,
+    ) {
+        companion object {
+            @OptIn(ExperimentalSerializationApi::class)
+            fun createFromBallotsDto(ballotsDto: BallotsDto): BallotsQrExport? {
+                try {
+                    val ballotsBytes = Cbor.encodeToByteArray(value = ballotsDto)
+                    val ballotsCompressedBytes = compress(input = ballotsBytes)
+                    val ballotsCompressedString = encode(bytes = ballotsCompressedBytes)
+                    val qrContent = "mju://b/$ballotsCompressedString"
+                    val qrPngBytes = renderQrCodePngBytes(qrContent)
+                    val qrBitmap = imageBitmapFromPngBytes(qrPngBytes)
+                    return BallotsQrExport(
+                        ballotsDto = ballotsDto,
+                        qrContent = qrContent,
+                        qrBitmap = qrBitmap,
+                    )
+                } catch (_: SerializationException) {
+                    // TBD: log the error?
+                } catch (_: IllegalArgumentException) {
+                    // TBD: log the error?
+                }
+                return null
+            }
+        }
+    }
+
     @Stable
     data class ViewState(
         /**
          * The poll whose ballots we want to export.
          */
         val poll: Poll? = null,
-        /**
-         * The Data Transfer Object that's actually going to transit via QR Code.
-         */
-        val ballotsDto: BallotsDto? = null,
+        val qrExports: List<BallotsQrExport> = emptyList(),
         // val offset: Int = 0,
         // val limit: Int = 100,
-        val qrContent: String? = null,
-        val qrBitmap: ImageBitmap? = null,
         val errorMessage: String? = null,
     )
 
@@ -107,19 +139,22 @@ class BallotsQrExportViewModel(
             ballots = poll.ballots,
         )
 
-        val ballotsBytes = Cbor.encodeToByteArray(value = ballotsDto)
-        val ballotsCompressedBytes = compress(input = ballotsBytes)
-        val ballotsCompressedString = encode(bytes = ballotsCompressedBytes)
-        val qrContent = "mju://b/$ballotsCompressedString"
-        val qrPngBytes = renderQrCodePngBytes(qrContent)
-        val qrBitmap = imageBitmapFromPngBytes(qrPngBytes)
+        val qrExport = BallotsQrExport.createFromBallotsDto(ballotsDto)
+
+//        val ballotsBytes = Cbor.encodeToByteArray(value = ballotsDto)
+//        val ballotsCompressedBytes = compress(input = ballotsBytes)
+//        val ballotsCompressedString = encode(bytes = ballotsCompressedBytes)
+//        val qrContent = "mju://b/$ballotsCompressedString"
+//        val qrPngBytes = renderQrCodePngBytes(qrContent)
+//        val qrBitmap = imageBitmapFromPngBytes(qrPngBytes)
 
         _viewState.update {
             it.copy(
                 poll = poll,
-                ballotsDto = ballotsDto,
-                qrContent = qrContent,
-                qrBitmap = qrBitmap,
+                qrExports = if (qrExport != null) { listOf(qrExport) } else { emptyList() },
+//                ballotsDto = ballotsDto,
+//                qrContent = qrContent,
+//                qrBitmap = qrBitmap,
             )
         }
     }
