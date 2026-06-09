@@ -14,7 +14,7 @@ import kotlinx.collections.immutable.toPersistentList
 
 fun Poll.toPollEntity(): PollEntity = PollEntity(
     uid = this.id,
-    uuid = this.uuid,
+    uuid = this.uuid ?: UUID.randomUUID(),
     subject = this.pollConfig.subject,
     gradingUid = this.pollConfig.grading.uid,
 )
