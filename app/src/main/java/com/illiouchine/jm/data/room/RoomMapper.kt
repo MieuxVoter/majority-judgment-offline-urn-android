@@ -11,6 +11,7 @@ import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import kotlinx.collections.immutable.toPersistentList
+import java.util.UUID
 
 fun Poll.toPollEntity(): PollEntity = PollEntity(
     uid = this.id,
