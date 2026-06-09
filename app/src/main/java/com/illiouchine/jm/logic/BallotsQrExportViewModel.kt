@@ -29,6 +29,7 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.encodeToByteArray
 import java.util.UUID
+import kotlin.math.min
 
 @Stable
 @Serializable
@@ -36,13 +37,36 @@ data class BallotsDto(
     @Serializable(UUIDSerializer::class)
     val pollUuid: UUID,
     val ballots: List<Ballot>,
-)
+) {
+    fun splitInto(amountOfPieces: Int): List<BallotsDto> {
+        val amountOfBallots = this.ballots.size
+
+        require(amountOfPieces > 0)
+        require(amountOfPieces <= amountOfBallots)
+
+        val rabiot = if (amountOfBallots % amountOfPieces == 0) { 0 } else { 1 }
+        val share = amountOfBallots / amountOfPieces + rabiot // Euclid, mah man
+        return buildList {
+            for (i in 0..<amountOfPieces) {
+                add(
+                    copy(
+                        ballots = ballots.subList(
+                            i * share,
+                            min(
+                                amountOfBallots,
+                                (i + 1) * share,
+                            ),
+                        ),
+                    )
+                )
+            }
+        }
+    }
+}
 
 class BallotsQrExportViewModel(
     private val pollDataSource: PollDataSource,
 ) : ViewModel() {
-
-    // private val MAX_CHARACTERS_ALLOWED = 650
 
     @Stable
     data class BallotsQrExport(
@@ -76,6 +100,26 @@ class BallotsQrExportViewModel(
                 return null
             }
         }
+
+        fun splitIfNecessary(maxAmountOfBytes: Int = 650): List<BallotsQrExport> {
+            if (this.qrContent == null) {
+                return listOf(this)
+            }
+            if (this.ballotsDto == null) {
+                return listOf(this)
+            }
+            val totalAmountOfBytes = this.qrContent.length // true because of our limited charset
+            val amountOfQrCodes = 1 + totalAmountOfBytes / maxAmountOfBytes // Euclid wuz hir
+            val ballotsDtos = this.ballotsDto.splitInto(amountOfQrCodes)
+            return buildList {
+                for (i in 0..<amountOfQrCodes) {
+                    val ballotsQrExport = createFromBallotsDto(ballotsDto = ballotsDtos[i])
+                    if (ballotsQrExport != null) {
+                        add(ballotsQrExport)
+                    }
+                }
+            }
+        }
     }
 
     @Stable
@@ -85,8 +129,6 @@ class BallotsQrExportViewModel(
          */
         val poll: Poll? = null,
         val qrExports: List<BallotsQrExport> = emptyList(),
-        // val offset: Int = 0,
-        // val limit: Int = 100,
         val errorMessage: String? = null,
     )
 
@@ -141,20 +183,14 @@ class BallotsQrExportViewModel(
 
         val qrExport = BallotsQrExport.createFromBallotsDto(ballotsDto)
 
-//        val ballotsBytes = Cbor.encodeToByteArray(value = ballotsDto)
-//        val ballotsCompressedBytes = compress(input = ballotsBytes)
-//        val ballotsCompressedString = encode(bytes = ballotsCompressedBytes)
-//        val qrContent = "mju://b/$ballotsCompressedString"
-//        val qrPngBytes = renderQrCodePngBytes(qrContent)
-//        val qrBitmap = imageBitmapFromPngBytes(qrPngBytes)
-
         _viewState.update {
             it.copy(
                 poll = poll,
-                qrExports = if (qrExport != null) { listOf(qrExport) } else { emptyList() },
-//                ballotsDto = ballotsDto,
-//                qrContent = qrContent,
-//                qrBitmap = qrBitmap,
+                qrExports = if (qrExport != null) {
+                    qrExport.splitIfNecessary(666)
+                } else {
+                    emptyList()
+                },
             )
         }
     }

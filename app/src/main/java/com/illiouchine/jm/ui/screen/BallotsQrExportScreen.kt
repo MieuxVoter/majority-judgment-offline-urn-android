@@ -122,23 +122,42 @@ fun BallotsQrExportScreen(
                 return@Column
             }
 
-            Text(
-                text = "Scan this QR Code with another device that also has that poll, " +
-                    "to send it your ballots."
-            )
+            if (state.qrExports.size > 1) {
+                Text(
+                    text = "Scan these QR Codes with another device that also has that poll, " +
+                        "to send it your ballots."
+                )
+            } else {
+                Text(
+                    text = "Scan this QR Code with another device that also has that poll, " +
+                        "to send it your ballots."
+                )
+            }
+            SmallVerticalSpacer()
+            Text("Note that the ballots are NOT encrypted, they are only compressed.")
 
-            for (qrExport in state.qrExports) {
+            for ((qrIndex, qrExport) in state.qrExports.withIndex()) {
+                MediumVerticalSpacer()
+
+                if (state.qrExports.size > 1) {
+                    Text(
+                        text = "${qrIndex + 1}/${state.qrExports.size}",
+                        fontSize = Theme.typography.headlineMedium.fontSize,
+                    )
+                    SmallVerticalSpacer()
+                }
                 if (qrExport.ballotsDto == null) {
+                    Text("I am a teapot")
                     continue // if this happens, something is very wrong with the code
                 }
                 if (qrExport.qrContent == null) {
-                    continue // TBD: perhaps show a brief error message?
+                    Text("Error with the ballots!")
+                    continue
                 }
                 if (qrExport.qrBitmap == null) {
-                    continue // TBD: perhaps show a brief error message?
+                    Text("Error with the QR Code!")
+                    continue
                 }
-
-                MediumVerticalSpacer()
 
                 Image(
                     modifier = Modifier
