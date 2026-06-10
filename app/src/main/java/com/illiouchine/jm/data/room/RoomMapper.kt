@@ -11,9 +11,11 @@ import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import kotlinx.collections.immutable.toPersistentList
+import java.util.UUID
 
 fun Poll.toPollEntity(): PollEntity = PollEntity(
     uid = this.id,
+    uuid = this.uuid ?: UUID.randomUUID(),
     subject = this.pollConfig.subject,
     gradingUid = this.pollConfig.grading.uid,
 )
@@ -21,7 +23,7 @@ fun Poll.toPollEntity(): PollEntity = PollEntity(
 fun Poll.toProposalsEntity(): List<ProposalEntity> {
     return this.pollConfig.proposals.map { proposal ->
         ProposalEntity(
-            name = proposal
+            name = proposal,
         )
     }
 }
@@ -41,7 +43,7 @@ fun List<Ballot>.toListOfJudgments(): List<List<JudgmentEntity>> {
         ballot.judgments.map {
             JudgmentEntity(
                 proposalIndex = it.proposal,
-                gradeIndex = it.grade
+                gradeIndex = it.grade,
             )
         }
     }
@@ -50,10 +52,11 @@ fun List<Ballot>.toListOfJudgments(): List<List<JudgmentEntity>> {
 fun List<BallotWithJudgment>.toDomainObject(): List<Ballot> {
     return this.map { ballot ->
         Ballot(
-            ballot.judgments.map { judgment ->
+            uuid = ballot.ballot.uuid,
+            judgments = ballot.judgments.map { judgment ->
                 Judgment(
                     proposal = judgment.proposalIndex,
-                    grade = judgment.gradeIndex
+                    grade = judgment.gradeIndex,
                 )
             }.toPersistentList()
         )
@@ -67,12 +70,13 @@ suspend fun List<PollWithProposals>.toDomainObject(
         val ballots: List<Ballot> = getBallots(poll.poll.uid)
         Poll(
             id = poll.poll.uid,
+            uuid = poll.poll.uuid,
             pollConfig = PollConfig(
                 subject = poll.poll.subject,
                 proposals = poll.proposals.map { it.name },
                 grading = Grading.byUid(uid = poll.poll.gradingUid),
             ),
-            ballots = ballots
+            ballots = ballots,
         )
     }
 }

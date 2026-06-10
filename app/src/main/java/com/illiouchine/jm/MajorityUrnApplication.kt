@@ -9,8 +9,12 @@ import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.data.SqlitePollDataSource
 import com.illiouchine.jm.data.room.PollDao
 import com.illiouchine.jm.data.room.PollDataBase
+import com.illiouchine.jm.logic.BallotsQrExportViewModel
+import com.illiouchine.jm.logic.BallotsQrImportViewModel
 import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.logic.OnboardingViewModel
+import com.illiouchine.jm.logic.PollQrExportViewModel
+import com.illiouchine.jm.logic.PollQrImportViewModel
 import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.logic.PollVotingViewModel
@@ -22,7 +26,6 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 class MajorityUrnApplication : Application() {
-
     override fun onCreate() {
         super.onCreate()
         startKoin {
@@ -82,6 +85,26 @@ val module = module {
     }
     viewModel {
         PollResultViewModel(
+            pollDataSource = get(),
+        )
+    }
+    viewModel {
+        PollQrExportViewModel(
+            pollDataSource = get(),
+        )
+    }
+    viewModel {
+        PollQrImportViewModel(
+            pollDataSource = get(),
+        )
+    }
+    viewModel {
+        BallotsQrExportViewModel(
+            pollDataSource = get(),
+        )
+    }
+    viewModel {
+        BallotsQrImportViewModel(
             pollDataSource = get(),
         )
     }

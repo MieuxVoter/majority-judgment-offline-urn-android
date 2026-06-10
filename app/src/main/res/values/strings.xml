@@ -48,6 +48,7 @@
     <string name="button_next">Next</string>
     <string name="button_skip">Skip</string>
     <string name="button_let_s_go">Let\'s go !</string>
+    <string name="button_new_poll">New Poll</string>
     <string name="button_next_participant">Next participant</string>
     <string name="button_end_the_poll">End the Poll</string>
     <string name="button_back">Back</string>
@@ -65,7 +66,6 @@
     <string name="settings_screen_title">Settings</string>
     <string name="incitation_making_new_poll">Try making a new poll, it\'s free !</string>
     <string name="title_multiline_majority_judgment_urn">Majority\nJudgment\nUrn</string>
-    <string name="button_new_poll">New Poll</string>
     <string name="onboarding_welcome_to_your_offline_poll_app">Welcome to your offline poll app using Majority Judgment.</string>
     <string name="onboarding_setup_a_poll_and_share_the_phone">Setup a poll and share the phone amongst participants.</string>
     <string name="onboarding_this_is_free_software">This is Libre Software, find out how to contact us or contribute in the About section.</string>
@@ -76,11 +76,13 @@
     <string name="grade_comparator_exactly">exactly</string>
     <string name="grade_comparator_at_most">at most</string>
     <string name="grade_comparator_at_least">at least</string>
-    <string name="action_delete">Delete</string>
-    <string name="action_clone">Clone</string>
-    <string name="action_resume">Resume</string>
-    <string name="action_inspect">Inspect</string>
     <string name="action_cancel">Cancel</string>
+    <string name="action_clone">Clone</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_export_ballots">Export Ballots</string>
+    <string name="action_export_poll">Export Poll</string>
+    <string name="action_inspect">Inspect</string>
+    <string name="action_resume">Resume</string>
     <string name="title_about">About</string>
     <string name="title_poll_setup">New Poll</string>
     <string name="opinion_profile">Opinion Profile</string>

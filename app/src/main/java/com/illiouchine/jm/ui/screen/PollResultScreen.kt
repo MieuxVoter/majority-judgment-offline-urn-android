@@ -540,7 +540,7 @@ fun ResultScreen(
 
                             proposalNameToast.cancel()
                             // We can't use setText here, perhaps because cancel hasn't finished yet
-                            //proposalNameToast.setText(partialProximityAnalysis.proposals[it])
+                            // proposalNameToast.setText(partialProximityAnalysis.proposals[it])
                             // But creating a new Toast instance entirely works
                             proposalNameToast = Toast.makeText(
                                 rememberedContext,

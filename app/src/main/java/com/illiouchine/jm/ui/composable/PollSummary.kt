@@ -39,6 +39,8 @@ fun PollSummary(
     onResumePoll: (poll: Poll) -> Unit = {},
     onSetupClonePoll: (poll: Poll) -> Unit = {},
     onShowResult: (poll: Poll) -> Unit = {},
+    onExportPoll: (poll: Poll) -> Unit = {},
+    onExportBallots: (poll: Poll) -> Unit = {},
 ) {
     val res = LocalResources.current
     Row(
@@ -70,6 +72,20 @@ fun PollSummary(
                         }
                     ),
                     CustomAccessibilityAction(
+                        label = res.getString(R.string.action_export_poll),
+                        action = {
+                            onExportPoll(poll)
+                            true
+                        }
+                    ),
+                    CustomAccessibilityAction(
+                        label = res.getString(R.string.action_export_ballots),
+                        action = {
+                            onExportBallots(poll)
+                            true
+                        }
+                    ),
+                    CustomAccessibilityAction(
                         label = res.getString(R.string.action_delete),
                         action = {
                             onDeletePoll(poll)
@@ -95,7 +111,9 @@ fun PollSummary(
                 }
 
                 Text(
-                    modifier = Modifier.weight(1f).padding(top = 4.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(top = 4.dp),
                     text = sequenceOfProposals.toString(),
                 )
 
@@ -119,24 +137,33 @@ fun PollSummary(
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 TextButton(
+                    enabled = poll.ballots.isNotEmpty(),
+                    onClick = { onShowResult(poll) },
+                ) {
+                    Text(stringResource(R.string.action_inspect))
+                }
+                TextButton(onClick = { onResumePoll(poll) }) {
+                    Text(stringResource(R.string.action_resume))
+                }
+                TextButton(onClick = { onSetupClonePoll(poll) }) {
+                    Text(stringResource(R.string.action_clone))
+                }
+                TextButton(onClick = { onExportPoll(poll) }) {
+                    Text(stringResource(R.string.action_export_poll))
+                }
+                TextButton(
+                    enabled = poll.ballots.isNotEmpty(),
+                    onClick = { onExportBallots(poll) },
+                ) {
+                    Text(stringResource(R.string.action_export_ballots))
+                }
+                TextButton(
                     onClick = { onDeletePoll(poll) },
                     colors = ButtonDefaults.textButtonColors().copy(
                         contentColor = DeleteColor,
                     ),
                 ) {
                     Text(stringResource(R.string.action_delete))
-                }
-                TextButton(onClick = { onSetupClonePoll(poll) }) {
-                    Text(stringResource(R.string.action_clone))
-                }
-                TextButton(onClick = { onResumePoll(poll) }) {
-                    Text(stringResource(R.string.action_resume))
-                }
-                TextButton(
-                    enabled = poll.ballots.isNotEmpty(),
-                    onClick = { onShowResult(poll) },
-                ) {
-                    Text(stringResource(R.string.action_inspect))
                 }
             }
         }

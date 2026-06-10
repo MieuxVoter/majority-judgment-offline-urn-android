@@ -1,4 +1,8 @@
 * Show the relative neutral on the proximity spider plots
 * Beautify the merit profiles
+* Export a poll configuration as QR Code
+* Import a poll configuration from a QR Code
+* Export ballots of a poll as QR Code(s)
+* Import ballots of a poll from a QR Code
 * Add Czech
 * Improve Breton

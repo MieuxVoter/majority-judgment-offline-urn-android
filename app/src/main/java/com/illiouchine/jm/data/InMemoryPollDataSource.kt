@@ -2,6 +2,7 @@ package com.illiouchine.jm.data
 
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Poll
+import java.util.UUID
 
 // This is now basically only a dummy used in @Previews, ever since we've had SqlitePollDataSource.
 // Todo : Should not be accessed directly,
@@ -22,6 +23,15 @@ class InMemoryPollDataSource : PollDataSource {
     override suspend fun getPollById(pollId: Int): Poll? {
         polls.forEach {
             if (it.id == pollId) {
+                return it
+            }
+        }
+        return null
+    }
+
+    override suspend fun getPollByUuid(pollUuid: UUID): Poll? {
+        polls.forEach {
+            if (it.uuid == pollUuid) {
                 return it
             }
         }

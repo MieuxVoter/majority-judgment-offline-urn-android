@@ -1,35 +1,13 @@
 package com.illiouchine.jm.service
 
-import androidx.compose.runtime.Stable
 import com.illiouchine.jm.model.Poll
 import kotlin.math.max
 import kotlin.math.sqrt
 
-@Stable
-data class ProximityAnalysis(
-    val proposals: List<String>, // aka. candidates
-    val proximities: List<List<Double>>, // for each proposal, proximities to every other proposal
-    val minima: List<Double>, // minimum proximity possible for each merit profile
-    val neutrals: List<Double>, // relative origins (indistinguishable from random)
-) {
-    fun filterByProposalsIndices(indicesToKeep: List<Int>): ProximityAnalysis {
-        return ProximityAnalysis(
-            proposals = indicesToKeep.map { proposals[it] },
-            proximities = indicesToKeep.map { i ->
-                indicesToKeep.map { j ->
-                    proximities[i][j]
-                }
-            },
-            minima = indicesToKeep.map { minima[it] },
-            neutrals = indicesToKeep.map { neutrals[it] },
-        )
-    }
-}
-
 //
-// Shows how close (in the collective hearts of the judges) pairs of proposals are.
+// Computes how close (in the collective hearts & minds of the judges) pairs of proposals are.
 // A proximity of +1 means that the two proposals received exactly the same grades in each ballot.
-// A proximity of ~0 is indistinguishable from random (when both are random → not for a given merit)
+// A proximity of ~0 is indistinguishable from random (when both are random → not for a given merit).
 // A proximity of -1 means that the two proposals received extreme and diametrically opposite grades in each ballot.
 // Basically:    proximity = (0.5 - squaredDeviation / maximumDeviation) * 2.0
 // This assumes that grades are somewhat linearly distributed, value-wise.
@@ -59,7 +37,7 @@ class ProximityAnalyzer {
                         0.0
                     }
                 } else {
-                    // Distance between the two proposals in the ND orthogonal space of the ballots
+                    // Distance between the two proposals in the orthonormal N-space of the ballots
                     val sqDeviation = sqrt(
                         poll.ballots.sumOf { ballot ->
                             // Assuming grades are linearly distributed, value-wise, here.
@@ -69,15 +47,13 @@ class ProximityAnalyzer {
                             (someGradeValue - otherGradeValue) * (someGradeValue - otherGradeValue)
                         }.toDouble()
                     )
-                    // Normalize over range [-1, +1] with:
-                    // +1 being the exact same
-                    // ±0 being indistinguishable from random (when both merit profiles are random)
-                    // -1 being the exact opposite
+                    // Normalize over range [-1, +1]
                     (0.5 - sqDeviation / maxDeviation) * 2.0
                 }
             }
         }
 
+        // Compute the minimum proximity achievable with a given merit profile at someProposalIndex
         val minima = proposalsIndices.map { someProposalIndex ->
             val sqDeviation = sqrt(
                 poll.ballots.sumOf {
@@ -89,17 +65,19 @@ class ProximityAnalyzer {
             (0.5 - sqDeviation / maxDeviation) * 2.0
         }
 
+        // Precompute this since we're using it multiple times in the loops below.
+        val meanOfSquaresPerGrade = List(poll.pollConfig.grading.grades.size) { index ->
+            List(poll.pollConfig.grading.grades.size) { i ->
+                (i - index) * (i - index)
+            }.sum().toDouble() / poll.pollConfig.grading.grades.size
+        }
+
         // Compute the proximity of "indistinguishable from random",
         // for a given merit profile at someProposalIndex.
-        val origins = proposalsIndices.map { someProposalIndex ->
+        val neutrals = proposalsIndices.map { someProposalIndex ->
             val neutralDeviation = sqrt(
                 poll.ballots.sumOf { ballot ->
-                    val someGradeValue = ballot.gradeOf(someProposalIndex)
-                    // Optimize: we could memoize this mean of squares per grade value?
-                    val total = List(poll.pollConfig.grading.grades.size) { i ->
-                        (i - someGradeValue) * (i - someGradeValue)
-                    }.sum().toDouble()
-                    total / poll.pollConfig.grading.grades.size
+                    meanOfSquaresPerGrade[ballot.gradeOf(someProposalIndex)]
                 }
             )
             (0.5 - neutralDeviation / maxDeviation) * 2.0
@@ -109,7 +87,7 @@ class ProximityAnalyzer {
             proposals = proposals,
             proximities = proximities,
             minima = minima,
-            neutrals = origins,
+            neutrals = neutrals,
         )
     }
 }

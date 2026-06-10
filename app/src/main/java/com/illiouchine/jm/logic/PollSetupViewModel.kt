@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.util.Calendar
+import java.util.UUID
 
 class PollSetupViewModel(
     private val sharedPrefs: SharedPrefsHelper,
@@ -46,7 +47,10 @@ class PollSetupViewModel(
     private val _navEvents = MutableSharedFlow<NavigationAction>()
     val navEvents = _navEvents.asSharedFlow()
 
-    fun initialize(cloneablePollId: Int = 0, pollTemplateSlug: String = "") {
+    fun initialize(
+        cloneablePollId: Int = 0,
+        pollTemplateSlug: String = "",
+    ) {
         viewModelScope.launch {
             when (cloneablePollId) {
                 0 -> {
@@ -69,7 +73,9 @@ class PollSetupViewModel(
                     val initialPollConfig = cloneablePoll?.pollConfig ?: makeDefaultPollConfig()
 
                     _pollSetupViewState.update {
-                        it.copy(config = initialPollConfig)
+                        it.copy(
+                            config = initialPollConfig,
+                        )
                     }
                 }
             }
@@ -177,6 +183,7 @@ class PollSetupViewModel(
 
         viewModelScope.launch {
             val poll = Poll(
+                uuid = UUID.randomUUID(),
                 pollConfig = pollConfig,
                 ballots = emptyList(),
             )

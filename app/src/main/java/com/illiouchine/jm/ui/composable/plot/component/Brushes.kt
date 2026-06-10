@@ -22,9 +22,12 @@ fun getImageBitmapFromVectorImage(
     // Android Studio suggested use of resourceCompat instead of LocalResources.current.getDrawable
     // Also, perhaps we should wrap this in a throw/catch and serve a blank bitmap as fallback?
     return ResourcesCompat.getDrawable(
-        /* res = */ res,
-        /* id = */ id,
-        /* theme = */ null,
+        /* res = */
+        res,
+        /* id = */
+        id,
+        /* theme = */
+        null,
     )!!.toBitmap().asImageBitmap()
 }
 

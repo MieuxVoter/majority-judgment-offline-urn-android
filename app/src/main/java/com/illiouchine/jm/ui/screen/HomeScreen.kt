@@ -41,6 +41,7 @@ import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.ui.composable.PollDeletionConfirmationDialog
 import com.illiouchine.jm.ui.composable.PollSummary
 import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
+import com.illiouchine.jm.ui.composable.spacer.MediumVerticalSpacer
 import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
@@ -59,6 +60,8 @@ fun HomeScreen(
     onResumePoll: (poll: Poll) -> Unit = {},
     onShowResult: (poll: Poll) -> Unit = {},
     onDeletePoll: (poll: Poll) -> Unit = {},
+    onExportPoll: (poll: Poll) -> Unit = {},
+    onExportBallots: (poll: Poll) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -123,7 +126,8 @@ fun HomeScreen(
             }
 
             // Not sure how to access the FAB with TalkBack
-            Spacer(Modifier.height(Theme.spacing.medium))
+            MediumVerticalSpacer()
+
             Button(
                 modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
                 onClick = { onSetupBlankPoll() },
@@ -132,7 +136,7 @@ fun HomeScreen(
                 Text(stringResource(R.string.button_new_poll))
             }
 
-            Spacer(Modifier.height(Theme.spacing.medium))
+            MediumVerticalSpacer()
 
             homeViewState.polls.reversed().forEach { poll ->
 
@@ -149,6 +153,8 @@ fun HomeScreen(
                     onDeletePoll = {
                         showDeletionDialog.value = true
                     },
+                    onExportPoll = { onExportPoll(it) },
+                    onExportBallots = { onExportBallots(it) },
                 )
                 Spacer(
                     Modifier
@@ -172,7 +178,7 @@ fun HomeScreen(
                 }
             }
 
-            Spacer(Modifier.height(Theme.spacing.medium))
+            MediumVerticalSpacer()
 
             Text(
                 modifier = Modifier.padding(bottom = 16.dp),

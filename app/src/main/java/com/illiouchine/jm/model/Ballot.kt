@@ -1,25 +1,28 @@
 package com.illiouchine.jm.model
 
 import androidx.compose.runtime.Stable
-import kotlinx.collections.immutable.ImmutableList
+import com.illiouchine.jm.model.serializer.UUIDSerializer
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.Serializable
+import java.util.UUID
 import kotlin.math.max
 
 @Stable
 @Serializable
 data class Ballot(
-    val judgments: ImmutableList<Judgment> = emptyList<Judgment>().toPersistentList(),
+    @Serializable(UUIDSerializer::class)
+    val uuid: UUID? = null,
+    val judgments: List<Judgment> = emptyList(),
 ) {
 
     fun withJudgment(judgment: Judgment): Ballot {
-        return Ballot(
+        return copy(
             judgments = (judgments + judgment).toPersistentList(),
         )
     }
 
     fun withoutLastJudgment(): Ballot {
-        return Ballot(
+        return copy(
             judgments = judgments.subList(0, judgments.size - 1),
         )
     }

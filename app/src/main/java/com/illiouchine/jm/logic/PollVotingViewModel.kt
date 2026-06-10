@@ -12,7 +12,6 @@ import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Judgment
-import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.navigator.NavigationAction
 import com.illiouchine.jm.ui.navigator.Screens
@@ -103,7 +102,9 @@ class PollVotingViewModel(
         // Add judgment to current ballot
         _pollVotingViewState.update {
             it.copy(
-                currentBallot = it.currentBallot?.withJudgment(judgment) ?: Ballot(persistentListOf(judgment))
+                currentBallot = it.currentBallot?.withJudgment(judgment) ?: Ballot(
+                    judgments = persistentListOf(judgment),
+                )
             )
         }
     }
@@ -146,12 +147,15 @@ class PollVotingViewModel(
 
     fun finalizePoll() {
         viewModelScope.launch {
-            val poll = Poll(
-                id = _pollVotingViewState.value.pollId,
-                pollConfig = _pollVotingViewState.value.pollConfig,
-                ballots = _pollVotingViewState.value.ballots,
-            )
-            val newPollId = pollDataSource.savePoll(poll)
+            // TBD: why did we use to (re-)save the poll here ?  What was the point ?
+//            val poll = Poll(
+//                id = _pollVotingViewState.value.pollId,
+//                pollConfig = _pollVotingViewState.value.pollConfig,
+//                ballots = _pollVotingViewState.value.ballots,
+//            )
+//            val newPollId = pollDataSource.savePoll(poll)
+            val newPollId = _pollVotingViewState.value.pollId
+
             _navEvents.emit(NavigationAction.To(Screens.PollResult(id = newPollId)))
             currentPollId = null
         }

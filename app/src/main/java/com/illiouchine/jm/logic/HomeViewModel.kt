@@ -120,6 +120,18 @@ class HomeViewModel(
         }
     }
 
+    fun exportPoll(poll: Poll) {
+        viewModelScope.launch {
+            _navEvents.emit(NavigationAction.To(Screens.PollQrExport(id = poll.id)))
+        }
+    }
+
+    fun exportBallots(poll: Poll) {
+        viewModelScope.launch {
+            _navEvents.emit(NavigationAction.To(Screens.BallotsQrExport(pollId = poll.id)))
+        }
+    }
+
     fun showResult(poll: Poll) {
         viewModelScope.launch {
             _navEvents.emit(NavigationAction.To(Screens.PollResult(id = poll.id)))
