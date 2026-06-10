@@ -79,6 +79,7 @@
     <string name="action_cancel">Cancel</string>
     <string name="action_clone">Clone</string>
     <string name="action_delete">Delete</string>
+    <string name="action_dismiss">Dismiss</string>
     <string name="action_export_ballots">Export Ballots</string>
     <string name="action_export_poll">Export Poll</string>
     <string name="action_inspect">Inspect</string>
