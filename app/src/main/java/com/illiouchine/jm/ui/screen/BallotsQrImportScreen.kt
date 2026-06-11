@@ -150,8 +150,9 @@ fun BallotsQrImportScreen(
 
                 val amountOfBallotsInPollBefore = state.poll.ballots.size
                 val amountOfBallotsInImport = state.ballotsDto.ballots.size
+                val existingBallotsUuids = state.poll.ballots.map { it.uuid }
                 val ballotsSkipped = state.ballotsDto.ballots.filter {
-                    state.poll.ballots.map { it.uuid }.contains(it.uuid)
+                    existingBallotsUuids.contains(it.uuid)
                 }
                 val ballotsInvalidated = state.ballotsDto.ballots.filterNot {
                     state.poll.isBallotValid(it)
