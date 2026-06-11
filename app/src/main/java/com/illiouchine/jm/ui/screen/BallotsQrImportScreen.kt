@@ -3,16 +3,13 @@ package com.illiouchine.jm.ui.screen
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -22,9 +19,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.illiouchine.jm.R
 import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.logic.BallotsDto
 import com.illiouchine.jm.logic.BallotsQrImportViewModel
@@ -34,6 +33,7 @@ import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.ScreenTitle
+import com.illiouchine.jm.ui.composable.button.ActionRowCancelConfirm
 import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
 import com.illiouchine.jm.ui.composable.spacer.MediumVerticalSpacer
 import com.illiouchine.jm.ui.composable.spacer.SmallVerticalSpacer
@@ -80,18 +80,13 @@ fun BallotsQrImportScreen(
     ) { innerPadding ->
 
         val scrollState = rememberScrollState()
-        // val coroutineScope = rememberCoroutineScope()
 
         @Composable
         fun ColumnScope.CancelAsPrimaryButton() {
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = onCancel,
-            ) {
-                Text(
-                    text = "Cancel",
-                )
-            }
+            ) { Text(stringResource(R.string.action_cancel)) }
         }
 
         Column(
@@ -111,7 +106,7 @@ fun BallotsQrImportScreen(
             }
 
             ScreenTitle(
-                text = "Import Ballots" + subtitle,
+                text = stringResource(R.string.action_import_ballots) + subtitle,
             )
 
             if (state.errorMessage != null) {
@@ -205,25 +200,10 @@ fun BallotsQrImportScreen(
 
                 MediumVerticalSpacer()
 
-                FlowRow {
-                    TextButton(
-                        onClick = onCancel,
-                    ) {
-                        Text(
-                            text = "Cancel",
-                        )
-                    }
-
-                    Spacer(Modifier.weight(1f))
-
-                    Button(
-                        onClick = onConfirm,
-                    ) {
-                        Text(
-                            text = "Confirm",
-                        )
-                    }
-                }
+                ActionRowCancelConfirm(
+                    onCancel = onCancel,
+                    onConfirm = onConfirm,
+                )
             }
         }
     }

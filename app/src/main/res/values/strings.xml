@@ -78,10 +78,13 @@
     <string name="grade_comparator_at_least">at least</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_clone">Clone</string>
+    <string name="action_confirm">Confirm</string>
     <string name="action_delete">Delete</string>
     <string name="action_dismiss">Dismiss</string>
     <string name="action_export_ballots">Export Ballots</string>
     <string name="action_export_poll">Export Poll</string>
+    <string name="action_import_ballots">Import Ballots</string>
+    <string name="action_import_poll">Import Poll</string>
     <string name="action_inspect">Inspect</string>
     <string name="action_resume">Resume</string>
     <string name="title_about">About</string>
