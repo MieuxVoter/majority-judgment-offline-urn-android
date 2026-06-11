@@ -42,10 +42,10 @@ import kotlinx.serialization.encodeToByteArray
 @OptIn(ExperimentalSerializationApi::class)
 @Composable
 fun PollQrImportScreen(
-    modifier: Modifier = Modifier,
     state: PollQrImportViewModel.PollQrImportViewState,
-    onConfirm: () -> Unit = {},
+    modifier: Modifier = Modifier,
     onCancel: () -> Unit = {},
+    onConfirm: () -> Unit = {},
 ) {
     MjuScaffold(
         modifier = Modifier.fillMaxSize(),
@@ -59,6 +59,22 @@ fun PollQrImportScreen(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = onCancel,
             ) { Text(stringResource(R.string.action_cancel)) }
+        }
+
+        @Composable
+        fun TextWithUnicodeIconRow(
+            unicodeIcon: String,
+            text: String,
+        ) {
+            Row {
+                Text(
+                    modifier = Modifier.padding(horizontal = Theme.spacing.tiny),
+                    text = unicodeIcon,
+                )
+                Text(
+                    text = text,
+                )
+            }
         }
 
         Column(
@@ -111,39 +127,26 @@ fun PollQrImportScreen(
 
                 MediumVerticalSpacer()
 
-                Row {
-                    Text(
-                        modifier = Modifier.padding(horizontal = Theme.spacing.tiny),
-                        text = "\uD83D\uDD2E",
-                    )
-                    Text(
-                        text = state.importedPoll.pollConfig.subject,
-                    )
-                }
+                TextWithUnicodeIconRow(
+                    unicodeIcon = "\uD83D\uDD2E",
+                    text = state.importedPoll.pollConfig.subject,
+                )
 
                 SmallVerticalSpacer()
 
                 for (proposalName in state.importedPoll.pollConfig.proposals) {
-                    Row {
-                        Text(
-                            modifier = Modifier.padding(horizontal = Theme.spacing.tiny),
-                            text = "\uD83E\uDDD8",
-                        )
-                        Text(
-                            text = proposalName,
-                        )
-                    }
+                    TextWithUnicodeIconRow(
+                        unicodeIcon = "\uD83E\uDDD8",
+                        text = proposalName,
+                    )
                 }
 
                 SmallVerticalSpacer()
 
-                Row {
-                    Text(
-                        modifier = Modifier.padding(horizontal = Theme.spacing.tiny),
-                        text = "⛅",
-                    )
-                    Text(stringResource(state.importedPoll.pollConfig.grading.name))
-                }
+                TextWithUnicodeIconRow(
+                    unicodeIcon = "⛅",
+                    text = stringResource(state.importedPoll.pollConfig.grading.name),
+                )
 
                 MediumVerticalSpacer()
 
@@ -152,6 +155,8 @@ fun PollQrImportScreen(
                     onConfirm = onConfirm,
                 )
             }
+
+            MediumVerticalSpacer()
         }
     }
 }
@@ -163,19 +168,18 @@ fun PollQrImportScreen(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     fontScale = 1.0f,
 )
-// @Preview(
-//    name = "Phone (Portrait, Big Font)",
-//    showSystemUi = true,
-//    uiMode = Configuration.UI_MODE_NIGHT_YES,
-//    fontScale = 2.0f,
-// )
-// @Preview(
-//    name = "Tablet",
-//    device = "spec:width=1280dp,height=800dp,dpi=240",
-//    uiMode = Configuration.UI_MODE_NIGHT_YES,
-//    showSystemUi = true,
-// )
-// @PreviewScreenSizes // my eyes hurt ← no dark mode
+ @Preview(
+    name = "Phone (Portrait, Big Font)",
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 2.0f,
+ )
+ @Preview(
+    name = "Tablet",
+    device = "spec:width=1280dp,height=800dp,dpi=240",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showSystemUi = true,
+ )
 @Composable
 fun PreviewPollQrImportScreen(modifier: Modifier = Modifier) {
     val poll = Poll(
