@@ -158,8 +158,13 @@ fun BallotsQrImportScreen(
                 val ballotsSkipped = state.ballotsDto.ballots.filter {
                     state.poll.ballots.map { it.uuid }.contains(it.uuid)
                 }
+                val ballotsInvalidated = state.ballotsDto.ballots.filterNot {
+                    state.poll.isBallotValid(it)
+                }
                 val amountOfBallotsSkipped = ballotsSkipped.size
-                val amountOfBallotsImported = amountOfBallotsInImport - amountOfBallotsSkipped
+                val amountOfBallotsInvalidated = ballotsInvalidated.size
+                val amountOfBallotsImported =
+                    amountOfBallotsInImport - amountOfBallotsSkipped - amountOfBallotsInvalidated
                 val amountOfBallotsInPollAfter =
                     amountOfBallotsInPollBefore + amountOfBallotsImported
 
@@ -169,6 +174,13 @@ fun BallotsQrImportScreen(
                 )
                 MediumVerticalSpacer()
 
+                if (amountOfBallotsInvalidated > 0) {
+                    AmountReportText(
+                        amount = amountOfBallotsInvalidated.toString(),
+                        text = "invalid ballots will be skipped",
+                    )
+                    SmallVerticalSpacer()
+                }
                 AmountReportText(
                     amount = amountOfBallotsSkipped.toString(),
                     text = "ballots already in the poll will be skipped",

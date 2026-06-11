@@ -19,4 +19,24 @@ data class Poll(
         get() = ballots.flatMap { ballot ->
             ballot.judgments
         }
+
+    fun isBallotValid(ballot: Ballot): Boolean {
+        for (judgment in ballot.judgments) {
+            if (judgment.grade < 0) {
+                return false
+            }
+            if (judgment.grade >= pollConfig.grading.grades.size) {
+                return false
+            }
+            if (judgment.proposal < 0) {
+                return false
+            }
+            if (judgment.proposal >= pollConfig.proposals.size) {
+                return false
+            }
+        }
+
+        return true
+    }
+
 }
