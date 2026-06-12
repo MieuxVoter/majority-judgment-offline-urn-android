@@ -2,16 +2,14 @@ package com.illiouchine.jm.ui.screen
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -21,12 +19,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.illiouchine.jm.R
 import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.logic.PollQrImportViewModel
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.ScreenTitle
+import com.illiouchine.jm.ui.composable.button.ActionRowCancelConfirm
 import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
 import com.illiouchine.jm.ui.composable.spacer.MediumVerticalSpacer
 import com.illiouchine.jm.ui.composable.spacer.SmallVerticalSpacer
@@ -42,17 +42,40 @@ import kotlinx.serialization.encodeToByteArray
 @OptIn(ExperimentalSerializationApi::class)
 @Composable
 fun PollQrImportScreen(
-    modifier: Modifier = Modifier,
     state: PollQrImportViewModel.PollQrImportViewState,
-    onConfirm: () -> Unit = {},
+    modifier: Modifier = Modifier,
     onCancel: () -> Unit = {},
+    onConfirm: () -> Unit = {},
 ) {
     MjuScaffold(
         modifier = Modifier.fillMaxSize(),
     ) { innerPadding ->
 
         val scrollState = rememberScrollState()
-        // val coroutineScope = rememberCoroutineScope()
+
+        @Composable
+        fun ColumnScope.CancelAsPrimaryButton() {
+            Button(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                onClick = onCancel,
+            ) { Text(stringResource(R.string.action_cancel)) }
+        }
+
+        @Composable
+        fun TextWithUnicodeIconRow(
+            unicodeIcon: String,
+            text: String,
+        ) {
+            Row {
+                Text(
+                    modifier = Modifier.padding(horizontal = Theme.spacing.tiny),
+                    text = unicodeIcon,
+                )
+                Text(
+                    text = text,
+                )
+            }
+        }
 
         Column(
             modifier = modifier
@@ -62,8 +85,7 @@ fun PollQrImportScreen(
                 .verticalScroll(state = scrollState),
         ) {
             ScreenTitle(
-                // text = "(BETA)" + " " + "Poll Import",
-                text = "Poll Import",
+                text = stringResource(R.string.action_import_poll),
             )
 
             if (state.errorMessage != null) {
@@ -81,14 +103,7 @@ fun PollQrImportScreen(
                     MediumVerticalSpacer()
                 }
 
-                Button(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    onClick = onCancel,
-                ) {
-                    Text(
-                        text = "Cancel",
-                    )
-                }
+                CancelAsPrimaryButton()
 
                 return@Column
             }
@@ -100,14 +115,7 @@ fun PollQrImportScreen(
 
                 MediumVerticalSpacer()
 
-                Button(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    onClick = onCancel,
-                ) {
-                    Text(
-                        text = "Cancel",
-                    )
-                }
+                CancelAsPrimaryButton()
 
                 return@Column
             }
@@ -119,64 +127,36 @@ fun PollQrImportScreen(
 
                 MediumVerticalSpacer()
 
-                Row {
-                    Text(
-                        modifier = Modifier.padding(horizontal = Theme.spacing.tiny),
-                        text = "\uD83D\uDD2E",
-                    )
-                    Text(
-                        text = state.importedPoll.pollConfig.subject,
-                    )
-                }
+                TextWithUnicodeIconRow(
+                    unicodeIcon = "\uD83D\uDD2E",
+                    text = state.importedPoll.pollConfig.subject,
+                )
 
                 SmallVerticalSpacer()
 
                 for (proposalName in state.importedPoll.pollConfig.proposals) {
-                    Row {
-                        Text(
-                            modifier = Modifier.padding(horizontal = Theme.spacing.tiny),
-                            text = "\uD83E\uDDD8",
-                        )
-                        Text(
-                            text = proposalName,
-                        )
-                    }
+                    TextWithUnicodeIconRow(
+                        unicodeIcon = "\uD83E\uDDD8",
+                        text = proposalName,
+                    )
                 }
 
                 SmallVerticalSpacer()
 
-                Row {
-                    Text(
-                        modifier = Modifier.padding(horizontal = Theme.spacing.tiny),
-                        text = "⛅",
-                    )
-                    Text(stringResource(state.importedPoll.pollConfig.grading.name))
-                }
+                TextWithUnicodeIconRow(
+                    unicodeIcon = "⛅",
+                    text = stringResource(state.importedPoll.pollConfig.grading.name),
+                )
 
                 MediumVerticalSpacer()
 
-                FlowRow {
-                    TextButton(
-//                    modifier = Modifier.align(Alignment.),
-                        onClick = onCancel,
-                    ) {
-                        Text(
-                            text = "Cancel",
-                        )
-                    }
-
-                    Spacer(Modifier.weight(1f))
-
-                    Button(
-//                    modifier = Modifier.align(Alignment.End),
-                        onClick = onConfirm,
-                    ) {
-                        Text(
-                            text = "Confirm",
-                        )
-                    }
-                }
+                ActionRowCancelConfirm(
+                    onCancel = onCancel,
+                    onConfirm = onConfirm,
+                )
             }
+
+            MediumVerticalSpacer()
         }
     }
 }
@@ -188,19 +168,18 @@ fun PollQrImportScreen(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     fontScale = 1.0f,
 )
-// @Preview(
-//    name = "Phone (Portrait, Big Font)",
-//    showSystemUi = true,
-//    uiMode = Configuration.UI_MODE_NIGHT_YES,
-//    fontScale = 2.0f,
-// )
-// @Preview(
-//    name = "Tablet",
-//    device = "spec:width=1280dp,height=800dp,dpi=240",
-//    uiMode = Configuration.UI_MODE_NIGHT_YES,
-//    showSystemUi = true,
-// )
-// @PreviewScreenSizes // my eyes hurt ← no dark mode
+ @Preview(
+    name = "Phone (Portrait, Big Font)",
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 2.0f,
+ )
+ @Preview(
+    name = "Tablet",
+    device = "spec:width=1280dp,height=800dp,dpi=240",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showSystemUi = true,
+ )
 @Composable
 fun PreviewPollQrImportScreen(modifier: Modifier = Modifier) {
     val poll = Poll(

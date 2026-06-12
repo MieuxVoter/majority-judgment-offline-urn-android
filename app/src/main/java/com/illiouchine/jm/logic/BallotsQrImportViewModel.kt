@@ -119,15 +119,19 @@ class BallotsQrImportViewModel(
     fun onConfirm() {
         viewModelScope.launch {
             if (viewState.value.ballotsDto != null && viewState.value.poll != null) {
+                val poll = viewState.value.poll!!
                 val ballotsImported = viewState.value.ballotsDto!!.ballots.filterNot {
-                    viewState.value.poll!!.ballots.map { it.uuid }.contains(it.uuid)
+                    poll.ballots.map { it.uuid }.contains(it.uuid) || !poll.isBallotValid(it)
                 }
                 for (ballot in ballotsImported) {
-                    // FIXME: check the consistency of the ballot first
+                    if (! poll.isBallotValid(ballot)) { // redundant, but safe
+                        continue
+                    }
+
                     try {
                         pollDataSource.saveBallot(
                             ballot = ballot,
-                            pollId = viewState.value.poll!!.id,
+                            pollId = poll.id,
                         )
                     } catch (_: SQLException) {
                         // TBD: what should we do with these errors ?

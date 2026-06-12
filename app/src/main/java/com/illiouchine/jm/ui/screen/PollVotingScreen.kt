@@ -38,7 +38,7 @@ import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.GradeSelectionList
 import com.illiouchine.jm.ui.composable.JudgmentBalls
-import com.illiouchine.jm.ui.composable.MjuSnackbar
+import com.illiouchine.jm.ui.composable.scaffold.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme

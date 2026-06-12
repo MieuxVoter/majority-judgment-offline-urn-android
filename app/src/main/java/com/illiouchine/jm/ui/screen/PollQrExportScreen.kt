@@ -3,13 +3,10 @@ package com.illiouchine.jm.ui.screen
 import android.content.ClipData
 import android.content.res.Configuration
 import android.graphics.Typeface.MONOSPACE
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -22,11 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.Clipboard
 import androidx.compose.ui.platform.LocalClipboard
-import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.min
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.InMemoryPollDataSource
@@ -35,6 +30,7 @@ import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.ScreenTitle
+import com.illiouchine.jm.ui.composable.image.QrCodeImage
 import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
 import com.illiouchine.jm.ui.composable.spacer.MediumVerticalSpacer
 import com.illiouchine.jm.ui.composable.spacer.SmallVerticalSpacer
@@ -58,7 +54,6 @@ fun PollQrExportScreen(
         val scrollState = rememberScrollState()
         val coroutineScope = rememberCoroutineScope()
         val clipboard: Clipboard = LocalClipboard.current
-        // val context = LocalContext.current
 
         Column(
             modifier = modifier
@@ -78,15 +73,6 @@ fun PollQrExportScreen(
                 return@Column
             }
 
-//            Text(
-//                modifier = Modifier.align(Alignment.CenterHorizontally),
-//                text = "(${state.poll.uuid})",
-//            )
-//            Text(
-//                modifier = Modifier.align(Alignment.CenterHorizontally),
-//                text = "(${state.poll.uuid?.toString()?.take(8)})",
-//            )
-
             Text(
                 text = "With this experimental daisy-chaining feature, you may use multiple offline devices to collect ballots, which is useful in large assemblies."
             )
@@ -104,28 +90,17 @@ fun PollQrExportScreen(
 
             if (state.pollQrBitmap != null) {
                 MediumVerticalSpacer()
-                val winSize = LocalWindowInfo.current.containerDpSize
-                Image(
+
+                QrCodeImage(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .wrapContentSize()
-                        .size(min(winSize.width, winSize.height) * 0.9f)
                         .align(alignment = Alignment.CenterHorizontally),
                     bitmap = state.pollQrBitmap,
-                    contentDescription = "QR Code",
                 )
 
                 SmallVerticalSpacer()
                 Text(
                     "Here's a clickable excerpt of the content of this QR Code" + " " + "(${state.pollQrContent.length} characters)" + ":"
                 )
-
-//                val mainIntent = Intent(LocalActivity.current, MainActivity::class.java)
-//                mainIntent.setAction(Intent.ACTION_MAIN)
-//                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
-//                mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-//                mainIntent.setData(state.pollQrContent.toUri())
 
                 SmallVerticalSpacer()
                 Text(
@@ -143,35 +118,8 @@ fun PollQrExportScreen(
                                                 state.pollQrContent,
                                                 "<a href=\"${state.pollQrContent}\">${state.poll.pollConfig.subject}</a>"
                                             )
-                                            // This works too
-//                                            ClipData.newPlainText(
-//                                                state.poll.pollConfig.subject,
-//                                                state.pollQrContent,
-//                                            )
-                                            // Nope: weird intent: link, not clickable
-//                                            ClipData.newIntent(
-//                                                "Import Poll",
-//                                                mainIntent,
-//                                            )
-                                            // Nope: no idea on how to use this, nor if we should
-//                                            ClipData.newUri(
-//                                                ContentResolver.wrap(ContentProvider.PipeDataWriter),
-//                                                "Poll URI",
-//                                                state.pollQrContent.toUri(),
-//                                            )
-                                            // Nope: android mistakenly think this is a file
-//                                            ClipData.newRawUri(
-//                                                "Poll URI",
-//                                                state.pollQrContent.toUri(),
-//                                            )
                                         )
                                     )
-                                    // Nope: Toast is redundant
-//                                    Toast.makeText(
-//                                        context,
-//                                        state.pollQrContent.length.toString() + " " + "characters copied to clipboard." + "\n" + state.pollQrContent,
-//                                        Toast.LENGTH_LONG,
-//                                    ).show()
                                 }
                             },
                         ),
@@ -185,7 +133,6 @@ fun PollQrExportScreen(
                 Text(
                     "The fact that it looks like an invocation of Creatures Beyond Time is perfectly normal, as it is compressed."
                 )
-                // Text("You can click on it to copy it.")
 
                 SmallVerticalSpacer()
                 Text(

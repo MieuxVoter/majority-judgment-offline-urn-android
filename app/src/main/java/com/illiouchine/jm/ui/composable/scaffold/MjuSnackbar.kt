@@ -1,4 +1,4 @@
-package com.illiouchine.jm.ui.composable
+package com.illiouchine.jm.ui.composable.scaffold
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
@@ -16,6 +16,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
@@ -41,7 +42,7 @@ fun MjuSnackbar(
                     modifier = Modifier.padding(Theme.spacing.small),
                     onClick = { onDismiss() },
                 ) {
-                    Text("Dismiss")
+                    Text(stringResource(R.string.action_dismiss))
                 }
             },
         ) {
@@ -70,7 +71,7 @@ fun MjuSnackbarWithStringResId(
                     modifier = Modifier.padding(Theme.spacing.small),
                     onClick = { onDismiss() },
                 ) {
-                    Text("Dismiss")
+                    Text(stringResource(R.string.action_dismiss))
                 }
             },
         ) {

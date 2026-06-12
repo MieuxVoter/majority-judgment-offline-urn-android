@@ -1,5 +1,6 @@
 * Show the relative neutral on the proximity spider plots
 * Beautify the merit profiles
+* Daisy-chaining: use multiple offline devices on the same poll
 * Export a poll configuration as QR Code
 * Import a poll configuration from a QR Code
 * Export ballots of a poll as QR Code(s)

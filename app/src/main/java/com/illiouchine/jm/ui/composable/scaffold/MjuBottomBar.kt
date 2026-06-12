@@ -1,4 +1,4 @@
-package com.illiouchine.jm.ui.composable
+package com.illiouchine.jm.ui.composable.scaffold
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -22,13 +22,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.Preview
 import com.illiouchine.jm.R
-import com.illiouchine.jm.ui.composable.ScreensMenuItem.About
-import com.illiouchine.jm.ui.composable.ScreensMenuItem.Home
-import com.illiouchine.jm.ui.composable.ScreensMenuItem.Settings
+import com.illiouchine.jm.ui.composable.scaffold.ScreensMenuItem.About
+import com.illiouchine.jm.ui.composable.scaffold.ScreensMenuItem.Home
+import com.illiouchine.jm.ui.composable.scaffold.ScreensMenuItem.Settings
 import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.theme.JmTheme
 
-private enum class ScreensMenuItem(
+enum class ScreensMenuItem(
     val screen: Screens,
     val resId: Int,
     val icon: ImageVector,
@@ -38,7 +38,7 @@ private enum class ScreensMenuItem(
     About(screen = Screens.About, resId = R.string.menu_about, icon = Icons.Default.Info)
 }
 
-private fun Screens.toScreensMenuItem(): ScreensMenuItem {
+fun Screens.toScreensMenuItem(): ScreensMenuItem {
     return when (this) {
         Screens.Home -> Home
         Screens.Settings -> Settings
@@ -47,7 +47,7 @@ private fun Screens.toScreensMenuItem(): ScreensMenuItem {
     }
 }
 
-private fun ScreensMenuItem.toScreen(): Screens {
+fun ScreensMenuItem.toScreen(): Screens {
     return this.screen
 }
 
@@ -115,7 +115,7 @@ fun MjuNavigationRail(
 
 @Preview
 @Composable
-private fun PreviewBottomBar() {
+fun PreviewBottomBar() {
     JmTheme {
         Scaffold(
             bottomBar = {
@@ -131,7 +131,7 @@ private fun PreviewBottomBar() {
     uiMode = UI_MODE_NIGHT_YES,
 )
 @Composable
-private fun PreviewBottomBarNight() {
+fun PreviewBottomBarNight() {
     JmTheme {
         Scaffold(
             bottomBar = {
@@ -149,7 +149,7 @@ private fun PreviewBottomBarNight() {
     device = "spec:width=511dp,height=891dp,orientation=landscape",
 )
 @Composable
-private fun PreviewMenuBarVertical() {
+fun PreviewMenuBarVertical() {
     JmTheme {
         Scaffold {
             Box(modifier = Modifier.padding(it)) {

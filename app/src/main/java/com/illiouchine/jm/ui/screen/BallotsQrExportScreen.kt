@@ -3,14 +3,11 @@ package com.illiouchine.jm.ui.screen
 import android.content.ClipData
 import android.content.res.Configuration
 import android.graphics.Typeface.MONOSPACE
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -23,11 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.min
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.InMemoryPollDataSource
@@ -38,6 +33,7 @@ import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.composable.ScreenTitle
+import com.illiouchine.jm.ui.composable.image.QrCodeImage
 import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
 import com.illiouchine.jm.ui.composable.spacer.MediumVerticalSpacer
 import com.illiouchine.jm.ui.composable.spacer.SmallVerticalSpacer
@@ -61,8 +57,6 @@ fun BallotsQrExportScreen(
         val scrollState = rememberScrollState()
         val coroutineScope = rememberCoroutineScope()
         val clipboard = LocalClipboard.current
-        val winSize = LocalWindowInfo.current.containerDpSize
-        // val context = LocalContext.current
 
         @Composable
         fun ColumnScope.FinishButton() {
@@ -159,14 +153,10 @@ fun BallotsQrExportScreen(
                     continue
                 }
 
-                Image(
+                QrCodeImage(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .wrapContentSize()
-                        .size(min(winSize.width, winSize.height) * 0.9f)
                         .align(alignment = Alignment.CenterHorizontally),
                     bitmap = qrExport.qrBitmap,
-                    contentDescription = "QR Code",
                 )
 
                 SmallVerticalSpacer()
@@ -234,7 +224,6 @@ fun BallotsQrExportScreen(
     showSystemUi = true,
 )
 @Composable
-@Suppress("SpellCheckingInspection")
 fun PreviewBallotsQrExportScreen(modifier: Modifier = Modifier) {
     val poll = Poll(
         id = 42,

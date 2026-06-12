@@ -74,6 +74,8 @@ fun ProportionsHelpScreen(
 
             for (algo in ProportionalAlgorithms.entries) {
                 if (algo == ProportionalAlgorithms.NONE) continue
+                if (!algo.isAvailable()) continue
+
                 Text(
                     modifier = Modifier.padding(
                         top = Theme.spacing.large,
@@ -82,13 +84,6 @@ fun ProportionsHelpScreen(
                     text = algo.getName(LocalContext.current),
                     fontSize = 24.sp,
                 )
-
-                if (!algo.isAvailable()) {
-                    Text(
-                        modifier = Modifier.padding(vertical = Theme.spacing.small),
-                        text = "(unavailable — work in progress)",
-                    )
-                }
 
                 Text(
                     modifier = Modifier,
