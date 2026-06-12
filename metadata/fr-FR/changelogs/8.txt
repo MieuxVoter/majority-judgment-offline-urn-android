@@ -1,4 +1,4 @@
-* Correction d'autres problèmes avec l'abordage
+* Correction d'autres problèmes avec le processus de découverte
 * Explications pour certaines options
 * Ajout de la traduction en turc (merci à @Kamilkampfwagen-II)
 * Ajout d'un Charte de la Vie Privée
