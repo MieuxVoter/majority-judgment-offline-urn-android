@@ -1,0 +1,3 @@
+*Weißer Blitz bei Navigation behoben.
+*Mehr Bewertungen hinzugefügt
+*Proportionale Repräsentation hinzugefügt.

@@ -112,8 +112,8 @@
     <string name="proportional_algorithm_mj_score_description">Cet algorithme a été découvert par Marc Paraire en 2024 et calcule un score unique pour chaque profil de mérite possible.</string>
     <string name="button_learn_more_on_the_wiki">En savoir plus sur le Wiki</string>
     <string name="proportional_algorithm_osmotic_favoritism">Favoritisme Préférentiel</string>
-    <string name="proportional_algorithm_osmotic_favoritism_features">Il est :\n✅ Résistant aux votes polarisés\n✅ Idéal quand les votants ont des opinions fortes\n❌ Pas isomorphe au Jugement Majoritaire</string>
-    <string name="proportional_algorithm_mj_score_features">Il est :\n✅ Isomorphe au Jugement Majoritaire\n✅ Idéal quand les votants sont candides\n❌ Sensible aux votes polarisés</string>
+    <string name="proportional_algorithm_osmotic_favoritism_features">Il est :\n✅ Résistant aux votes stratégiques\n✅ Idéal quand les votants ont des opinions fortes\n❌ Pas classé comme le Jugement Majoritaire</string>
+    <string name="proportional_algorithm_mj_score_features">Il est :\n✅ Classé comme le Jugement Majoritaire\n✅ Idéal quand les votants sont candides\n❌ Sensible aux votes stratégiques</string>
     <string name="proportional_algorithm_osmotic_favoritism_description">Cet algorithme a été découvert par Dominique Merle en 2025, avec comme objectif de calculer une représentation proportionnelle qui soit anti-stratégique, tout comme l\'est le Jugement Majoritaire.</string>
     <string name="tts_activate">activer</string>
     <string name="tts_deactivate">désactiver</string>
@@ -162,4 +162,10 @@
     <string name="proximity_profile">Profil de Proximité</string>
     <string name="plot_title_proximity_profile">Proximité de chaque paire de propositions dans l\'espace des bulletins.</string>
     <string name="plot_title_proximity_with">Proximité avec %1$s</string>
+    <string name="action_confirm">Confirmer</string>
+    <string name="action_dismiss">Ignorer</string>
+    <string name="action_export_ballots">Exporter les Bulletins</string>
+    <string name="action_export_poll">Exporter le Scrutin</string>
+    <string name="action_import_ballots">Importer des Bulletins</string>
+    <string name="action_import_poll">Importer un Scrutin</string>
 </resources>

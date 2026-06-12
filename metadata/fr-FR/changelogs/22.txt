@@ -1,0 +1,9 @@
+* Affichage du neutre relatif sur les profils de proximité en toile
+* Embellissement des profils de mérite
+* Essaimage : usage de multiples appareils hors-ligne pour le même scrutin
+* Exporter un Scrutin sous forme de QR Code
+* Importer un Scrutin depuis un QR Code
+* Exporter des Bulletins sous forme de QR Code(s)
+* Importer des Bulletins depuis un QR Code
+* Ajout du Tchèque
+* Amélioration du Breton

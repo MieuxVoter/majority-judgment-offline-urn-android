@@ -1,5 +1,5 @@
-* Support des scrutins avec une seule proposition
-* Correction d'un flash de lumière en mode sombre
+* Acceptation des scrutins n'ayant qu'une seule proposition (préférendum)
+* Correction d'un clignotement lors de la navigation en mode sombre
 * Ajout d'un profil d'opinion
 * Ajout d'un profil de nuance
 * Ajout d'un profil de proximité
