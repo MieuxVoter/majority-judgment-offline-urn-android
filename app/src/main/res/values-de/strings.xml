@@ -8,8 +8,8 @@
     <string name="poll_setup_proposal_placeholder">Gib einen Vorschlag ein…</string>
     <string name="proposal">Vorschlag</string>
     <string name="poll_of">Umfrage vom</string>
-    <string name="ballots">Stimmen</string>
-    <string name="ballot">Stimme</string>
+    <string name="ballots">stimmen</string>
+    <string name="ballot">stimme</string>
     <string name="in_the_urn">in der Urne</string>
     <string name="adhesion">adhesion</string>
     <string name="contestation">Anfechtung</string>
@@ -36,8 +36,8 @@
     <string name="menu_about">Infos</string>
     <string name="button_add">Hinzufügen</string>
     <string name="button_finish">Abschließen</string>
-    <string name="button_next">weiter</string>
-    <string name="button_skip">überspringen</string>
+    <string name="button_next">Weiter</string>
+    <string name="button_skip">Überspringen</string>
     <string name="button_let_s_go">Los geht’s!</string>
     <string name="button_next_participant">Nächster Teilnehmer</string>
     <string name="button_end_the_poll">Umfrage beenden</string>
@@ -54,9 +54,9 @@
     <string name="six_enthusiasm_grades">Sechs Begeisterungsstufen</string>
     <string name="settings_screen_title">Einstellungen</string>
     <string name="incitation_making_new_poll">Probier’ eine neue Umfrage, es kostet nix!</string>
-    <string name="title_multiline_majority_judgment_urn">Mehrheits-\nentscheidungs-\nUrne</string>
+    <string name="title_multiline_majority_judgment_urn">Mehrheits-\nEntscheidungs-\nUrne</string>
     <string name="button_new_poll">Neue Umfrage</string>
-    <string name="onboarding_welcome_to_your_offline_poll_app">Willkommen bei der Offline-Umfrage-App mit Mehrheitsentscheidung.</string>
+    <string name="onboarding_welcome_to_your_offline_poll_app">Willkommen bei der Umfrage-App mit Mehrheits Entscheidung.</string>
     <string name="onboarding_setup_a_poll_and_share_the_phone">Richten Sie eine Umfrage ein und geben Sie das Telefon unter den Teilnehmern weiter.</string>
     <string name="onboarding_this_is_free_software">Dies ist freie Software. Informationen zur Konaktaufnahme und zum Mitmachen auf der Info-Seite.</string>
     <string name="home_try_poll_templates">Oder starte schnell mit einem von diesen Beispielen:</string>
@@ -78,7 +78,7 @@
     <string name="setting_show_onboarding">Einführung erneut anzeigen</string>
     <string name="setting_show_onboarding_button">Start</string>
     <string name="setting_play_sound">Töne abspielen</string>
-    <string name="setting_play_sound_label">Allen kenntlich machen, dass eine Stimme abgegeben wurde</string>
+    <string name="setting_play_sound_label">Teilen Sie allen mit, dass ein Stimmzettel abgegeben wurde</string>
     <string name="setting_pin_screen">App automatisch anpinnen</string>
     <string name="setting_pin_screen_label">Befragte am Verlassen der App hindern</string>
     <string name="summary_you_are_almost_done">Fast fertig!</string>
@@ -102,7 +102,7 @@
     <string name="ranking_explain_different_median">Die Durchschnittsnote von %1$s beträgt %2$s und ist damit %3$s besser als die von %4$s, dessen Durchschnittsnote %5$s beträgt.</string>
     <string name="ranking_explain_same_median">%1$s und %2$s sind beide %3$s, aber die %4$s-Gruppe von %5$s ist größer und daher ausschlaggebend.</string>
     <string name="ranking_explain_different_sub_groups">Die Gruppe %1$s von %2$s sagt %3$s, dass ist %4$s als die %5$s Gruppe von %6$s , welche %7$s sagt.</string>
-    <string name="ranking_explain_double_majority">"Doppelte Mehrheit ! Die %1$s Gruppe von %2$s ist genauso groß wie die %3$s Gruppe von %4$s. Beide sagen, dass %5$s  %6$s als %7$s sein sollte."</string>
+    <string name="ranking_explain_double_majority">Doppelte Mehrheit ! Die %1$s Gruppe von %2$s ist genauso groß wie die %3$s Gruppe von %4$s. Beide sagen, dass %5$s %6$s als %7$s sein sollte.</string>
     <string name="ranking_explain_no_more_groups">Die %1$s Gruppe von %2$s ist die größte und gewinnt das Duell gegen %3$s deutlich.</string>
     <string name="wip_stay_tuned">Arbeit im Gange.\nFreut euch auf Updates.</string>
     <string name="title_proportional_representation">Proportionale\nRepräsentation</string>
@@ -147,4 +147,24 @@
     <string name="poll_template_project_proposal_build_a_toolkit">Ein Toolkit bauen</string>
     <string name="poll_template_project_proposal_call_for_allies">Verbündete anrufen</string>
     <string name="poll_template_project_proposal_craft_a_solution">Ein Ergebnis erstellen</string>
+    <string name="grade_nay">Nein</string>
+    <string name="grade_meh">Meh</string>
+    <string name="grade_aye">Ja</string>
+    <string name="three_oral_grades">Drei Gesangsstufen</string>
+    <string name="action_dismiss">Verwerfen</string>
+    <string name="action_export_ballots">Stimmzettel Exportieren</string>
+    <string name="action_export_poll">Umfrage Exportieren</string>
+    <string name="action_import_ballots">Stimmzettel Importieren</string>
+    <string name="action_import_poll">Umfrage Importieren</string>
+    <string name="opinion_profile">Meinungsprofil</string>
+    <string name="plot_title_opinion_profile">Gesamtzahl der abgegebenen Urteile pro Klassenstufe.</string>
+    <string name="nuance_profile">Handlung der Nuance</string>
+    <string name="plot_title_nuance_profile">Anzahl der Stimmzettel mit X verschiedenen Noten.</string>
+    <string name="proximity_profile">Näherungsdiagramm</string>
+    <string name="plot_title_proximity_profile">Nähe jedes Paares von Vorschlägen auf dem Stimmzettel.</string>
+    <string name="plot_title_proximity_with">Nähe zu %1$s</string>
+    <string name="grade_comparator_exactly">genau</string>
+    <string name="grade_comparator_at_most">höchstens</string>
+    <string name="grade_comparator_at_least">mindestens</string>
+    <string name="action_confirm">Bestätigen</string>
 </resources>
