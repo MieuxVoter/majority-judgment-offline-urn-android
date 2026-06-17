@@ -112,9 +112,9 @@
     <string name="proportions_help_paragraph_1">El propósito de la representación proporcional es compartir entre los candidatos un recurso finito como el tiempo, los escaños en la asamblea, el dinero…</string>
     <string name="button_learn_more_on_the_wiki">Obtenga más información en la Wiki</string>
     <string name="proportional_algorithm_mj_score_description">Este algoritmo fue descubierto por Marc Paraire en 2024 y calcula una puntuación única para cada perfil de mérito posible.</string>
-    <string name="proportional_algorithm_mj_score_features">Es:\n✅ Isomorfo a la Sentencia Mayoritaria\n✅ Mejor cuando los votantes son sinceros\n❌ Poco resistente al voto polarizado</string>
+    <string name="proportional_algorithm_mj_score_features">Es:\n✅ Clasificada como la Sentencia Mayoritaria\n✅ Mejor cuando los votantes son sinceros\n❌ Poco resistente al voto estratégico</string>
     <string name="proportional_algorithm_mj_score">Mérito de la Mayoría</string>
-    <string name="proportional_algorithm_osmotic_favoritism_features">Es:\n✅ Resistente al voto polarizado\n✅ Mejor cuando los votantes tienen opiniones firmes\n❌ No es isomorfo a la Sentencia Mayoritaria</string>
+    <string name="proportional_algorithm_osmotic_favoritism_features">Es:\n✅ Resistente al voto estratégico\n✅ Mejor cuando los votantes tienen opiniones firmes\n❌ No clasificada como la Sentencia Mayoritaria</string>
     <string name="tts_activate">activar</string>
     <string name="tts_deactivate">desactivar</string>
     <string name="tts_setting">configuración</string>
@@ -162,4 +162,10 @@
     <string name="poll_template_project_proposal_build_a_toolkit">Crear un conjunto de herramientas</string>
     <string name="poll_template_project_proposal_call_for_allies">Llamar a los aliados</string>
     <string name="poll_template_project_proposal_craft_a_solution">Crear una solución</string>
+    <string name="action_confirm">Confirmar</string>
+    <string name="action_dismiss">Despedir</string>
+    <string name="action_export_ballots">Exportar Papeletas</string>
+    <string name="action_export_poll">Exportar Encuesta</string>
+    <string name="action_import_ballots">Importar Papeletas</string>
+    <string name="action_import_poll">Importar Encuesta</string>
 </resources>
