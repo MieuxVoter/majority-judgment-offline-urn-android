@@ -1,0 +1,5 @@
+* Verbesserte Darstellung des Proximity-Profils
+* Behebung eines Absturzes beim nacheinander Anzeigen verschiedener Umfrageergebnisse
+* Optimierung der Ergebnisdarstellung auf kleinen Geräten mit großer Schriftart
+* Anzeige der relativ neutralen Stimmen als Kerbe im Proximity-Profil
+* Einfache Filterung der Stimmzettel auf der Ergebnisdarstellung

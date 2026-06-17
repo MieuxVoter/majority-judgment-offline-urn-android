@@ -1,0 +1,6 @@
+* Umfragen mit nur einem Vorschlag (Präferenzabstimmungen) zulassen
+* Bildschirmflackern bei der Navigation im Dunkelmodus beheben
+* Meinungsprofil hinzufügen
+* Nuancenprofil hinzufügen
+* Näheprofil hinzufügen
+* Keine Erläuterungen zu den oben genannten neuen Diagrammen hinzufügen
