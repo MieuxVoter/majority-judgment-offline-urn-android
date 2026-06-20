@@ -1,0 +1,4 @@
+* Ja/Nein-Bewertung hinzufügen
+* Filterung der Stimmzettel nach Nuancen ermöglichen
+* Bretonische Sprache hinzufügen
+* Relativ neutrale Werte in den Spinnendiagrammen zur Abstimmung anzeigen

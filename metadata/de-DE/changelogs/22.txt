@@ -1,0 +1,9 @@
+* Relative Neutralität in den Spinnendiagrammen anzeigen
+* Merit-Profile übersichtlicher gestalten
+* Daisy-Chaining: Mehrere Offline-Geräte für dieselbe Umfrage nutzen
+* Umfragekonfiguration als QR-Code exportieren
+* Umfragekonfiguration aus einem QR-Code importieren
+* Stimmzettel einer Umfrage als QR-Code(s) exportieren
+* Stimmzettel einer Umfrage aus einem QR-Code importieren
+* Tschechisch hinzufügen
+* Bretonisch verbessern
