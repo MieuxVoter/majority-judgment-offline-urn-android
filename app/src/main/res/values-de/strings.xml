@@ -18,7 +18,7 @@
     <string name="grade_to_reject">zurückweisen</string>
     <string name="grade_insufficient">unzureichend</string>
     <string name="grade_passable">akzeptabel</string>
-    <string name="grade_somewhat_good">ziemlich gut</string>
+    <string name="grade_somewhat_good">einigermaßen gut</string>
     <string name="grade_good">gut</string>
     <string name="grade_very_good">sehr gut</string>
     <string name="grade_excellent">hervorragend</string>
@@ -122,7 +122,7 @@
     <string name="tts_deactivate">deaktivieren</string>
     <string name="tts_setting">Einstellungen</string>
     <string name="tts_show_explanation">Zeige Erklährung</string>
-    <string name="tts_more_information_about_proportional_algorithms">Mehr Informationen über proportionale Algorithmen.</string>
+    <string name="tts_more_information_about_proportional_algorithms">Mehr Informationen über proportionale Algorithmen</string>
     <string name="tts_remove_the_proposal">Entferne den Vorschlag</string>
     <string name="tts_add_the_proposal">Vorschlag hinzufügen</string>
     <string name="tts_judge_proposal_as_grade">Bewerte %1$s als %2$s</string>
