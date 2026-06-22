@@ -1,0 +1,3 @@
+* Fix an error message remanence on ballots exporting
+* Add Russian (thanks to caendeith)
+* Improve Czech (thanks to Štefan Kecskes)
