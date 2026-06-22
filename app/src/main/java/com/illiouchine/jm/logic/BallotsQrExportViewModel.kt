@@ -33,6 +33,9 @@ import kotlin.math.min
 
 @Stable
 @Serializable
+/**
+ * This Data Transfer Object is what's encoded in the QR Code.
+ */
 data class BallotsDto(
     @Serializable(UUIDSerializer::class)
     val pollUuid: UUID,
@@ -74,6 +77,9 @@ class BallotsQrExportViewModel(
          * The Data Transfer Object that's actually going to transit via QR Code.
          */
         val ballotsDto: BallotsDto? = null,
+        /**
+         * Full content of the QR Code, including the URL prefix (host+domain).
+         */
         val qrContent: String? = null,
         val qrBitmap: ImageBitmap? = null,
     ) {
@@ -171,6 +177,7 @@ class BallotsQrExportViewModel(
                 it.copy(
                     poll = poll,
                     errorMessage = "The poll is too ancient.",
+                    qrExports = emptyList(),
                 )
             }
             return
@@ -186,11 +193,8 @@ class BallotsQrExportViewModel(
         _viewState.update {
             it.copy(
                 poll = poll,
-                qrExports = if (qrExport != null) {
-                    qrExport.splitIfNecessary(666)
-                } else {
-                    emptyList()
-                },
+                errorMessage = null,
+                qrExports = qrExport?.splitIfNecessary(650) ?: emptyList(),
             )
         }
     }
