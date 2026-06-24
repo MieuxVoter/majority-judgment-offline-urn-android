@@ -1,0 +1,3 @@
+* Correctif d'une erreur de rémanence lors de l'export de bulletins
+* Ajout du Russe (merci caendeith)
+* Amélioration du Tchèque (merci Štefan Kecskes)
