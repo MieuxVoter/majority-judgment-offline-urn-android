@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Urne</string>
     <string name="majority_judgment">Jugement Majoritaire</string>
-    <string name="button_finish">terminer</string>
+    <string name="button_finish">Terminer</string>
     <string name="button_next">Suivant</string>
     <string name="button_skip">Abréger</string>
     <string name="button_let_s_go">C\'est parti !</string>
