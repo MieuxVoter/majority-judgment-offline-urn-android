@@ -12,7 +12,7 @@
     <string name="button_add">添加</string>
     <string name="button_next">下一个</string>
     <string name="grade_very_good">非常好</string>
-    <string name="settings_screen_title">设置</string>
+    <string name="title_settings">设置</string>
     <string name="menu_about">关于</string>
     <string name="vote">投票</string>
     <string name="grade_excellent">很棒</string>

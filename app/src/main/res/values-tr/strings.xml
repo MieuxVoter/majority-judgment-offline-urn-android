@@ -57,7 +57,7 @@
     <string name="dialog_operation_cannot_be_undone">Bu işlem geri alınamaz.</string>
     <string name="about_this_app_is_libre_software">Bu uygulama bir özgür yazılımdır.</string>
     <string name="toast_proposal_name_already_exists">Bu teklif zaten mevcut.</string>
-    <string name="settings_screen_title">Ayarlar</string>
+    <string name="title_settings">Ayarlar</string>
     <string name="summary_button_no_rescind">Hayır, geri al</string>
     <string name="toast_you_cannot_go_back_from_here">Buradan geri dönemezsiniz, bu hile olur.</string>
     <string name="onboarding_welcome_to_your_offline_poll_app">Dereceli oylama yöntemini kullanan çevrimdışı anket uygulamasına hoş geldiniz.</string>

@@ -57,13 +57,13 @@ fun PollQrExportScreen(
 
         Column(
             modifier = modifier
-                .padding(innerPadding)
+                .padding(paddingValues = innerPadding)
                 .padding(horizontal = Theme.spacing.small)
                 .fillMaxSize()
                 .verticalScroll(state = scrollState),
         ) {
             ScreenTitle(
-                text = "Export Poll" + "\n" +
+                text = stringResource(R.string.title_export_poll) + "\n" +
                     state.poll.pollConfig.subject + "\n" +
                     "(${state.poll.uuid?.toString()?.take(8)})",
             )

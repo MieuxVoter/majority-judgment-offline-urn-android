@@ -2,6 +2,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">Urn</string>
     <string name="majority_judgment">Majority Judgment</string>
+    <string name="title_multiline_majority_judgment_urn">Majority\nJudgment\nUrn</string>
+    <string name="title_poll_setup">New Poll</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_about">About</string>
+    <string name="title_export_poll">Export Poll</string>
     <string name="label_poll_subject">Subject of the Poll</string>
     <string name="label_poll_proposals">Proposals</string>
     <string name="poll_setup_subject_placeholder">Enter the subject of the poll…</string>
@@ -63,9 +68,7 @@
     <string name="five_urgency_grades">Five urgency grades</string>
     <string name="five_priority_grades">Five priority grades</string>
     <string name="six_enthusiasm_grades">Six enthusiasm grades</string>
-    <string name="settings_screen_title">Settings</string>
     <string name="incitation_making_new_poll">Try making a new poll, it\'s free !</string>
-    <string name="title_multiline_majority_judgment_urn">Majority\nJudgment\nUrn</string>
     <string name="onboarding_welcome_to_your_offline_poll_app">Welcome to your offline poll app using Majority Judgment.</string>
     <string name="onboarding_setup_a_poll_and_share_the_phone">Setup a poll and share the phone amongst participants.</string>
     <string name="onboarding_this_is_free_software">This is Libre Software, find out how to contact us or contribute in the About section.</string>
@@ -87,8 +90,6 @@
     <string name="action_import_poll">Import Poll</string>
     <string name="action_inspect">Inspect</string>
     <string name="action_resume">Resume</string>
-    <string name="title_about">About</string>
-    <string name="title_poll_setup">New Poll</string>
     <string name="opinion_profile">Opinion Profile</string>
     <string name="plot_title_opinion_profile">Total amount of judgments cast per grade.</string>
     <string name="nuance_profile">Nuance Profile</string>
@@ -108,6 +109,8 @@
     <string name="setting_play_sound_label">Signal everyone that a ballot has been submitted</string>
     <string name="setting_pin_screen">Pin screen automatically</string>
     <string name="setting_pin_screen_label">Prevent voters from leaving the app</string>
+    <string name="setting_default_grading">Default grading</string>
+    <string name="setting_default_grading_label">Selected by default when you create a new poll</string>
     <string name="summary_you_are_almost_done">You\'re almost done !</string>
     <string name="summary_please_confirm_your_vote">Please confirm your vote:</string>
     <string name="summary_are_you_sure">Are you sure ?</string>

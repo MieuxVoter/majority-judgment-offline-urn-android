@@ -34,7 +34,7 @@
     <string name="five_quality_grades">Cinco grados cualitativo</string>
     <string name="three_quality_grades">Tres grados cualitativo</string>
     <string name="setting_show_onboarding">Mostrar la introducción nuevamente</string>
-    <string name="settings_screen_title">Ajustes</string>
+    <string name="title_settings">Ajustes</string>
     <string name="incitation_making_new_poll">Prueba a hacer una nueva encuesta, ¡es gratis!</string>
     <string name="title_multiline_majority_judgment_urn">Mayoría\nSentencia\nUrna</string>
     <string name="button_new_poll">Nueva Encuesta</string>

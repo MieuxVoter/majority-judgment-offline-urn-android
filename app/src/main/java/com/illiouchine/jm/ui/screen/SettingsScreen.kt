@@ -83,7 +83,7 @@ fun SettingsScreen(
         ) {
             ScreenTitle(
                 modifier = Modifier,
-                text = stringResource(R.string.settings_screen_title),
+                text = stringResource(R.string.title_settings),
             )
 
             ShowOnboardingRow(
@@ -114,6 +114,28 @@ fun SettingsScreen(
                 },
             )
 
+            Row(
+                modifier = Modifier
+                    .padding(
+                        top = Theme.spacing.medium,
+                        start = Theme.spacing.medium,
+                        end = Theme.spacing.medium,
+                    ),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(end = Theme.spacing.extraSmall),
+                ) {
+                    Text(stringResource(R.string.setting_default_grading))
+                    Text(
+                        text = stringResource(R.string.setting_default_grading_label),
+                        fontStyle = FontStyle.Italic,
+                        fontSize = 12.sp,
+                    )
+                }
+            }
             GradingSelectionRow(
                 modifier = Modifier,
                 grading = settingsState.defaultGrading,
@@ -226,7 +248,10 @@ fun SwitchSettingRow(
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
 @Preview(
     showSystemUi = true,
     uiMode = Configuration.UI_MODE_NIGHT_YES,
