@@ -29,7 +29,7 @@
     <string name="title_poll_setup">投票</string>
     <string name="summary_are_you_sure">您确定吗？</string>
     <string name="ranking_explain_perfectly_equal">%1$s和%2$s完全相等。</string>
-    <string name="toast_you_cannot_go_back_from_here">你不可以从这里退出，这将会是欺骗！</string>
+    <string name="toast_you_cannot_go_back_from_here">你不可以从这里退出，这将会是欺骗.</string>
     <string name="setting_pin_screen">自动固定屏幕</string>
     <string name="summary_button_yes_confirm">是，我已确定</string>
     <string name="dialog_are_you_sure">您确定？</string>

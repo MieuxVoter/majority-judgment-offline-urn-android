@@ -96,7 +96,7 @@
     <string name="six_enthusiasm_grades">Altı duygu derecesi</string>
     <string name="label_show_proportions">Oranlar</string>
     <string name="proportional_algorithm_none">Hiçbiri</string>
-    <string name="proportional_algorithm_mj_score">MJ Skoru</string>
+    <string name="proportional_algorithm_mj_score">Çoğunluk Liyakati</string>
     <string name="proportional_algorithm_osmotic_favoritism">Ozmotik favoritizm</string>
     <string name="title_proportional_representation">Oransal\nGösterim</string>
     <string name="proportions_help_paragraph_3">Seçmeden iki kere düşün.</string>
