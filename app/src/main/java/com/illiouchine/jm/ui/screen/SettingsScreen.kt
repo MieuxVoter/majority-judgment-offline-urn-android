@@ -53,6 +53,7 @@ fun SettingsScreen(
     onShowOnBoardingRequested: () -> Unit = {},
     onPlaySoundChange: (Boolean) -> Unit = {},
     onPinScreenChange: (Boolean) -> Unit = {},
+    onHighestGradeOnTheLeftChange: (Boolean) -> Unit = {},
     onDefaultGradingSelected: (Grading) -> Unit = {},
     onDismissFeedback: () -> Unit = {},
 ) {
@@ -111,6 +112,16 @@ fun SettingsScreen(
                 checked = settingsState.pinScreen,
                 onCheckedChange = {
                     onPinScreenChange(it)
+                },
+            )
+
+            SwitchSettingRow(
+                modifier = Modifier.padding(Theme.spacing.medium),
+                title = R.string.setting_highest_grade_on_the_left,
+                label = R.string.setting_highest_grade_on_the_left_label,
+                checked = settingsState.highestGradeOnTheLeft,
+                onCheckedChange = {
+                    onHighestGradeOnTheLeftChange(it)
                 },
             )
 

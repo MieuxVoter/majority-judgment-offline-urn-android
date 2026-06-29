@@ -24,7 +24,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -57,6 +56,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.illiouchine.jm.R
 import com.illiouchine.jm.config.ProportionalAlgorithms
 import com.illiouchine.jm.data.InMemoryPollDataSource
+import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.extensions.bigSumOf
 import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.filters.BallotsFilterInterface
@@ -67,7 +67,6 @@ import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.model.ProposalTally
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
-import com.illiouchine.jm.ui.composable.scaffold.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.composable.plot.NuanceProfile
 import com.illiouchine.jm.ui.composable.plot.OpinionProfileBarChart
@@ -75,6 +74,8 @@ import com.illiouchine.jm.ui.composable.plot.ProximityBarChart
 import com.illiouchine.jm.ui.composable.plot.ProximitySpider
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
 import com.illiouchine.jm.ui.composable.plot.utils.filterAnalysis
+import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
+import com.illiouchine.jm.ui.composable.scaffold.MjuSnackbar
 import com.illiouchine.jm.ui.composable.spacer.MediumVerticalSpacer
 import com.illiouchine.jm.ui.composable.spacer.SmallVerticalSpacer
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
@@ -105,9 +106,7 @@ fun ResultScreen(
     val result = state.result!!
     val tally = state.tally!!
     val grading = poll.pollConfig.grading
-
-    // Good first issue: fetch this from settings
-    val highestGradeToLowestGrade = true
+    val highestGradeToLowestGrade = state.highGradeOnLeft
 
     val context = LocalContext.current
     val amountOfProposals = result.proposalResultsRanked.size
@@ -131,7 +130,7 @@ fun ResultScreen(
     var ballotsFiltersExpanded by rememberSaveable { mutableStateOf(false) }
     var newBallotsFilterDropdownExpanded by remember { mutableStateOf(false) }
 
-    Scaffold(
+    MjuScaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = {
             MjuSnackbar(
@@ -656,9 +655,11 @@ fun PreviewResultScreen(modifier: Modifier = Modifier) {
         }
     )
 
+    val context = LocalContext.current
     val pollResultViewModel = viewModel {
         PollResultViewModel(
             pollDataSource = InMemoryPollDataSource(), // dummy
+            sharedPrefsHelper = SharedPrefsHelper(context),
         )
     }
     pollResultViewModel.initializePollResult(LocalContext.current, poll)
@@ -739,13 +740,14 @@ fun PreviewFilteredResultScreen(modifier: Modifier = Modifier) {
         )
     }
 
+    val context = LocalContext.current
     val pollResultViewModel = viewModel {
         PollResultViewModel(
             pollDataSource = InMemoryPollDataSource(), // dummy
+            sharedPrefsHelper = SharedPrefsHelper(context),
         )
     }
 
-    val context = LocalContext.current
 //    LaunchedEffect(poll, ballotsFilter) { // → preview refresh loop
     pollResultViewModel.initializePollResult(
         context = context,

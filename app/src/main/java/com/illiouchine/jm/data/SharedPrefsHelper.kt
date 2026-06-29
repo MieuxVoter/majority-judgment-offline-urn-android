@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.illiouchine.jm.config.DEFAULT_GRADING_QUALITY_VALUE
+import com.illiouchine.jm.config.DEFAULT_HIGH_GRADE_ON_LEFT_VALUE
 import com.illiouchine.jm.config.DEFAULT_PLAY_SOUND_VALUE
 import com.illiouchine.jm.config.DEFAULT_SHOW_ONBOARDING_VALUE
 import com.illiouchine.jm.model.Grading
@@ -17,6 +18,7 @@ class SharedPrefsHelper(
         private const val PLAY_SOUND_PREF_KEY: String = "play_sound"
         private const val PIN_SCREEN_PREF_KEY: String = "pin_screen"
         private const val DEFAULT_GRADING_PREF_KEY: String = "default_grading_prefs"
+        private const val HIGH_GRADE_ON_LEFT_PREF_KEY: String = "highest_grade_on_the_left_prefs"
     }
 
     private val sharedPreferences: SharedPreferences =
@@ -55,6 +57,19 @@ class SharedPrefsHelper(
     fun editPinScreen(value: Boolean = true) {
         sharedPreferences.edit {
             putBoolean(PIN_SCREEN_PREF_KEY, value)
+        }
+    }
+
+    fun getHighGradeOnLeft(): Boolean {
+        return sharedPreferences.getBoolean(
+            HIGH_GRADE_ON_LEFT_PREF_KEY,
+            DEFAULT_HIGH_GRADE_ON_LEFT_VALUE,
+        )
+    }
+
+    fun editHighGradeOnLeft(value: Boolean = false) {
+        sharedPreferences.edit {
+            putBoolean(HIGH_GRADE_ON_LEFT_PREF_KEY, value)
         }
     }
 

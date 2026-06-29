@@ -109,6 +109,8 @@
     <string name="setting_play_sound_label">Signal everyone that a ballot has been submitted</string>
     <string name="setting_pin_screen">Pin screen automatically</string>
     <string name="setting_pin_screen_label">Prevent voters from leaving the app</string>
+    <string name="setting_highest_grade_on_the_left">Highest grade on the left</string>
+    <string name="setting_highest_grade_on_the_left_label">Show Highest Grade → Lowest Grade in the merit profiles</string>
     <string name="setting_default_grading">Default grading</string>
     <string name="setting_default_grading_label">Selected by default when you create a new poll</string>
     <string name="summary_you_are_almost_done">You\'re almost done !</string>

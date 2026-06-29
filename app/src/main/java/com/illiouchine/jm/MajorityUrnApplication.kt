@@ -86,6 +86,7 @@ val module = module {
     viewModel {
         PollResultViewModel(
             pollDataSource = get(),
+            sharedPrefsHelper = get(),
         )
     }
     viewModel {

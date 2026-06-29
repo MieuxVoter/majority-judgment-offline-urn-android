@@ -4,6 +4,7 @@ import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.config.DEFAULT_GRADING_QUALITY_VALUE
+import com.illiouchine.jm.config.DEFAULT_HIGH_GRADE_ON_LEFT_VALUE
 import com.illiouchine.jm.config.DEFAULT_PIN_SCREEN_VALUE
 import com.illiouchine.jm.config.DEFAULT_PLAY_SOUND_VALUE
 import com.illiouchine.jm.data.SharedPrefsHelper
@@ -25,6 +26,7 @@ class SettingsViewModel(
     data class SettingsViewState(
         val playSound: Boolean = DEFAULT_PLAY_SOUND_VALUE,
         val pinScreen: Boolean = DEFAULT_PIN_SCREEN_VALUE,
+        val highestGradeOnTheLeft: Boolean = DEFAULT_HIGH_GRADE_ON_LEFT_VALUE,
         val defaultGrading: Grading = DEFAULT_GRADING_QUALITY_VALUE,
     )
 
@@ -37,6 +39,7 @@ class SettingsViewModel(
     fun initialize() {
         loadPlaySound()
         loadPinScreen()
+        loadHighestGradeOnTheLeft()
         loadDefaultGrading()
     }
 
@@ -51,6 +54,13 @@ class SettingsViewModel(
         val pinScreen = sharedPreferences.getPinScreen()
         _settingsViewState.update {
             it.copy(pinScreen = pinScreen)
+        }
+    }
+
+    private fun loadHighestGradeOnTheLeft() {
+        val value = sharedPreferences.getHighGradeOnLeft()
+        _settingsViewState.update {
+            it.copy(highestGradeOnTheLeft = value)
         }
     }
 
@@ -78,6 +88,13 @@ class SettingsViewModel(
         sharedPreferences.editPinScreen(pinScreen)
         _settingsViewState.update {
             it.copy(pinScreen = pinScreen)
+        }
+    }
+
+    fun updateHighestGradeOnTheLeft(value: Boolean) {
+        sharedPreferences.editHighGradeOnLeft(value)
+        _settingsViewState.update {
+            it.copy(highestGradeOnTheLeft = value)
         }
     }
 

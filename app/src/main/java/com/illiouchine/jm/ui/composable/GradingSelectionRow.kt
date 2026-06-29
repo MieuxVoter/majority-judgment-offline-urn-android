@@ -48,13 +48,13 @@ fun GradingSelectionRow(
     grading: Grading = DEFAULT_GRADING_QUALITY_VALUE,
     onGradingSelected: (Grading) -> Unit = {},
 ) {
+    var expanded by remember { mutableStateOf(false) }
+
     Row(
         modifier = modifier
             .fillMaxWidth()
             .padding(0.dp),
     ) {
-        var expanded by remember { mutableStateOf(false) }
-
         Column {
             Row(
                 modifier = Modifier
