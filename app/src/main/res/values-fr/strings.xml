@@ -34,7 +34,7 @@
     <string name="five_quality_grades">Cinq mentions qualitatives</string>
     <string name="three_quality_grades">Trois mentions qualitatives</string>
     <string name="setting_show_onboarding">Montrer l\'intro à nouveau</string>
-    <string name="settings_screen_title">Options</string>
+    <string name="title_settings">Options</string>
     <string name="incitation_making_new_poll">Créez un nouveau scrutin, c\'est gratis !</string>
     <string name="title_multiline_majority_judgment_urn">Urne\nJugement\nMajoritaire</string>
     <string name="button_new_poll">Nouveau Scrutin</string>

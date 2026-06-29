@@ -52,7 +52,7 @@
     <string name="five_urgency_grades">Fünf Dringlichkeitsstufen</string>
     <string name="five_priority_grades">Fünf Prioritätsstufen</string>
     <string name="six_enthusiasm_grades">Sechs Begeisterungsstufen</string>
-    <string name="settings_screen_title">Einstellungen</string>
+    <string name="title_settings">Einstellungen</string>
     <string name="incitation_making_new_poll">Probier’ eine neue Umfrage, es kostet nix!</string>
     <string name="title_multiline_majority_judgment_urn">Mehrheits-\nEntscheidungs-\nUrne</string>
     <string name="button_new_poll">Neue Umfrage</string>

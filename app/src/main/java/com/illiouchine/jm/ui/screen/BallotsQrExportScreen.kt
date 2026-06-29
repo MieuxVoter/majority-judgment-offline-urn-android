@@ -70,7 +70,7 @@ fun BallotsQrExportScreen(
 
         Column(
             modifier = modifier
-                .padding(innerPadding)
+                .padding(paddingValues = innerPadding)
                 .padding(horizontal = Theme.spacing.small)
                 .fillMaxSize()
                 .verticalScroll(state = scrollState),

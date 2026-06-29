@@ -446,6 +446,7 @@ class MainActivity : ComponentActivity() {
                                 onShowOnBoardingRequested = settingsViewModel::showOnBoarding,
                                 onPlaySoundChange = settingsViewModel::updatePlaySound,
                                 onPinScreenChange = settingsViewModel::updatePinScreen,
+                                onHighestGradeOnTheLeftChange = settingsViewModel::updateHighestGradeOnTheLeft,
                                 onDefaultGradingSelected = settingsViewModel::updateDefaultGrading,
                                 onDismissFeedback = {},
                             )

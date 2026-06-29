@@ -7,8 +7,10 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.R
+import com.illiouchine.jm.config.DEFAULT_HIGH_GRADE_ON_LEFT_VALUE
 import com.illiouchine.jm.config.ProportionalAlgorithms
 import com.illiouchine.jm.data.PollDataSource
+import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.filters.BallotsFilterInterface
 import com.illiouchine.jm.filters.NoBallotsFilter
 import com.illiouchine.jm.model.ParticipantGroupAnalysis
@@ -37,6 +39,7 @@ import kotlin.math.max
 
 class PollResultViewModel(
     private val pollDataSource: PollDataSource,
+    private val sharedPrefsHelper: SharedPrefsHelper,
 ) : ViewModel() {
 
     @Stable
@@ -50,6 +53,7 @@ class PollResultViewModel(
         val proximityAnalysis: ProximityAnalysis? = null,
         val ballotFilter: BallotsFilterInterface = NoBallotsFilter(),
         val unfilteredPoll: Poll? = null,
+        val highGradeOnLeft: Boolean = DEFAULT_HIGH_GRADE_ON_LEFT_VALUE,
     )
 
     @Stable
@@ -166,6 +170,7 @@ class PollResultViewModel(
                 groups = groups,
                 proportions = proportions,
                 proximityAnalysis = proximityAnalysis,
+                highGradeOnLeft = sharedPrefsHelper.getHighGradeOnLeft(),
             )
         }
     }

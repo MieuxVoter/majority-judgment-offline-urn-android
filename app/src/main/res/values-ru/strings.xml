@@ -57,7 +57,7 @@
     <string name="five_urgency_grades">Пять оценок срочности</string>
     <string name="five_priority_grades">Пять оценок приоритета</string>
     <string name="six_enthusiasm_grades">Шесть оценок энтузиазма</string>
-    <string name="settings_screen_title">Настройки</string>
+    <string name="title_settings">Настройки</string>
     <string name="incitation_making_new_poll">Попробуйте создать новый опрос — это бесплатно!</string>
     <string name="title_multiline_majority_judgment_urn">Урна\nРешения\nБольшинства</string>
     <string name="onboarding_welcome_to_your_offline_poll_app">Добро пожаловать в ваше приложение для офлайн-опросов, использующее алгоритм «решения большинства».</string>
