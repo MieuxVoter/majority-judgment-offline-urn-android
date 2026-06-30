@@ -13,5 +13,6 @@ val gradings: List<Grading> = listOf(
     Grading.Oral3Grading,
     Grading.Priority5Grading,
     Grading.Urgency5Grading,
+    Grading.Love5Grading,
     Grading.Enthusiasm6Grading,
 )

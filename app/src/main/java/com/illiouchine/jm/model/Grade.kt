@@ -146,6 +146,34 @@ val gradeNoPriority = Grade(
     textColor = grade0FgColor,
 )
 
+// LOVE GRADES — https://en.wikipedia.org/wiki/He_loves_me..._he_loves_me_not
+
+val gradeLoveToMadness = Grade(
+    name = R.string.grade_to_madness,
+    color = grade6BgColor,
+    textColor = grade6FgColor,
+)
+val gradeLovePassionately = Grade(
+    name = R.string.grade_passionately,
+    color = grade5BgColor,
+    textColor = grade5FgColor,
+)
+val gradeLoveAtLot = Grade(
+    name = R.string.grade_a_lot,
+    color = grade4BgColor,
+    textColor = grade4FgColor,
+)
+val gradeLoveLittle = Grade(
+    name = R.string.grade_a_little,
+    color = grade3BgColor,
+    textColor = grade3FgColor,
+)
+val gradeLoveNotAtAll = Grade(
+    name = R.string.grade_not_at_all,
+    color = grade0BgColor,
+    textColor = grade0FgColor,
+)
+
 // ENTHUSIASM GRADES
 
 val gradeDisgust = Grade(
