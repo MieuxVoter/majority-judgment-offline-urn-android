@@ -39,11 +39,11 @@
     <string name="grade_priority">priority</string>
     <string name="grade_high_priority">high priority</string>
     <string name="grade_top_priority">top priority</string>
-    <string name="grade_not_at_all">not at all</string>
-    <string name="grade_a_little">a little</string>
-    <string name="grade_a_lot">a lot</string>
-    <string name="grade_passionately">passionately</string>
-    <string name="grade_to_madness">to madness</string>
+    <string name="grade_not_at_all">not loved at all</string>
+    <string name="grade_a_little">loved a little</string>
+    <string name="grade_a_lot">loved a lot</string>
+    <string name="grade_passionately">loved passionately</string>
+    <string name="grade_to_madness">loved to madness</string>
     <string name="grade_disgust" translatable="false">😫</string>
     <string name="grade_reluctance" translatable="false">😒</string>
     <string name="grade_ataraxia" translatable="false">😐</string>
