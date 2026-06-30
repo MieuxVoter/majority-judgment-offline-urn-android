@@ -168,4 +168,9 @@
     <string name="action_export_poll">Exporter le Scrutin</string>
     <string name="action_import_ballots">Importer des Bulletins</string>
     <string name="action_import_poll">Importer un Scrutin</string>
+    <string name="title_export_poll">Exporter le Scrutin</string>
+    <string name="setting_highest_grade_on_the_left">Mention la plus élevée à gauche</string>
+    <string name="setting_highest_grade_on_the_left_label">Afficher Meilleure Mention → Pire Mention dans les profils de mérite</string>
+    <string name="setting_default_grading">Mentions par défaut</string>
+    <string name="setting_default_grading_label">Sélectionnées par défaut quand vous créez un nouveau scrutin</string>
 </resources>
