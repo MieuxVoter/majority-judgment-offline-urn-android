@@ -12,6 +12,7 @@ An application for Android 8.1 and greater that helps groups decide about things
 
 > If you're looking for an online app, try https://app.mieuxvoter.fr/
 
+
 ## Features
 
 - *Mobile Urn*: Set up a local, offline poll on your phone.
@@ -37,19 +38,30 @@ Since Android 11, you may enable [app pinning](https://support.google.com/androi
 
 ## Download
 
+[<img src="https://f-droid.org/badge/get-it-on.svg"
+    alt="Get it on F-Droid"
+    height="80">](https://f-droid.org/packages/com.illiouchine.jm)
+
+
 ### F-Droid
 
-This Android app is available on [F-Droid](https://f-droid.org/en/packages/com.illiouchine.jm).
+This Android app is available on the excellent [F-Droid](https://f-droid.org/en/packages/com.illiouchine.jm).
 
-> This is the **recommended way to install**, as you'll benefit from automatic updates.
+> [!TIP]
+> This is the **recommended way to install**, as you'll benefit from automatic updates,
+> and better security than the alternatives.
 
 ### Google Play
 
 This application is also [available on Google Play](https://play.google.com/store/apps/details?id=fr.mieuxvoter.urn).
 
+> [!WARNING]
+> As of September 2026, this app may not be available on Google Play anymore,
+> as Google decided to further enshittify Android.  https://keepandroidopen.com/
+
 ### Direct Download
 
-[Download the latest release](https://github.com/MieuxVoter/majority-judgment-offline-urn-android/releases/latest/download/app-release.apk) of the app.
+[Download the latest release](https://github.com/MieuxVoter/majority-judgment-offline-urn-android/releases/latest/download/app-release.apk) of the app, as an `APK` file.
 
 > All the artifacts are built by our Continuous Integration (CI) on each release.
 
