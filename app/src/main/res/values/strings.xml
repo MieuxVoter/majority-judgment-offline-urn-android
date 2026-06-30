@@ -30,15 +30,20 @@
     <string name="grade_nay">Nay</string>
     <string name="grade_meh">Meh</string>
     <string name="grade_aye">Aye</string>
-    <string name="grade_extremely_urgent">extremely urgent</string>
-    <string name="grade_very_urgent">very urgent</string>
-    <string name="grade_urgent">urgent</string>
-    <string name="grade_neutral">neutral</string>
     <string name="grade_not_urgent">not urgent</string>
-    <string name="grade_top_priority">top priority</string>
-    <string name="grade_high_priority">high priority</string>
-    <string name="grade_priority">priority</string>
+    <string name="grade_neutral">neutral</string>
+    <string name="grade_urgent">urgent</string>
+    <string name="grade_very_urgent">very urgent</string>
+    <string name="grade_extremely_urgent">extremely urgent</string>
     <string name="grade_no_priority">no priority</string>
+    <string name="grade_priority">priority</string>
+    <string name="grade_high_priority">high priority</string>
+    <string name="grade_top_priority">top priority</string>
+    <string name="grade_not_at_all">not loved at all</string>
+    <string name="grade_a_little">loved a little</string>
+    <string name="grade_a_lot">loved a lot</string>
+    <string name="grade_passionately">loved passionately</string>
+    <string name="grade_to_madness">loved to madness</string>
     <string name="grade_disgust" translatable="false">😫</string>
     <string name="grade_reluctance" translatable="false">😒</string>
     <string name="grade_ataraxia" translatable="false">😐</string>
@@ -67,6 +72,7 @@
     <string name="three_oral_grades">Three oral grades</string>
     <string name="five_urgency_grades">Five urgency grades</string>
     <string name="five_priority_grades">Five priority grades</string>
+    <string name="five_love_grades">Five love grades</string>
     <string name="six_enthusiasm_grades">Six enthusiasm grades</string>
     <string name="incitation_making_new_poll">Try making a new poll, it\'s free !</string>
     <string name="onboarding_welcome_to_your_offline_poll_app">Welcome to your offline poll app using Majority Judgment.</string>

@@ -120,6 +120,20 @@ sealed class Grading(
     )
 
     @Serializable
+    data object Love5Grading : Grading(
+        uid = 405,
+        name = R.string.five_love_grades,
+        grades = listOf(
+            gradeLoveNotAtAll,
+            gradeLoveLittle,
+            gradeLoveAtLot,
+            gradeLovePassionately,
+            gradeLoveToMadness,
+        ),
+        acceptationThreshold = 1,
+    )
+
+    @Serializable
     data object Enthusiasm6Grading : Grading(
         uid = 306,
         name = R.string.six_enthusiasm_grades,

@@ -1,4 +1,5 @@
 * Fix an error message remanence on ballots exporting
 * Add a setting for the layout of merit profiles
+* Add a love grading
 * Add Russian (thanks to caendeith)
 * Improve Czech (thanks to Štefan Kecskes)
