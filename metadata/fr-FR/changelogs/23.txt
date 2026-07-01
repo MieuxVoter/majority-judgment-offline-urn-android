@@ -1,3 +1,5 @@
 * Correctif d'une erreur de rémanence lors de l'export de bulletins
+* Ajout d'une option pour l'ordre des mentions dans les profils de mérite
+* Ajout de mentions d'amour
 * Ajout du Russe (merci caendeith)
 * Amélioration du Tchèque (merci Štefan Kecskes)
