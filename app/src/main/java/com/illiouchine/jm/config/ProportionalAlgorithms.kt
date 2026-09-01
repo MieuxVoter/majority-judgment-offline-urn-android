@@ -102,17 +102,21 @@ enum class ProportionalAlgorithms {
      */
     abstract fun getDescription(context: Context): String
 
+    /**
+     * Additional content shown on the help screen, describing the features of the algorithm.
+     */
     abstract fun getFeatures(context: Context): String
 
     /**
      * Whether this algorithm is available to users.
+     * Nowadays all the algorithms are available, but in the past some used to be hidden.
      */
     abstract fun isAvailable(): Boolean
 
     /**
      * The output list is sorted in order of the input proposals.
      * It ought to be normalized (the sum of its elements must be 1.0).
-     * Except for NONE, where the list might be empty (or full of zeros).
+     * Except for NONE, where the list might be empty (or full of meaningless values).
      */
     abstract fun compute(poll: Poll, result: ResultInterface): List<Double>
 }
