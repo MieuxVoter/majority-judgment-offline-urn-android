@@ -60,13 +60,6 @@ android {
     buildFeatures {
         compose = true
     }
-    packaging {
-        // For org.apache.arrow:arrow-dataset:18.3.0 and 6 others (from dataframe)
-        // dataframe is too big, so it has been removed for now, hence the comments
-//        resources.excludes.add("META-INF/DEPENDENCIES")
-//        resources.excludes.add("META-INF/*LICENSE")
-//        resources.excludes.add("META-INF/*NOTICE")
-    }
 
     room {
         schemaDirectory("$projectDir/schemas")
@@ -147,7 +140,6 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     // Plotting
-    //implementation(libs.kandy.lets.plot) // not using kandy for now as it produces raster (+svg)
     implementation(libs.compose.charts)
     implementation(libs.koalaplot.core)
 
