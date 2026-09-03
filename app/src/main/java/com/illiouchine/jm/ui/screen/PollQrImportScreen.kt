@@ -25,6 +25,7 @@ import com.illiouchine.jm.logic.PollQrImportViewModel
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.service.ExchangeUriService
 import com.illiouchine.jm.ui.composable.ScreenTitle
 import com.illiouchine.jm.ui.composable.button.ActionRowCancelConfirm
 import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
@@ -38,6 +39,7 @@ import com.illiouchine.jm.ui.utils.encode
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.encodeToByteArray
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalSerializationApi::class)
 @Composable
@@ -181,7 +183,10 @@ fun PollQrImportScreen(
     showSystemUi = true,
  )
 @Composable
-fun PreviewPollQrImportScreen(modifier: Modifier = Modifier) {
+fun PreviewPollQrImportScreen(
+    modifier: Modifier = Modifier,
+    exchangeUriService: ExchangeUriService = koinInject(),
+) {
     val poll = Poll(
         id = 17,
         pollConfig = PollConfig(
@@ -210,11 +215,13 @@ fun PreviewPollQrImportScreen(modifier: Modifier = Modifier) {
     val pollQrImportViewModel = viewModel {
         PollQrImportViewModel(
             pollDataSource = InMemoryPollDataSource(), // dummy
+            exchangeUriService = exchangeUriService,
+
         )
     }
     pollQrImportViewModel.initialize(
         context = LocalContext.current,
-        qrUriPath = compressedPollString,
+        qrUriPathDatum = compressedPollString,
     )
     val state = pollQrImportViewModel.viewState.collectAsState().value
 

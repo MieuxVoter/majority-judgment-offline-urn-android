@@ -29,6 +29,7 @@ import com.illiouchine.jm.logic.PollQrExportViewModel
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.service.ExchangeUriService
 import com.illiouchine.jm.ui.composable.ScreenTitle
 import com.illiouchine.jm.ui.composable.image.QrCodeImage
 import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
@@ -39,6 +40,7 @@ import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalSerializationApi::class)
 @Composable
@@ -185,7 +187,10 @@ fun PollQrExportScreen(
 )
 // @PreviewScreenSizes // my eyes hurt ← no dark mode
 @Composable
-fun PreviewPollQrExportScreen(modifier: Modifier = Modifier) {
+fun PreviewPollQrExportScreen(
+    modifier: Modifier = Modifier,
+    exchangeUriService: ExchangeUriService = koinInject(),
+) {
     val poll = Poll(
         id = 17,
         pollConfig = PollConfig(
@@ -210,6 +215,7 @@ fun PreviewPollQrExportScreen(modifier: Modifier = Modifier) {
     val pollQrExportViewModel = viewModel {
         PollQrExportViewModel(
             pollDataSource = InMemoryPollDataSource(), // dummy
+            exchangeUriService = exchangeUriService,
         )
     }
     pollQrExportViewModel.initializeFromPoll(poll)

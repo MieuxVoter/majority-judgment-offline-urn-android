@@ -27,13 +27,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.InMemoryPollDataSource
-import com.illiouchine.jm.logic.BallotsDto
 import com.illiouchine.jm.logic.BallotsQrImportViewModel
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.model.dto.BallotsDto
+import com.illiouchine.jm.service.ExchangeUriService
 import com.illiouchine.jm.ui.composable.ScreenTitle
 import com.illiouchine.jm.ui.composable.button.ActionRowCancelConfirm
 import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
@@ -47,6 +48,7 @@ import com.illiouchine.jm.ui.utils.encode
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.encodeToByteArray
+import org.koin.compose.koinInject
 import java.util.UUID
 
 @Composable
@@ -233,7 +235,10 @@ fun BallotsQrImportScreen(
 // )
 // @PreviewScreenSizes // my eyes hurt ← no dark mode
 @Composable
-fun PreviewBallotsQrImportScreen(modifier: Modifier = Modifier) {
+fun PreviewBallotsQrImportScreen(
+    modifier: Modifier = Modifier,
+    exchangeUriService: ExchangeUriService = koinInject(),
+) {
     val poll = Poll(
         id = 17,
         uuid = UUID(66666669999999, 777111),
@@ -303,13 +308,14 @@ fun PreviewBallotsQrImportScreen(modifier: Modifier = Modifier) {
     val ballotsQrImportViewModel = viewModel {
         BallotsQrImportViewModel(
             pollDataSource = pollDataSource,
+            exchangeUriService = exchangeUriService,
         )
     }
 
     if (done) {
         ballotsQrImportViewModel.initialize(
             context = LocalContext.current,
-            qrUriPath = uriPath,
+            qrUriPathDatum = uriPath,
         )
         val state = ballotsQrImportViewModel.viewState.collectAsState().value
 

@@ -22,6 +22,14 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!--
+            ## Solution 1
+            The mju:// scheme will only work on recent Android versions.
+            It does not work on my Android 13 device, for example.  T_T
+            It's also not recommended to use a custom scheme.
+            But, it does work on recent Android devices, fully offline, so that's nice.
+            Also, it's short.
+            -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -33,6 +41,19 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="mju" android:host="b" />
+            </intent-filter>
+            <!--
+            ## Solution 2
+            As is recommended, we can use the https scheme and a domain we own.
+            Hmmm…  Maybe not.  Android needs a network call to verify the domain.
+            This sucks, as this app is expected to work 100% offline.
+            Also, we have not deployed (yet) the .well-known on the server.
+            -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="mju.mieuxvoter.fr" />
             </intent-filter>
         </activity>
         <provider

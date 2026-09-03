@@ -62,6 +62,7 @@ majority-judgment-library-java = { module = "com.github.MieuxVoter:majority-judg
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
 koin-core = { module = "io.insert-koin:koin-core" }
 koin-android = { module = "io.insert-koin:koin-android" }
+koin-compose = { module = "io.insert-koin:koin-compose" }
 androidx-room-runtime = { group ="androidx.room", name = "room-runtime", version.ref = "room"}
 androidx-room-compiler = { group ="androidx.room", name = "room-compiler", version.ref = "room"}
 androidx-room-ktx = { group ="androidx.room", name = "room-ktx", version.ref = "room"}

@@ -133,6 +133,7 @@ dependencies {
     implementation(project.dependencies.platform(libs.koin.bom))
     implementation(libs.koin.core)
     implementation(libs.koin.android)
+    implementation(libs.koin.compose)
 
     // Room (Database)
     implementation(libs.androidx.room.runtime)

@@ -1,0 +1,2 @@
+* Refactor daisy-chaining via QR codes
+* Refactor Composable previews to use dependency injection

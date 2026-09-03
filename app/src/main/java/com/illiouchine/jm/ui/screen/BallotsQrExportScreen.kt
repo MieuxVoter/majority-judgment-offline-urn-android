@@ -32,6 +32,7 @@ import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.service.ExchangeUriService
 import com.illiouchine.jm.ui.composable.ScreenTitle
 import com.illiouchine.jm.ui.composable.image.QrCodeImage
 import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
@@ -41,6 +42,7 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 import java.util.UUID
 import kotlin.random.Random
 
@@ -224,7 +226,10 @@ fun BallotsQrExportScreen(
     showSystemUi = true,
 )
 @Composable
-fun PreviewBallotsQrExportScreen(modifier: Modifier = Modifier) {
+fun PreviewBallotsQrExportScreen(
+    modifier: Modifier = Modifier,
+    exchangeUriService: ExchangeUriService = koinInject(),
+) {
     val poll = Poll(
         id = 42,
         uuid = UUID(1234567890123456789, 1234567890123456789),
@@ -260,6 +265,7 @@ fun PreviewBallotsQrExportScreen(modifier: Modifier = Modifier) {
     val ballotsQrExportViewModel = viewModel {
         BallotsQrExportViewModel(
             pollDataSource = pollDataSource,
+            exchangeUriService = exchangeUriService,
         )
     }
     ballotsQrExportViewModel.initializeFromPoll(

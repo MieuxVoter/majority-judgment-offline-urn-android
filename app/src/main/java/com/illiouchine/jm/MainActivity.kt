@@ -39,6 +39,7 @@ import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.logic.PollVotingViewModel
 import com.illiouchine.jm.logic.SettingsViewModel
+import com.illiouchine.jm.service.ExchangeUriService
 import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.navigator.TopLevelBackStack
 import com.illiouchine.jm.ui.screen.AboutScreen
@@ -55,9 +56,12 @@ import com.illiouchine.jm.ui.screen.ProportionsHelpScreen
 import com.illiouchine.jm.ui.screen.ResultScreen
 import com.illiouchine.jm.ui.screen.SettingsScreen
 import com.illiouchine.jm.ui.theme.JmTheme
+import org.koin.android.ext.android.get
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
+
+    private val exchangeUriService: ExchangeUriService = get()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,32 +98,49 @@ class MainActivity : ComponentActivity() {
                         // Toast.makeText(context, uri.host, Toast.LENGTH_LONG).show()
                         // Toast.makeText(context, uri.path, Toast.LENGTH_LONG).show()
 
-                        if (uri.host == "p") {
-                            // p is for Poll ; let's import the poll if we can
-                            val data = uri.path
-                            if (data != null) {
-                                val compressedDataString = data.substring(1)
-                                topLevelBackStack.add(
-                                    Screens.PollQrImport(
-                                        encodedContent = compressedDataString,
-                                    )
+//                        if (uri.host == "p") {
+//                            // CUSTOM SCHEME URL FORMAT mju://p/<gnagnagna>
+//                            // p is for Poll ; let's import the poll if we can
+//                            val data = uri.path
+//                            if (data != null) {
+//                                val compressedDataString = data.substring(1)
+//                                topLevelBackStack.add(
+//                                    Screens.PollQrImport(
+//                                        encodedContent = compressedDataString,
+//                                    )
+//                                )
+//                            }
+//                        } else if (uri.host == "b") {
+//                            // CUSTOM SCHEME URL FORMAT mju://b/<gnagnagna>
+//                            // b is for Ballots ; let's import the ballots if we can
+//                            val data = uri.path
+//                            if (data != null) {
+//                                val compressedDataString = data.substring(1)
+//                                topLevelBackStack.add(
+//                                    Screens.BallotsQrImport(
+//                                        encodedContent = compressedDataString,
+//                                    )
+//                                )
+//                            }
+//                        } else
+                        if (exchangeUriService.uriMatchesPoll(uri)) {
+                            val compressedDataString = uri.pathSegments[1]
+                            topLevelBackStack.add(
+                                Screens.PollQrImport(
+                                    encodedContent = compressedDataString,
                                 )
-                            }
-                        } else if (uri.host == "b") {
-                            // b is for Ballots ; let's import the ballots if we can
-                            val data = uri.path
-                            if (data != null) {
-                                val compressedDataString = data.substring(1)
-                                topLevelBackStack.add(
-                                    Screens.BallotsQrImport(
-                                        encodedContent = compressedDataString,
-                                    )
+                            )
+                        } else if (exchangeUriService.uriMatchesBallots(uri)) {
+                            val compressedDataString = uri.pathSegments[1]
+                            topLevelBackStack.add(
+                                Screens.BallotsQrImport(
+                                    encodedContent = compressedDataString,
                                 )
-                            }
+                            )
                         } else {
                             Toast.makeText(
                                 context,
-                                "Error: unsupported URI host.",
+                                "Error: unsupported URI.",
                                 Toast.LENGTH_LONG,
                             ).show()
                         }
@@ -343,7 +364,7 @@ class MainActivity : ComponentActivity() {
                             LaunchedEffect(key.encodedContent) {
                                 viewModel.initialize(
                                     context = context,
-                                    qrUriPath = key.encodedContent,
+                                    qrUriPathDatum = key.encodedContent,
                                 )
                             }
 
@@ -402,7 +423,7 @@ class MainActivity : ComponentActivity() {
                             LaunchedEffect(key.encodedContent) {
                                 viewModel.initialize(
                                     context = context,
-                                    qrUriPath = key.encodedContent,
+                                    qrUriPathDatum = key.encodedContent,
                                 )
                             }
 
