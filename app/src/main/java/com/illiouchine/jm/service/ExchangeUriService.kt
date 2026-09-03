@@ -26,6 +26,7 @@ class ExchangeUriService(
     /**
      * You should own this domain.  (it might need verification from Gogole)
      * Example: mju.mieuxvoter.fr
+     * Note: this is allowed to be empty, in the case where we use our custom mju:// scheme.
      */
     private val domain: String,
     private val pollRoutePathSegment: String = "p",
@@ -101,17 +102,24 @@ class ExchangeUriService(
         return Cbor.decodeFromByteArray<BallotsDto>(bytes = decompressedBytes)
     }
 
-    fun uriMatchesFormat(uri: Uri): Boolean {
-        return uriMatchesHost(uri) && uri.pathSegments.size == 2
-    }
-    fun uriMatchesHost(uri: Uri): Boolean {
-        return uri.scheme == scheme && uri.host == domain
-    }
     fun uriMatchesPoll(uri: Uri): Boolean {
-        return uriMatchesFormat(uri) && uri.pathSegments.first() == pollRoutePathSegment
-    }
-    fun uriMatchesBallots(uri: Uri): Boolean {
-        return uriMatchesFormat(uri) && uri.pathSegments.first() == ballotsRoutePathSegment
+        return uriMatchesFormat(uri) && uriMatchesRoutePrefix(uri, pollRoutePathSegment)
     }
 
+    fun uriMatchesBallots(uri: Uri): Boolean {
+        return uriMatchesFormat(uri) && uriMatchesRoutePrefix(uri, ballotsRoutePathSegment)
+    }
+
+    private fun uriMatchesFormat(uri: Uri): Boolean {
+        return uriMatchesHost(uri) && uri.pathSegments.isNotEmpty()
+    }
+
+    private fun uriMatchesHost(uri: Uri): Boolean {
+        return uri.scheme == scheme && (domain.isEmpty() || uri.host == domain)
+    }
+
+    private fun uriMatchesRoutePrefix(uri: Uri, prefix: String): Boolean {
+        return uri.pathSegments.first() == prefix
+            || (domain.isEmpty() && uri.host == prefix)
+    }
 }

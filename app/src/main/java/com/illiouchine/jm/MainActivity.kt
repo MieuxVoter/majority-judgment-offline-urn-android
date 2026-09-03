@@ -98,40 +98,15 @@ class MainActivity : ComponentActivity() {
                         // Toast.makeText(context, uri.host, Toast.LENGTH_LONG).show()
                         // Toast.makeText(context, uri.path, Toast.LENGTH_LONG).show()
 
-//                        if (uri.host == "p") {
-//                            // CUSTOM SCHEME URL FORMAT mju://p/<gnagnagna>
-//                            // p is for Poll ; let's import the poll if we can
-//                            val data = uri.path
-//                            if (data != null) {
-//                                val compressedDataString = data.substring(1)
-//                                topLevelBackStack.add(
-//                                    Screens.PollQrImport(
-//                                        encodedContent = compressedDataString,
-//                                    )
-//                                )
-//                            }
-//                        } else if (uri.host == "b") {
-//                            // CUSTOM SCHEME URL FORMAT mju://b/<gnagnagna>
-//                            // b is for Ballots ; let's import the ballots if we can
-//                            val data = uri.path
-//                            if (data != null) {
-//                                val compressedDataString = data.substring(1)
-//                                topLevelBackStack.add(
-//                                    Screens.BallotsQrImport(
-//                                        encodedContent = compressedDataString,
-//                                    )
-//                                )
-//                            }
-//                        } else
                         if (exchangeUriService.uriMatchesPoll(uri)) {
-                            val compressedDataString = uri.pathSegments[1]
+                            val compressedDataString = uri.pathSegments.last()
                             topLevelBackStack.add(
                                 Screens.PollQrImport(
                                     encodedContent = compressedDataString,
                                 )
                             )
                         } else if (exchangeUriService.uriMatchesBallots(uri)) {
-                            val compressedDataString = uri.pathSegments[1]
+                            val compressedDataString = uri.pathSegments.last()
                             topLevelBackStack.add(
                                 Screens.BallotsQrImport(
                                     encodedContent = compressedDataString,
