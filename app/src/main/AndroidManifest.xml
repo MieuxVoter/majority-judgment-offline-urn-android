@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
@@ -8,8 +7,8 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Jm"
@@ -23,27 +22,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <!--
-            ## Solution 1
-            The mju:// scheme will only work on recent Android versions.
+            ## Solution 1: Custom Deep Links
+            The mju:// scheme will only work on Android versions before 12.
             It does not work on my Android 13 device, for example.  T_T
-            It's also not recommended to use a custom scheme.
-            But, it does work on recent Android devices, fully offline, so that's nice.
-            Also, it's short.
+            It's not recommended to use a custom scheme, and so Google disabled it.
+            But it's shorter, and it used to work 100% offline.
             -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="mju" android:host="p" />
+                <data
+                    android:host="p"
+                    android:scheme="mju" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="mju" android:host="b" />
+                <data
+                    android:host="b"
+                    android:scheme="mju" />
             </intent-filter>
             <!--
-            ## Solution 2
+            ## Solution 2: Deep App Links
             As is recommended, we can use the https scheme and a domain we own.
             Hmmm…  Maybe not.  Android needs a network call to verify the domain.
             This sucks, as this app is expected to work 100% offline.
@@ -53,7 +55,19 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="mju.mieuxvoter.fr" />
+                <data
+                    android:host="mju.mieuxvoter.fr"
+                    android:pathPrefix="/p"
+                    android:scheme="https" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="mju.mieuxvoter.fr"
+                    android:pathPrefix="/b"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
         <provider
