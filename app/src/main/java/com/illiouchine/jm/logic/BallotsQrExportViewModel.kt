@@ -8,13 +8,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.PollDataSource
-import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Poll
-import com.illiouchine.jm.model.serializer.UUIDSerializer
+import com.illiouchine.jm.model.dto.BallotsDto
+import com.illiouchine.jm.service.ExchangeUriService
 import com.illiouchine.jm.ui.navigator.NavigationAction
 import com.illiouchine.jm.ui.navigator.Screens
-import com.illiouchine.jm.ui.utils.compress
-import com.illiouchine.jm.ui.utils.encode
 import com.illiouchine.jm.ui.utils.imageBitmapFromPngBytes
 import com.illiouchine.jm.ui.utils.renderQrCodePngBytes
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -24,51 +22,11 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.cbor.Cbor
-import kotlinx.serialization.encodeToByteArray
-import java.util.UUID
-import kotlin.math.min
-
-@Stable
-@Serializable
-/**
- * This Data Transfer Object is what's encoded in the QR Code.
- */
-data class BallotsDto(
-    @Serializable(UUIDSerializer::class)
-    val pollUuid: UUID,
-    val ballots: List<Ballot>,
-) {
-    fun splitInto(amountOfPieces: Int): List<BallotsDto> {
-        val amountOfBallots = this.ballots.size
-
-        require(amountOfPieces > 0)
-        require(amountOfPieces <= amountOfBallots)
-
-        val rabiot = if (amountOfBallots % amountOfPieces == 0) { 0 } else { 1 }
-        val share = amountOfBallots / amountOfPieces + rabiot // Euclid, mah man
-        return buildList {
-            for (i in 0..<amountOfPieces) {
-                add(
-                    copy(
-                        ballots = ballots.subList(
-                            i * share,
-                            min(
-                                amountOfBallots,
-                                (i + 1) * share,
-                            ),
-                        ),
-                    )
-                )
-            }
-        }
-    }
-}
 
 class BallotsQrExportViewModel(
     private val pollDataSource: PollDataSource,
+    private val exchangeUriService: ExchangeUriService,
 ) : ViewModel() {
 
     @Stable
@@ -78,19 +36,19 @@ class BallotsQrExportViewModel(
          */
         val ballotsDto: BallotsDto? = null,
         /**
-         * Full content of the QR Code, including the URL prefix (host+domain).
+         * Full content of the QR Code, including the URL prefix (scheme+domain+path).
          */
         val qrContent: String? = null,
         val qrBitmap: ImageBitmap? = null,
     ) {
-        companion object {
+        companion object { // cheap factories
             @OptIn(ExperimentalSerializationApi::class)
-            fun createFromBallotsDto(ballotsDto: BallotsDto): BallotsQrExport? {
+            fun createFromBallotsDto(
+                exchangeUriService: ExchangeUriService,
+                ballotsDto: BallotsDto,
+            ): BallotsQrExport? {
                 try {
-                    val ballotsBytes = Cbor.encodeToByteArray(value = ballotsDto)
-                    val ballotsCompressedBytes = compress(input = ballotsBytes)
-                    val ballotsCompressedString = encode(bytes = ballotsCompressedBytes)
-                    val qrContent = "mju://b/$ballotsCompressedString"
+                    val qrContent = exchangeUriService.ballotsDtoToUri(ballotsDto)
                     val qrPngBytes = renderQrCodePngBytes(qrContent)
                     val qrBitmap = imageBitmapFromPngBytes(qrPngBytes)
                     return BallotsQrExport(
@@ -107,7 +65,10 @@ class BallotsQrExportViewModel(
             }
         }
 
-        fun splitIfNecessary(maxAmountOfBytes: Int = 650): List<BallotsQrExport> {
+        fun splitIfNecessary(
+            exchangeUriService: ExchangeUriService,
+            maxAmountOfBytes: Int = 650,
+        ): List<BallotsQrExport> {
             if (this.qrContent == null) {
                 return listOf(this)
             }
@@ -119,7 +80,10 @@ class BallotsQrExportViewModel(
             val ballotsDtos = this.ballotsDto.splitInto(amountOfQrCodes)
             return buildList {
                 for (i in 0..<amountOfQrCodes) {
-                    val ballotsQrExport = createFromBallotsDto(ballotsDto = ballotsDtos[i])
+                    val ballotsQrExport = createFromBallotsDto(
+                        exchangeUriService = exchangeUriService,
+                        ballotsDto = ballotsDtos[i],
+                    )
                     if (ballotsQrExport != null) {
                         add(ballotsQrExport)
                     }
@@ -188,13 +152,21 @@ class BallotsQrExportViewModel(
             ballots = poll.ballots,
         )
 
-        val qrExport = BallotsQrExport.createFromBallotsDto(ballotsDto)
+        val qrExport = BallotsQrExport.createFromBallotsDto(
+            exchangeUriService = exchangeUriService,
+            ballotsDto = ballotsDto,
+        )
+
+        val qrExports = qrExport?.splitIfNecessary(
+            exchangeUriService = exchangeUriService,
+            maxAmountOfBytes = 650,
+        )
 
         _viewState.update {
             it.copy(
                 poll = poll,
                 errorMessage = null,
-                qrExports = qrExport?.splitIfNecessary(650) ?: emptyList(),
+                qrExports = qrExports ?: emptyList(),
             )
         }
     }

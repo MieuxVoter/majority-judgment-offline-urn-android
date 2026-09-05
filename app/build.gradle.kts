@@ -32,8 +32,8 @@ android {
         minSdk = 27
         targetSdk = 35
         // You need to bump both of these versions when making a new release.
-        versionCode = 23
-        versionName = "1.6.1"
+        versionCode = 24
+        versionName = "1.6.2"
 
         // Ideally we'd have both, but support for multiple runners looks experimental
 //        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -59,13 +59,6 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-    packaging {
-        // For org.apache.arrow:arrow-dataset:18.3.0 and 6 others (from dataframe)
-        // dataframe is too big, so it has been removed for now, hence the comments
-//        resources.excludes.add("META-INF/DEPENDENCIES")
-//        resources.excludes.add("META-INF/*LICENSE")
-//        resources.excludes.add("META-INF/*NOTICE")
     }
 
     room {
@@ -140,6 +133,7 @@ dependencies {
     implementation(project.dependencies.platform(libs.koin.bom))
     implementation(libs.koin.core)
     implementation(libs.koin.android)
+    implementation(libs.koin.compose)
 
     // Room (Database)
     implementation(libs.androidx.room.runtime)
@@ -147,7 +141,6 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     // Plotting
-    //implementation(libs.kandy.lets.plot) // not using kandy for now as it produces raster (+svg)
     implementation(libs.compose.charts)
     implementation(libs.koalaplot.core)
 

@@ -19,6 +19,7 @@ import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.logic.PollVotingViewModel
 import com.illiouchine.jm.logic.SettingsViewModel
+import com.illiouchine.jm.service.ExchangeUriService
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -36,7 +37,7 @@ class MajorityUrnApplication : Application() {
 }
 
 val module = module {
-    // DataBase
+    // Database
     single {
         Room.databaseBuilder(
             context = androidApplication(),
@@ -55,7 +56,20 @@ val module = module {
     single<PollDataSource> { SqlitePollDataSource(get()) }
     single<PollTemplateDataSource> { HardcodedPollTemplateDataSource() }
 
-    // ViewModel
+    // Miscellaneous
+    single {
+        ExchangeUriService(
+            scheme = "mju",
+            domain = "",
+            // We'll get back to the https scheme later ; perhaps using another service?
+//            scheme = "https",
+//            domain = "mju.mieuxvoter.fr",
+            pollRoutePathSegment = "p",
+            ballotsRoutePathSegment = "b",
+        )
+    }
+
+    // ViewModels
     viewModel {
         HomeViewModel(
             pollDataSource = get(),
@@ -92,21 +106,25 @@ val module = module {
     viewModel {
         PollQrExportViewModel(
             pollDataSource = get(),
+            exchangeUriService = get(),
         )
     }
     viewModel {
         PollQrImportViewModel(
             pollDataSource = get(),
+            exchangeUriService = get(),
         )
     }
     viewModel {
         BallotsQrExportViewModel(
             pollDataSource = get(),
+            exchangeUriService = get(),
         )
     }
     viewModel {
         BallotsQrImportViewModel(
             pollDataSource = get(),
+            exchangeUriService = get(),
         )
     }
     viewModel {

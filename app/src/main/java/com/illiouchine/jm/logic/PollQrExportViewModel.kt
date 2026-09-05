@@ -10,10 +10,9 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.service.ExchangeUriService
 import com.illiouchine.jm.ui.navigator.NavigationAction
 import com.illiouchine.jm.ui.navigator.Screens
-import com.illiouchine.jm.ui.utils.compress
-import com.illiouchine.jm.ui.utils.encode
 import com.illiouchine.jm.ui.utils.imageBitmapFromPngBytes
 import com.illiouchine.jm.ui.utils.renderQrCodePngBytes
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -23,11 +22,10 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.cbor.Cbor
-import kotlinx.serialization.encodeToByteArray
 
 class PollQrExportViewModel(
     private val pollDataSource: PollDataSource,
+    private val exchangeUriService: ExchangeUriService,
 ) : ViewModel() {
 
     @Stable
@@ -65,6 +63,7 @@ class PollQrExportViewModel(
             val poll = pollDataSource.getPollById(pollId)
 
             if (poll == null) {
+                // TBD: We should NOT toast & redirect in here, but return an error code
                 Toast.makeText(
                     context,
                     context.getString(R.string.toast_that_poll_does_not_exist),
@@ -73,7 +72,6 @@ class PollQrExportViewModel(
                 _navEvents.emit(NavigationAction.To(Screens.Home))
             } else {
                 initializeFromPoll(
-                    // context = context,
                     poll = poll,
                 )
             }
@@ -82,15 +80,9 @@ class PollQrExportViewModel(
 
     @OptIn(ExperimentalSerializationApi::class)
     fun initializeFromPoll(
-        // context: Context,
         poll: Poll,
     ) {
-        val pollToExport = poll.copy(id = 0, ballots = emptyList())
-        val pollBytes = Cbor.encodeToByteArray(pollToExport)
-        val compressedPollBytes = compress(pollBytes)
-        val compressedPollString = encode(compressedPollBytes)
-        val qrContent = "mju://p/$compressedPollString"
-
+        val qrContent = exchangeUriService.pollToUri(poll)
         // Up to 2,953 bytes (so the spec says ; we need to check, seems less)
         val qrPngBytes = renderQrCodePngBytes(qrContent)
         val qrBitmap = imageBitmapFromPngBytes(qrPngBytes)

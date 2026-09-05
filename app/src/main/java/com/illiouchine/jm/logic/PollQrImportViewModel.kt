@@ -6,23 +6,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.service.ExchangeUriService
 import com.illiouchine.jm.ui.navigator.NavigationAction
-import com.illiouchine.jm.ui.utils.decode
-import com.illiouchine.jm.ui.utils.decompress
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.cbor.Cbor
-import kotlinx.serialization.decodeFromByteArray
 import java.util.zip.DataFormatException
 
 class PollQrImportViewModel(
     private val pollDataSource: PollDataSource,
+    private val exchangeUriService: ExchangeUriService,
 ) : ViewModel() {
 
     @Stable
@@ -40,22 +37,19 @@ class PollQrImportViewModel(
     private val _navEvents = MutableSharedFlow<NavigationAction>()
     val navEvents = _navEvents.asSharedFlow()
 
-    @OptIn(ExperimentalSerializationApi::class)
     fun initialize(
         context: Context,
-        qrUriPath: String,
+        qrUriPathDatum: String,
     ) {
 //        viewModelScope.launch {
         _viewState.update {
             PollQrImportViewState(
-                qrUriPath = qrUriPath,
+                qrUriPath = qrUriPathDatum,
             )
         }
 
         try {
-            val compressedPollString = decode(qrUriPath)
-            val decompressedQrBytes = decompress(compressedPollString)
-            val poll = Cbor.decodeFromByteArray<Poll>(decompressedQrBytes)
+            val poll = exchangeUriService.uriPathDatumToPoll(qrUriPathDatum)
             initializeFromPoll(context, poll)
         } catch (e: DataFormatException) {
             _viewState.update {
