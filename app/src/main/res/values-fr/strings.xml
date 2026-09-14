@@ -179,4 +179,12 @@
     <string name="grade_passionately">aimé passionnément</string>
     <string name="grade_to_madness">aimé à la folie</string>
     <string name="five_love_grades">Cinq mentions d\'amour</string>
+    <string name="button_export_as_printable_text">Exporter en texte brut</string>
+    <string name="proportional_algorithm">Algorithme de Proportionnelle</string>
+    <string name="plot_description_nuance_profile_many_many">%1$d bulletins utilisant %2$d différentes mentions.</string>
+    <string name="plot_description_nuance_profile_one_many">Un bulletin utilisant %1$d différentes mentions.</string>
+    <string name="plot_description_nuance_profile_many_one">%1$d bulletins utilisant une seule mention.</string>
+    <string name="plot_description_nuance_profile_one_one">Un bulletin utilisant une seule mention.</string>
+    <string name="label_filter_by_grade">Filtrer par Mention</string>
+    <string name="label_filter_by_nuance">Filtrer par Nuance</string>
 </resources>

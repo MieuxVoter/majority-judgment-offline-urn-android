@@ -1,0 +1,7 @@
+* Refactorisation du collier de marguerites par QR Code
+* Changement du protocole des URLs de QR Code de mju:// vers https:// (toujours hors ligne)
+* Refactorisation des Prévisualisations de Composables pour utiliser l'injection de dépendances
+* Export des résultats en texte brut, pour l'impression et le partage (par YannickIngwiller67)
+* Amélioration du support pour TalkBack dans les profils d'opinion
+* Amélioration du support pour TalkBack dans les profils de nuance
+* Correctif des actions sélectionnables alors qu'elles ne devraient pas l'être dans TalkBack
