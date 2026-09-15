@@ -52,8 +52,7 @@ import ir.ehsannarmani.compose_charts.models.LabelProperties
  * This helps to get a sense of the overall feel of the voters for the whole set of candidates.
  * This is especially useful to poll administrators since they chose the set of candidates.
  *
- * Ideally the bars in this plot should be made of strata, as many as there are proposals.
- * The lib does not seem to allow this, so we might have to do it ourselves.
+ * @deprecated because we can't add background patterns (and the API is too broad)
  */
 @Composable
 fun OpinionProfileBarChart(
