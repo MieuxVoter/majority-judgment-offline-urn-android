@@ -35,6 +35,7 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import fr.mieuxvoter.mj.CollectedTally
 import ir.ehsannarmani.compose_charts.ColumnChart
+import ir.ehsannarmani.compose_charts.models.AnimationMode
 import ir.ehsannarmani.compose_charts.models.BarProperties
 import ir.ehsannarmani.compose_charts.models.Bars
 import ir.ehsannarmani.compose_charts.models.DividerProperties
@@ -60,6 +61,7 @@ fun OpinionProfileBarChart(
     poll: Poll,
     tally: Tally,
     highestGradeToLowestGrade: Boolean = false,
+    animated: Boolean = true,
 ) {
     val context = LocalContext.current
     val barData = remember(poll, poll.ballots.size, highestGradeToLowestGrade) {
@@ -153,6 +155,16 @@ fun OpinionProfileBarChart(
             labelHelperProperties = LabelHelperProperties(
                 enabled = false,
             ),
+            animationMode = if (animated) {
+                AnimationMode.Together { it * 200L }
+            } else {
+                AnimationMode.None
+            },
+            animationDelay = if (animated) {
+                200
+            } else {
+                0
+            },
         )
 
         // Hotfix for bottom padding being too small when x-axis labels are rotated.
@@ -236,6 +248,7 @@ fun OpinionProfileBarChartPreview() {
             modifier = Modifier.height(400.dp).padding(8.dp),
             poll = poll,
             tally = tally.toTally(),
+            animated = false,
         )
     }
 }
