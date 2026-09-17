@@ -74,7 +74,7 @@ import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.composable.plot.NuanceProfile
-import com.illiouchine.jm.ui.composable.plot.OpinionProfileBarChart
+import com.illiouchine.jm.ui.composable.plot.OpinionProfileBarChartKoala
 import com.illiouchine.jm.ui.composable.plot.ProximityBarChart
 import com.illiouchine.jm.ui.composable.plot.ProximitySpider
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
@@ -465,6 +465,7 @@ fun ResultScreen(
                 LinearMeritProfileCanvas(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(start=16.dp)
                         .height(Theme.spacing.medium + Theme.spacing.small),
                     proposalTally = pollTallyAsProposalTally,
                     grading = grading,
@@ -472,11 +473,11 @@ fun ResultScreen(
                 )
                 MediumVerticalSpacer()
 
-                OpinionProfileBarChart(
+                OpinionProfileBarChartKoala(
                     modifier = Modifier
-                        .height(250.dp)
+                        .height(300.dp)
                         .fillMaxWidth(),
-                    poll = poll,
+                    grading = poll.pollConfig.grading,
                     tally = tally,
                     highestGradeToLowestGrade = highGradeOnLeft,
                 )
