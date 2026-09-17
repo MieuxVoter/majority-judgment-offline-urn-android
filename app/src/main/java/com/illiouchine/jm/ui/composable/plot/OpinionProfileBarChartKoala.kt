@@ -1,13 +1,8 @@
 package com.illiouchine.jm.ui.composable.plot
 
 import android.content.res.Configuration
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.absolutePadding
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,15 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -36,6 +22,7 @@ import com.illiouchine.jm.extensions.reversedIf
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Tally
 import com.illiouchine.jm.model.toTally
+import com.illiouchine.jm.ui.composable.plot.component.PatternedBar
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
 import com.illiouchine.jm.ui.composable.plot.component.getPatternBrushes
 import com.illiouchine.jm.ui.composable.spacer.MediumVerticalSpacer
@@ -68,42 +55,6 @@ private fun AxisLabel(
         modifier = modifier,
         overflow = TextOverflow.Ellipsis,
         maxLines = 1,
-    )
-}
-
-
-@Composable
-private fun PatternBar(
-    brush: Brush,
-    patternBrush: Brush,
-    color: Color,
-    modifier: Modifier = Modifier,
-    shape: Shape = RectangleShape,
-    border: BorderStroke? = null,
-) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .then(if (border != null) Modifier.border(border, shape) else Modifier)
-            .background(brush = brush, shape = shape)
-            .clip(shape),
-    )
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .drawWithContent {
-                drawRect(
-                    brush = patternBrush,
-                    colorFilter = ColorFilter.tint(
-                        color = lerp(
-                            start = color,
-                            stop = Color.Black,
-                            fraction = 0.2f,
-                        ),
-                    ),
-                )
-            }
-            .clip(shape),
     )
 }
 
@@ -212,11 +163,11 @@ fun OpinionProfileBarChartKoala(
                     } else {
                         barIndex
                     }
-                    PatternBar(
-                        brush = SolidColor(grading.getGradeColor(gradeIndex)),
+                    PatternedBar(
+                        modifier = Modifier.fillMaxWidth(),
                         patternBrush = brushes[gradeIndex],
                         color = grading.getGradeColor(gradeIndex),
-                        modifier = Modifier.fillMaxWidth(),
+                        label = opinionTally[gradeIndex].toString(),
                         shape = RoundedCornerShape(
                             topStart = 8f,
                             topEnd = 8f,
@@ -261,8 +212,8 @@ fun OpinionProfileBarChartKoalaPreview() {
     val grading = Grading.Quality5Grading
     val tally = fr.mieuxvoter.mj.Tally(
         arrayOf(
-            fr.mieuxvoter.mj.ProposalTally(arrayOf<Int>(3, 0, 3, 4, 5)),
-            fr.mieuxvoter.mj.ProposalTally(arrayOf<Int>(2, 0, 0, 10, 3)),
+            fr.mieuxvoter.mj.ProposalTally(arrayOf<Int>(0, 0, 3, 7, 5)),
+            fr.mieuxvoter.mj.ProposalTally(arrayOf<Int>(0, 0, 0, 10, 5)),
             fr.mieuxvoter.mj.ProposalTally(arrayOf<Int>(1, 0, 5, 4, 5)),
         ),
     )
