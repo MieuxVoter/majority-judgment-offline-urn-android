@@ -33,19 +33,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.extensions.reversedIf
-import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Grading
-import com.illiouchine.jm.model.Judgment
-import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.Tally
 import com.illiouchine.jm.model.toTally
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
 import com.illiouchine.jm.ui.composable.plot.component.getPatternBrushes
 import com.illiouchine.jm.ui.composable.spacer.MediumVerticalSpacer
-import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
-import fr.mieuxvoter.mj.CollectedTally
 import io.github.koalaplot.core.animation.StartAnimationUseCase
 import io.github.koalaplot.core.animation.StartAnimationUseCase.ExecutionType
 import io.github.koalaplot.core.bar.DefaultBarPosition
@@ -263,55 +258,14 @@ fun OpinionProfileBarChartKoala(
 )
 @Composable
 fun OpinionProfileBarChartKoalaPreview() {
-    val poll = Poll(
-        id = 1,
-        pollConfig = PreviewDataFaker.pollConfig(
-            amountOfProposals = 3,
-        ),
-        ballots = listOf(
-            Ballot(
-                judgments = listOf(
-                    Judgment(proposal = 0, grade = 0),
-                    Judgment(proposal = 1, grade = 1),
-                    Judgment(proposal = 2, grade = 2),
-                ),
-            ),
-            Ballot(
-                judgments = listOf(
-                    Judgment(proposal = 0, grade = 1),
-                    Judgment(proposal = 1, grade = 2),
-                    Judgment(proposal = 2, grade = 2),
-                ),
-            ),
-            Ballot(
-                judgments = listOf(
-                    Judgment(proposal = 0, grade = 2),
-                    Judgment(proposal = 1, grade = 0),
-                    Judgment(proposal = 2, grade = 4),
-                ),
-            ),
-            Ballot(
-                judgments = listOf(
-                    Judgment(proposal = 0, grade = 0),
-                    Judgment(proposal = 1, grade = 0),
-                    Judgment(proposal = 2, grade = 0),
-                ),
-            ),
+    val grading = Grading.Quality5Grading
+    val tally = fr.mieuxvoter.mj.Tally(
+        arrayOf(
+            fr.mieuxvoter.mj.ProposalTally(arrayOf<Int>(3, 0, 3, 4, 5)),
+            fr.mieuxvoter.mj.ProposalTally(arrayOf<Int>(2, 0, 0, 10, 3)),
+            fr.mieuxvoter.mj.ProposalTally(arrayOf<Int>(1, 0, 5, 4, 5)),
         ),
     )
-
-    // Refactor the following into a service (but first recode the MJ lib in Kotlin)
-    val amountOfProposals = poll.pollConfig.proposals.size
-    val amountOfGrades = poll.pollConfig.grading.getAmountOfGrades()
-    val tally = CollectedTally(amountOfProposals, amountOfGrades)
-
-    poll.pollConfig.proposals.forEachIndexed { proposalIndex, _ ->
-        val voteResult = poll.judgments.filter { it.proposal == proposalIndex }
-        voteResult.forEach { judgment ->
-            tally.collect(proposalIndex, judgment.grade)
-        }
-    }
-    // ----------------------------------------------------------------------------
 
     JmTheme {
         Column {
@@ -320,7 +274,7 @@ fun OpinionProfileBarChartKoalaPreview() {
                     .height(300.dp)
                     .padding(8.dp),
                 tally = tally.toTally(),
-                grading = Grading.Quality5Grading,
+                grading = grading,
                 animated = false,
             )
             MediumVerticalSpacer()
@@ -330,7 +284,7 @@ fun OpinionProfileBarChartKoalaPreview() {
                     .height(300.dp)
                     .padding(8.dp),
                 tally = tally.toTally().copy(),
-                grading = Grading.Quality5Grading,
+                grading = grading,
                 highestGradeToLowestGrade = true,
                 animated = true,
             )
