@@ -7,14 +7,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.R
@@ -22,12 +20,12 @@ import com.illiouchine.jm.extensions.reversedIf
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Tally
 import com.illiouchine.jm.model.toTally
+import com.illiouchine.jm.ui.composable.plot.component.AxisLabel
 import com.illiouchine.jm.ui.composable.plot.component.PatternedBar
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
 import com.illiouchine.jm.ui.composable.plot.component.getPatternBrushes
 import com.illiouchine.jm.ui.composable.spacer.MediumVerticalSpacer
 import com.illiouchine.jm.ui.theme.JmTheme
-import com.illiouchine.jm.ui.theme.Theme
 import io.github.koalaplot.core.animation.StartAnimationUseCase
 import io.github.koalaplot.core.animation.StartAnimationUseCase.ExecutionType
 import io.github.koalaplot.core.bar.DefaultBarPosition
@@ -41,22 +39,6 @@ import io.github.koalaplot.core.xygraph.LongLinearAxisModel
 import io.github.koalaplot.core.xygraph.XYGraph
 import io.github.koalaplot.core.xygraph.rememberAxisStyle
 import io.github.koalaplot.core.xygraph.rememberGridStyle
-
-
-@Composable
-private fun AxisLabel(
-    label: String,
-    modifier: Modifier = Modifier,
-) {
-    Text(
-        label,
-        color = Theme.colorScheme.onBackground,
-        style = Theme.typography.bodySmall,
-        modifier = modifier,
-        overflow = TextOverflow.Ellipsis,
-        maxLines = 1,
-    )
-}
 
 /**
  * An Opinion Profile shows how many judgments of each grade were cast across all candidates.
