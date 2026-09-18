@@ -1,1 +1,2 @@
 * Compatibility with Android SDK 36
+* Add background patterns to the Opinion Profile
