@@ -1,2 +1,3 @@
 * Compatibility with Android SDK 36
 * Add background patterns to the Opinion Profile
+* Allow editing the judgments in the ballot summary screen

@@ -32,7 +32,11 @@ fun JudgmentSummary(
         )
 
         Text(
-            text = proposalName + " " + stringResource(R.string.verb_is) + " " + gradeString,
+            text = stringResource(
+                R.string.candidate_is_grade,
+                proposalName,
+                gradeString,
+            ),
         )
     }
 }
