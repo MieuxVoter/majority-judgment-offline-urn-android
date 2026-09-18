@@ -21,7 +21,8 @@ import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.PollConfig
-import com.illiouchine.jm.ui.composable.JudgmentSummary
+import com.illiouchine.jm.ui.composable.EditableJudgmentSummary
+import com.illiouchine.jm.ui.composable.spacer.SmallVerticalSpacer
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.DeleteColor
 import com.illiouchine.jm.ui.theme.JmTheme
@@ -34,6 +35,7 @@ fun BallotSummaryScreen(
     modifier: Modifier = Modifier,
     pollConfig: PollConfig,
     ballot: Ballot,
+    onUpdate: (judgmentIndex: Int, gradeIndex: Int) -> Unit = { _, _ -> },
     onCancel: () -> Unit = {},
     onConfirm: () -> Unit = {},
 ) {
@@ -60,18 +62,21 @@ fun BallotSummaryScreen(
 
         Spacer(Modifier.height(Theme.spacing.large))
 
-        ballot.judgments.forEach { judgment ->
+        ballot.judgments.forEachIndexed { judgmentIndex, judgment ->
             val gradeIndex = judgment.grade
             val proposal = pollConfig.proposals[judgment.proposal]
-            JudgmentSummary(
+            EditableJudgmentSummary(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(Theme.spacing.extraSmall),
                 proposalName = proposal,
-                gradeString = stringResource(pollConfig.grading.getGradeName(gradeIndex)),
-                color = pollConfig.grading.getGradeColor(gradeIndex),
+                gradeIndex = gradeIndex,
+                grading = pollConfig.grading,
+                onGradeChange = {
+                    onUpdate(judgmentIndex, it)
+                }
             )
-            Spacer(Modifier.height(Theme.spacing.small))
+            SmallVerticalSpacer()
         }
 
         Spacer(Modifier.height(Theme.spacing.large))

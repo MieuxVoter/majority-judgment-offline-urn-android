@@ -244,6 +244,7 @@ class MainActivity : ComponentActivity() {
                                 pollVotingState = pollVotingViewState,
                                 onStartVoting = pollVotingViewModel::initParticipantVotingSession,
                                 onJudgmentCast = pollVotingViewModel::castJudgment,
+                                onBallotUpdated = pollVotingViewModel::updateBallot,
                                 onBallotConfirmed = pollVotingViewModel::confirmBallot,
                                 onBallotCanceled = pollVotingViewModel::cancelBallot,
                                 onCancelLastJudgment = pollVotingViewModel::cancelLastJudgment,

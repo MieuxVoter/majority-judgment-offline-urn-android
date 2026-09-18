@@ -109,6 +109,14 @@ class PollVotingViewModel(
         }
     }
 
+    fun updateBallot(ballot: Ballot) {
+        _pollVotingViewState.update {
+            it.copy(
+                currentBallot = ballot,
+            )
+        }
+    }
+
     fun confirmBallot(context: Context, ballot: Ballot) {
         val mediaPlayer = MediaPlayer.create(context, R.raw.success)
         if (sharedPrefsHelper.getPlaySound()) {
