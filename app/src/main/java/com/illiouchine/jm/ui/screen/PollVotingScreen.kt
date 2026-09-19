@@ -38,8 +38,8 @@ import com.illiouchine.jm.model.Judgment
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.GradeSelectionList
 import com.illiouchine.jm.ui.composable.JudgmentBalls
-import com.illiouchine.jm.ui.composable.scaffold.MjuSnackbar
 import com.illiouchine.jm.ui.composable.PollSubject
+import com.illiouchine.jm.ui.composable.scaffold.MjuSnackbar
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
@@ -53,6 +53,7 @@ fun PollVotingScreen(
     pollVotingState: PollVotingViewModel.PollVotingViewState = PollVotingViewModel.PollVotingViewState(),
     onStartVoting: () -> Unit = {},
     onJudgmentCast: (Judgment) -> Unit = {},
+    onBallotUpdated: (Ballot) -> Unit = { _ -> },
     onBallotConfirmed: (Context, Ballot) -> Unit = { _, _ -> },
     onBallotCanceled: () -> Unit = {},
     onCancelLastJudgment: () -> Unit = {},
@@ -177,6 +178,23 @@ fun PollVotingScreen(
                         .semantics { focused = shouldFocusScreenTop },
                     pollConfig = pollVotingState.pollConfig,
                     ballot = pollVotingState.currentBallot!!,
+                    onUpdate = { judgmentIndex, gradeIndex ->
+                        val newJudgments = pollVotingState.currentBallot.judgments
+                            .mapIndexed { index, judgment ->
+                                if (index != judgmentIndex) {
+                                    judgment
+                                } else {
+                                    judgment.copy(
+                                        grade = gradeIndex,
+                                    )
+                                }
+                            }
+                        onBallotUpdated(
+                            pollVotingState.currentBallot.copy(
+                                judgments = newJudgments,
+                            )
+                        )
+                    },
                     onConfirm = {
                         onBallotConfirmed(context, pollVotingState.currentBallot)
                     },

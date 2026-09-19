@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,6 +32,8 @@ import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
+import com.illiouchine.jm.ui.theme.Theme
+import com.illiouchine.jm.ui.theme.spacing
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -100,15 +103,15 @@ fun GradeSelectionList(
 
         GradeSelectionButton(
             modifier = Modifier
-                .fillMaxWidth()
                 .testTag("grade_selection_$gradeIndex")
+                .fillMaxWidth()
+                .padding(vertical = Theme.spacing.extraSmall + Theme.spacing.tiny)
                 .semantics {
                     onClick(
                         label = onClickSemanticsLabel,
                         action = null,
                     )
                 },
-            height = animatedHeight,
             enabled = ((selectedGradeIndex == null) || (selectedGradeIndex == gradeIndex)),
             text = gradeName.uppercase(),
             bgColor = pollConfig.grading.getGradeColor(gradeIndex),

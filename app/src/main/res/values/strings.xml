@@ -66,6 +66,7 @@
     <string name="button_export_as_printable_text">Export as printable text</string>
     <string name="all_things_considered_i_think">All things considered, I think</string>
     <string name="verb_is">is</string>
+    <string name="candidate_is_grade">%1$s is %2$s</string>
     <string name="toast_proposal_name_already_exists">A proposal with this name already exists.</string>
     <string name="seven_quality_grades">Seven quality grades</string>
     <string name="five_quality_grades">Five quality grades</string>

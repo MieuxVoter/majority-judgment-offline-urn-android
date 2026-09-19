@@ -1,5 +1,6 @@
 package com.illiouchine.jm.ui.composable
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -8,7 +9,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.theme.JmTheme
@@ -23,8 +23,7 @@ fun JudgmentSummary(
     color: Color = Color.Green,
 ) {
     Row(
-        modifier = modifier
-            .semantics(mergeDescendants = true) {},
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         JudgmentBall(
@@ -32,17 +31,12 @@ fun JudgmentSummary(
             color = color,
         )
 
-        // NOPE: This is quite glitchy on tiny screens
-//        Text(
-//            modifier = Modifier.weight(1.0f, fill = false),
-//            textAlign = TextAlign.Center,
-//            text = proposalName,
-//        )
-//        Text(" " + stringResource(R.string.verb_is) + " ")
-//        Text(gradeString)
-
         Text(
-            text = proposalName + " " + stringResource(R.string.verb_is) + " " + gradeString,
+            text = stringResource(
+                R.string.candidate_is_grade,
+                proposalName,
+                gradeString,
+            ),
         )
     }
 }
@@ -52,13 +46,15 @@ fun JudgmentSummary(
 private fun PreviewJudgmentSummary() {
     JmTheme {
         JudgmentSummary(
-            modifier = Modifier,
-            proposalName = "Tonio",
+            proposalName = "Rami",
         )
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
 @Composable
 private fun PreviewJudgmentSummaryLongName() {
     JmTheme {
