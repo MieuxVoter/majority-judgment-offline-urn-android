@@ -1,7 +1,7 @@
 package com.illiouchine.jm.model
 
-import java.math.BigInteger
-import fr.mieuxvoter.mj.ParticipantGroup as MJParticipantGroup
+import com.ionspin.kotlin.bignum.integer.BigInteger
+import fr.mieuxvoter.kmj.analysis.ParticipantGroup as LibParticipantGroup
 
 data class ParticipantGroup(
     val size: BigInteger,
@@ -15,18 +15,18 @@ data class ParticipantGroup(
     }
 }
 
-fun MJParticipantGroup.Type.toType(): ParticipantGroup.Type {
+fun LibParticipantGroup.Type.toType(): ParticipantGroup.Type {
     return when (this) {
-        MJParticipantGroup.Type.Median -> ParticipantGroup.Type.Median
-        MJParticipantGroup.Type.Contestation -> ParticipantGroup.Type.Contestation
-        MJParticipantGroup.Type.Adhesion -> ParticipantGroup.Type.Adhesion
+        LibParticipantGroup.Type.Median -> ParticipantGroup.Type.Median
+        LibParticipantGroup.Type.Contestation -> ParticipantGroup.Type.Contestation
+        LibParticipantGroup.Type.Adhesion -> ParticipantGroup.Type.Adhesion
     }
 }
 
-fun MJParticipantGroup.toParticipantGroup(): ParticipantGroup {
+fun LibParticipantGroup.toParticipantGroup(): ParticipantGroup {
     return ParticipantGroup(
         size = this.size,
         grade = this.grade,
-        type = this.type.toType()
+        type = this.type.toType(),
     )
 }

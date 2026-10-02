@@ -90,10 +90,6 @@ fun GradeSelectionList(
         val interactionSourceIsPressed by interactionSource.collectIsFocusedAsState()
         val coroutine = rememberCoroutineScope()
 
-        val animatedHeight by animateDpAsState(
-            targetValue = if (interactionSourceIsPressed) 80.dp else 64.dp
-        )
-
         val gradeName = stringResource(pollConfig.grading.grades[gradeIndex].name)
         val onClickSemanticsLabel = stringResource(
             R.string.tts_judge_proposal_as_grade,

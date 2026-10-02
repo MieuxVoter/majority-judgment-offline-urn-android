@@ -1,8 +1,9 @@
 package com.illiouchine.jm.service
 
+import com.illiouchine.jm.extensions.bigSumOf
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.ProposalTally
-import java.math.BigInteger
+import com.ionspin.kotlin.bignum.integer.BigInteger
 
 class AsciiMeritProfile {
     fun generate(
@@ -54,13 +55,14 @@ class AsciiMeritProfile {
         tally: ProposalTally,
         ratio: Double,
     ): Int {
-        val targetIndex = (ratio * tally.amountOfJudgments.toDouble()).toInt()
+        val totalSize = tally.tally.bigSumOf { it }.doubleValue(exactRequired = false)
+        val targetIndex = (ratio * totalSize).toInt()
         var cursorStart: Int
         var cursor = 0
         tally.tally.forEachIndexed { gradeIndex, gradeTally ->
             if (gradeTally > BigInteger.ZERO) {
                 cursorStart = cursor
-                cursor += gradeTally.toInt()
+                cursor += gradeTally.intValue(exactRequired = false)
 
                 if (cursorStart <= targetIndex && targetIndex < cursor) {
                     return gradeIndex

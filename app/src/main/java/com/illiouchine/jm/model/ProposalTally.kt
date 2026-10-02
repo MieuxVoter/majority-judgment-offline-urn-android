@@ -1,20 +1,19 @@
 package com.illiouchine.jm.model
 
 import androidx.compose.runtime.Stable
-import fr.mieuxvoter.mj.ProposalTallyInterface
+import com.ionspin.kotlin.bignum.integer.BigInteger
+import fr.mieuxvoter.kmj.tally.CandidateTallyInterface
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
-import java.math.BigInteger
 
 @Stable
 data class ProposalTally(
     val tally: ImmutableList<BigInteger>,
-    val amountOfJudgments: BigInteger,
+//    val amountOfJudgments: BigInteger,
 )
 
-fun ProposalTallyInterface.toProposalTally(): ProposalTally {
+fun CandidateTallyInterface.toProposalTally(): ProposalTally {
     return ProposalTally(
-        tally = this.tally.toPersistentList(),
-        amountOfJudgments = this.amountOfJudgments,
+        tally = this.gradesTallies.toPersistentList(),
     )
 }

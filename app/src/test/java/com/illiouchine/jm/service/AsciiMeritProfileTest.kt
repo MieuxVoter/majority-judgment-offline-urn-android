@@ -5,7 +5,7 @@ import com.illiouchine.jm.model.ProposalTally
 import kotlinx.collections.immutable.toImmutableList
 import org.junit.Assert
 import org.junit.Test
-import java.math.BigInteger
+import com.ionspin.kotlin.bignum.integer.BigInteger
 
 
 class AsciiMeritProfileTest {
@@ -25,8 +25,7 @@ class AsciiMeritProfileTest {
 
     private fun makeTally(vararg amount: Long): ProposalTally {
         return ProposalTally(
-            tally = amount.map { BigInteger.valueOf(it) }.toImmutableList(),
-            amountOfJudgments = BigInteger.valueOf(amount.sum()),
+            tally = amount.map { BigInteger.fromLong(it) }.toImmutableList(),
         )
     }
 

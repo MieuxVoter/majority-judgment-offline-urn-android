@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
+import com.illiouchine.jm.extensions.bigSumOf
 import com.illiouchine.jm.extensions.reversedIf
 import com.illiouchine.jm.extensions.smartFormat
 import com.illiouchine.jm.model.Ballot
@@ -33,7 +34,7 @@ import com.illiouchine.jm.ui.composable.plot.utils.favorIntLineCountForBars
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
-import fr.mieuxvoter.mj.CollectedTally
+import fr.mieuxvoter.kmj.tally.CollectedPollTally
 import ir.ehsannarmani.compose_charts.ColumnChart
 import ir.ehsannarmani.compose_charts.models.AnimationMode
 import ir.ehsannarmani.compose_charts.models.BarProperties
@@ -75,9 +76,9 @@ fun OpinionProfileBarChart(
                 label = context.getString(grade.name),
                 values = listOf(
                     Bars.Data(
-                        value = tally.proposalsTallies.sumOf { proposalTally ->
+                        value = tally.proposalsTallies.bigSumOf { proposalTally ->
                             proposalTally.tally[gradeIndex]
-                        }.toDouble(),
+                        }.doubleValue(exactRequired = false),
                         color = SolidColor(grade.color),
                     ),
                 ),
@@ -98,7 +99,7 @@ fun OpinionProfileBarChart(
                     } else {
                         i
                     }
-                    val value = tally.proposalsTallies.sumOf { proposalTally ->
+                    val value = tally.proposalsTallies.bigSumOf { proposalTally ->
                         proposalTally.tally[gradeIndex]
                     }
                     append("${value} ")
@@ -240,7 +241,7 @@ fun OpinionProfileBarChartPreview() {
     // Refactor the following into a service (but first recode the MJ lib in Kotlin)
     val amountOfProposals = poll.pollConfig.proposals.size
     val amountOfGrades = poll.pollConfig.grading.getAmountOfGrades()
-    val tally = CollectedTally(amountOfProposals, amountOfGrades)
+    val tally = CollectedPollTally(amountOfProposals, amountOfGrades)
 
     poll.pollConfig.proposals.forEachIndexed { proposalIndex, _ ->
         val voteResult = poll.judgments.filter { it.proposal == proposalIndex }

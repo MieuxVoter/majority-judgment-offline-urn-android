@@ -26,12 +26,17 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
+import com.illiouchine.jm.extensions.bigSumOf
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.ParticipantGroup
 import com.illiouchine.jm.model.ParticipantGroupAnalysis
 import com.illiouchine.jm.model.ProposalTally
 import com.illiouchine.jm.ui.composable.plot.component.getPatternBrushes
 import com.illiouchine.jm.ui.utils.smoothStep
+import com.ionspin.kotlin.bignum.decimal.BigDecimal
+import com.ionspin.kotlin.bignum.decimal.DecimalMode
+import com.ionspin.kotlin.bignum.decimal.RoundingMode
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import java.util.Locale
@@ -49,6 +54,11 @@ fun LinearMeritProfileCanvas(
     showDecisiveGroups: Boolean = false,
     highestGradeOnTheLeft: Boolean = false,
 ) {
+    val amountOfJudgments = proposalTally.tally.bigSumOf { it }
+    if (amountOfJudgments == BigInteger.ZERO) {
+        return
+    }
+
     val textMeasurer = rememberTextMeasurer()
     val contrastedColor = if (isSystemInDarkTheme()) {
         Color.White
@@ -116,8 +126,16 @@ fun LinearMeritProfileCanvas(
 
         var cursorX = 0f // without spacing between grades
         for ((cursorIndex, gradeIndex) in gradesIndices.withIndex()) {
-            val gradeWidthNoGap = (size.width * proposalTally.tally[gradeIndex].toFloat()) /
-                proposalTally.amountOfJudgments.toFloat()
+            val gradeWidthNoGap = BigDecimal.fromBigInteger(proposalTally.tally[gradeIndex])
+                .multiply(BigDecimal.fromFloat(size.width))
+                .divide(
+                    other = BigDecimal.fromBigInteger(amountOfJudgments),
+                    decimalMode = DecimalMode(
+                        decimalPrecision = 15,
+                        roundingMode = RoundingMode.ROUND_HALF_CEILING,
+                    ),
+                )
+                .floatValue(exactRequired = false)
 
             val isFirstGradeShown = cursorX == 0f &&
                 gradeWidthNoGap > 0f

@@ -88,9 +88,9 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import com.illiouchine.jm.ui.utils.smoothStep
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
-import java.math.BigInteger
 import java.util.Locale
 import kotlin.math.max
 import kotlin.math.min
@@ -282,7 +282,6 @@ fun ResultScreen(
                                     isAnyProfileSelected = false
                                 } else {
                                     isAnyProfileSelected = true
-                                    @Suppress("AssignedValueIsNeverRead") // because it IS
                                     selectedProfileIndex = proposalDisplayIndex
                                 }
                             }
@@ -459,7 +458,6 @@ fun ResultScreen(
                     tally = List(grading.grades.size) { gradeIndex ->
                         tally.proposalsTallies.bigSumOf { it.tally[gradeIndex] }
                     }.toPersistentList(),
-                    amountOfJudgments = tally.proposalsTallies.bigSumOf { it.amountOfJudgments },
                 )
 
                 LinearMeritProfileCanvas(

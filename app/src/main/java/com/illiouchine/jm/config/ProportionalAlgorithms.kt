@@ -4,7 +4,7 @@ import android.content.Context
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.service.PreferentialFavoritismRepartitor
-import fr.mieuxvoter.mj.ResultInterface
+import com.illiouchine.jm.model.Result
 
 // NOTE: we could use a sealed class instead of an enum
 enum class ProportionalAlgorithms {
@@ -26,7 +26,7 @@ enum class ProportionalAlgorithms {
             return true
         }
 
-        override fun compute(poll: Poll, result: ResultInterface): List<Double> {
+        override fun compute(poll: Poll, result: Result): List<Double> {
             // It does not really matter what we compute here ; it should never be shown.
             return List(
                 size = poll.pollConfig.proposals.size,
@@ -58,7 +58,7 @@ enum class ProportionalAlgorithms {
             return true
         }
 
-        override fun compute(poll: Poll, result: ResultInterface): List<Double> {
+        override fun compute(poll: Poll, result: Result): List<Double> {
             return List(
                 size = result.proposalResults.size,
                 init = {
@@ -85,7 +85,7 @@ enum class ProportionalAlgorithms {
             return true
         }
 
-        override fun compute(poll: Poll, result: ResultInterface): List<Double> {
+        override fun compute(poll: Poll, result: Result): List<Double> {
             return PreferentialFavoritismRepartitor().computeProportionalRepresentation(poll)
         }
     },
@@ -118,5 +118,5 @@ enum class ProportionalAlgorithms {
      * It ought to be normalized (the sum of its elements must be 1.0).
      * Except for NONE, where the list might be empty (or full of meaningless values).
      */
-    abstract fun compute(poll: Poll, result: ResultInterface): List<Double>
+    abstract fun compute(poll: Poll, result: Result): List<Double>
 }
