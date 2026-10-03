@@ -52,7 +52,7 @@ fun PollSetupScreen(
     modifier: Modifier = Modifier,
     onBottomBarItemSelected: (item: NavKey) -> Unit = {},
     pollSetupState: PollSetupViewModel.PollSetupViewState = PollSetupViewModel.PollSetupViewState(),
-    onAddSubject: (Context, String) -> Unit = { _, _ -> },
+    onAddSubject: (String) -> Unit = { _ -> },
     onAddProposal: (Context, String) -> Unit = { _, _ -> },
     onRemoveProposal: (String) -> Unit = {},
     onGradingSelected: (Grading) -> Unit = {},
@@ -116,11 +116,11 @@ fun PollSetupScreen(
                 subject = pollSetupState.config.subject,
                 subjectSuggestion = pollSetupState.subjectSuggestion.toPersistentList(),
                 onSuggestionSelected = {
-                    onAddSubject(context, it)
+                    onAddSubject(it)
                     onGetSubjectSuggestion("")
                 },
                 onSubjectChange = {
-                    onAddSubject(context, it)
+                    onAddSubject(it)
                     if (it.length > 2) {
                         onGetSubjectSuggestion(it)
                     } else {
@@ -185,7 +185,6 @@ fun PollSetupScreen(
                 modifier = Modifier
                     .testTag("setup_submit")
                     .displayed {
-                        @Suppress("AssignedValueIsNeverRead") // because it IS (?!)
                         finishButtonVisibility = it
                     }
                     .align(Alignment.CenterHorizontally)

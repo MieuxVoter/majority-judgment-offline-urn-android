@@ -98,6 +98,7 @@ fun QrCodeImage(
                         // Uri: content://com.illiouchine.jm.service.FileProvider/qr_cache/shared_qr_1781147368908.png
                         // Log.i("MJ", "Uri: ${uri}")
 
+                        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         activity.startActivity(
                             Intent.createChooser(
                                 shareIntent,

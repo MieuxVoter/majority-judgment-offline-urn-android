@@ -42,7 +42,6 @@ class BallotsQrExportViewModel(
         val qrBitmap: ImageBitmap? = null,
     ) {
         companion object { // cheap factories
-            @OptIn(ExperimentalSerializationApi::class)
             fun createFromBallotsDto(
                 exchangeUriService: ExchangeUriService,
                 ballotsDto: BallotsDto,
@@ -131,7 +130,6 @@ class BallotsQrExportViewModel(
         }
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
     fun initializeFromPoll(
         context: Context,
         poll: Poll,

@@ -41,7 +41,6 @@ import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.encodeToByteArray
 import org.koin.compose.koinInject
 
-@OptIn(ExperimentalSerializationApi::class)
 @Composable
 fun PollQrImportScreen(
     state: PollQrImportViewModel.PollQrImportViewState,

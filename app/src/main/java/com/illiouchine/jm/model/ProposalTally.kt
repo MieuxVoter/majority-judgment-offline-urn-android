@@ -9,7 +9,6 @@ import kotlinx.collections.immutable.toPersistentList
 @Stable
 data class ProposalTally(
     val tally: ImmutableList<BigInteger>,
-//    val amountOfJudgments: BigInteger,
 )
 
 fun CandidateTallyInterface.toProposalTally(): ProposalTally {

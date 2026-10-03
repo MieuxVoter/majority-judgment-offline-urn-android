@@ -78,7 +78,6 @@ class PollQrExportViewModel(
         }
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
     fun initializeFromPoll(
         poll: Poll,
     ) {

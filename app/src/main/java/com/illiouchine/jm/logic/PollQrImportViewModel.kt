@@ -50,7 +50,7 @@ class PollQrImportViewModel(
 
         try {
             val poll = exchangeUriService.uriPathDatumToPoll(qrUriPathDatum)
-            initializeFromPoll(context, poll)
+            initializeFromPoll(poll)
         } catch (e: DataFormatException) {
             _viewState.update {
                 it.copy(
@@ -78,7 +78,6 @@ class PollQrImportViewModel(
     }
 
     fun initializeFromPoll(
-        context: Context,
         pollToImport: Poll,
     ) {
         viewModelScope.launch {

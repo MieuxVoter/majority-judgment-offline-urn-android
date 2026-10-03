@@ -29,7 +29,6 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun BallotSummaryScreen(
     modifier: Modifier = Modifier,

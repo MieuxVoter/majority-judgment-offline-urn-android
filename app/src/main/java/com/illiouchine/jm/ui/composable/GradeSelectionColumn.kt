@@ -58,7 +58,7 @@ fun GradeSelectionColumn(
     }
 }
 
-@Preview()
+@Preview
 @Composable
 private fun PreviewGradeSelectionColumn7() {
     JmTheme {

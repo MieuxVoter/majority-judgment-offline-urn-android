@@ -84,7 +84,7 @@ fun PollQrExportScreen(
             Text(
                 text = "With this experimental daisy-chaining feature, you may use multiple offline devices to collect ballots, which is useful in large assemblies."
             )
-            if (!state.poll.ballots.isEmpty()) {
+            if (state.poll.ballots.isNotEmpty()) {
                 Text(text = "The other devices will not see the ballots already recorded on this device.")
             }
 

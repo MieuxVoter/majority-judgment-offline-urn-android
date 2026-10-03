@@ -12,7 +12,8 @@ data class PollConfig(
     val grading: Grading = DEFAULT_GRADING_QUALITY_VALUE,
 ) {
 
-    fun getProposalName(proposalIndex: Int): String {
-        return proposals[proposalIndex]
-    }
+//    fun getProposalName(proposalIndex: Int): String {
+//        return proposals[proposalIndex]
+//    }
+
 }

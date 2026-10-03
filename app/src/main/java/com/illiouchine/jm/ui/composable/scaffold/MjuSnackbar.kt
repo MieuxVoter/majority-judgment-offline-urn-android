@@ -21,6 +21,7 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun MjuSnackbar(
@@ -30,7 +31,7 @@ fun MjuSnackbar(
 ) {
     if (!text.isNullOrEmpty()) {
         LaunchedEffect(text) {
-            delay(5 * 1000)
+            delay(5000.milliseconds)
             onDismiss()
         }
         Snackbar(
@@ -59,7 +60,7 @@ fun MjuSnackbarWithStringResId(
 ) {
     textId?.let {
         LaunchedEffect(it) {
-            delay(5 * 1000)
+            delay(5000.milliseconds)
             onDismiss()
         }
         Snackbar(

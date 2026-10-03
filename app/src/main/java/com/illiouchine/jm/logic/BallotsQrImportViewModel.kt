@@ -53,7 +53,6 @@ class BallotsQrImportViewModel(
         try {
             val ballotsDto = exchangeUriService.uriPathDatumToBallotsDto(qrUriPathDatum)
             initializeFromBallotsDto(
-                // context = context,
                 ballotsDto = ballotsDto,
             )
         } catch (e: DataFormatException) {
@@ -90,7 +89,6 @@ class BallotsQrImportViewModel(
     }
 
     fun initializeFromBallotsDto(
-        // context: Context,
         ballotsDto: BallotsDto,
     ) {
         viewModelScope.launch {
