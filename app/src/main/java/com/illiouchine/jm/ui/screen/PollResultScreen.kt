@@ -88,9 +88,9 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import com.illiouchine.jm.ui.utils.smoothStep
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
-import java.math.BigInteger
 import java.util.Locale
 import kotlin.math.max
 import kotlin.math.min
@@ -282,7 +282,6 @@ fun ResultScreen(
                                     isAnyProfileSelected = false
                                 } else {
                                     isAnyProfileSelected = true
-                                    @Suppress("AssignedValueIsNeverRead") // because it IS
                                     selectedProfileIndex = proposalDisplayIndex
                                 }
                             }
@@ -459,13 +458,12 @@ fun ResultScreen(
                     tally = List(grading.grades.size) { gradeIndex ->
                         tally.proposalsTallies.bigSumOf { it.tally[gradeIndex] }
                     }.toPersistentList(),
-                    amountOfJudgments = tally.proposalsTallies.bigSumOf { it.amountOfJudgments },
                 )
 
                 LinearMeritProfileCanvas(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start=16.dp)
+                        .padding(start = 16.dp)
                         .height(Theme.spacing.medium + Theme.spacing.small),
                     proposalTally = pollTallyAsProposalTally,
                     grading = grading,
@@ -577,7 +575,7 @@ fun ResultScreen(
                         append("  ")
                         append(proposalName)
                         append("  ")
-                        append("(${medianGradeName})")
+                        append("($medianGradeName)")
 
                         if (proportionalAlgorithm != ProportionalAlgorithms.NONE) {
                             val shownProportion = state.proportions[proportionalAlgorithm]
@@ -589,17 +587,19 @@ fun ResultScreen(
                                         maxDecimals = 2,
                                     )
                                 )
-                                append(" ${proportionAsText}")
+                                append(" $proportionAsText")
                             }
                         }
 
                         append("\n")
-                        append(asciiMeritProfile.generate(
-                            tally = tally.proposalsTallies[proposalResult.index],
-                            grading = poll.pollConfig.grading,
-                            width = 13,
-                            highestGradeOnTheLeft = highGradeOnLeft,
-                        ))
+                        append(
+                            asciiMeritProfile.generate(
+                                tally = tally.proposalsTallies[proposalResult.index],
+                                grading = poll.pollConfig.grading,
+                                width = 13,
+                                highestGradeOnTheLeft = highGradeOnLeft,
+                            )
+                        )
                         append("\n")
                         append("\n")
                     }

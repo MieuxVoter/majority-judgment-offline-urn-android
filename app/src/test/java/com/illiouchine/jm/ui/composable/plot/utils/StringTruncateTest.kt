@@ -139,12 +139,11 @@ class StringTruncateTest {
         )
 
         testData.forEachIndexed { testIndex, testDatum ->
-            for (io in testDatum.expected) {
-                val actual = io.first.truncate(
+            for ((input, expected) in testDatum.expected) {
+                val actual = input.truncate(
                     maxLength = testDatum.maxLength,
                     ellipsis = testDatum.ellipsis,
                 )
-                val expected = io.second
                 assertEquals(
                     "Rule #$testIndex `${testDatum.rule}` fails:",
                     expected,

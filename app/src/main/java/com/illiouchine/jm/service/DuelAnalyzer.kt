@@ -3,13 +3,12 @@ package com.illiouchine.jm.service
 import android.content.Context
 import androidx.compose.ui.text.AnnotatedString
 import com.illiouchine.jm.R
+import com.illiouchine.jm.model.ParticipantGroup
 import com.illiouchine.jm.model.ParticipantGroupAnalysis
 import com.illiouchine.jm.model.Poll
-import com.illiouchine.jm.model.toParticipantGroup
-import fr.mieuxvoter.mj.ParticipantGroup
-import fr.mieuxvoter.mj.ProposalResultInterface
-import fr.mieuxvoter.mj.ResultInterface
-import fr.mieuxvoter.mj.TallyInterface
+import com.illiouchine.jm.model.ProposalResult
+import com.illiouchine.jm.model.Result
+import fr.mieuxvoter.kmj.tally.PollTallyInterface
 import kotlin.math.max
 
 /**
@@ -22,19 +21,17 @@ import kotlin.math.max
 @Suppress("CanBeParameter")
 class DuelAnalyzer(
     private val poll: Poll,
-    private val tally: TallyInterface,
-    private val result: ResultInterface,
+    private val tally: PollTallyInterface,
+    private val result: Result,
     private val baseIndex: Int, // merit profile that was selected
     private val otherIndex: Int, // dueling profile, usually a neighbor in ranking
 ) {
 
-    private val base: ProposalResultInterface = result.proposalResultsRanked[baseIndex]
-    private val other: ProposalResultInterface = result.proposalResultsRanked[otherIndex]
+    private val base: ProposalResult = result.proposalResultsRanked[baseIndex]
+    private val other: ProposalResult = result.proposalResultsRanked[otherIndex]
 
-    private val baseGroups: Array<ParticipantGroup> =
-        base.analysis.computeResolution(tally.proposalsTallies[base.index])
-    private val otherGroups: Array<ParticipantGroup> =
-        other.analysis.computeResolution(tally.proposalsTallies[other.index])
+    private val baseGroups: List<ParticipantGroup> = base.decisiveGroups
+    private val otherGroups: List<ParticipantGroup> = other.decisiveGroups
 
     fun generateDuelExplanation(
         context: Context,
@@ -230,7 +227,7 @@ class DuelAnalyzer(
                 groups.add(
                     ParticipantGroupAnalysis(
                         participant = otherIndex,
-                        group = otherGroup.toParticipantGroup(),
+                        group = otherGroup,
                         decisive = true,
                     )
                 )
@@ -242,7 +239,7 @@ class DuelAnalyzer(
                 groups.add(
                     ParticipantGroupAnalysis(
                         participant = baseIndex,
-                        group = baseGroup.toParticipantGroup(),
+                        group = baseGroup,
                         decisive = true,
                     )
                 )
@@ -262,14 +259,14 @@ class DuelAnalyzer(
                 groups.add(
                     ParticipantGroupAnalysis(
                         participant = baseIndex,
-                        group = baseGroup.toParticipantGroup(),
+                        group = baseGroup,
                         decisive = (baseGroup.grade >= otherGroup.grade),
                     )
                 )
                 groups.add(
                     ParticipantGroupAnalysis(
                         participant = otherIndex,
-                        group = otherGroup.toParticipantGroup(),
+                        group = otherGroup,
                         decisive = (baseGroup.grade <= otherGroup.grade),
                     )
                 )
@@ -279,14 +276,14 @@ class DuelAnalyzer(
                 groups.add(
                     ParticipantGroupAnalysis(
                         participant = baseIndex,
-                        group = baseGroup.toParticipantGroup(),
+                        group = baseGroup,
                         decisive = (baseGroup.size >= otherGroup.size),
                     )
                 )
                 groups.add(
                     ParticipantGroupAnalysis(
                         participant = otherIndex,
-                        group = otherGroup.toParticipantGroup(),
+                        group = otherGroup,
                         decisive = (baseGroup.size <= otherGroup.size),
                     )
                 )
@@ -298,14 +295,14 @@ class DuelAnalyzer(
                     groups.add(
                         ParticipantGroupAnalysis(
                             participant = baseIndex,
-                            group = baseGroup.toParticipantGroup(),
+                            group = baseGroup,
                             decisive = true,
                         )
                     )
                     groups.add(
                         ParticipantGroupAnalysis(
                             participant = otherIndex,
-                            group = otherGroup.toParticipantGroup(),
+                            group = otherGroup,
                             decisive = true,
                         )
                     )
@@ -316,14 +313,14 @@ class DuelAnalyzer(
                 groups.add(
                     ParticipantGroupAnalysis(
                         participant = baseIndex,
-                        group = baseGroup.toParticipantGroup(),
+                        group = baseGroup,
                         decisive = (baseGroup.grade >= otherGroup.grade),
                     )
                 )
                 groups.add(
                     ParticipantGroupAnalysis(
                         participant = otherIndex,
-                        group = otherGroup.toParticipantGroup(),
+                        group = otherGroup,
                         decisive = (baseGroup.grade <= otherGroup.grade),
                     )
                 )

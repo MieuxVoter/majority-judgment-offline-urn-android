@@ -119,7 +119,7 @@ class ExchangeUriService(
     }
 
     private fun uriMatchesRoutePrefix(uri: Uri, prefix: String): Boolean {
-        return uri.pathSegments.first() == prefix
-            || (domain.isEmpty() && uri.host == prefix)
+        return uri.pathSegments.first() == prefix ||
+            (domain.isEmpty() && uri.host == prefix)
     }
 }

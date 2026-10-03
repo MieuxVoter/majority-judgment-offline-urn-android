@@ -2,9 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.room)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.detekt)
 }
 
@@ -36,7 +36,7 @@ android {
         versionName = "1.7.0"
 
         // Ideally we'd have both, but support for multiple runners looks experimental
-//        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        //testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunner = "io.cucumber.android.runner.CucumberAndroidJUnitRunner"
     }
 
@@ -106,14 +106,15 @@ dependencies {
     implementation(libs.kotlinx.collections.immutable)
 
     // Android & Jetpack Compose
+    @Suppress("AvoidDuplicateDependencies") // see explanation below, at the other declaration
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.material3)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
     //implementation("androidx.core:core-splashscreen:1.0.0") // TBD: do we need this?
 
     // Android App Navigation
@@ -127,7 +128,9 @@ dependencies {
     implementation(libs.androidx.material.icons)
 
     // Majority Judgment
-    implementation(libs.majority.judgment.library.java)
+    // Maven Central suggests using platform() here, but I don't know what's it for, so… TBD
+    //implementation(platform(libs.majority.judgment.library.kotlin))
+    implementation(libs.majority.judgment.kotlin)
 
     // Koin (Dependency Injection)
     implementation(project.dependencies.platform(libs.koin.bom))
@@ -151,14 +154,16 @@ dependencies {
     implementation(libs.qrcode.kotlin)
 
     // Faking — Development only
-    debugImplementation(libs.kotlin.faker)
-    //implementation(libs.kotlin.faker)  // adds ~13Mio to our ~3Mio release, so no
+    debugImplementation(libs.kotlin.faker)  // adds ~13Mio
+
+    // We DO need to repeat it, or we get "Could not find androidx.compose.ui:ui-test-junit4"
+    @Suppress("AvoidDuplicateDependencies")
+    androidTestImplementation(platform(libs.androidx.compose.bom))
 
     // Testing — Development only
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.cucumber.android)
     androidTestImplementation(libs.cucumber.picocontainer)

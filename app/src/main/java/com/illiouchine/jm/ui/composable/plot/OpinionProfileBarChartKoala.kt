@@ -16,6 +16,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.R
+import com.illiouchine.jm.extensions.bigSumOf
 import com.illiouchine.jm.extensions.reversedIf
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Tally
@@ -61,7 +62,7 @@ fun OpinionProfileBarChartKoala(
         key2 = highestGradeToLowestGrade,
     ) {
         List(grading.grades.size) { gradeIndex ->
-            tally.proposalsTallies.sumOf { proposalTally ->
+            tally.proposalsTallies.bigSumOf { proposalTally ->
                 proposalTally.tally[gradeIndex]
             }
         }
@@ -95,7 +96,7 @@ fun OpinionProfileBarChartKoala(
                 x = gradesNames[gradeIndex],
                 y = DefaultBarPosition(
                     start = 0L,
-                    end = opinionTally[gradeIndex].toLong(),
+                    end = opinionTally[gradeIndex].longValue(exactRequired = false),
                 ),
             )
         }.reversedIf(highestGradeToLowestGrade)
@@ -112,7 +113,7 @@ fun OpinionProfileBarChartKoala(
                 categoryAxisOffset = CategoryAxisOffset.Half,
             ),
             yAxisModel = LongLinearAxisModel(
-                range = 0L..maxValue.toInt(), // why do we have to cast to Int here ?
+                range = 0L..maxValue.intValue(exactRequired = false),
             ),
             xAxisContent = AxisContent(
                 labels = {
@@ -192,11 +193,11 @@ fun OpinionProfileBarChartKoala(
 @Composable
 fun OpinionProfileBarChartKoalaPreview() {
     val grading = Grading.Quality5Grading
-    val tally = fr.mieuxvoter.mj.Tally(
-        arrayOf(
-            fr.mieuxvoter.mj.ProposalTally(arrayOf<Int>(0, 0, 3, 7, 5)),
-            fr.mieuxvoter.mj.ProposalTally(arrayOf<Int>(0, 0, 0, 10, 5)),
-            fr.mieuxvoter.mj.ProposalTally(arrayOf<Int>(1, 0, 5, 4, 5)),
+    val tally = fr.mieuxvoter.kmj.tally.PollTally(
+        listOf(
+            fr.mieuxvoter.kmj.tally.CandidateTally(arrayOf(0, 0, 3, 7, 5)),
+            fr.mieuxvoter.kmj.tally.CandidateTally(arrayOf(0, 0, 0, 10, 5)),
+            fr.mieuxvoter.kmj.tally.CandidateTally(arrayOf(1, 0, 5, 4, 5)),
         ),
     )
 

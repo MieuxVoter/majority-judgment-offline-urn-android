@@ -39,10 +39,8 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import kotlinx.coroutines.launch
-import kotlinx.serialization.ExperimentalSerializationApi
 import org.koin.compose.koinInject
 
-@OptIn(ExperimentalSerializationApi::class)
 @Composable
 fun PollQrExportScreen(
     modifier: Modifier = Modifier,
@@ -65,20 +63,28 @@ fun PollQrExportScreen(
                 .verticalScroll(state = scrollState),
         ) {
             ScreenTitle(
-                text = stringResource(R.string.title_export_poll) + "\n" +
-                    state.poll.pollConfig.subject + "\n" +
-                    "(${state.poll.uuid?.toString()?.take(8)})",
+                text = buildString {
+                    append(stringResource(R.string.title_export_poll))
+                    append("\n")
+                    append(state.poll.pollConfig.subject)
+                    if (state.poll.uuid != null) {
+                        append("\n")
+                        append("(")
+                        append(state.poll.uuid.toString().take(n = 6))
+                        append(")")
+                    }
+                },
             )
 
             if (state.poll.uuid == null) {
-                Text("This poll is from another era and cannot be exported.  Please make a new one.")
+                Text("This poll has no unique identifier and therefore cannot be exported.")
                 return@Column
             }
 
             Text(
                 text = "With this experimental daisy-chaining feature, you may use multiple offline devices to collect ballots, which is useful in large assemblies."
             )
-            if (!state.poll.ballots.isEmpty()) {
+            if (state.poll.ballots.isNotEmpty()) {
                 Text(text = "The other devices will not see the ballots already recorded on this device.")
             }
 
@@ -118,7 +124,11 @@ fun PollQrExportScreen(
                                             ClipData.newHtmlText(
                                                 state.poll.pollConfig.subject,
                                                 state.pollQrContent,
-                                                "<a href=\"${state.pollQrContent}\">${state.poll.pollConfig.subject}</a>"
+                                                buildString {
+                                                    append("<a href=\"${state.pollQrContent}\">")
+                                                    append(state.poll.pollConfig.subject)
+                                                    append("</a>")
+                                                },
                                             )
                                         )
                                     )
@@ -148,11 +158,11 @@ fun PollQrExportScreen(
 
                 SmallVerticalSpacer()
                 Text(
-                    "We do not provide a QR Code scanner with this app, since we do not want it to access the Camera.  Your favorite Qr Code scanner should work."
+                    "We do not provide a QR Code scanner with this app, since we do not want it to access the Camera.  Your favorite QR Code scanner should work."
                 )
             } else {
                 MediumVerticalSpacer()
-                Text("There was an error generating your Qr Code.")
+                Text("There was an error generating your QR Code.")
             }
 
             MediumVerticalSpacer()
@@ -204,7 +214,6 @@ fun PreviewPollQrExportScreen(
                 "Jordan Bardella",
                 "François Ruffin",
                 "François Asselineau",
-                "Philippe Poutou",
                 "Bruno Retailleau",
                 "Monsieur Patate",
             ),

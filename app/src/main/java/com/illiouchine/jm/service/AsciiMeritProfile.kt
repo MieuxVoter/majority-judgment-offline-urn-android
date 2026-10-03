@@ -1,8 +1,9 @@
 package com.illiouchine.jm.service
 
+import com.illiouchine.jm.extensions.bigSumOf
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.ProposalTally
-import java.math.BigInteger
+import com.ionspin.kotlin.bignum.integer.BigInteger
 
 class AsciiMeritProfile {
     fun generate(
@@ -12,7 +13,14 @@ class AsciiMeritProfile {
         highestGradeOnTheLeft: Boolean = false,
         medianCharacter: String = "|",
         charset: List<String> = listOf(
-            "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█",
+            "▁",
+            "▂",
+            "▃",
+            "▄",
+            "▅",
+            "▆",
+            "▇",
+            "█",
         ),
     ): String {
         if (charset.size < grading.getAmountOfGrades()) {
@@ -28,12 +36,12 @@ class AsciiMeritProfile {
         val ascii = buildString {
             for (cursor in 0..<width) {
                 val ratio = if (highestGradeOnTheLeft) {
-                    (width-cursor-1).toDouble() / width.toDouble()
+                    (width - cursor - 1).toDouble() / width.toDouble()
                 } else {
                     cursor.toDouble() / width.toDouble()
                 }
                 val offset = if (highestGradeOnTheLeft) { 0 } else { 1 }
-                val isMedian = ((width-offset)/2 == cursor)
+                val isMedian = ((width - offset) / 2 == cursor)
                 val gradeChar = if (isMedian) {
                     medianCharacter
                 } else {
@@ -54,13 +62,14 @@ class AsciiMeritProfile {
         tally: ProposalTally,
         ratio: Double,
     ): Int {
-        val targetIndex = (ratio * tally.amountOfJudgments.toDouble()).toInt()
+        val totalSize = tally.tally.bigSumOf { it }.doubleValue(exactRequired = false)
+        val targetIndex = (ratio * totalSize).toInt()
         var cursorStart: Int
         var cursor = 0
         tally.tally.forEachIndexed { gradeIndex, gradeTally ->
             if (gradeTally > BigInteger.ZERO) {
                 cursorStart = cursor
-                cursor += gradeTally.toInt()
+                cursor += gradeTally.intValue(exactRequired = false)
 
                 if (cursorStart <= targetIndex && targetIndex < cursor) {
                     return gradeIndex

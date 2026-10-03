@@ -1,19 +1,19 @@
 package com.illiouchine.jm.model
 
 import androidx.compose.runtime.Stable
-import fr.mieuxvoter.mj.TallyInterface
+import fr.mieuxvoter.kmj.tally.PollTallyInterface
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
 @Stable
 data class Tally(
-    val proposalsTallies: ImmutableList<ProposalTally>
+    val proposalsTallies: ImmutableList<ProposalTally>,
 )
 
-fun TallyInterface.toTally(): Tally {
+fun PollTallyInterface.toTally(): Tally {
     return Tally(
-        proposalsTallies = this.proposalsTallies.map { tallyInterface ->
-            tallyInterface.toProposalTally()
-        }.toPersistentList()
+        proposalsTallies = this.candidatesTallies.map { candidateTally ->
+            candidateTally.toProposalTally()
+        }.toPersistentList(),
     )
 }

@@ -2,11 +2,10 @@ package com.illiouchine.jm.service
 
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.ProposalTally
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import kotlinx.collections.immutable.toImmutableList
 import org.junit.Assert
 import org.junit.Test
-import java.math.BigInteger
-
 
 class AsciiMeritProfileTest {
 
@@ -19,14 +18,20 @@ class AsciiMeritProfileTest {
         val highestGradeOnTheLeft: Boolean = false,
         val medianCharacter: String = "|",
         val charset: List<String> = listOf(
-            "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█",
+            "▁",
+            "▂",
+            "▃",
+            "▄",
+            "▅",
+            "▆",
+            "▇",
+            "█",
         ),
     )
 
     private fun makeTally(vararg amount: Long): ProposalTally {
         return ProposalTally(
-            tally = amount.map { BigInteger.valueOf(it) }.toImmutableList(),
-            amountOfJudgments = BigInteger.valueOf(amount.sum()),
+            tally = amount.map { BigInteger.fromLong(it) }.toImmutableList(),
         )
     }
 
@@ -91,7 +96,10 @@ class AsciiMeritProfileTest {
                 grading = Grading.Quality7Grading,
                 width = 13,
                 charset = listOf(
-                    "▁", "▄", "▆", "▇",
+                    "▁",
+                    "▄",
+                    "▆",
+                    "▇",
                 )
             ),
             AsciiMeritProfileGenerateTestDatum(
@@ -101,7 +109,10 @@ class AsciiMeritProfileTest {
                 grading = Grading.Quality7Grading,
                 width = 2,
                 charset = listOf(
-                    "▁", "▄", "▆", "▇",
+                    "▁",
+                    "▄",
+                    "▆",
+                    "▇",
                 )
             ),
         )
@@ -119,7 +130,7 @@ class AsciiMeritProfileTest {
             )
             val expected = testDatum.expected
             Assert.assertEquals(
-                "Rule #${testIndex} `${testDatum.rule}` fails:",
+                "Rule #$testIndex `${testDatum.rule}` fails:",
                 expected,
                 actual,
             )

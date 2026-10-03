@@ -87,7 +87,7 @@ class PollSetupViewModel(
         return PollConfig(grading = sharedPrefs.getDefaultGrading())
     }
 
-    fun addSubject(@Suppress("unused") context: Context, subject: String) {
+    fun addSubject(subject: String) {
         _pollSetupViewState.update {
             it.copy(config = it.config.copy(subject = subject))
         }

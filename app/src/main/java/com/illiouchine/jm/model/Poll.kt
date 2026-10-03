@@ -38,5 +38,4 @@ data class Poll(
 
         return true
     }
-
 }

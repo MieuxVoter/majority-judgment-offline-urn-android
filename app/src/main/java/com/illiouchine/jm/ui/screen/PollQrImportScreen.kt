@@ -41,7 +41,6 @@ import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.encodeToByteArray
 import org.koin.compose.koinInject
 
-@OptIn(ExperimentalSerializationApi::class)
 @Composable
 fun PollQrImportScreen(
     state: PollQrImportViewModel.PollQrImportViewState,
@@ -170,18 +169,18 @@ fun PollQrImportScreen(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     fontScale = 1.0f,
 )
- @Preview(
+@Preview(
     name = "Phone (Portrait, Big Font)",
     showSystemUi = true,
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     fontScale = 2.0f,
- )
- @Preview(
+)
+@Preview(
     name = "Tablet",
     device = "spec:width=1280dp,height=800dp,dpi=240",
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     showSystemUi = true,
- )
+)
 @Composable
 fun PreviewPollQrImportScreen(
     modifier: Modifier = Modifier,

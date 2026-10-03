@@ -25,10 +25,9 @@ import com.illiouchine.jm.service.ProximityAnalyzer
 import com.illiouchine.jm.service.TextStylist
 import com.illiouchine.jm.ui.navigator.NavigationAction
 import com.illiouchine.jm.ui.navigator.Screens
-import fr.mieuxvoter.mj.CollectedTally
-import fr.mieuxvoter.mj.DeliberatorInterface
-import fr.mieuxvoter.mj.MajorityJudgmentDeliberator
-import fr.mieuxvoter.mj.ResultInterface
+import fr.mieuxvoter.kmj.DeliberatorInterface
+import fr.mieuxvoter.kmj.MajorityJudgment
+import fr.mieuxvoter.kmj.tally.CollectedPollTally
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -104,17 +103,17 @@ class PollResultViewModel(
         )
         val amountOfProposals = filteredPoll.pollConfig.proposals.size
         val amountOfGrades = filteredPoll.pollConfig.grading.getAmountOfGrades()
-        val deliberation: DeliberatorInterface = MajorityJudgmentDeliberator()
-        val tally = CollectedTally(amountOfProposals, amountOfGrades)
+        val deliberation: DeliberatorInterface = MajorityJudgment()
+        val tally = CollectedPollTally(amountOfProposals, amountOfGrades)
 
         filteredPoll.pollConfig.proposals.forEachIndexed { proposalIndex, _ ->
             val voteResult = filteredPoll.judgments.filter { it.proposal == proposalIndex }
             voteResult.forEach { judgment ->
-                tally.collect(proposalIndex, judgment.grade)
+                tally.collect(candidateIndex = proposalIndex, gradeIndex = judgment.grade)
             }
         }
 
-        val result: ResultInterface = deliberation.deliberate(tally)
+        val result: Result = deliberation.deliberate(tally).toResult()
 
         val stylist = TextStylist()
         val groups: MutableList<DuelGroups> = mutableListOf()
@@ -165,7 +164,7 @@ class PollResultViewModel(
                 unfilteredPoll = poll,
                 poll = filteredPoll,
                 tally = tally.toTally(),
-                result = result.toResult(),
+                result = result,
                 explanations = explanations,
                 groups = groups,
                 proportions = proportions,

@@ -1,16 +1,18 @@
 package com.illiouchine.jm.model
 
-import java.math.BigInteger
-import fr.mieuxvoter.mj.ProposalTallyAnalysis as MJProposalTallyAnalysis
+import androidx.compose.runtime.Stable
+import com.ionspin.kotlin.bignum.integer.BigInteger
+import fr.mieuxvoter.kmj.analysis.CandidateTallyAnalysis
 
+@Stable
 data class ProposalTallyAnalysis(
     val medianGrade: Int,
     val totalSize: BigInteger,
 )
 
-fun MJProposalTallyAnalysis.toAnalysis(): ProposalTallyAnalysis {
+fun CandidateTallyAnalysis.toAnalysis(): ProposalTallyAnalysis {
     return ProposalTallyAnalysis(
         medianGrade = this.medianGrade,
-        totalSize = this.totalSize
+        totalSize = this.totalSize,
     )
 }

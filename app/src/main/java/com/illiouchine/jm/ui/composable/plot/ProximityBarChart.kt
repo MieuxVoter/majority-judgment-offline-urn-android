@@ -42,7 +42,6 @@ import io.github.koalaplot.core.xygraph.rememberAxisStyle
 import io.github.koalaplot.core.xygraph.rememberFloatLinearAxisModel
 import kotlin.math.abs
 
-@OptIn(ExperimentalKoalaPlotApi::class)
 @Composable
 fun ProximityBarChart(
     modifier: Modifier = Modifier,
@@ -73,7 +72,6 @@ fun ProximityBarChart(
     XYGraph(
         modifier = modifier
             .onGloballyPositioned {
-                @Suppress("AssignedValueIsNeverRead")
                 chartSize = it.size.toSize()
             }
             // TalkBack's default behavior here is just noise, as it is.

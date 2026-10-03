@@ -53,7 +53,6 @@ class BallotsQrImportViewModel(
         try {
             val ballotsDto = exchangeUriService.uriPathDatumToBallotsDto(qrUriPathDatum)
             initializeFromBallotsDto(
-                // context = context,
                 ballotsDto = ballotsDto,
             )
         } catch (e: DataFormatException) {
@@ -90,7 +89,6 @@ class BallotsQrImportViewModel(
     }
 
     fun initializeFromBallotsDto(
-        // context: Context,
         ballotsDto: BallotsDto,
     ) {
         viewModelScope.launch {
@@ -119,7 +117,7 @@ class BallotsQrImportViewModel(
                     poll.ballots.map { it.uuid }.contains(it.uuid) || !poll.isBallotValid(it)
                 }
                 for (ballot in ballotsImported) {
-                    if (! poll.isBallotValid(ballot)) { // redundant, but safe
+                    if (!poll.isBallotValid(ballot)) { // redundant, but safe
                         continue
                     }
 

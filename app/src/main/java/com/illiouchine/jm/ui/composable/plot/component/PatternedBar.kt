@@ -41,11 +41,7 @@ fun PatternedBar(
             .fillMaxSize()
             .then(if (border != null) Modifier.border(border, shape) else Modifier)
             .background(
-                brush = if (brush != null) {
-                    brush
-                } else {
-                    SolidColor(value = color)
-                },
+                brush = brush ?: SolidColor(value = color),
                 shape = shape,
             )
             .clip(shape),

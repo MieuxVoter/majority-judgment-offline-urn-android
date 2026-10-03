@@ -35,7 +35,6 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 
-@OptIn(ExperimentalLayoutApi::class) // for FlowRow
 @Composable
 fun PollSummary(
     modifier: Modifier = Modifier,

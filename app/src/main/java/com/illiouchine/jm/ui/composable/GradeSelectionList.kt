@@ -1,8 +1,5 @@
 package com.illiouchine.jm.ui.composable
 
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,7 +22,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Grading
@@ -36,6 +32,7 @@ import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun GradeSelectionList(
@@ -85,16 +82,12 @@ fun GradeSelectionList(
 
     var selectedGradeIndex: Int? by remember { mutableStateOf(null) }
 
-    for (gradeIndex in 0..<pollConfig.grading.grades.size) {
-        val interactionSource = remember { MutableInteractionSource() }
-        val interactionSourceIsPressed by interactionSource.collectIsFocusedAsState()
+    for ((gradeIndex, grade) in pollConfig.grading.grades.withIndex()) {
+        // val interactionSource = remember { MutableInteractionSource() }
+        // val interactionSourceIsPressed by interactionSource.collectIsFocusedAsState()
         val coroutine = rememberCoroutineScope()
 
-        val animatedHeight by animateDpAsState(
-            targetValue = if (interactionSourceIsPressed) 80.dp else 64.dp
-        )
-
-        val gradeName = stringResource(pollConfig.grading.grades[gradeIndex].name)
+        val gradeName = stringResource(grade.name)
         val onClickSemanticsLabel = stringResource(
             R.string.tts_judge_proposal_as_grade,
             forProposalName,
@@ -120,7 +113,7 @@ fun GradeSelectionList(
             if (selectedGradeIndex == null) {
                 selectedGradeIndex = gradeIndex
                 coroutine.launch {
-                    delay(150)
+                    delay(duration = 150.milliseconds)
                     onGradeSelected(gradeIndex)
                     selectedGradeIndex = null
                 }
