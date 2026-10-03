@@ -102,7 +102,7 @@ fun OpinionProfileBarChart(
                     val value = tally.proposalsTallies.bigSumOf { proposalTally ->
                         proposalTally.tally[gradeIndex]
                     }
-                    append("${value} ")
+                    append("$value ")
                     @SuppressLint("LocalContextGetResourceValueCall")
                     append(context.getString(grade.name))
                     append(",\n")

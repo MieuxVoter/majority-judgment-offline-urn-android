@@ -463,7 +463,7 @@ fun ResultScreen(
                 LinearMeritProfileCanvas(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start=16.dp)
+                        .padding(start = 16.dp)
                         .height(Theme.spacing.medium + Theme.spacing.small),
                     proposalTally = pollTallyAsProposalTally,
                     grading = grading,
@@ -575,7 +575,7 @@ fun ResultScreen(
                         append("  ")
                         append(proposalName)
                         append("  ")
-                        append("(${medianGradeName})")
+                        append("($medianGradeName)")
 
                         if (proportionalAlgorithm != ProportionalAlgorithms.NONE) {
                             val shownProportion = state.proportions[proportionalAlgorithm]
@@ -587,17 +587,19 @@ fun ResultScreen(
                                         maxDecimals = 2,
                                     )
                                 )
-                                append(" ${proportionAsText}")
+                                append(" $proportionAsText")
                             }
                         }
 
                         append("\n")
-                        append(asciiMeritProfile.generate(
-                            tally = tally.proposalsTallies[proposalResult.index],
-                            grading = poll.pollConfig.grading,
-                            width = 13,
-                            highestGradeOnTheLeft = highGradeOnLeft,
-                        ))
+                        append(
+                            asciiMeritProfile.generate(
+                                tally = tally.proposalsTallies[proposalResult.index],
+                                grading = poll.pollConfig.grading,
+                                width = 13,
+                                highestGradeOnTheLeft = highGradeOnLeft,
+                            )
+                        )
                         append("\n")
                         append("\n")
                     }

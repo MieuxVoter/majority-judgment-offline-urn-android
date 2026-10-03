@@ -36,9 +36,9 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.SettingsViewModel
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.ui.composable.GradingSelectionRow
-import com.illiouchine.jm.ui.composable.scaffold.MjuSnackbar
 import com.illiouchine.jm.ui.composable.ScreenTitle
 import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
+import com.illiouchine.jm.ui.composable.scaffold.MjuSnackbar
 import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme

@@ -30,14 +30,12 @@ fun GradeSelectionColumn(
     Column(
         modifier = modifier,
     ) {
-
         for (gradeIndex in (0..<grading.grades.size).reversedIf(highestGradeUpTop)) {
-
             val gradeName = stringResource(id = grading.getGradeName(gradeIndex))
 
             GradeSelectionButton(
                 modifier = gradeModifier
-                    .testTag("${gradeTestTagPrefix}${gradeIndex}")
+                    .testTag("${gradeTestTagPrefix}$gradeIndex")
                     .fillMaxWidth()
                     .semantics {
                         onClick(

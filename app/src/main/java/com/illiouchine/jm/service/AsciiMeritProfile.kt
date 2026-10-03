@@ -13,7 +13,14 @@ class AsciiMeritProfile {
         highestGradeOnTheLeft: Boolean = false,
         medianCharacter: String = "|",
         charset: List<String> = listOf(
-            "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█",
+            "▁",
+            "▂",
+            "▃",
+            "▄",
+            "▅",
+            "▆",
+            "▇",
+            "█",
         ),
     ): String {
         if (charset.size < grading.getAmountOfGrades()) {
@@ -29,12 +36,12 @@ class AsciiMeritProfile {
         val ascii = buildString {
             for (cursor in 0..<width) {
                 val ratio = if (highestGradeOnTheLeft) {
-                    (width-cursor-1).toDouble() / width.toDouble()
+                    (width - cursor - 1).toDouble() / width.toDouble()
                 } else {
                     cursor.toDouble() / width.toDouble()
                 }
                 val offset = if (highestGradeOnTheLeft) { 0 } else { 1 }
-                val isMedian = ((width-offset)/2 == cursor)
+                val isMedian = ((width - offset) / 2 == cursor)
                 val gradeChar = if (isMedian) {
                     medianCharacter
                 } else {

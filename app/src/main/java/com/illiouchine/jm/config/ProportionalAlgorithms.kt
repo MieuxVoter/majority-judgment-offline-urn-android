@@ -3,8 +3,8 @@ package com.illiouchine.jm.config
 import android.content.Context
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Poll
-import com.illiouchine.jm.service.PreferentialFavoritismRepartitor
 import com.illiouchine.jm.model.Result
+import com.illiouchine.jm.service.PreferentialFavoritismRepartitor
 
 // NOTE: we could use a sealed class instead of an enum
 enum class ProportionalAlgorithms {

@@ -6,7 +6,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import com.illiouchine.jm.ui.theme.Theme
 
-
 @Composable
 fun AxisLabel(
     label: String,

@@ -31,13 +31,13 @@ import com.illiouchine.jm.R
 import com.illiouchine.jm.logic.PollSetupViewModel
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.ui.composable.GradingSelectionRow
-import com.illiouchine.jm.ui.composable.scaffold.MjuSnackbarWithStringResId
 import com.illiouchine.jm.ui.composable.ProposalRow
 import com.illiouchine.jm.ui.composable.ProposalSelectionRow
 import com.illiouchine.jm.ui.composable.ScreenTitle
 import com.illiouchine.jm.ui.composable.SubjectSelectionRow
 import com.illiouchine.jm.ui.composable.ThemedHorizontalDivider
 import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
+import com.illiouchine.jm.ui.composable.scaffold.MjuSnackbarWithStringResId
 import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme

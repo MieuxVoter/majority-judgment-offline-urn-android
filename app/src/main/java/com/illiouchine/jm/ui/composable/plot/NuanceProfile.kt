@@ -80,7 +80,8 @@ fun NuanceProfile(
                         if (currentNuance > 1) {
                             context.getString(
                                 R.string.plot_description_nuance_profile_many_many,
-                                amountOfBallots, currentNuance,
+                                amountOfBallots,
+                                currentNuance,
                             )
                         } else {
                             context.getString(

@@ -3,7 +3,6 @@ package com.illiouchine.jm.model
 import androidx.compose.runtime.Stable
 import fr.mieuxvoter.kmj.result.CandidateResult
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
 @Stable

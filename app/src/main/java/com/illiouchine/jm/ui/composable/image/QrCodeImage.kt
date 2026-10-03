@@ -26,7 +26,6 @@ import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.File
 
-
 @Composable
 fun QrCodeImage(
     modifier: Modifier = Modifier,
@@ -85,7 +84,7 @@ fun QrCodeImage(
                         file.writeBytes(byteArray)
 
                         // file.path = /data/user/0/com.illiouchine.jm/cache/qr/shared_qr_1781144984659.png
-                        //Log.i("MJ", "File: ${file.path}")
+                        // Log.i("MJ", "File: ${file.path}")
 
                         // See app/src/main/res/xml/file_provider.xml and AndroidManifest.xml
                         val uri = FileProvider.getUriForFile(
@@ -97,7 +96,7 @@ fun QrCodeImage(
                         shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
 
                         // Uri: content://com.illiouchine.jm.service.FileProvider/qr_cache/shared_qr_1781147368908.png
-                        //Log.i("MJ", "Uri: ${uri}")
+                        // Log.i("MJ", "Uri: ${uri}")
 
                         activity.startActivity(
                             Intent.createChooser(
