@@ -90,6 +90,34 @@ class AsciiMeritProfileTest {
                 width = 30,
             ),
             AsciiMeritProfileGenerateTestDatum(
+                rule = "Basic usage 5",
+                expected = "▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄|▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅",
+                tally = makeTally(0, 0, 0, 80, 80, 0, 0),
+                grading = Grading.Quality7Grading,
+                width = 40,
+            ),
+            AsciiMeritProfileGenerateTestDatum(
+                rule = "Fangs",
+                expected = "▁▁▁▁▁▁▁▁▁|▇▇▇▇▇▇▇▇▇▇",
+                tally = makeTally(10, 0, 0, 0, 0, 0, 10),
+                grading = Grading.Quality7Grading,
+                width = 20,
+            ),
+            AsciiMeritProfileGenerateTestDatum(
+                rule = "Ski",
+                expected = "▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▃▄|▄▅▆▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇",
+                tally = makeTally(26, 1, 1, 3, 1, 1, 26),
+                grading = Grading.Quality7Grading,
+                width = 59,
+            ),
+            AsciiMeritProfileGenerateTestDatum(
+                rule = "Ski Free",
+                expected = "▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▃▃▃▃▃▃▃▃▃▃▄▄▄▄▄▄▄▄▄▄▄▄▄▄|▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▅▅▅▅▅▅▅▅▅▅▆▆▆▆▆▆▆▆▆▆▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇",
+                tally = makeTally(26, 1, 1, 3, 1, 1, 26),
+                grading = Grading.Quality7Grading,
+                width = 590,
+            ),
+            AsciiMeritProfileGenerateTestDatum(
                 rule = "Not enough characters in charset",
                 expected = "",
                 tally = makeTally(3, 1, 1, 1, 1, 1, 3),
@@ -129,8 +157,9 @@ class AsciiMeritProfileTest {
                 charset = testDatum.charset,
             )
             val expected = testDatum.expected
+//            Assert.
             Assert.assertEquals(
-                "Rule #$testIndex `${testDatum.rule}` fails:",
+                "Rule #$testIndex `${testDatum.rule}` fails: $actual \n",
                 expected,
                 actual,
             )
