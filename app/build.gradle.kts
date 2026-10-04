@@ -1,6 +1,7 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.room)
@@ -13,9 +14,16 @@ val isGoogleFlavor = providers
     .environmentVariable("GOOGLE")
     .getOrElse("false") == "true"
 
+kotlin {
+    compilerOptions {
+        // https://kotlinlang.org/docs/gradle-compiler-options.html#target-the-jvm
+        jvmTarget = JvmTarget.fromTarget("11")
+    }
+}
+
 android {
     namespace = "com.illiouchine.jm"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = if (isGoogleFlavor) {
@@ -30,7 +38,7 @@ android {
             "com.illiouchine.jm"
         }
         minSdk = 27
-        targetSdk = 36
+        targetSdk = 37
         // You need to bump both of these versions when making a new release.
         versionCode = 25
         versionName = "1.7.0"
@@ -50,19 +58,8 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
     buildFeatures {
         compose = true
-    }
-
-    room {
-        schemaDirectory("$projectDir/schemas")
     }
 
     // We find that there is a DependencyInfoBlock in our APK. It's a Signing block added by AGP
@@ -97,6 +94,10 @@ android {
 //            dimension = "store"
 //        }
 //    }
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 dependencies {
