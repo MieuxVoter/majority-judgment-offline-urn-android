@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -12,6 +14,13 @@ plugins {
 val isGoogleFlavor = providers
     .environmentVariable("GOOGLE")
     .getOrElse("false") == "true"
+
+kotlin {
+    compilerOptions {
+        // https://kotlinlang.org/docs/gradle-compiler-options.html#target-the-jvm
+        jvmTarget = JvmTarget.fromTarget("11")
+    }
+}
 
 android {
     namespace = "com.illiouchine.jm"
@@ -54,9 +63,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
     buildFeatures {
         compose = true
     }
@@ -98,6 +104,7 @@ android {
 //        }
 //    }
 }
+
 
 dependencies {
     // The Usual Suspects
