@@ -1,4 +1,4 @@
-* Compatibility with Android SDK 36
+* Compatibility with Android SDK 36 & 37
 * Add background patterns to the Opinion Profile
 * Allow editing the judgments in the ballot summary screen
 * Use the Majority Judgment library for Kotlin Multiplatform
