@@ -34,7 +34,6 @@ import io.github.koalaplot.core.animation.StartAnimationUseCase
 import io.github.koalaplot.core.bar.GroupedHorizontalBarPlot
 import io.github.koalaplot.core.bar.horizontalSolidBar
 import io.github.koalaplot.core.style.KoalaPlotTheme
-import io.github.koalaplot.core.util.ExperimentalKoalaPlotApi
 import io.github.koalaplot.core.xygraph.AxisContent
 import io.github.koalaplot.core.xygraph.CategoryAxisModel
 import io.github.koalaplot.core.xygraph.XYGraph
