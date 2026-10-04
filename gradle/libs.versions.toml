@@ -17,7 +17,7 @@ koin-bom = "4.2.2"
 # Check KSP support before bumping kotlin — https://kotlinlang.org/docs/ksp-overview.html
 kotlin = "2.3.20"
 kotlinFaker = "1.16.2"
-kotlinxCollectionsImmutable = "0.4.0"
+kotlinxCollectionsImmutable = "0.5.2"
 ksp = "2.3.10"
 lifecycleRuntimeKtx = "2.8.7"
 lifecycleViewmodelNavigation3 = "2.10.0"
