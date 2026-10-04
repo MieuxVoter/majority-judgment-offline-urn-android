@@ -6,6 +6,9 @@
 lint:  ## Lint and auto-correct using detekt.
 	./gradlew :app:detekt --auto-correct --rerun
 
+test:  ## Verbose tests
+	./gradlew :app:test --info
+
 help:  ## Show this help.
 	@echo "Welcome to your favorite Majority Judgment application for Android!\n"
 	@echo "Usage:   make <goal>\n"
