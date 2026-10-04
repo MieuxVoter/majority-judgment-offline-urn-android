@@ -3,6 +3,7 @@
 activityCompose = "1.13.0"
 agp = "9.4.1"
 composeBom = "2025.02.00"
+# We're going to ditch Compose Charts soon (we're going for Koala)
 composeCharts = "0.2.5"
 coreKtx = "1.19.1"
 cucumberAndroid = "4.9.0"
