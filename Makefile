@@ -14,5 +14,5 @@ help:  ## Show this help.
 		-e '/^[a-zA-Z0-9._-]*:.*##/!d' \
 		-e 's/:.*##\s*/:/' \
 		-e 's/^\(.\+\):\(.*\)/$(shell tput setaf 6)\1$(shell tput sgr0):\2/' \
-		$(MAKEFILE_LIST) | column -c2 -t -s :
+		$(MAKEFILE_LIST) | column -c2 --table --separator ':'
 	@echo "\nNote: We use gradlew.  For more available tasks, run   ./gradlew tasks"
