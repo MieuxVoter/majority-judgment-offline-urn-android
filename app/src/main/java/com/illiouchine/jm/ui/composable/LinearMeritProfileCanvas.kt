@@ -44,11 +44,6 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.round
 
-enum class Perspective {
-    Relative,
-    Absolute,
-}
-
 @Composable
 fun LinearMeritProfileCanvas(
     modifier: Modifier = Modifier,
@@ -59,7 +54,7 @@ fun LinearMeritProfileCanvas(
         emptyList<ParticipantGroupAnalysis>().toPersistentList(),
     showDecisiveGroups: Boolean = false,
     highestGradeOnTheLeft: Boolean = false,
-    perspective: Perspective = Perspective.Relative,
+    perspective: AmountPerspective = AmountPerspective.Relative,
 ) {
     val amountOfJudgments = proposalTally.tally.bigSumOf { it }
     if (amountOfJudgments == BigInteger.ZERO) {
@@ -214,7 +209,7 @@ fun LinearMeritProfileCanvas(
 
             // Show the amount under each grade with at least one judgment
             if (gradeWidth > 0f) {
-                val gradeTallyString = if (perspective == Perspective.Relative) {
+                val gradeTallyString = if (perspective == AmountPerspective.Relative) {
                     val percentage = 100f * gradeWidthNoGap / size.width
                     val approximate = if (round(percentage) != percentage) {
                         "~"
@@ -226,7 +221,7 @@ fun LinearMeritProfileCanvas(
                         format = "$approximate%.0f%%",
                         percentage,
                     )
-                } else if (perspective == Perspective.Absolute) {
+                } else if (perspective == AmountPerspective.Absolute) {
                     proposalTally.tally[gradeIndex].toString()
                 } else {
                     "?"

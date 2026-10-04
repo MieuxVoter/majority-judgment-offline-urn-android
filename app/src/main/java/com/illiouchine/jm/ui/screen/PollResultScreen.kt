@@ -72,7 +72,7 @@ import com.illiouchine.jm.model.ProposalTally
 import com.illiouchine.jm.service.AsciiMeritProfile
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
-import com.illiouchine.jm.ui.composable.Perspective
+import com.illiouchine.jm.ui.composable.AmountPerspective
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.composable.plot.NuanceProfile
 import com.illiouchine.jm.ui.composable.plot.OpinionProfileBarChartKoala
@@ -343,9 +343,9 @@ fun ResultScreen(
                                 showDecisiveGroups = isAnyProfileSelected,
                                 highestGradeOnTheLeft = highGradeOnLeft,
                                 perspective = if (isInSelectedDuel) {
-                                    Perspective.Absolute
+                                    AmountPerspective.Absolute
                                 } else {
-                                    Perspective.Relative
+                                    AmountPerspective.Relative
                                 }
                             )
                         }
