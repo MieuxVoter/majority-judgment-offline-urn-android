@@ -13,7 +13,7 @@ junit = "4.13.2"
 junitVersion = "1.3.0"
 kMajorityJudgment = "0.4.1"
 koalaplotCore = "0.12.1"
-koin-bom = "4.1.1"
+koin-bom = "4.2.2"
 # Check KSP support before bumping kotlin — https://kotlinlang.org/docs/ksp-overview.html
 kotlin = "2.3.20"
 kotlinFaker = "1.16.2"
