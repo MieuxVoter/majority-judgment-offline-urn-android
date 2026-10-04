@@ -10,9 +10,9 @@ cucumberPicocontainer = "4.8.1"
 detekt = "1.23.8"
 espressoCore = "3.6.1"
 junit = "4.13.2"
-junitVersion = "1.2.1"
-kmj = "0.4.1"
-koalaplotCore = "0.11.0"
+junitVersion = "1.3.0"
+kMajorityJudgment = "0.4.1"
+koalaplotCore = "0.12.1"
 # Check KSP support before bumping kotlin — https://kotlinlang.org/docs/ksp-overview.html
 kotlin = "2.3.20"
 kotlinFaker = "1.16.2"
@@ -58,7 +58,7 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-material-icons = { group = "androidx.compose.material", name = "material-icons-core" }
-majority-judgment-kotlin = { module = "fr.mieuxvoter:kmj", version.ref = "kmj" }
+majority-judgment-kotlin = { module = "fr.mieuxvoter:kmj", version.ref = "kMajorityJudgment" }
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
 koin-core = { module = "io.insert-koin:koin-core" }
 koin-android = { module = "io.insert-koin:koin-android" }
