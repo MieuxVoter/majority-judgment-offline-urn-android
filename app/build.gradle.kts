@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.room)
@@ -59,16 +58,8 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
     buildFeatures {
         compose = true
-    }
-
-    room {
-        schemaDirectory("$projectDir/schemas")
     }
 
     // We find that there is a DependencyInfoBlock in our APK. It's a Signing block added by AGP
@@ -105,6 +96,9 @@ android {
 //    }
 }
 
+room {
+    schemaDirectory("$projectDir/schemas")
+}
 
 dependencies {
     // The Usual Suspects
