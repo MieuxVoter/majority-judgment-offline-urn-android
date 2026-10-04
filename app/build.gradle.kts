@@ -23,7 +23,7 @@ kotlin {
 
 android {
     namespace = "com.illiouchine.jm"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = if (isGoogleFlavor) {
@@ -38,7 +38,7 @@ android {
             "com.illiouchine.jm"
         }
         minSdk = 27
-        targetSdk = 36
+        targetSdk = 37
         // You need to bump both of these versions when making a new release.
         versionCode = 25
         versionName = "1.7.0"
