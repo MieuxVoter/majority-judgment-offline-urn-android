@@ -1,5 +1,6 @@
 package com.illiouchine.jm.ui.screen
 
+import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -29,6 +30,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -145,10 +147,10 @@ fun OnBoardingPage(
             )
         },
     ) {
-        FlowColumn(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .padding(horizontal = Theme.spacing.medium + Theme.spacing.small),
+
+        @Composable
+        fun OnBoardingPageContent(
+            onBoardingPage: OnBoardingPage,
         ) {
             Image(
                 painter = painterResource(onBoardingPage.image),
@@ -159,6 +161,30 @@ fun OnBoardingPage(
                 text = stringResource(onBoardingPage.text),
             )
         }
+
+        val configuration = LocalConfiguration.current
+        when (configuration.orientation) {
+            Configuration.ORIENTATION_PORTRAIT -> {
+                FlowColumn(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(horizontal = Theme.spacing.medium + Theme.spacing.small),
+                ) {
+                    OnBoardingPageContent(onBoardingPage)
+                }
+            }
+            else -> { // ORIENTATION_LANDSCAPE
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(horizontal = Theme.spacing.medium + Theme.spacing.small),
+                ) {
+                    OnBoardingPageContent(onBoardingPage)
+                }
+            }
+        }
+
     }
 }
 
@@ -255,6 +281,20 @@ fun PreviewOnBoardingLastPageFr(modifier: Modifier = Modifier) {
     showSystemUi = true,
     uiMode = UI_MODE_NIGHT_YES,
     device = "spec:width=720dp,height=1280dp,orientation=landscape",
+)
+@Preview(
+    showSystemUi = true,
+    uiMode = UI_MODE_NIGHT_YES,
+    device = "spec:width=720dp,height=1280dp,orientation=landscape",
+    fontScale = 2.0f,
+    name = "Big",
+)
+@Preview(
+    showSystemUi = true,
+    uiMode = UI_MODE_NIGHT_YES,
+    device = "spec:width=720dp,height=1280dp,orientation=landscape",
+    fontScale = 3.0f,
+    name = "Huge",
 )
 @Composable
 fun PreviewOnBoardingLandscape(modifier: Modifier = Modifier) {
