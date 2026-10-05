@@ -74,7 +74,7 @@ import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.PollSubject
 import com.illiouchine.jm.ui.composable.plot.NuanceProfile
-import com.illiouchine.jm.ui.composable.plot.OpinionProfileBarChartKoala
+import com.illiouchine.jm.ui.composable.plot.OpinionProfileBarChart
 import com.illiouchine.jm.ui.composable.plot.ProximityBarChart
 import com.illiouchine.jm.ui.composable.plot.ProximitySpider
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
@@ -471,7 +471,7 @@ fun ResultScreen(
                 )
                 MediumVerticalSpacer()
 
-                OpinionProfileBarChartKoala(
+                OpinionProfileBarChart(
                     modifier = Modifier
                         .height(300.dp)
                         .fillMaxWidth(),

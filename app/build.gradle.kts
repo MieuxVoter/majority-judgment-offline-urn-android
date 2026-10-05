@@ -145,7 +145,6 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     // Plotting
-    implementation(libs.compose.charts)
     implementation(libs.koalaplot.core)
 
     // Data Formats for I/O ; good but commented out because it adds 20Mio to the release (!)
