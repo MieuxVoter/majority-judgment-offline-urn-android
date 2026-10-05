@@ -50,9 +50,11 @@ fun LinearMeritProfileCanvas(
     proposalTally: ProposalTally,
     medianGrade: Int = -1, // median grade highlight is only shown if this is a valid grade index
     grading: Grading,
-    decisiveGroups: ImmutableList<ParticipantGroupAnalysis> = emptyList<ParticipantGroupAnalysis>().toPersistentList(),
+    decisiveGroups: ImmutableList<ParticipantGroupAnalysis> =
+        emptyList<ParticipantGroupAnalysis>().toPersistentList(),
     showDecisiveGroups: Boolean = false,
     highestGradeOnTheLeft: Boolean = false,
+    perspective: AmountPerspective = AmountPerspective.Relative,
 ) {
     val amountOfJudgments = proposalTally.tally.bigSumOf { it }
     if (amountOfJudgments == BigInteger.ZERO) {
@@ -205,25 +207,31 @@ fun LinearMeritProfileCanvas(
                 cornerRadius = gradeCornerRadius,
             )
 
-            // Show the percentage under each grade with at least one judgment
+            // Show the amount under each grade with at least one judgment
             if (gradeWidth > 0f) {
-                val percentage = 100f * gradeWidthNoGap / size.width
-                val approximate = if (round(percentage) != percentage) {
-                    "~"
-                } else {
-                    ""
-                }
-                val measuredText =
-                    textMeasurer.measure(
-                        text = AnnotatedString(
-                            String.format(
-                                locale = Locale.FRANCE,
-                                format = "$approximate%.0f%%",
-                                percentage,
-                            )
-                        ),
-                        style = TextStyle(fontSize = 10.sp),
+                val gradeTallyString = if (perspective == AmountPerspective.Relative) {
+                    val percentage = 100f * gradeWidthNoGap / size.width
+                    val approximate = if (round(percentage) != percentage) {
+                        "~"
+                    } else {
+                        ""
+                    }
+                    String.format(
+                        locale = Locale.FRANCE,
+                        format = "$approximate%.0f%%",
+                        percentage,
                     )
+                } else if (perspective == AmountPerspective.Absolute) {
+                    proposalTally.tally[gradeIndex].toString()
+                } else {
+                    "?"
+                }
+                val measuredText = textMeasurer.measure(
+                    text = AnnotatedString(
+                        text = gradeTallyString,
+                    ),
+                    style = TextStyle(fontSize = 10.sp),
+                )
                 drawText(
                     textLayoutResult = measuredText,
                     topLeft = gradeRectOffset + Offset(
