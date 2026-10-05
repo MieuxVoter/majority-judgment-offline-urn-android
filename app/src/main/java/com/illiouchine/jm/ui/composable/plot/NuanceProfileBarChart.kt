@@ -44,7 +44,7 @@ import io.github.koalaplot.core.xygraph.rememberGridStyle
 import kotlin.math.min
 
 @Composable
-fun NuanceProfile(
+fun NuanceProfileBarChart(
     modifier: Modifier = Modifier,
     // TBD: Replace this var by an intermediary data class like NuanceProfileData
     poll: Poll,
@@ -217,7 +217,7 @@ fun NuanceProfile(
     fontScale = 1.0f,
 )
 @Composable
-fun NuanceProfilePreview() {
+fun NuanceProfileBarChartPreview() {
     val poll = poll(
         grading = Grading.Quality5Grading,
         amountOfProposals = 4,
@@ -227,7 +227,7 @@ fun NuanceProfilePreview() {
     JmTheme {
         Column() {
 
-            NuanceProfile(
+            NuanceProfileBarChart(
                 modifier = Modifier
                     .padding(all = Theme.spacing.large)
                     .height(300.dp),
@@ -236,7 +236,7 @@ fun NuanceProfilePreview() {
                 animated = false,
             )
 
-            NuanceProfile(
+            NuanceProfileBarChart(
                 modifier = Modifier
                     .padding(all = Theme.spacing.large)
                     .height(300.dp),
