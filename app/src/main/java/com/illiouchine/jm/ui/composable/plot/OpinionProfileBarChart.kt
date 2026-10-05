@@ -59,7 +59,6 @@ fun OpinionProfileBarChart(
 
     val opinionTally = remember(
         key1 = tally,
-        key2 = highestGradeToLowestGrade,
     ) {
         List(grading.grades.size) { gradeIndex ->
             tally.proposalsTallies.bigSumOf { proposalTally ->
@@ -99,7 +98,7 @@ fun OpinionProfileBarChart(
                     end = opinionTally[gradeIndex].longValue(exactRequired = false),
                 ),
             )
-        }.reversedIf(highestGradeToLowestGrade)
+        }
     }
 
     val maxValue = opinionTally.max()
@@ -122,7 +121,19 @@ fun OpinionProfileBarChart(
                         modifier = Modifier.padding(top = 12.dp),
                     )
                 },
-                title = {},
+                title = {
+                    val plotTitle = stringResource(R.string.plot_title_opinion_profile)
+                    PlotTitle(
+                        modifier = Modifier.semantics {
+                            contentDescription = buildString {
+                                append(plotTitle)
+                                append("\n")
+                                append(dataDescription)
+                            }
+                        },
+                        text = plotTitle,
+                    )
+                },
                 style = rememberAxisStyle(labelRotation = 42),
             ),
             yAxisContent = AxisContent(
@@ -141,16 +152,11 @@ fun OpinionProfileBarChart(
                 data = barData,
                 barWidth = 0.42f,
                 bar = { barIndex, _, _ ->
-                    val gradeIndex = if (highestGradeToLowestGrade) {
-                        grading.grades.size - 1 - barIndex
-                    } else {
-                        barIndex
-                    }
                     PatternedBar(
                         modifier = Modifier.fillMaxWidth(),
-                        patternBrush = brushes[gradeIndex],
-                        color = grading.getGradeColor(gradeIndex),
-                        label = opinionTally[gradeIndex].toString(),
+                        patternBrush = brushes[barIndex],
+                        color = grading.getGradeColor(barIndex),
+                        label = opinionTally[barIndex].toString(),
                         shape = RoundedCornerShape(
                             topStart = 8f,
                             topEnd = 8f,
@@ -169,18 +175,6 @@ fun OpinionProfileBarChart(
                 )
             )
         }
-
-        val plotTitle = stringResource(R.string.plot_title_opinion_profile)
-        PlotTitle(
-            modifier = Modifier.semantics {
-                contentDescription = buildString {
-                    append(plotTitle)
-                    append("\n")
-                    append(dataDescription)
-                }
-            },
-            text = plotTitle,
-        )
     }
 }
 
@@ -205,7 +199,7 @@ fun OpinionProfileBarChartPreview() {
         Column {
             OpinionProfileBarChart(
                 modifier = Modifier
-                    .height(300.dp)
+                    .height(350.dp)
                     .padding(8.dp),
                 tally = tally.toTally(),
                 grading = grading,
@@ -215,7 +209,7 @@ fun OpinionProfileBarChartPreview() {
             MediumVerticalSpacer()
             OpinionProfileBarChart(
                 modifier = Modifier
-                    .height(300.dp)
+                    .height(350.dp)
                     .padding(8.dp),
                 tally = tally.toTally().copy(),
                 grading = grading,
