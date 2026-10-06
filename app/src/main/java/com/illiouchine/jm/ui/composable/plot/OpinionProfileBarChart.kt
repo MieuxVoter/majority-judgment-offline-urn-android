@@ -1,195 +1,180 @@
 package com.illiouchine.jm.ui.composable.plot
 
-import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.absolutePadding
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.extensions.bigSumOf
 import com.illiouchine.jm.extensions.reversedIf
-import com.illiouchine.jm.extensions.smartFormat
-import com.illiouchine.jm.model.Ballot
-import com.illiouchine.jm.model.Judgment
-import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Tally
 import com.illiouchine.jm.model.toTally
+import com.illiouchine.jm.ui.composable.plot.component.AxisLabel
+import com.illiouchine.jm.ui.composable.plot.component.PatternedBar
 import com.illiouchine.jm.ui.composable.plot.component.PlotTitle
-import com.illiouchine.jm.ui.composable.plot.utils.favorIntLineCountForBars
-import com.illiouchine.jm.ui.preview.PreviewDataFaker
+import com.illiouchine.jm.ui.composable.plot.component.getPatternBrushes
+import com.illiouchine.jm.ui.composable.spacer.MediumVerticalSpacer
 import com.illiouchine.jm.ui.theme.JmTheme
-import com.illiouchine.jm.ui.theme.Theme
-import fr.mieuxvoter.kmj.tally.CollectedPollTally
-import ir.ehsannarmani.compose_charts.ColumnChart
-import ir.ehsannarmani.compose_charts.models.AnimationMode
-import ir.ehsannarmani.compose_charts.models.BarProperties
-import ir.ehsannarmani.compose_charts.models.Bars
-import ir.ehsannarmani.compose_charts.models.DividerProperties
-import ir.ehsannarmani.compose_charts.models.GridProperties
-import ir.ehsannarmani.compose_charts.models.HorizontalIndicatorProperties
-import ir.ehsannarmani.compose_charts.models.IndicatorCount
-import ir.ehsannarmani.compose_charts.models.LabelHelperProperties
-import ir.ehsannarmani.compose_charts.models.LabelProperties
+import io.github.koalaplot.core.animation.StartAnimationUseCase
+import io.github.koalaplot.core.animation.StartAnimationUseCase.ExecutionType
+import io.github.koalaplot.core.bar.DefaultBarPosition
+import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
+import io.github.koalaplot.core.bar.VerticalBarPlot
+import io.github.koalaplot.core.style.KoalaPlotTheme
+import io.github.koalaplot.core.xygraph.AxisContent
+import io.github.koalaplot.core.xygraph.CategoryAxisModel
+import io.github.koalaplot.core.xygraph.CategoryAxisOffset
+import io.github.koalaplot.core.xygraph.LongLinearAxisModel
+import io.github.koalaplot.core.xygraph.XYGraph
+import io.github.koalaplot.core.xygraph.rememberAxisStyle
+import io.github.koalaplot.core.xygraph.rememberGridStyle
 
 /**
- * An Opinion Profile shows how many judgments of each grade were cast in the poll,
- * across all candidates.
+ * An Opinion Profile shows how many judgments of each grade were cast across all candidates.
  *
  * This helps to get a sense of the overall feel of the voters for the whole set of candidates.
  * This is especially useful to poll administrators since they chose the set of candidates.
- *
- * @deprecated because we can't add background patterns (and the API is too broad)
  */
 @Composable
 fun OpinionProfileBarChart(
     modifier: Modifier = Modifier,
-    poll: Poll,
     tally: Tally,
+    grading: Grading,
     highestGradeToLowestGrade: Boolean = false,
     animated: Boolean = true,
 ) {
-    val context = LocalContext.current
-    val barData = remember(
-        poll,
-        poll.ballots.size,
-        highestGradeToLowestGrade,
+    val gradesNames = grading.grades.map { stringResource(it.name) }
+
+    val opinionTally = remember(
+        key1 = tally,
     ) {
-        // Cumulative (without strata because the chart lib does not support it out of the box)
-        poll.pollConfig.grading.grades.mapIndexed { gradeIndex, grade ->
-            @SuppressLint("LocalContextGetResourceValueCall") // how else?
-            Bars(
-                label = context.getString(grade.name),
-                values = listOf(
-                    Bars.Data(
-                        value = tally.proposalsTallies.bigSumOf { proposalTally ->
-                            proposalTally.tally[gradeIndex]
-                        }.doubleValue(exactRequired = false),
-                        color = SolidColor(grade.color),
-                    ),
-                ),
-            )
-        }.reversedIf(highestGradeToLowestGrade)
+        List(grading.grades.size) { gradeIndex ->
+            tally.proposalsTallies.bigSumOf { proposalTally ->
+                proposalTally.tally[gradeIndex]
+            }
+        }
     }
+
     val dataDescription = remember(
-        poll,
-        poll.ballots.size,
-        highestGradeToLowestGrade,
+        key1 = tally,
+        key2 = highestGradeToLowestGrade,
     ) {
         buildString {
-            poll.pollConfig.grading.grades
+            grading.grades
                 .reversedIf(highestGradeToLowestGrade)
-                .forEachIndexed { i, grade ->
+                .forEachIndexed { i, _ ->
                     val gradeIndex = if (highestGradeToLowestGrade) {
-                        poll.pollConfig.grading.grades.size - 1 - i
+                        grading.grades.size - 1 - i
                     } else {
                         i
                     }
-                    val value = tally.proposalsTallies.bigSumOf { proposalTally ->
-                        proposalTally.tally[gradeIndex]
-                    }
-                    append("$value ")
-                    @SuppressLint("LocalContextGetResourceValueCall")
-                    append(context.getString(grade.name))
+                    append("${opinionTally[gradeIndex]} ${gradesNames[gradeIndex]}")
                     append(",\n")
                 }
         }
     }
 
-    val horizontalLinesCount = favorIntLineCountForBars(barData)
+    val barData = remember(
+        key1 = tally,
+        key2 = highestGradeToLowestGrade,
+    ) {
+        List(grading.grades.size) { gradeIndex ->
+            DefaultVerticalBarPlotEntry(
+                x = gradesNames[gradeIndex],
+                y = DefaultBarPosition(
+                    start = 0L,
+                    end = opinionTally[gradeIndex].longValue(exactRequired = false),
+                ),
+            )
+        }
+    }
+
+    val maxValue = opinionTally.max()
+    val brushes = getPatternBrushes()
 
     Column {
-        ColumnChart(
-            modifier = modifier
-                // We need to fix the compose-chart lib upstream in order to show this.
-                // We do want to iterate over the labels, but we need to say the values too.
-                // We work around this by computing a textual data description (see PlotTitle below)
-                .clearAndSetSemantics {},
-            data = barData,
-            barProperties = BarProperties(
-                thickness = 32.dp,
-                spacing = 0.dp,
-                cornerRadius = Bars.Data.Radius.Rectangle(
-                    topLeft = 4.dp,
-                    topRight = 4.dp,
-                ),
+        XYGraph(
+            modifier = modifier,
+            xAxisModel = CategoryAxisModel(
+                categories = gradesNames.reversedIf(highestGradeToLowestGrade),
+                categoryAxisOffset = CategoryAxisOffset.Half,
             ),
-            labelProperties = LabelProperties(
-                enabled = true,
-                textStyle = TextStyle.Default.copy(
-                    fontSize = 10.sp,
-                    textAlign = TextAlign.End,
-                    color = Theme.colorScheme.onBackground,
-                ),
+            yAxisModel = LongLinearAxisModel(
+                range = 0L..maxValue.intValue(exactRequired = false),
             ),
-            indicatorProperties = HorizontalIndicatorProperties(
-                textStyle = TextStyle.Default.copy(
-                    fontSize = 12.sp,
-                    textAlign = TextAlign.End,
-                    color = Theme.colorScheme.onBackground,
-                ),
-                contentBuilder = {
-                    it.smartFormat()
+            xAxisContent = AxisContent(
+                labels = {
+                    AxisLabel(
+                        label = it,
+                        modifier = Modifier.padding(top = 12.dp),
+                    )
                 },
-                count = IndicatorCount.CountBased(horizontalLinesCount),
+                title = {
+                    val plotTitle = stringResource(R.string.plot_title_opinion_profile)
+                    PlotTitle(
+                        modifier = Modifier.semantics {
+                            contentDescription = buildString {
+                                append(plotTitle)
+                                append("\n")
+                                append(dataDescription)
+                            }
+                        },
+                        text = plotTitle,
+                    )
+                },
+                style = rememberAxisStyle(labelRotation = 42),
             ),
-            dividerProperties = DividerProperties(
-                enabled = false,
+            yAxisContent = AxisContent(
+                labels = {
+                    AxisLabel(
+                        label = "$it",
+                        modifier = Modifier.absolutePadding(right = 2.dp),
+                    )
+                },
+                title = {},
+                style = rememberAxisStyle(minorTickSize = 0.dp),
             ),
-            gridProperties = GridProperties(
-                enabled = true,
-                xAxisProperties = GridProperties.AxisProperties(
-                    enabled = true,
-                    lineCount = horizontalLinesCount,
-                ),
-                yAxisProperties = GridProperties.AxisProperties(
-                    enabled = false,
-                ),
-            ),
-            labelHelperProperties = LabelHelperProperties(
-                enabled = false,
-            ),
-            animationMode = if (animated) {
-                AnimationMode.Together { it * 200L }
-            } else {
-                AnimationMode.None
-            },
-            animationDelay = if (animated) {
-                200
-            } else {
-                0
-            },
-        )
-
-        // Hotfix for bottom padding being too small when x-axis labels are rotated.
-        // This must stay a magic value, since it's a hotfix hack and not theme related.
-        Spacer(modifier = Modifier.padding(vertical = 26.dp))
-
-        val plotTitle = stringResource(R.string.plot_title_opinion_profile)
-        PlotTitle(
-            modifier = Modifier.semantics {
-                contentDescription = buildString {
-                    append(plotTitle)
-                    append("\n")
-                    append(dataDescription)
-                }
-            },
-            text = plotTitle,
-        )
+            gridStyle = rememberGridStyle(verticalMajorStyle = null),
+        ) {
+            VerticalBarPlot(
+                data = barData,
+                barWidth = 0.42f,
+                bar = { barIndex, _, _ ->
+                    PatternedBar(
+                        modifier = Modifier.fillMaxWidth(),
+                        patternBrush = brushes[barIndex],
+                        color = grading.getGradeColor(barIndex),
+                        label = opinionTally[barIndex].toString(),
+                        shape = RoundedCornerShape(
+                            topStart = 8f,
+                            topEnd = 8f,
+                            bottomStart = 0f,
+                            bottomEnd = 0f,
+                        )
+                    )
+                },
+                startAnimationUseCase = StartAnimationUseCase(
+                    executionType = if (animated) {
+                        ExecutionType.Default
+                    } else {
+                        ExecutionType.None
+                    },
+                    KoalaPlotTheme.animationSpec,
+                )
+            )
+        }
     }
 }
 
@@ -201,62 +186,36 @@ fun OpinionProfileBarChart(
 )
 @Composable
 fun OpinionProfileBarChartPreview() {
-    val poll = Poll(
-        id = 1,
-        pollConfig = PreviewDataFaker.pollConfig(
-            amountOfProposals = 3,
-        ),
-        ballots = listOf(
-            Ballot(
-                judgments = listOf(
-                    Judgment(proposal = 0, grade = 0),
-                    Judgment(proposal = 1, grade = 1),
-                    Judgment(proposal = 2, grade = 2),
-                ),
-            ),
-            Ballot(
-                judgments = listOf(
-                    Judgment(proposal = 0, grade = 1),
-                    Judgment(proposal = 1, grade = 2),
-                    Judgment(proposal = 2, grade = 3),
-                ),
-            ),
-            Ballot(
-                judgments = listOf(
-                    Judgment(proposal = 0, grade = 2),
-                    Judgment(proposal = 1, grade = 3),
-                    Judgment(proposal = 2, grade = 4),
-                ),
-            ),
-            Ballot(
-                judgments = listOf(
-                    Judgment(proposal = 0, grade = 0),
-                    Judgment(proposal = 1, grade = 0),
-                    Judgment(proposal = 2, grade = 0),
-                ),
-            ),
+    val grading = Grading.Quality5Grading
+    val tally = fr.mieuxvoter.kmj.tally.PollTally(
+        listOf(
+            fr.mieuxvoter.kmj.tally.CandidateTally(arrayOf(0, 0, 3, 7, 5)),
+            fr.mieuxvoter.kmj.tally.CandidateTally(arrayOf(0, 0, 0, 10, 5)),
+            fr.mieuxvoter.kmj.tally.CandidateTally(arrayOf(1, 0, 5, 4, 5)),
         ),
     )
 
-    // Refactor the following into a service (but first recode the MJ lib in Kotlin)
-    val amountOfProposals = poll.pollConfig.proposals.size
-    val amountOfGrades = poll.pollConfig.grading.getAmountOfGrades()
-    val tally = CollectedPollTally(amountOfProposals, amountOfGrades)
-
-    poll.pollConfig.proposals.forEachIndexed { proposalIndex, _ ->
-        val voteResult = poll.judgments.filter { it.proposal == proposalIndex }
-        voteResult.forEach { judgment ->
-            tally.collect(proposalIndex, judgment.grade)
-        }
-    }
-    // ----------------------------------------------------------------------------
-
     JmTheme {
-        OpinionProfileBarChart(
-            modifier = Modifier.height(400.dp).padding(8.dp),
-            poll = poll,
-            tally = tally.toTally(),
-            animated = false,
-        )
+        Column {
+            OpinionProfileBarChart(
+                modifier = Modifier
+                    .height(350.dp)
+                    .padding(8.dp),
+                tally = tally.toTally(),
+                grading = grading,
+                animated = false,
+            )
+            MediumVerticalSpacer()
+            MediumVerticalSpacer()
+            OpinionProfileBarChart(
+                modifier = Modifier
+                    .height(350.dp)
+                    .padding(8.dp),
+                tally = tally.toTally().copy(),
+                grading = grading,
+                highestGradeToLowestGrade = true,
+                animated = true,
+            )
+        }
     }
 }

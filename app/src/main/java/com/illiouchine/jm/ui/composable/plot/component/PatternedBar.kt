@@ -27,13 +27,14 @@ import com.illiouchine.jm.ui.theme.Theme
  */
 @Composable
 fun PatternedBar(
-    patternBrush: Brush,
     color: Color,
     modifier: Modifier = Modifier,
+    patternBrush: Brush? = null,
     brush: Brush? = null,
     shape: Shape = RectangleShape,
     border: BorderStroke? = null,
     label: String = "",
+    labelColor: Color = Theme.colorScheme.onBackground,
 ) {
     // Background (usually a SolidColor brush)
     Box(
@@ -47,23 +48,25 @@ fun PatternedBar(
             .clip(shape),
     )
     // Pattern (for accessibility)
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .drawWithContent {
-                drawRect(
-                    brush = patternBrush,
-                    colorFilter = ColorFilter.tint(
-                        color = lerp(
-                            start = color,
-                            stop = Color.Black,
-                            fraction = 0.2f,
+    if (patternBrush != null) {
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .drawWithContent {
+                    drawRect(
+                        brush = patternBrush,
+                        colorFilter = ColorFilter.tint(
+                            color = lerp(
+                                start = color,
+                                stop = Color.Black,
+                                fraction = 0.2f,
+                            ),
                         ),
-                    ),
-                )
-            }
-            .clip(shape),
-    )
+                    )
+                }
+                .clip(shape),
+        )
+    }
 
     if (label.isNotEmpty()) {
         Box(
@@ -76,7 +79,12 @@ fun PatternedBar(
                 modifier = labelModifier,
                 text = label,
                 style = labelStyle.copy(
-                    color = Theme.colorScheme.background,
+                    color = Color(
+                        red = 1.0f - labelColor.red,
+                        green = 1.0f - labelColor.green,
+                        blue = 1.0f - labelColor.blue,
+                        alpha = labelColor.alpha,
+                    ),
                     drawStyle = Stroke(
                         width = 6f,
                         join = StrokeJoin.Round,
@@ -87,7 +95,9 @@ fun PatternedBar(
             Text(
                 modifier = labelModifier,
                 text = label,
-                style = labelStyle,
+                style = labelStyle.copy(
+                    color = labelColor,
+                ),
             )
         }
     }
