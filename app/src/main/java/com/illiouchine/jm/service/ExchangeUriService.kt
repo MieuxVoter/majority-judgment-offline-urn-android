@@ -103,11 +103,11 @@ class ExchangeUriService(
     }
 
     fun uriMatchesPoll(uri: Uri): Boolean {
-        return uriMatchesFormat(uri) && uriMatchesRoutePrefix(uri, pollRoutePathSegment)
+        return uriMatchesFormat(uri) && uriMatchesRoutePrefix(uri, prefix = pollRoutePathSegment)
     }
 
     fun uriMatchesBallots(uri: Uri): Boolean {
-        return uriMatchesFormat(uri) && uriMatchesRoutePrefix(uri, ballotsRoutePathSegment)
+        return uriMatchesFormat(uri) && uriMatchesRoutePrefix(uri, prefix = ballotsRoutePathSegment)
     }
 
     private fun uriMatchesFormat(uri: Uri): Boolean {
@@ -119,7 +119,7 @@ class ExchangeUriService(
     }
 
     private fun uriMatchesRoutePrefix(uri: Uri, prefix: String): Boolean {
-        return uri.pathSegments.first() == prefix ||
+        return (uri.pathSegments.first() == prefix) ||
             (domain.isEmpty() && uri.host == prefix)
     }
 }
