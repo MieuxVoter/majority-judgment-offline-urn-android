@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -150,20 +152,29 @@ fun OpinionProfileBarChart(
         ) {
             VerticalBarPlot(
                 data = barData,
-                barWidth = 0.42f,
+                barWidth = 1f,
                 bar = { barIndex, _, _ ->
-                    PatternedBar(
+                    // We want our bars to be Dp-perfect (to align patterns),
+                    // but the plot only accepts a relative barWidth.
+                    // So, we use wrapper Column so we can center horizontally its contents.
+                    Column(
                         modifier = Modifier.fillMaxWidth(),
-                        patternBrush = brushes[barIndex],
-                        color = grading.getGradeColor(barIndex),
-                        label = opinionTally[barIndex].toString(),
-                        shape = RoundedCornerShape(
-                            topStart = 8f,
-                            topEnd = 8f,
-                            bottomStart = 0f,
-                            bottomEnd = 0f,
+                    ) {
+                        PatternedBar(
+                            modifier = Modifier
+                                .width(32.dp)
+                                .align(Alignment.CenterHorizontally),
+                            patternBrush = brushes[barIndex],
+                            color = grading.getGradeColor(barIndex),
+                            label = opinionTally[barIndex].toString(),
+                            shape = RoundedCornerShape(
+                                topStart = 8f,
+                                topEnd = 8f,
+                                bottomStart = 0f,
+                                bottomEnd = 0f,
+                            ),
                         )
-                    )
+                    }
                 },
                 startAnimationUseCase = StartAnimationUseCase(
                     executionType = if (animated) {
