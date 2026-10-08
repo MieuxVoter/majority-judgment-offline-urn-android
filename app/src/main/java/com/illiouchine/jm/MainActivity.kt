@@ -58,10 +58,14 @@ import com.illiouchine.jm.ui.screen.SettingsScreen
 import com.illiouchine.jm.ui.theme.JmTheme
 import org.koin.android.ext.android.get
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.qualifier.named
 
 class MainActivity : ComponentActivity() {
 
     private val exchangeUriService: ExchangeUriService = get()
+    private val legacyExchangeUriService: ExchangeUriService = get(
+        qualifier = named("LegacyExchangeUriService"),
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,7 +82,7 @@ class MainActivity : ComponentActivity() {
 
             val context = applicationContext
             val intent = getIntent()
-            if (Intent.ACTION_VIEW == intent.action) {
+            if (Intent.ACTION_VIEW == intent.action) @Suppress("UsePropertyAccessSyntax") {
                 // We arrived here via QR Code scanning.  (We do not get to choose the action.)
                 // We do not want to run another activity instance, so we GTFO.
                 // This intent will either recall the existing activity or run a new one.
@@ -98,14 +102,20 @@ class MainActivity : ComponentActivity() {
                         // Toast.makeText(context, uri.host, Toast.LENGTH_LONG).show()
                         // Toast.makeText(context, uri.path, Toast.LENGTH_LONG).show()
 
-                        if (exchangeUriService.uriMatchesPoll(uri)) {
+                        if (
+                            exchangeUriService.uriMatchesPoll(uri)
+                            || legacyExchangeUriService.uriMatchesPoll(uri)
+                        ) {
                             val compressedDataString = uri.pathSegments.last()
                             topLevelBackStack.add(
                                 Screens.PollQrImport(
                                     encodedContent = compressedDataString,
                                 )
                             )
-                        } else if (exchangeUriService.uriMatchesBallots(uri)) {
+                        } else if (
+                            exchangeUriService.uriMatchesBallots(uri)
+                            || legacyExchangeUriService.uriMatchesBallots(uri)
+                        ) {
                             val compressedDataString = uri.pathSegments.last()
                             topLevelBackStack.add(
                                 Screens.BallotsQrImport(
