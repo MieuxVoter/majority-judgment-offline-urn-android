@@ -36,69 +36,75 @@ fun PatternedBar(
     label: String = "",
     labelColor: Color = Theme.colorScheme.onBackground,
 ) {
-    // Background (usually a SolidColor brush)
     Box(
+        contentAlignment = Alignment.Center, // important, or overlapping might not happen
         modifier = modifier
-            .fillMaxSize()
-            .then(if (border != null) Modifier.border(border, shape) else Modifier)
-            .background(
-                brush = brush ?: SolidColor(value = color),
-                shape = shape,
-            )
-            .clip(shape),
-    )
-    // Pattern (for accessibility)
-    if (patternBrush != null) {
+            .fillMaxSize(),
+    ) {
+        // Background (usually a SolidColor brush)
         Box(
             modifier = modifier
                 .fillMaxSize()
-                .drawWithContent {
-                    drawRect(
-                        brush = patternBrush,
-                        colorFilter = ColorFilter.tint(
-                            color = lerp(
-                                start = color,
-                                stop = Color.Black,
-                                fraction = 0.2f,
-                            ),
-                        ),
-                    )
-                }
+                .then(if (border != null) Modifier.border(border, shape) else Modifier)
+                .background(
+                    brush = brush ?: SolidColor(value = color),
+                    shape = shape,
+                )
                 .clip(shape),
         )
-    }
+        // Pattern (for accessibility)
+        if (patternBrush != null) {
+            Box(
+                modifier = modifier
+                    .fillMaxSize()
+                    .drawWithContent {
+                        drawRect(
+                            brush = patternBrush,
+                            colorFilter = ColorFilter.tint(
+                                color = lerp(
+                                    start = color,
+                                    stop = Color.Black,
+                                    fraction = 0.2f,
+                                ),
+                            ),
+                        )
+                    }
+                    .clip(shape),
+            )
+        }
 
-    if (label.isNotEmpty()) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            val labelModifier = Modifier.align(alignment = Alignment.BottomCenter)
-            val labelStyle = Theme.typography.bodyMedium
-            // Outline
-            Text(
-                modifier = labelModifier,
-                text = label,
-                style = labelStyle.copy(
-                    color = Color(
-                        red = 1.0f - labelColor.red,
-                        green = 1.0f - labelColor.green,
-                        blue = 1.0f - labelColor.blue,
-                        alpha = labelColor.alpha,
+        if (label.isNotEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                val labelModifier = Modifier.align(alignment = Alignment.BottomCenter)
+                val labelStyle = Theme.typography.bodyMedium
+                // Outline
+                Text(
+                    modifier = labelModifier,
+                    text = label,
+                    style = labelStyle.copy(
+                        color = Color(
+                            red = 1.0f - labelColor.red,
+                            green = 1.0f - labelColor.green,
+                            blue = 1.0f - labelColor.blue,
+                            alpha = labelColor.alpha,
+                        ),
+                        drawStyle = Stroke(
+                            width = 6f,
+                            join = StrokeJoin.Round,
+                        ),
                     ),
-                    drawStyle = Stroke(
-                        width = 6f,
-                        join = StrokeJoin.Round,
+                )
+                // Fill
+                Text(
+                    modifier = labelModifier,
+                    text = label,
+                    style = labelStyle.copy(
+                        color = labelColor,
                     ),
-                ),
-            )
-            // Fill
-            Text(
-                modifier = labelModifier,
-                text = label,
-                style = labelStyle.copy(
-                    color = labelColor,
-                ),
-            )
+                )
+            }
         }
     }
 }
