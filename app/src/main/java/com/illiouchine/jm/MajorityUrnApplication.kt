@@ -24,6 +24,7 @@ import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 class MajorityUrnApplication : Application() {
@@ -52,19 +53,25 @@ val module = module {
 
     // Data
     single { SharedPrefsHelper(get()) }
-    // single<PollDataSource>(named("inMemory") { InMemoryPollDataSource() }
+//    single<PollDataSource>(named("inMemory")) { InMemoryPollDataSource() }
     single<PollDataSource> { SqlitePollDataSource(get()) }
     single<PollTemplateDataSource> { HardcodedPollTemplateDataSource() }
 
     // Miscellaneous
     single {
         ExchangeUriService(
-            // Legacy mju:// scheme
-//            scheme = "mju",
-//            domain = "",
-            // Using the https:// scheme
+            // Using the modern https:// scheme
             scheme = "https",
             domain = "mju.mieuxvoter.fr",
+            pollRoutePathSegment = "p",
+            ballotsRoutePathSegment = "b",
+        )
+    }
+    single(qualifier = named("LegacyExchangeUriService")) {
+        ExchangeUriService(
+            // Legacy mju:// scheme
+            scheme = "mju",
+            domain = "",
             pollRoutePathSegment = "p",
             ballotsRoutePathSegment = "b",
         )
