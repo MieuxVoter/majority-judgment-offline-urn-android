@@ -20,6 +20,7 @@ import com.illiouchine.jm.model.Tally
 import com.illiouchine.jm.model.toResult
 import com.illiouchine.jm.model.toTally
 import com.illiouchine.jm.service.DuelAnalyzer
+import com.illiouchine.jm.service.InnocentHand
 import com.illiouchine.jm.service.ProximityAnalysis
 import com.illiouchine.jm.service.ProximityAnalyzer
 import com.illiouchine.jm.service.TextStylist
@@ -49,6 +50,7 @@ class PollResultViewModel(
         val explanations: List<AnnotatedString> = emptyList(),
         val groups: List<DuelGroups> = emptyList(),
         val proportions: Map<ProportionalAlgorithms, List<Double>> = emptyMap(),
+        val lottery: Map<ProportionalAlgorithms, List<Int>> = emptyMap(),
         val proximityAnalysis: ProximityAnalysis? = null,
         val ballotFilter: BallotsFilterInterface = NoBallotsFilter(),
         val unfilteredPoll: Poll? = null,
@@ -60,8 +62,8 @@ class PollResultViewModel(
         val groups: List<ParticipantGroupAnalysis>,
     )
 
-    private val _pollResultViewState = MutableStateFlow(PollResultViewState())
-    val pollResultViewState: StateFlow<PollResultViewState> = _pollResultViewState
+    private val _viewState = MutableStateFlow(PollResultViewState())
+    val viewState: StateFlow<PollResultViewState> = _viewState
 
     private val _navEvents = MutableSharedFlow<NavigationAction>()
     val navEvents = _navEvents.asSharedFlow()
@@ -154,11 +156,24 @@ class PollResultViewModel(
             }
         }
 
+        var lotterySeed: Long = 666010999
+        if (poll.uuid != null) {
+            lotterySeed = poll.uuid.mostSignificantBits
+        }
+
+        val lottery = mutableMapOf<ProportionalAlgorithms, List<Int>>()
+        for (proportionalAlgorithm in ProportionalAlgorithms.entries) {
+            if (proportionalAlgorithm.isAvailable()) {
+                lottery[proportionalAlgorithm] = InnocentHand(seed = lotterySeed)
+                    .pickWinners(weights = proportions[proportionalAlgorithm]!!)
+            }
+        }
+
         val proximityAnalysis = ProximityAnalyzer().analyze(
             poll = filteredPoll,
         )
 
-        _pollResultViewState.update {
+        _viewState.update {
             it.copy(
                 ballotFilter = ballotFilter,
                 unfilteredPoll = poll,
@@ -168,6 +183,7 @@ class PollResultViewModel(
                 explanations = explanations,
                 groups = groups,
                 proportions = proportions,
+                lottery = lottery,
                 proximityAnalysis = proximityAnalysis,
                 highGradeOnLeft = sharedPrefsHelper.getHighGradeOnLeft(),
             )
