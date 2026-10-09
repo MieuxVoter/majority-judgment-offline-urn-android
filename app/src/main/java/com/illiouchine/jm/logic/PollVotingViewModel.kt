@@ -128,7 +128,7 @@ class PollVotingViewModel(
             it.copy(
                 currentBallot = null,
                 ballots = it.ballots + ballot,
-                amountOfBallotsCastThisSession = _pollVotingViewState.value.amountOfBallotsCastThisSession + 1,
+                amountOfBallotsCastThisSession = it.amountOfBallotsCastThisSession + 1,
             )
         }
 
