@@ -109,7 +109,7 @@ fun PollVotingScreen(
 
                 Spacer(modifier = Modifier.height(Theme.spacing.large))
 
-                if (pollVotingState.ballots.isNotEmpty()) {
+                if (pollVotingState.amountOfBallotsCastThisSession > 0) {
                     Text(stringResource(R.string.help_your_participation_was_a_success))
                 }
 
