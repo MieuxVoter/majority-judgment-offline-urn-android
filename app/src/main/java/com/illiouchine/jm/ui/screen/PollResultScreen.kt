@@ -98,6 +98,18 @@ import kotlin.math.max
 import kotlin.math.min
 
 @Composable
+fun SectionTitle(
+    text: String,
+    modifier: Modifier = Modifier,
+) {
+    Text(
+        modifier = modifier,
+        text = text,
+        fontSize = Theme.typography.titleLarge.fontSize
+    )
+}
+
+@Composable
 fun ResultScreen(
     modifier: Modifier = Modifier,
     state: PollResultViewModel.PollResultViewState,
@@ -457,11 +469,11 @@ fun ResultScreen(
 
             if (amountOfBallots > 0) {
 
-                AnimatedVisibility(proportionalAlgorithm != ProportionalAlgorithms.NONE) {
-
+                AnimatedVisibility(
+                    visible = proportionalAlgorithm != ProportionalAlgorithms.NONE,
+                ) {
                     Column {
-
-                        Text(
+                        SectionTitle(
                             text = "Lottery",
                         )
                         SmallVerticalSpacer()
@@ -471,38 +483,42 @@ fun ResultScreen(
                         if (state.lottery[proportionalAlgorithm] != null) {
                             val lottery = state.lottery[proportionalAlgorithm]!!
                             val maxAmount = min(
-                                a = lotteryRevealCursor,
-                                b = min(
-                                    a = lottery.size,
-                                    b = poll.pollConfig.proposals.size,
-                                ),
+                                a = lottery.size,
+                                b = poll.pollConfig.proposals.size,
                             )
                             (0..<maxAmount).forEach {
-                                val chosenIndex = lottery[it]
-                                Text("#${it + 1} is ${poll.pollConfig.proposals[chosenIndex]}")
-                                SmallVerticalSpacer()
+                                AnimatedVisibility(
+                                    visible = lotteryRevealCursor > it
+                                ) {
+                                    Column {
+                                        val chosenIndex = lottery[it]
+                                        Text("#${it + 1} is ${poll.pollConfig.proposals[chosenIndex]}")
+                                        SmallVerticalSpacer()
+                                    }
+                                }
+                            }
+
+                            if (lotteryRevealCursor < lottery.size) {
+                                OutlinedButton(
+                                    onClick = {
+                                        lotteryRevealCursor++
+                                    },
+                                ) {
+                                    Text(
+                                        text = "Roll a Random Winner",
+                                    )
+                                }
                             }
                         }
 
-                        OutlinedButton(
-                            onClick = {
-                                lotteryRevealCursor++
-                            },
-                        ) {
-                            Text(
-                                text = "Roll a Random Winner",
-                            )
-                        }
-
                         MediumVerticalSpacer()
-
                     }
                 }
             }
 
 
             if (amountOfBallots > 0) {
-                Text(
+                SectionTitle(
                     text = stringResource(R.string.opinion_profile),
                 )
                 SmallVerticalSpacer()
@@ -536,7 +552,7 @@ fun ResultScreen(
             }
 
             if (amountOfBallots > 0) {
-                Text(stringResource(R.string.nuance_profile))
+                SectionTitle(stringResource(R.string.nuance_profile))
                 SmallVerticalSpacer()
                 NuanceProfileBarChart(
                     modifier = Modifier
@@ -556,7 +572,7 @@ fun ResultScreen(
                 )
                 var selectedPartialAnalysisProposal by remember { mutableIntStateOf(0) }
 
-                Text(stringResource(R.string.proximity_profile))
+                SectionTitle(stringResource(R.string.proximity_profile))
                 SmallVerticalSpacer()
                 ProximityBarChart(
                     modifier = Modifier

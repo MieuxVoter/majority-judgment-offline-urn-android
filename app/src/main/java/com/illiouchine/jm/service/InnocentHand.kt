@@ -12,7 +12,6 @@ class InnocentHand(
             val weightsLeft = weights.toMutableList()
             repeat(times = weights.size) {
                 val winner = pickWinner(weightsLeft)
-//                weightsLeft.removeAt(winner)
                 weightsLeft[winner] = 0.0
                 add(winner)
             }
@@ -20,14 +19,18 @@ class InnocentHand(
     }
 
     fun pickWinner(weights: List<Double>): Int {
-        //require(weights.isNotEmpty()) { "AMBIGUOUS EMPTY LIST" }
         if (weights.isEmpty()) {
             return 0
         }
 
+        val sum = weights.sum()
+        if (sum == 0.0) {
+            return 0
+        }
+
         val roll = rng.nextDouble(
-            from = 0.0,            // inclusive
-            until = weights.sum(), // exclusive
+            from = 0.0,  // inclusive
+            until = sum, // exclusive
         )
 
         var cursor = 0.0

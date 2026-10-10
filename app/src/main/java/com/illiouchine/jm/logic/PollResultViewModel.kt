@@ -158,7 +158,14 @@ class PollResultViewModel(
 
         var lotterySeed: Long = 666010999
         if (poll.uuid != null) {
-            lotterySeed = poll.uuid.mostSignificantBits
+            // Rule: The seed must not be predictable by someone knowing the poll's uuid
+            // Rule: The seed must not be predictable by someone knowing the amount of voters
+            // Rule: The seed must stay the same if the poll has stayed the same
+            // Note: We don't care about buffer overflowing Long here, it's all just salty bytes
+            // Note; This is not perfect because the distribution of the sums is not linear
+            lotterySeed = poll.uuid.mostSignificantBits +
+                poll.ballots.size +
+                poll.ballots.sumOf { b -> b.judgments.sumOf { j -> j.grade } }
         }
 
         val lottery = mutableMapOf<ProportionalAlgorithms, List<Int>>()
