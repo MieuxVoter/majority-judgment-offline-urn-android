@@ -109,7 +109,7 @@ fun PollVotingScreen(
 
                 Spacer(modifier = Modifier.height(Theme.spacing.large))
 
-                if (pollVotingState.ballots.isNotEmpty()) {
+                if (pollVotingState.amountOfBallotsCastThisSession > 0) {
                     Text(stringResource(R.string.help_your_participation_was_a_success))
                 }
 
@@ -279,13 +279,16 @@ private fun PreviewVotingScreenConfirmation(modifier: Modifier = Modifier) {
         PollVotingScreen(
             modifier = modifier,
             pollVotingState = PollVotingViewModel.PollVotingViewState(
-                pollConfig = PreviewDataFaker.pollConfig(),
+                pollConfig = PreviewDataFaker.pollConfig(
+                    amountOfProposals = 3,
+                ),
                 ballots = listOf(
                     // Ballot(judgments = listOf(Judgment(proposal = 1, grade = 3)))
                 ),
                 currentBallot = Ballot(
                     judgments = PreviewDataFaker.judgments(3),
                 ),
+                currentProposalsOrder = listOf(0, 1, 2),
             ),
         )
     }
@@ -303,13 +306,16 @@ private fun PreviewVotingSmallScreenConfirmation(modifier: Modifier = Modifier) 
         PollVotingScreen(
             modifier = modifier,
             pollVotingState = PollVotingViewModel.PollVotingViewState(
-                pollConfig = PreviewDataFaker.pollConfig(),
+                pollConfig = PreviewDataFaker.pollConfig(
+                    amountOfProposals = 3,
+                ),
                 ballots = listOf(
                     // Ballot(judgments = listOf(Judgment(proposal = 1, grade = 3)))
                 ),
                 currentBallot = Ballot(
                     judgments = PreviewDataFaker.judgments(3),
                 ),
+                currentProposalsOrder = listOf(0, 1, 2),
             ),
         )
     }
@@ -321,15 +327,25 @@ private fun PreviewVotingSmallScreenConfirmation(modifier: Modifier = Modifier) 
 )
 @Composable
 private fun PreviewVotingScreenWithoutCurrentBallot(modifier: Modifier = Modifier) {
+    val pollConfig = PreviewDataFaker.pollConfig(
+        amountOfProposals = 10,
+    )
     JmTheme {
         PollVotingScreen(
             modifier = modifier,
             pollVotingState = PollVotingViewModel.PollVotingViewState(
-                pollConfig = PreviewDataFaker.pollConfig(),
-                ballots = PreviewDataFaker.ballots(5),
-                currentBallot = Ballot(
-                    judgments = PreviewDataFaker.judgments(0),
+                pollConfig = pollConfig,
+                ballots = PreviewDataFaker.ballots(
+                    size = 5,
+                    pollConfig = pollConfig,
                 ),
+                currentBallot = Ballot(
+                    judgments = PreviewDataFaker.judgments(
+                        size = 0,
+                        grading = pollConfig.grading,
+                    ),
+                ),
+                currentProposalsOrder = listOf(3, 1, 2, 0, 4, 5, 6, 7, 8, 9),
             ),
         )
     }
