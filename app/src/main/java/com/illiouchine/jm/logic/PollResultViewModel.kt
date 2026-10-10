@@ -20,6 +20,7 @@ import com.illiouchine.jm.model.Tally
 import com.illiouchine.jm.model.toResult
 import com.illiouchine.jm.model.toTally
 import com.illiouchine.jm.service.DuelAnalyzer
+import com.illiouchine.jm.service.InnocentHand
 import com.illiouchine.jm.service.ProximityAnalysis
 import com.illiouchine.jm.service.ProximityAnalyzer
 import com.illiouchine.jm.service.TextStylist
@@ -49,6 +50,7 @@ class PollResultViewModel(
         val explanations: List<AnnotatedString> = emptyList(),
         val groups: List<DuelGroups> = emptyList(),
         val proportions: Map<ProportionalAlgorithms, List<Double>> = emptyMap(),
+        val lottery: Map<ProportionalAlgorithms, List<Int>> = emptyMap(),
         val proximityAnalysis: ProximityAnalysis? = null,
         val ballotFilter: BallotsFilterInterface = NoBallotsFilter(),
         val unfilteredPoll: Poll? = null,
@@ -60,8 +62,8 @@ class PollResultViewModel(
         val groups: List<ParticipantGroupAnalysis>,
     )
 
-    private val _pollResultViewState = MutableStateFlow(PollResultViewState())
-    val pollResultViewState: StateFlow<PollResultViewState> = _pollResultViewState
+    private val _viewState = MutableStateFlow(PollResultViewState())
+    val viewState: StateFlow<PollResultViewState> = _viewState
 
     private val _navEvents = MutableSharedFlow<NavigationAction>()
     val navEvents = _navEvents.asSharedFlow()
@@ -154,11 +156,31 @@ class PollResultViewModel(
             }
         }
 
+        var lotterySeed: Long = 666010999
+        if (poll.uuid != null) {
+            // Rule: The seed must not be predictable by someone knowing the poll's uuid
+            // Rule: The seed must not be predictable by someone knowing the amount of voters
+            // Rule: The seed must stay the same if the poll has stayed the same
+            // Note: We don't care about buffer overflowing Long here, it's all just salty bytes
+            // Note; This is not perfect because the distribution of the sums is not linear
+            lotterySeed = poll.uuid.mostSignificantBits +
+                poll.ballots.size +
+                poll.ballots.sumOf { b -> b.judgments.sumOf { j -> j.grade } }
+        }
+
+        val lottery = mutableMapOf<ProportionalAlgorithms, List<Int>>()
+        for (proportionalAlgorithm in ProportionalAlgorithms.entries) {
+            if (proportionalAlgorithm.isAvailable()) {
+                lottery[proportionalAlgorithm] = InnocentHand(seed = lotterySeed)
+                    .pickWinners(weights = proportions[proportionalAlgorithm]!!)
+            }
+        }
+
         val proximityAnalysis = ProximityAnalyzer().analyze(
             poll = filteredPoll,
         )
 
-        _pollResultViewState.update {
+        _viewState.update {
             it.copy(
                 ballotFilter = ballotFilter,
                 unfilteredPoll = poll,
@@ -168,6 +190,7 @@ class PollResultViewModel(
                 explanations = explanations,
                 groups = groups,
                 proportions = proportions,
+                lottery = lottery,
                 proximityAnalysis = proximityAnalysis,
                 highGradeOnLeft = sharedPrefsHelper.getHighGradeOnLeft(),
             )
