@@ -75,6 +75,7 @@ import com.illiouchine.jm.ui.composable.AmountPerspective
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.PollSubject
+import com.illiouchine.jm.ui.composable.SectionTitle
 import com.illiouchine.jm.ui.composable.plot.NuanceProfileBarChart
 import com.illiouchine.jm.ui.composable.plot.OpinionProfileBarChart
 import com.illiouchine.jm.ui.composable.plot.ProximityBarChart
@@ -96,18 +97,6 @@ import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.math.max
 import kotlin.math.min
-
-@Composable
-fun SectionTitle(
-    text: String,
-    modifier: Modifier = Modifier,
-) {
-    Text(
-        modifier = modifier,
-        text = text,
-        fontSize = Theme.typography.titleLarge.fontSize
-    )
-}
 
 @Composable
 fun ResultScreen(
