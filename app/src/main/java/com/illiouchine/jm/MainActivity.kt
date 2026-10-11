@@ -280,7 +280,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
 
-                            val pollResultViewState by pollResultViewModel.pollResultViewState.collectAsState()
+                            val pollResultViewState by pollResultViewModel.viewState.collectAsState()
 
                             LaunchedEffect(Unit) {
                                 pollResultViewModel.navEvents.collect { event ->
