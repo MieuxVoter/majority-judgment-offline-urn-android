@@ -36,8 +36,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.NavKey
 import com.illiouchine.jm.R
 import com.illiouchine.jm.ui.composable.button.IconTextButton
-import com.illiouchine.jm.ui.composable.title.ScreenTitle
 import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
+import com.illiouchine.jm.ui.composable.title.ScreenTitle
 import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme

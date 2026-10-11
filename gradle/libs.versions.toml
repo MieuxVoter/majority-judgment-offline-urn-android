@@ -2,9 +2,8 @@
 [versions]
 activityCompose = "1.13.0"
 agp = "9.4.1"
+commonMarkdown = "0.0.2"
 composeBom = "2026.09.00"
-# We're going to ditch Compose Charts soon (we're going for Koala)
-composeCharts = "0.2.5"
 coreKtx = "1.19.1"
 cucumberAndroid = "4.9.0"
 cucumberPicocontainer = "4.8.1"
@@ -35,7 +34,7 @@ serialization-json = "1.11.0"
 [libraries]
 androidx-material3-adaptive-navigation3 = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation3", version.ref = "navigation3Material3Adaptive" }
 androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycleViewmodelNavigation3" }
-compose-charts = { module = "io.github.ehsannarmani:compose-charts", version.ref = "composeCharts" }
+commonmark = { module = "io.github.feiyin0719:commonmark", version.ref = "commonMarkdown" }
 koalaplot-core = { module = "io.github.koalaplot:koalaplot-core", version.ref = "koalaplotCore" }
 kotlin-faker = { module = "io.github.serpro69:kotlin-faker", version.ref = "kotlinFaker" }
 kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }

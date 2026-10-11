@@ -75,7 +75,6 @@ import com.illiouchine.jm.ui.composable.AmountPerspective
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.PollSubject
-import com.illiouchine.jm.ui.composable.title.SectionTitle
 import com.illiouchine.jm.ui.composable.plot.NuanceProfileBarChart
 import com.illiouchine.jm.ui.composable.plot.OpinionProfileBarChart
 import com.illiouchine.jm.ui.composable.plot.ProximityBarChart
@@ -86,6 +85,7 @@ import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
 import com.illiouchine.jm.ui.composable.scaffold.MjuSnackbar
 import com.illiouchine.jm.ui.composable.spacer.MediumVerticalSpacer
 import com.illiouchine.jm.ui.composable.spacer.SmallVerticalSpacer
+import com.illiouchine.jm.ui.composable.title.SectionTitle
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
@@ -103,6 +103,7 @@ fun ResultScreen(
     modifier: Modifier = Modifier,
     state: PollResultViewModel.PollResultViewState,
     onShowProportionsHelp: () -> Unit = {},
+    onShowLotteryHelp: () -> Unit = {},
     onFinish: () -> Unit = {},
     onBallotsFilterUpdate: (BallotsFilterInterface) -> Unit = {},
     feedback: String? = "",
@@ -157,7 +158,7 @@ fun ResultScreen(
 
         Column(
             modifier = modifier
-                .padding(innerPadding)
+                .padding(paddingValues = innerPadding)
                 .padding(horizontal = Theme.spacing.small)
                 .fillMaxSize()
                 .verticalScroll(state = scrollState)
@@ -457,14 +458,29 @@ fun ResultScreen(
             }
 
             if (amountOfBallots > 0) {
-
                 AnimatedVisibility(
                     visible = proportionalAlgorithm != ProportionalAlgorithms.NONE,
                 ) {
                     Column {
-                        SectionTitle(
-                            text = "Lottery",
-                        )
+                        Row {
+                            SectionTitle(
+                                modifier = Modifier.align(Alignment.CenterVertically),
+                                text = "Lottery",
+                            )
+                            IconButton(
+                                modifier = Modifier.align(Alignment.CenterVertically),
+                                onClick = {
+                                    coroutineScope.launch {
+                                        onShowLotteryHelp()
+                                    }
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Info,
+                                    contentDescription = "More information about the weighted lottery.",
+                                )
+                            }
+                        }
                         SmallVerticalSpacer()
 
                         var lotteryRevealCursor by remember { mutableIntStateOf(0) }
@@ -504,7 +520,6 @@ fun ResultScreen(
                     }
                 }
             }
-
 
             if (amountOfBallots > 0) {
                 SectionTitle(

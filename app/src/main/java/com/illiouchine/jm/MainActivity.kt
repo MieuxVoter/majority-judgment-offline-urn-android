@@ -52,9 +52,10 @@ import com.illiouchine.jm.ui.screen.PollQrExportScreen
 import com.illiouchine.jm.ui.screen.PollQrImportScreen
 import com.illiouchine.jm.ui.screen.PollSetupScreen
 import com.illiouchine.jm.ui.screen.PollVotingScreen
-import com.illiouchine.jm.ui.screen.ProportionsHelpScreen
 import com.illiouchine.jm.ui.screen.ResultScreen
 import com.illiouchine.jm.ui.screen.SettingsScreen
+import com.illiouchine.jm.ui.screen.help.LotteryHelpScreen
+import com.illiouchine.jm.ui.screen.help.ProportionsHelpScreen
 import com.illiouchine.jm.ui.theme.JmTheme
 import org.koin.android.ext.android.get
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -82,18 +83,21 @@ class MainActivity : ComponentActivity() {
 
             val context = applicationContext
             val intent = getIntent()
-            if (Intent.ACTION_VIEW == intent.action) @Suppress("UsePropertyAccessSyntax") {
-                // We arrived here via QR Code scanning.  (We do not get to choose the action.)
-                // We do not want to run another activity instance, so we GTFO.
-                // This intent will either recall the existing activity or run a new one.
-                val mainIntent = Intent(this, MainActivity::class.java)
-                mainIntent.setAction(Intent.ACTION_MAIN)
-                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
-                mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                mainIntent.setData(intent.data)
-                startActivity(mainIntent)
-                finish()
+            if (Intent.ACTION_VIEW == intent.action) {
+                @Suppress("UsePropertyAccessSyntax")
+                {
+                    // We arrived here via QR Code scanning.  (We do not get to choose the action.)
+                    // We do not want to run another activity instance, so we GTFO.
+                    // This intent will either recall the existing activity or run a new one.
+                    val mainIntent = Intent(this, MainActivity::class.java)
+                    mainIntent.setAction(Intent.ACTION_MAIN)
+                    mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
+                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    mainIntent.setData(intent.data)
+                    startActivity(mainIntent)
+                    finish()
+                }
             } else if (Intent.ACTION_MAIN == intent.action) {
                 val uri = intent.data
                 if (uri != null) {
@@ -103,8 +107,8 @@ class MainActivity : ComponentActivity() {
                         // Toast.makeText(context, uri.path, Toast.LENGTH_LONG).show()
 
                         if (
-                            exchangeUriService.uriMatchesPoll(uri)
-                            || legacyExchangeUriService.uriMatchesPoll(uri)
+                            exchangeUriService.uriMatchesPoll(uri) ||
+                            legacyExchangeUriService.uriMatchesPoll(uri)
                         ) {
                             val compressedDataString = uri.pathSegments.last()
                             topLevelBackStack.add(
@@ -113,8 +117,8 @@ class MainActivity : ComponentActivity() {
                                 )
                             )
                         } else if (
-                            exchangeUriService.uriMatchesBallots(uri)
-                            || legacyExchangeUriService.uriMatchesBallots(uri)
+                            exchangeUriService.uriMatchesBallots(uri) ||
+                            legacyExchangeUriService.uriMatchesBallots(uri)
                         ) {
                             val compressedDataString = uri.pathSegments.last()
                             topLevelBackStack.add(
@@ -297,6 +301,9 @@ class MainActivity : ComponentActivity() {
                                     onShowProportionsHelp = {
                                         topLevelBackStack.add(Screens.ProportionsHelp)
                                     },
+                                    onShowLotteryHelp = {
+                                        topLevelBackStack.add(Screens.LotteryHelp)
+                                    },
                                     onBallotsFilterUpdate = { filter ->
                                         ballotsFilter = filter
 
@@ -430,6 +437,12 @@ class MainActivity : ComponentActivity() {
                         }
                         entry<Screens.ProportionsHelp> {
                             ProportionsHelpScreen(
+                                modifier = Modifier.fillMaxSize(),
+                                onNavigateUp = { topLevelBackStack.removeLast() },
+                            )
+                        }
+                        entry<Screens.LotteryHelp> {
+                            LotteryHelpScreen(
                                 modifier = Modifier.fillMaxSize(),
                                 onNavigateUp = { topLevelBackStack.removeLast() },
                             )

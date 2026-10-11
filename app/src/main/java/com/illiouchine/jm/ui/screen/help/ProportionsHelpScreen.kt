@@ -1,4 +1,4 @@
-package com.illiouchine.jm.ui.screen
+package com.illiouchine.jm.ui.screen.help
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
@@ -24,6 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.config.ProportionalAlgorithms
+import com.illiouchine.jm.ui.composable.spacer.MediumVerticalSpacer
+import com.illiouchine.jm.ui.composable.spacer.SmallVerticalSpacer
 import com.illiouchine.jm.ui.composable.title.ScreenTitle
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
@@ -58,14 +60,14 @@ fun ProportionsHelpScreen(
                 textAlign = TextAlign.Justify,
             )
 
-            Spacer(Modifier.padding(vertical = Theme.spacing.small))
+            SmallVerticalSpacer()
 
             Text(
                 text = stringResource(R.string.proportions_help_paragraph_2),
                 textAlign = TextAlign.Justify,
             )
 
-            Spacer(Modifier.padding(vertical = Theme.spacing.small))
+            SmallVerticalSpacer()
 
             Text(
                 text = stringResource(R.string.proportions_help_paragraph_3),
@@ -114,7 +116,7 @@ fun ProportionsHelpScreen(
                 Text("\uD83D\uDCDA " + stringResource(R.string.button_learn_more_on_the_wiki))
             }
 
-            Spacer(Modifier.padding(vertical = Theme.spacing.medium))
+            MediumVerticalSpacer()
 
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),

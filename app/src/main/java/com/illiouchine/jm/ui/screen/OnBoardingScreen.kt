@@ -147,7 +147,6 @@ fun OnBoardingPage(
             )
         },
     ) {
-
         @Composable
         fun OnBoardingPageContent(
             onBoardingPage: OnBoardingPage,
@@ -184,7 +183,6 @@ fun OnBoardingPage(
                 }
             }
         }
-
     }
 }
 

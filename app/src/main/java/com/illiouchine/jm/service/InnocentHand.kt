@@ -29,7 +29,7 @@ class InnocentHand(
         }
 
         val roll = rng.nextDouble(
-            from = 0.0,  // inclusive
+            from = 0.0, // inclusive
             until = sum, // exclusive
         )
 
@@ -44,5 +44,4 @@ class InnocentHand(
         // In case of numerical instability — we're adding floats here
         return weights.size - 1
     }
-
 }
