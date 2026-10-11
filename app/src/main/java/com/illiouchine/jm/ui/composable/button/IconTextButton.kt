@@ -1,4 +1,4 @@
-package com.illiouchine.jm.ui.composable
+package com.illiouchine.jm.ui.composable.button
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
