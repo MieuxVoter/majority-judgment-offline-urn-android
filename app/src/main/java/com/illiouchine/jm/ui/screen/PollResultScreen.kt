@@ -75,7 +75,7 @@ import com.illiouchine.jm.ui.composable.AmountPerspective
 import com.illiouchine.jm.ui.composable.BallotCountRow
 import com.illiouchine.jm.ui.composable.LinearMeritProfileCanvas
 import com.illiouchine.jm.ui.composable.PollSubject
-import com.illiouchine.jm.ui.composable.SectionTitle
+import com.illiouchine.jm.ui.composable.title.SectionTitle
 import com.illiouchine.jm.ui.composable.plot.NuanceProfileBarChart
 import com.illiouchine.jm.ui.composable.plot.OpinionProfileBarChart
 import com.illiouchine.jm.ui.composable.plot.ProximityBarChart

@@ -33,7 +33,7 @@ import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.ui.composable.GradingSelectionRow
 import com.illiouchine.jm.ui.composable.ProposalRow
 import com.illiouchine.jm.ui.composable.ProposalSelectionRow
-import com.illiouchine.jm.ui.composable.ScreenTitle
+import com.illiouchine.jm.ui.composable.title.ScreenTitle
 import com.illiouchine.jm.ui.composable.SubjectSelectionRow
 import com.illiouchine.jm.ui.composable.ThemedHorizontalDivider
 import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold

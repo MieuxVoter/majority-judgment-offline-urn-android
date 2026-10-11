@@ -1,4 +1,4 @@
-package com.illiouchine.jm.ui.composable
+package com.illiouchine.jm.ui.composable.title
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

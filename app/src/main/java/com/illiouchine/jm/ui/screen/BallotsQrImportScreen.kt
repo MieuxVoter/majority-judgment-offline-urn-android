@@ -35,7 +35,7 @@ import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
 import com.illiouchine.jm.model.dto.BallotsDto
 import com.illiouchine.jm.service.ExchangeUriService
-import com.illiouchine.jm.ui.composable.ScreenTitle
+import com.illiouchine.jm.ui.composable.title.ScreenTitle
 import com.illiouchine.jm.ui.composable.button.ActionRowCancelConfirm
 import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
 import com.illiouchine.jm.ui.composable.spacer.MediumVerticalSpacer
