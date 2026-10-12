@@ -100,6 +100,7 @@
     <string name="action_inspect">Inspect</string>
     <string name="action_resume">Resume</string>
     <string name="proportional_algorithm">Proportional Algorithm</string>
+    <string name="lottery">Lottery</string>
     <string name="opinion_profile">Opinion Profile</string>
     <string name="plot_title_opinion_profile">Total amount of judgments cast per grade.</string>
     <string name="nuance_profile">Nuance Profile</string>

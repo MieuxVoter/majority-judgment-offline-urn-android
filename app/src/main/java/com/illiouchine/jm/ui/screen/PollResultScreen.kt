@@ -465,7 +465,7 @@ fun ResultScreen(
                         Row {
                             SectionTitle(
                                 modifier = Modifier.align(Alignment.CenterVertically),
-                                text = "Lottery",
+                                text = stringResource(R.string.lottery),
                             )
                             IconButton(
                                 modifier = Modifier.align(Alignment.CenterVertically),

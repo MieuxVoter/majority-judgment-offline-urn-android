@@ -50,7 +50,7 @@ fun LotteryHelpScreen(
                 .padding(horizontal = Theme.spacing.small)
         ) {
             ScreenTitle(
-                text = "Lottery",
+                text = stringResource(R.string.lottery),
             )
 
             MarkdownText(
