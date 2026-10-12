@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.illiouchine.jm.R
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.service.ExchangeUriService
@@ -29,6 +30,8 @@ class PollQrImportViewModel(
         val existingPoll: Poll? = null,
         val error: Exception? = null,
         val errorMessage: String? = null,
+        // TBD: maybe proper; but we do need to inject params — data to explain why it failed, etc.
+        //@param:StringRes val errorMessageId: Int? = null,
     )
 
     private val _viewState = MutableStateFlow(PollQrImportViewState())
@@ -42,6 +45,7 @@ class PollQrImportViewModel(
         qrUriPathDatum: String,
     ) {
 //        viewModelScope.launch {
+
         _viewState.update {
             PollQrImportViewState(
                 qrUriPath = qrUriPathDatum,
@@ -55,21 +59,27 @@ class PollQrImportViewModel(
             _viewState.update {
                 it.copy(
                     error = e,
-                    errorMessage = "There was an issue while decompressing the imported poll.",
+                    errorMessage = context.getString(
+                        R.string.error_while_decompressing_imported_poll,
+                    ),
                 )
             }
         } catch (e: SerializationException) {
             _viewState.update {
                 it.copy(
                     error = e,
-                    errorMessage = "There was an issue while deserializing the imported poll.",
+                    errorMessage = context.getString(
+                        R.string.error_while_deserializing_imported_poll,
+                    ),
                 )
             }
         } catch (e: IllegalArgumentException) {
             _viewState.update {
                 it.copy(
                     error = e,
-                    errorMessage = "There was an issue while decoding the imported poll.",
+                    errorMessage = context.getString(
+                        R.string.error_while_decoding_imported_poll,
+                    ),
                 )
             }
         }

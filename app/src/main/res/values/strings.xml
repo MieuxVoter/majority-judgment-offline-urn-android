@@ -166,6 +166,9 @@
     <string name="proportions_help_paragraph_3">Choose wisely.</string>
     <string name="toast_you_cannot_go_back_from_here">You cannot go back from here, that would be cheating.</string>
     <string name="toast_that_poll_does_not_exist">That poll does not exist anymore.</string>
+    <string name="error_while_decompressing_imported_poll">There was an issue while decompressing the imported poll.</string>
+    <string name="error_while_deserializing_imported_poll">There was an issue while deserializing the imported poll.</string>
+    <string name="error_while_decoding_imported_poll">There was an issue while decoding the imported poll.</string>
     <string name="tts_activate">activate</string>
     <string name="tts_deactivate">deactivate</string>
     <string name="tts_setting">setting</string>
