@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun LotteryHelpScreen(
     modifier: Modifier = Modifier,
-    onNavigateUp: () -> Unit = {},
+    onNavigateBack: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier
@@ -83,7 +83,7 @@ To avoid such pitfalls, you are encouraged to collegially define beforehand one 
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = {
                     coroutineScope.launch {
-                        onNavigateUp()
+                        onNavigateBack()
                     }
                 },
             ) {

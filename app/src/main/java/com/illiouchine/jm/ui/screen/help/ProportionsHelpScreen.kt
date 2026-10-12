@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ProportionsHelpScreen(
     modifier: Modifier = Modifier,
-    onNavigateUp: () -> Unit = {},
+    onNavigateBack: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier
@@ -122,7 +122,7 @@ fun ProportionsHelpScreen(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = {
                     coroutineScope.launch {
-                        onNavigateUp()
+                        onNavigateBack()
                     }
                 },
             ) {

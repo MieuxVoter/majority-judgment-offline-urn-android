@@ -61,7 +61,14 @@ import org.koin.android.ext.android.get
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.qualifier.named
 
+/**
+ * For simplicity, we've done everything in one, big main activity.
+ * This is the glue that ties it all together.
+ */
 class MainActivity : ComponentActivity() {
+
+    // Feature: we can request any service we want via koin, our dependency injection container.
+    //          See ./MajorityUrnApplication.kt where services are declared.
 
     private val exchangeUriService: ExchangeUriService = get()
     private val legacyExchangeUriService: ExchangeUriService = get(
@@ -84,20 +91,19 @@ class MainActivity : ComponentActivity() {
             val context = applicationContext
             val intent = getIntent()
             if (Intent.ACTION_VIEW == intent.action) {
+                // We arrived here via QR Code scanning.  (We do not get to choose the action.)
+                // We do not want to run another activity instance, so we GTFO.
+                // This intent will either recall the existing activity or run a new one.
+                val mainIntent = Intent(this, MainActivity::class.java)
                 @Suppress("UsePropertyAccessSyntax")
-                {
-                    // We arrived here via QR Code scanning.  (We do not get to choose the action.)
-                    // We do not want to run another activity instance, so we GTFO.
-                    // This intent will either recall the existing activity or run a new one.
-                    val mainIntent = Intent(this, MainActivity::class.java)
-                    mainIntent.setAction(Intent.ACTION_MAIN)
-                    mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
-                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    mainIntent.setData(intent.data)
-                    startActivity(mainIntent)
-                    finish()
-                }
+                mainIntent.setAction(Intent.ACTION_MAIN)
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                @Suppress("UsePropertyAccessSyntax")
+                mainIntent.setData(intent.data)
+                startActivity(mainIntent)
+                finish()
             } else if (Intent.ACTION_MAIN == intent.action) {
                 val uri = intent.data
                 if (uri != null) {
@@ -248,7 +254,7 @@ class MainActivity : ComponentActivity() {
                             val waitAnimation = remember { Animatable(0f) }
                             LaunchedEffect(pollVotingViewState.pinScreens) {
                                 waitAnimation.animateTo(1f, tween(1000))
-                                perhapsLockScreen(pollVotingViewState.pinScreens)
+                                perhapsPinApplication(pollVotingViewState.pinScreens)
                             }
 
                             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -438,13 +444,13 @@ class MainActivity : ComponentActivity() {
                         entry<Screens.ProportionsHelp> {
                             ProportionsHelpScreen(
                                 modifier = Modifier.fillMaxSize(),
-                                onNavigateUp = { topLevelBackStack.removeLast() },
+                                onNavigateBack = { topLevelBackStack.removeLast() },
                             )
                         }
                         entry<Screens.LotteryHelp> {
                             LotteryHelpScreen(
                                 modifier = Modifier.fillMaxSize(),
-                                onNavigateUp = { topLevelBackStack.removeLast() },
+                                onNavigateBack = { topLevelBackStack.removeLast() },
                             )
                         }
                         entry<Screens.Settings> {
@@ -477,7 +483,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun perhapsLockScreen(pinScreen: Boolean) {
+    private fun perhapsPinApplication(pinScreen: Boolean) {
         val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
         if (pinScreen && activityManager.lockTaskModeState == ActivityManager.LOCK_TASK_MODE_NONE) {
             startLockTask()
@@ -485,7 +491,7 @@ class MainActivity : ComponentActivity() {
     }
 
     companion object {
-        fun create(context: Context?): Intent {
+        fun createIntent(context: Context): Intent {
             return Intent(context, MainActivity::class.java)
         }
     }

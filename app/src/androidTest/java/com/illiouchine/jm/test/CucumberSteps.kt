@@ -30,7 +30,7 @@ class CucumberSteps(
     fun initializeApp() {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
         // This is actually required for the rule to work, and I don't know how it's injected.
-        scenarioHolder.launch(MainActivity.create(instrumentation.targetContext))
+        scenarioHolder.launch(MainActivity.createIntent(instrumentation.targetContext))
     }
 
     @When("^I wait for idle$")
