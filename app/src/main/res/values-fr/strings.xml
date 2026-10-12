@@ -186,4 +186,9 @@
     <string name="plot_description_nuance_profile_one_one">Un bulletin utilisant une seule mention.</string>
     <string name="label_filter_by_grade">Filtrer par Mention</string>
     <string name="label_filter_by_nuance">Filtrer par Nuance</string>
+    <string name="candidate_is_grade">%1$s est %2$s</string>
+    <string name="lottery">Loterie</string>
+    <string name="error_while_decompressing_imported_poll">Il y a eu un problème lors de la décompression du scrutin importé.</string>
+    <string name="error_while_deserializing_imported_poll">Il y a eu un problème lors de la déserialisation du scrutin importé.</string>
+    <string name="error_while_decoding_imported_poll">Il y a eu un problème lors du décodage du scrutin importé.</string>
 </resources>
