@@ -51,7 +51,6 @@
     <string name="title_about">Hakkında</string>
     <string name="poll_setup_subject_placeholder">Anketin konusunu girin…</string>
     <string name="title_multiline_majority_judgment_urn">Dereceli\nOylama\nSandığı</string>
-    <string name="summary_are_you_sure">Emin misiniz?</string>
     <string name="grade_insufficient">ZAYIF</string>
     <string name="votes">oy</string>
     <string name="dialog_operation_cannot_be_undone">Bu işlem geri alınamaz.</string>

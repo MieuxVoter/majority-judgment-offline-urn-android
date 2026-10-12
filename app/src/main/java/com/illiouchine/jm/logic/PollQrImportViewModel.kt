@@ -31,7 +31,7 @@ class PollQrImportViewModel(
         val error: Exception? = null,
         val errorMessage: String? = null,
         // TBD: maybe proper; but we do need to inject params — data to explain why it failed, etc.
-        //@param:StringRes val errorMessageId: Int? = null,
+        // @param:StringRes val errorMessageId: Int? = null,
     )
 
     private val _viewState = MutableStateFlow(PollQrImportViewState())

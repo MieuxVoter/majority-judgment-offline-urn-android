@@ -104,7 +104,6 @@
     <string name="setting_pin_screen_label">Не дайте избирателям покинуть приложение</string>
     <string name="summary_you_are_almost_done">Ты почти закончил!</string>
     <string name="summary_please_confirm_your_vote">Пожалуйста, подтвердите свой голос:</string>
-    <string name="summary_are_you_sure">Вы уверены?</string>
     <string name="summary_is_that_accurate">Это точно?</string>
     <string name="summary_button_no_rescind">Нет, отмена</string>
     <string name="summary_button_yes_confirm">Да, подтвердить</string>
