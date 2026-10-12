@@ -50,7 +50,7 @@ private val markdownParser = Parser.builder().build()
  * - `[link](https://example.org)`.
  *
  * For wider support we're going to need a lib, or to cook our own.
- * We already have a Kotlin Multiplatform Markdown parser, so it's not that far away.
+ * We already found a Kotlin Multiplatform Markdown parser, so it's not that far away.
  */
 @Composable
 fun MarkdownText(
@@ -59,15 +59,10 @@ fun MarkdownText(
     style: TextStyle = TextStyle.Default,
     textColor: Color = Color.Unspecified,
     linkColor: Color = Color.Unspecified,
-    textAlign: TextAlign = TextAlign.Justify,
+    textAlign: TextAlign = TextAlign.Start,
 ) {
     val uriHandler = LocalUriHandler.current
     val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
-
-    val alignedStyle = style.copy(
-        textAlign = textAlign,
-        background = Color.Red,
-    )
 
     val styledText = buildAnnotatedString {
         val root = markdownParser.parse(text)
@@ -181,7 +176,9 @@ private fun MarkdownTextPreview() {
                 "\n" +
                 "After a newline…" +
                 "\n\n" +
-                "And a _second_ paragraph !",
+                "And a _second_ paragraph !" +
+                "\n" +
+                "Lorem ipsum dolor sit amet, sed `in girum imus nocte et consumimur igni`. Dura lex sed lex. _VISITA INTERIORES TERRAE RECTIFICANDO INVENIES OCCULTUM LAPIDEM_",
         )
     }
 }
