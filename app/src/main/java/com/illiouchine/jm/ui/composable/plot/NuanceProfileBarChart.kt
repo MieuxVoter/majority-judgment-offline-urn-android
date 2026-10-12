@@ -225,8 +225,7 @@ fun NuanceProfileBarChartPreview() {
     )
 
     JmTheme {
-        Column() {
-
+        Column {
             NuanceProfileBarChart(
                 modifier = Modifier
                     .padding(all = Theme.spacing.large)

@@ -19,6 +19,7 @@ class PathShape : Shape {
         this.path = p
     }
 
+    @Suppress("unused") // linter yells, yet we have no use for layout direction here
     override fun createOutline(
         size: Size,
         layoutDirection: LayoutDirection,

@@ -83,7 +83,6 @@
     <string name="setting_pin_screen_label">Befragte am Verlassen der App hindern</string>
     <string name="summary_you_are_almost_done">Fast fertig!</string>
     <string name="summary_please_confirm_your_vote">Bitte bestätige deine Stimme:</string>
-    <string name="summary_are_you_sure">Bist du dir sicher?</string>
     <string name="summary_is_that_accurate">Ist das korrekt?</string>
     <string name="summary_button_no_rescind">Nein, wiederrufen</string>
     <string name="summary_button_yes_confirm">Ja, bestätigen</string>

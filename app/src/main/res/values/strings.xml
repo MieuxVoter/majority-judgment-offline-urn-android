@@ -100,14 +100,15 @@
     <string name="action_inspect">Inspect</string>
     <string name="action_resume">Resume</string>
     <string name="proportional_algorithm">Proportional Algorithm</string>
+    <string name="lottery">Lottery</string>
     <string name="opinion_profile">Opinion Profile</string>
     <string name="plot_title_opinion_profile">Total amount of judgments cast per grade.</string>
     <string name="nuance_profile">Nuance Profile</string>
     <string name="plot_title_nuance_profile">Amount of ballots using X different grades.</string>
-    <string name="plot_description_nuance_profile_many_many">%1$d ballots using %2$d different grades.</string>
-    <string name="plot_description_nuance_profile_one_many">One ballot using %1$d different grades.</string>
-    <string name="plot_description_nuance_profile_many_one">%1$d ballots using only one grade.</string>
-    <string name="plot_description_nuance_profile_one_one">One ballot using only one grade.</string>
+    <string name="plot_description_nuance_profile_many_many" tools:ignore="PluralsCandidate">%1$d ballots using %2$d different grades.</string>
+    <string name="plot_description_nuance_profile_one_many" tools:ignore="PluralsCandidate">One ballot using %1$d different grades.</string>
+    <string name="plot_description_nuance_profile_many_one" tools:ignore="PluralsCandidate">%1$d ballots using only one grade.</string>
+    <string name="plot_description_nuance_profile_one_one" tools:ignore="PluralsCandidate">One ballot using only one grade.</string>
     <string name="proximity_profile">Proximity Profile</string>
     <string name="plot_title_proximity_profile">Proximity of every pair of proposals in the space of the ballots.</string>
     <string name="plot_title_proximity_with">Proximity with %1$s</string>
@@ -130,7 +131,6 @@
     <string name="setting_default_grading_label">Selected by default when you create a new poll</string>
     <string name="summary_you_are_almost_done">You\'re almost done !</string>
     <string name="summary_please_confirm_your_vote">Please confirm your vote:</string>
-    <string name="summary_are_you_sure">Are you sure ?</string>
     <string name="summary_is_that_accurate">Is that accurate ?</string>
     <string name="summary_button_no_rescind">No, rescind</string>
     <string name="summary_button_yes_confirm">Yes, confirm</string>
@@ -165,6 +165,9 @@
     <string name="proportions_help_paragraph_3">Choose wisely.</string>
     <string name="toast_you_cannot_go_back_from_here">You cannot go back from here, that would be cheating.</string>
     <string name="toast_that_poll_does_not_exist">That poll does not exist anymore.</string>
+    <string name="error_while_decompressing_imported_poll">There was an issue while decompressing the imported poll.</string>
+    <string name="error_while_deserializing_imported_poll">There was an issue while deserializing the imported poll.</string>
+    <string name="error_while_decoding_imported_poll">There was an issue while decoding the imported poll.</string>
     <string name="tts_activate">activate</string>
     <string name="tts_deactivate">deactivate</string>
     <string name="tts_setting">setting</string>

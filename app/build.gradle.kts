@@ -147,6 +147,10 @@ dependencies {
     // Plotting
     implementation(libs.koalaplot.core)
 
+    // Markdown for the Help screens (Kotlin Multiplatform)
+    // https://github.com/feiyin0719/commonmark-kotlin
+    implementation(libs.commonmark)
+
     // Data Formats for I/O ; good but commented out because it adds 20Mio to the release (!)
     //implementation("org.jetbrains.kotlinx:dataframe:1.0.0-Beta4")
 

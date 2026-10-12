@@ -9,6 +9,24 @@ lint:  ## Lint and auto-correct using detekt.
 test:  ## Verbose tests
 	./gradlew :app:test --info
 
+build-release:  ## Build the signed release APK
+	@if [ "${STORE_KEY_FILE_PATH}" = "" ]; then \
+  		echo "ERROR: NO CREDENTIALS"; \
+  		echo "source .env.release.local"; \
+	else \
+	  	echo "Building the release for git version `git describe --tags`"; \
+		./gradlew assembleRelease \
+			-Pandroid.injected.signing.store.file="${STORE_KEY_FILE_PATH}" \
+			-Pandroid.injected.signing.store.password="${STORE_PASSWORD}" \
+			-Pandroid.injected.signing.key.alias="${STORE_KEY_ALIAS}" \
+			-Pandroid.injected.signing.key.password="${STORE_KEY_PASSWORD}" \
+			; \
+		echo -e "Built app/build/outputs/apk/release/app-release.apk"; \
+		ls -lh ./app/build/outputs/apk/release/app-release.apk; \
+		echo -e "Android Version Code: `cat app/build/outputs/apk/release/output-metadata.json | jq '.elements.[0].versionCode'`"; \
+		echo -e "Android Version Name: `cat app/build/outputs/apk/release/output-metadata.json | jq '.elements.[0].versionName'`"; \
+	fi
+
 help:  ## Show this help.
 	@echo "Welcome to your favorite Majority Judgment application for Android!\n"
 	@echo "Usage:   make <goal>\n"

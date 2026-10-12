@@ -52,7 +52,6 @@
     <string name="button_be_the_first_to_vote">Sé el primero en votar</string>
     <string name="label_grades">Grados</string>
     <string name="setting_play_sound">Reproducir sonidos</string>
-    <string name="summary_are_you_sure">¿ Estas segure ?</string>
     <string name="summary_is_that_accurate">¿ Es exacto ?</string>
     <string name="summary_button_no_rescind">No, rescindir</string>
     <string name="summary_button_yes_confirm">Si, confirmar</string>

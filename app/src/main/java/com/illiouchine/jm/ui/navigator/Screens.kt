@@ -54,5 +54,8 @@ sealed interface Screens : NavKey {
     data object ProportionsHelp : Screens
 
     @Serializable
+    data object LotteryHelp : Screens
+
+    @Serializable
     data object Loader : Screens
 }

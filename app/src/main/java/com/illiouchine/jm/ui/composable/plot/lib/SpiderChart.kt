@@ -28,7 +28,7 @@ import io.github.koalaplot.core.ChartLayout
 import io.github.koalaplot.core.Symbol
 import io.github.koalaplot.core.polar.PolarGraph
 import io.github.koalaplot.core.polar.PolarGraphDefaults
-import io.github.koalaplot.core.polar.PolarPlotSeries2
+import io.github.koalaplot.core.polar.PolarPlotSeries
 import io.github.koalaplot.core.polar.PolarPoint
 import io.github.koalaplot.core.polar.RadialGridType
 import io.github.koalaplot.core.polar.rememberCategoryAngularAxisModel
@@ -121,7 +121,7 @@ fun SpiderChart(
                 radialAxisGridLineStyle = angularAxisGridLineStyle,
             ),
         ) {
-            PolarPlotSeries2(
+            PolarPlotSeries(
                 data = polarPlotData,
                 lineStyle = LineStyle(SolidColor(Theme.colorScheme.primary), strokeWidth = 1.5.dp),
                 areaStyle = AreaStyle(SolidColor(Theme.colorScheme.primary), alpha = 0.3f),

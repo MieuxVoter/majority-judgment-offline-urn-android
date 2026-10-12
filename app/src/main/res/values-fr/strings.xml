@@ -57,7 +57,6 @@
     <string name="button_be_the_first_to_vote">Votez en premier</string>
     <string name="label_grades">Mentions</string>
     <string name="setting_play_sound">Effets sonores</string>
-    <string name="summary_are_you_sure">Êtes-vous sûr⋅e ?</string>
     <string name="summary_is_that_accurate">Est-ce correct ?</string>
     <string name="summary_button_no_rescind">Non, recommencer</string>
     <string name="summary_button_yes_confirm">Oui, confirmer</string>
@@ -102,7 +101,7 @@
     <string name="five_priority_grades">Cinq mentions de priorité</string>
     <string name="six_enthusiasm_grades">Six mentions d\'enthousiasme</string>
     <string name="proportional_algorithm_mj_score">Mérite Majoritaire</string>
-    <string name="proportions_help_paragraph_2">Il existe de multiple algorithmes qui permettent de calculer une représentation proportionnelle, chacun ayant ses vertus et ses vices.</string>
+    <string name="proportions_help_paragraph_2">Il existe de multiples algorithmes qui permettent de calculer une représentation proportionnelle, chacun ayant ses forces et ses défauts.</string>
     <string name="proportions_help_paragraph_1">Le but d\'une représentation proportionnelle est de partager entre les candidats une ressource limitée comme le temps, l\'argent, ou des sièges dans une assemblée…</string>
     <string name="button_back">Retour</string>
     <string name="label_show_proportions">Proportionnelle</string>
