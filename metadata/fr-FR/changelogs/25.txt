@@ -1,0 +1,5 @@
+* Compatibilité avec Android SDK 36 & 37
+* Ajout de motifs d'arrière-plan sur le profil d'opinion
+* On peut désormais modifier nos jugements juste avant soumission
+* Migration vers la bibliothèque JM en Kotlin Multiplatform
+* Mise à jour de nos autres dépendances logicielles
