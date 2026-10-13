@@ -24,7 +24,7 @@ class InnocentHand(
         }
 
         val sum = weights.sum()
-        if (sum == 0.0) {
+        if (sum == 0.0 || sum.isNaN()) {
             return 0
         }
 
@@ -42,6 +42,7 @@ class InnocentHand(
         }
 
         // In case of numerical instability — we're adding floats here
+        // TBD: don't return the last if its weight is zero
         return weights.size - 1
     }
 }
