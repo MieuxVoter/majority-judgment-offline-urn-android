@@ -3,6 +3,7 @@ package com.illiouchine.jm
 import android.app.Application
 import androidx.room.Room
 import com.illiouchine.jm.data.HardcodedPollTemplateDataSource
+import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.data.PollTemplateDataSource
 import com.illiouchine.jm.data.SharedPrefsHelper
@@ -46,16 +47,18 @@ val module = module {
             name = "PollDataBase",
         ).build()
     }
+    // Data Access Object (i.e. Repository)
     single<PollDao> {
         val dataBase = get<PollDataBase>()
         dataBase.pollDao()
     }
-
-    // Data
-    single { SharedPrefsHelper(get()) }
-//    single<PollDataSource>(named("inMemory")) { InMemoryPollDataSource() }
-    single<PollDataSource> { SqlitePollDataSource(get()) }
+    // Data Source
+    single<PollDataSource> { SqlitePollDataSource(pollDao = get()) }
+    single<PollDataSource>(qualifier = named("inMemory")) { InMemoryPollDataSource() }
     single<PollTemplateDataSource> { HardcodedPollTemplateDataSource() }
+
+    // Config Data
+    single { SharedPrefsHelper(context = get()) }
 
     // Miscellaneous
     single {
@@ -77,7 +80,7 @@ val module = module {
         )
     }
 
-    // ViewModels
+    // View Models
     viewModel {
         HomeViewModel(
             pollDataSource = get(),
