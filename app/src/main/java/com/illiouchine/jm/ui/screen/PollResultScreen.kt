@@ -86,6 +86,7 @@ import com.illiouchine.jm.ui.composable.scaffold.MjuSnackbar
 import com.illiouchine.jm.ui.composable.spacer.MediumVerticalSpacer
 import com.illiouchine.jm.ui.composable.spacer.SmallVerticalSpacer
 import com.illiouchine.jm.ui.composable.title.SectionTitle
+import com.illiouchine.jm.ui.composable.title.SectionTitleWithIcon
 import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
@@ -104,6 +105,7 @@ fun ResultScreen(
     state: PollResultViewModel.PollResultViewState,
     onShowProportionsHelp: () -> Unit = {},
     onShowLotteryHelp: () -> Unit = {},
+    onShowOpinionHelp: () -> Unit = {},
     onFinish: () -> Unit = {},
     onBallotsFilterUpdate: (BallotsFilterInterface) -> Unit = {},
     feedback: String? = "",
@@ -462,25 +464,15 @@ fun ResultScreen(
                     visible = proportionalAlgorithm != ProportionalAlgorithms.NONE,
                 ) {
                     Column {
-                        Row {
-                            SectionTitle(
-                                modifier = Modifier.align(Alignment.CenterVertically),
-                                text = stringResource(R.string.lottery),
-                            )
-                            IconButton(
-                                modifier = Modifier.align(Alignment.CenterVertically),
-                                onClick = {
-                                    coroutineScope.launch {
-                                        onShowLotteryHelp()
-                                    }
-                                },
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Info,
-                                    contentDescription = "More information about the weighted lottery.",
-                                )
-                            }
-                        }
+                        SectionTitleWithIcon(
+                            text = stringResource(R.string.lottery),
+                            iconDescription = "More information about the weighted lottery.",
+                            onClickOnIcon = {
+                                coroutineScope.launch {
+                                    onShowLotteryHelp()
+                                }
+                            },
+                        )
                         SmallVerticalSpacer()
 
                         var lotteryRevealCursor by remember { mutableIntStateOf(0) }
@@ -522,8 +514,15 @@ fun ResultScreen(
             }
 
             if (amountOfBallots > 0) {
-                SectionTitle(
+
+                SectionTitleWithIcon(
                     text = stringResource(R.string.opinion_profile),
+                    iconDescription = "More information about the opinion profile.",
+                    onClickOnIcon = {
+                        coroutineScope.launch {
+                            onShowOpinionHelp()
+                        }
+                    },
                 )
                 SmallVerticalSpacer()
 

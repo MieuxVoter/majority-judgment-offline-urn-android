@@ -15,6 +15,7 @@ data class ProposalResult(
 )
 
 fun CandidateResult.toProposalResult(): ProposalResult {
+    assert(!this.relativeMerit.isNaN())
     return ProposalResult(
         index = this.index,
         rank = this.rank,

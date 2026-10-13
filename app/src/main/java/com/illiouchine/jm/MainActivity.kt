@@ -55,6 +55,7 @@ import com.illiouchine.jm.ui.screen.PollVotingScreen
 import com.illiouchine.jm.ui.screen.ResultScreen
 import com.illiouchine.jm.ui.screen.SettingsScreen
 import com.illiouchine.jm.ui.screen.help.LotteryHelpScreen
+import com.illiouchine.jm.ui.screen.help.OpinionHelpScreen
 import com.illiouchine.jm.ui.screen.help.ProportionsHelpScreen
 import com.illiouchine.jm.ui.theme.JmTheme
 import org.koin.android.ext.android.get
@@ -310,6 +311,9 @@ class MainActivity : ComponentActivity() {
                                     onShowLotteryHelp = {
                                         topLevelBackStack.add(Screens.LotteryHelp)
                                     },
+                                    onShowOpinionHelp = {
+                                        topLevelBackStack.add(Screens.OpinionHelp)
+                                    },
                                     onBallotsFilterUpdate = { filter ->
                                         ballotsFilter = filter
 
@@ -449,6 +453,12 @@ class MainActivity : ComponentActivity() {
                         }
                         entry<Screens.LotteryHelp> {
                             LotteryHelpScreen(
+                                modifier = Modifier.fillMaxSize(),
+                                onNavigateBack = { topLevelBackStack.removeLast() },
+                            )
+                        }
+                        entry<Screens.OpinionHelp> {
+                            OpinionHelpScreen(
                                 modifier = Modifier.fillMaxSize(),
                                 onNavigateBack = { topLevelBackStack.removeLast() },
                             )
