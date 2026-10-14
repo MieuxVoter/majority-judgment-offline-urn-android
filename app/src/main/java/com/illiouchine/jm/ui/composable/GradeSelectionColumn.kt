@@ -1,7 +1,10 @@
 package com.illiouchine.jm.ui.composable
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -9,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.illiouchine.jm.extensions.reversedIf
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.ui.theme.JmTheme
@@ -59,12 +63,20 @@ fun GradeSelectionColumn(
 }
 
 @Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 2.0f,
+)
 @Composable
 private fun PreviewGradeSelectionColumn7() {
     JmTheme {
-        GradeSelectionColumn(
-            grading = Grading.Quality5Grading,
-            onGradeSelected = {},
-        )
+        Column {
+            GradeSelectionColumn(
+                modifier = Modifier.padding(all=32.dp),
+                gradeModifier = Modifier.height(64.dp),
+                grading = Grading.Quality7Grading,
+                onGradeSelected = {},
+            )
+        }
     }
 }

@@ -1,5 +1,11 @@
 package com.illiouchine.jm.ui.composable
 
+import android.content.res.Configuration
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
@@ -7,7 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.illiouchine.jm.ui.composable.spacer.SmallVerticalSpacer
 import com.illiouchine.jm.ui.theme.JmTheme
 
 @Composable
@@ -32,7 +40,9 @@ fun GradeSelectionButton(
     ) {
         Text(
             text = text,
-            fontSize = 24.sp,
+//            fontSize = 24.sp,
+            autoSize = TextAutoSize.StepBased(minFontSize = 8.sp, maxFontSize = 40.sp),
+            maxLines = 1,
         )
         // Example with outline
 //        Text(
@@ -55,9 +65,70 @@ fun GradeSelectionButton(
 private fun PreviewGradeSelectionButton() {
     JmTheme {
         GradeSelectionButton(
-            text = "Candidat A",
+            text = "Excellent",
             bgColor = Color.Red,
             fgColor = Color.White,
         )
+    }
+}
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 2.0f,
+)
+@Composable
+private fun PreviewGradeSelectionButtonBigFont() {
+    JmTheme {
+        Column(
+            Modifier.padding(32.dp)
+        ) {
+            GradeSelectionButton(
+                modifier = Modifier
+                    .height(64.dp)
+                    .fillMaxWidth()
+                ,
+                text = "SOMEWHAT GOOD",
+            )
+            SmallVerticalSpacer()
+            GradeSelectionButton(
+                modifier = Modifier
+                    .height(64.dp)
+                    .fillMaxWidth()
+                ,
+                text = "SOMEWHAT EXTRA LONG",
+                bgColor = Color.Red,
+                fgColor = Color.White,
+            )
+            SmallVerticalSpacer()
+            GradeSelectionButton(
+                modifier = Modifier
+                    .height(64.dp)
+                    .fillMaxWidth()
+                ,
+                text = "SOMEWHAT EXTRA ABSURDLY LONG OMG THIS IS HIDDEN — HELLO WORLD :)",
+                bgColor = Color.Red,
+                fgColor = Color.White,
+            )
+            SmallVerticalSpacer()
+            GradeSelectionButton(
+                modifier = Modifier
+                    .height(64.dp)
+                    .fillMaxWidth()
+                ,
+                text = "GOOD",
+                bgColor = Color.DarkGray,
+                fgColor = Color.White,
+            )
+            SmallVerticalSpacer()
+            GradeSelectionButton(
+                modifier = Modifier
+                    .height(64.dp)
+                    .fillMaxWidth()
+                ,
+                text = "VERY GOOD",
+                bgColor = Color.DarkGray,
+                fgColor = Color.White,
+            )
+        }
     }
 }
