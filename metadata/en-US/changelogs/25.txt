@@ -3,3 +3,4 @@
 * Allow editing the judgments in the ballot summary screen
 * Use the Majority Judgment library for Kotlin Multiplatform
 * Update most of our software dependencies
+* Add a weighted lottery for the results
