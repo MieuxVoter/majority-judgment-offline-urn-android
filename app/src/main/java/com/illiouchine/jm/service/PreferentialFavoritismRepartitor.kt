@@ -56,6 +56,7 @@ class PreferentialFavoritismRepartitor {
                     // Rule: Multiple favorites of a ballot receive each a fraction of a vote.
                     //       This fosters resilience to strategic voting.
                     val amountOfFavorites = ballot.countProposalsWithGrade(proposalGrade)
+                    assert(amountOfFavorites > 0)
                     1.0 / amountOfFavorites.toDouble()
                 }
             }

@@ -153,6 +153,7 @@ fun PollVotingScreen(
                 GradeSelectionList(
                     pollConfig = pollVotingState.pollConfig,
                     forProposalIndex = currentProposalIndex,
+                    gradeHeight = 80.dp,
                     onGradeSelected = { result ->
                         val judgment = Judgment(
                             proposal = currentProposalIndex,

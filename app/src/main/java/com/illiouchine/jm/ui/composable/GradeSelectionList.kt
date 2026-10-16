@@ -1,10 +1,12 @@
 package com.illiouchine.jm.ui.composable
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +24,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.illiouchine.jm.R
 import com.illiouchine.jm.model.Grading
@@ -38,6 +42,7 @@ import kotlin.time.Duration.Companion.milliseconds
 fun GradeSelectionList(
     pollConfig: PollConfig,
     forProposalIndex: Int,
+    gradeHeight: Dp = Dp.Unspecified,
     onGradeSelected: (Int) -> Unit = {},
 ) {
     val forProposalName = pollConfig.proposals[forProposalIndex]
@@ -98,6 +103,7 @@ fun GradeSelectionList(
             modifier = Modifier
                 .testTag("grade_selection_$gradeIndex")
                 .fillMaxWidth()
+                .height(gradeHeight)
                 .padding(vertical = Theme.spacing.extraSmall + Theme.spacing.tiny)
                 .semantics {
                     onClick(
@@ -122,9 +128,13 @@ fun GradeSelectionList(
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(
+    showSystemUi = false,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 1.0f,
+)
 @Composable
-private fun Preview7GradeList() {
+private fun PreviewBiasedGradeList() {
     JmTheme {
         Column {
             GradeSelectionList(
@@ -136,15 +146,40 @@ private fun Preview7GradeList() {
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(
+    showSystemUi = false,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 1.0f,
+)
 @Composable
 private fun Preview5GradeList() {
+    JmTheme {
+        Column {
+            GradeSelectionList(
+                pollConfig = PreviewDataFaker.pollConfig(),
+                forProposalIndex = 2,
+                onGradeSelected = {},
+                gradeHeight = 110.dp,
+            )
+        }
+    }
+}
+
+@Preview(
+    name = "Small Device",
+    showSystemUi = false,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 2.0f,
+)
+@Composable
+private fun Preview7GradeList() {
     JmTheme {
         Column {
             GradeSelectionList(
                 pollConfig = PreviewDataFaker.pollConfig(grading = Grading.Quality7Grading),
                 forProposalIndex = 2,
                 onGradeSelected = {},
+                gradeHeight = 85.dp,
             )
         }
     }
