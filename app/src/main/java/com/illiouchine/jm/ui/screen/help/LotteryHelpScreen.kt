@@ -42,7 +42,7 @@ To avoid such pitfalls, you are encouraged to collegially define beforehand one 
 
 ✅ a minimum median grade (such as _Passable_)
 ✅ a maximum share of _Rejection_ grades, which works as a soft veto
-                """.trimIndent(),
+            """.trimIndent(),
             style = Theme.typography.bodyLarge,
             textAlign = TextAlign.Start,
         )

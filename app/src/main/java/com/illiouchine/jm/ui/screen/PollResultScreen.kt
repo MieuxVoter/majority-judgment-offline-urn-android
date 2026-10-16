@@ -514,7 +514,6 @@ fun ResultScreen(
             }
 
             if (amountOfBallots > 0) {
-
                 SectionTitleWithIcon(
                     text = stringResource(R.string.opinion_profile),
                     iconDescription = "More information about the opinion profile.",

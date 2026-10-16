@@ -93,13 +93,15 @@ fun PreviewGenericHelpScreen(modifier: Modifier = Modifier) {
             title = "The Test Help",
             modifier = modifier,
         ) {
-            Text("""
+            Text(
+                """
                 Do reprehenderit pariatur reprehenderit bell. Soup tempor incididunt fugiat spinach et soba esse esse chia soba corn natural irure. Pariatur sanctuary shallot squash et consequat support sint soba est legumes sustain sincerity humility.
 
                 Occaecat esse leek plant-based integrity bowl excepteur fiber do grain. Herbivore oatmilk kale life legumes amet adipisicing peas lettuce selflessness officia spinach love radish. Sweet shallot mercy cupidatat lentils natural quinoa mustard fruit mint magna herbivore nonviolence veniam exercitation.
 
                 Peas avocado wholefood exercitation cabbage sympathy positivity warmth peas. Veniam ullamco empathy commodo radicchio love. Pepper helpfulness noodles pepper positivity sint leek truth avocado avocado tomato duis. Beet plant peas jackfruit bowl amet plant-based voluptate integrity rights mercy patience. Lorem sweet lentils magna peace aliquip nut tofu positivity compassion. Adipisicing grain green grace minim bowl chickpea curry.
-            """.trimIndent())
+                """.trimIndent()
+            )
         }
     }
 }

@@ -88,16 +88,14 @@ private fun PreviewGradeSelectionButtonBigFont() {
             GradeSelectionButton(
                 modifier = Modifier
                     .height(64.dp)
-                    .fillMaxWidth()
-                ,
+                    .fillMaxWidth(),
                 text = "SOMEWHAT GOOD",
             )
             SmallVerticalSpacer()
             GradeSelectionButton(
                 modifier = Modifier
                     .height(64.dp)
-                    .fillMaxWidth()
-                ,
+                    .fillMaxWidth(),
                 text = "SOMEWHAT EXTRA LONG",
                 bgColor = Color.Red,
                 fgColor = Color.White,
@@ -106,8 +104,7 @@ private fun PreviewGradeSelectionButtonBigFont() {
             GradeSelectionButton(
                 modifier = Modifier
                     .height(64.dp)
-                    .fillMaxWidth()
-                ,
+                    .fillMaxWidth(),
                 text = "SOMEWHAT EXTRA ABSURDLY LONG OMG THIS IS HIDDEN — HELLO WORLD :)",
                 bgColor = Color.Red,
                 fgColor = Color.White,
@@ -116,8 +113,7 @@ private fun PreviewGradeSelectionButtonBigFont() {
             GradeSelectionButton(
                 modifier = Modifier
                     .height(64.dp)
-                    .fillMaxWidth()
-                ,
+                    .fillMaxWidth(),
                 text = "GOOD",
                 bgColor = Color.DarkGray,
                 fgColor = Color.White,
@@ -126,8 +122,7 @@ private fun PreviewGradeSelectionButtonBigFont() {
             GradeSelectionButton(
                 modifier = Modifier
                     .height(64.dp)
-                    .fillMaxWidth()
-                ,
+                    .fillMaxWidth(),
                 text = "VERY GOOD",
                 bgColor = Color.DarkGray,
                 fgColor = Color.White,

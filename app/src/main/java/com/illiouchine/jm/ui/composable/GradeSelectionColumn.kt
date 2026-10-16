@@ -72,7 +72,7 @@ private fun PreviewGradeSelectionColumn7() {
     JmTheme {
         Column {
             GradeSelectionColumn(
-                modifier = Modifier.padding(all=32.dp),
+                modifier = Modifier.padding(all = 32.dp),
                 gradeModifier = Modifier.height(64.dp),
                 grading = Grading.Quality7Grading,
                 onGradeSelected = {},

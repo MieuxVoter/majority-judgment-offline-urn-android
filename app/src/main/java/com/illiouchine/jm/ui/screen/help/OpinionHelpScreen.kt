@@ -35,7 +35,7 @@ One can think of it as the _merit profile of the poll_ itself.
 For example, a disproportionate amount of rejection grades can mean that the pool of candidates was poorly chosen.
 
 A disproportionate amount of extreme grades can mean that the opinion is quite polarized.
-                """.trimIndent(),
+            """.trimIndent(),
             style = Theme.typography.bodyLarge,
             textAlign = TextAlign.Start,
         )
