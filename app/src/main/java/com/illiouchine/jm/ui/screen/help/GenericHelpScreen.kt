@@ -37,11 +37,13 @@ fun GenericHelpScreen(
     Scaffold(
         modifier = modifier
             .fillMaxSize()
-            .apply(block = {
+            .let {
                 if (testTag.isNotBlank()) {
-                    this.testTag(testTag)
+                    it.testTag(testTag)
+                } else {
+                    it
                 }
-            }),
+            },
     ) { innerPadding ->
 
         val scrollState = rememberScrollState()

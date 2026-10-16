@@ -40,8 +40,11 @@ fun GradeSelectionButton(
     ) {
         Text(
             text = text,
-//            fontSize = 24.sp,
-            autoSize = TextAutoSize.StepBased(minFontSize = 8.sp, maxFontSize = 40.sp),
+//            fontSize = 24.sp, // experimenting with autoSize instead
+            autoSize = TextAutoSize.StepBased(
+                minFontSize = 8.sp,
+                maxFontSize = 80.sp,
+            ),
             maxLines = 1,
         )
         // Example with outline
