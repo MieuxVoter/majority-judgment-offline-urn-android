@@ -12,7 +12,7 @@ import com.illiouchine.jm.model.Poll
  * - holistic: uses all cast judgments, one way or another
  * - deterministic: no random
  * - exact: no approximation
- * - scalable: reasonably computable for billions of judges and hundreds of candidates
+ * - scalable: reasonably computable for millions of judges and hundreds of candidates
  * - simple: elementary arithmetic
  *
  * Known Issues:
@@ -21,20 +21,19 @@ import com.illiouchine.jm.model.Poll
  *
  * Notes:
  * This code can be heavily optimized ; this is an initial draft.
- * The goal for now is to be as explicit and clear as possible.  Optimization will come later.
+ * The goal for now is to be as explicit and clear as possible.  Optimization can come later.
  */
 class PreferentialFavoritismRepartitor {
 
     fun computeProportionalRepresentation(poll: Poll): List<Double> {
         val ballots = poll.ballots
         val amountOfProposals = poll.pollConfig.proposals.size
+        val amountOfBallots = ballots.size
+        val acceptationGradeThreshold = poll.pollConfig.grading.acceptationThreshold
 
         if (ballots.isEmpty()) {
             return List(size = amountOfProposals) { 0.0 }
         }
-
-        val amountOfBallots = ballots.size
-        val acceptationGradeThreshold = poll.pollConfig.grading.acceptationThreshold
 
         // Step 1: Establish an initial proportional representation using only the favorites,
         //         the proposals that received the highest acceptation grades of each ballot.
@@ -63,6 +62,13 @@ class PreferentialFavoritismRepartitor {
         }
 
         val totalFavoritism = favoritism.sum()
+
+        if (totalFavoritism == 0.0) {
+            // None of the candidates has passed the acceptation threshold in any ballot.
+            // Rule: When all candidates are rejected by everyone, all of them get 0%.
+            return List(size = amountOfProposals) { 0.0 }
+        }
+
         val initialProportions: List<Double> = List(size = amountOfProposals) { proposalIndex ->
             favoritism[proposalIndex] / totalFavoritism
         }
