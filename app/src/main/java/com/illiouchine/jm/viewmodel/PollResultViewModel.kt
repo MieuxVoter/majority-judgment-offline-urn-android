@@ -128,7 +128,6 @@ class PollResultViewModel(
             }
             val duelAnalyzer = DuelAnalyzer(
                 poll = filteredPoll,
-                tally = tally,
                 result = result,
                 baseIndex = displayIndex,
                 otherIndex = otherIndex,
