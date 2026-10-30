@@ -1,4 +1,4 @@
-package com.illiouchine.jm.view_model
+package com.illiouchine.jm.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

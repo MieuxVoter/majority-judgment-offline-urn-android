@@ -44,7 +44,7 @@ import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
-import com.illiouchine.jm.view_model.HomeViewModel
+import com.illiouchine.jm.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
 
 @Composable

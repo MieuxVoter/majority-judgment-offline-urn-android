@@ -37,7 +37,7 @@ import com.illiouchine.jm.ui.composable.title.ScreenTitle
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
-import com.illiouchine.jm.view_model.PollQrExportViewModel
+import com.illiouchine.jm.viewmodel.PollQrExportViewModel
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 

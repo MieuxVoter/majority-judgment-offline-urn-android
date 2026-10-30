@@ -40,7 +40,7 @@ import com.illiouchine.jm.ui.composable.title.ScreenTitle
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
-import com.illiouchine.jm.view_model.BallotsQrExportViewModel
+import com.illiouchine.jm.viewmodel.BallotsQrExportViewModel
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import java.util.UUID

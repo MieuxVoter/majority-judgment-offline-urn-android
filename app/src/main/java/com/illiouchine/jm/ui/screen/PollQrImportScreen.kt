@@ -35,7 +35,7 @@ import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import com.illiouchine.jm.ui.utils.compress
 import com.illiouchine.jm.ui.utils.encode
-import com.illiouchine.jm.view_model.PollQrImportViewModel
+import com.illiouchine.jm.viewmodel.PollQrImportViewModel
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.encodeToByteArray

@@ -43,7 +43,7 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import com.illiouchine.jm.ui.utils.displayed
-import com.illiouchine.jm.view_model.PollSetupViewModel
+import com.illiouchine.jm.viewmodel.PollSetupViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 

@@ -42,7 +42,7 @@ import com.illiouchine.jm.ui.navigator.Screens
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
-import com.illiouchine.jm.view_model.SettingsViewModel
+import com.illiouchine.jm.viewmodel.SettingsViewModel
 
 @Composable
 fun SettingsScreen(
