@@ -167,4 +167,5 @@
     <string name="poll_template_project_proposal_build_a_toolkit">Создайте набор инструментов</string>
     <string name="poll_template_project_proposal_call_for_allies">Призыв к союзникам</string>
     <string name="poll_template_project_proposal_craft_a_solution">Создание решения</string>
+    <string name="title_export_poll">Экспортировать</string>
 </resources>

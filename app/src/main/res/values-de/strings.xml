@@ -166,4 +166,6 @@
     <string name="grade_comparator_at_most">höchstens</string>
     <string name="grade_comparator_at_least">mindestens</string>
     <string name="action_confirm">Bestätigen</string>
+    <string name="title_export_poll">Umfrage exportieren</string>
+    <string name="setting_default_grading_label">Standardmäßig gesetzt, wenn eine neue Umfrage gestartet wird</string>
 </resources>
