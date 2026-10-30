@@ -1,4 +1,4 @@
-package com.illiouchine.jm.logic
+package com.illiouchine.jm.view_model
 
 import android.content.Context
 import android.widget.Toast

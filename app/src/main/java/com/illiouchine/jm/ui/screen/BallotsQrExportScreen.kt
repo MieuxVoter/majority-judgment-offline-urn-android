@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.InMemoryPollDataSource
-import com.illiouchine.jm.logic.BallotsQrExportViewModel
+import com.illiouchine.jm.view_model.BallotsQrExportViewModel
 import com.illiouchine.jm.model.Ballot
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Judgment

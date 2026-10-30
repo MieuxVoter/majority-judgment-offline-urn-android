@@ -28,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.NavKey
 import com.illiouchine.jm.R
-import com.illiouchine.jm.logic.PollSetupViewModel
+import com.illiouchine.jm.view_model.PollSetupViewModel
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.ui.composable.GradingSelectionRow
 import com.illiouchine.jm.ui.composable.ProposalRow

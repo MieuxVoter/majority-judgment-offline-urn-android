@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.InMemoryPollDataSource
-import com.illiouchine.jm.logic.PollQrImportViewModel
+import com.illiouchine.jm.view_model.PollQrImportViewModel
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig

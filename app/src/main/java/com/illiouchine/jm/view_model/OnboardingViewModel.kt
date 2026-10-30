@@ -1,4 +1,4 @@
-package com.illiouchine.jm.logic
+package com.illiouchine.jm.view_model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

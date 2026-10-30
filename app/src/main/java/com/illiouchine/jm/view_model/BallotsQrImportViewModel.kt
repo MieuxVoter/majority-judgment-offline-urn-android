@@ -1,12 +1,13 @@
-package com.illiouchine.jm.logic
+package com.illiouchine.jm.view_model
 
 import android.content.Context
+import android.database.SQLException
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.illiouchine.jm.R
 import com.illiouchine.jm.data.PollDataSource
 import com.illiouchine.jm.model.Poll
+import com.illiouchine.jm.model.dto.BallotsDto
 import com.illiouchine.jm.service.ExchangeUriService
 import com.illiouchine.jm.ui.navigator.NavigationAction
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -18,24 +19,22 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.SerializationException
 import java.util.zip.DataFormatException
 
-class PollQrImportViewModel(
+class BallotsQrImportViewModel(
     private val pollDataSource: PollDataSource,
     private val exchangeUriService: ExchangeUriService,
 ) : ViewModel() {
 
     @Stable
-    data class PollQrImportViewState(
+    data class ViewState(
         val qrUriPath: String? = null,
-        val importedPoll: Poll? = null,
-        val existingPoll: Poll? = null,
+        val ballotsDto: BallotsDto? = null,
+        val poll: Poll? = null,
         val error: Exception? = null,
         val errorMessage: String? = null,
-        // TBD: maybe proper; but we do need to inject params — data to explain why it failed, etc.
-        // @param:StringRes val errorMessageId: Int? = null,
     )
 
-    private val _viewState = MutableStateFlow(PollQrImportViewState())
-    val viewState: StateFlow<PollQrImportViewState> = _viewState
+    private val _viewState = MutableStateFlow(ViewState())
+    val viewState: StateFlow<ViewState> = _viewState
 
     private val _navEvents = MutableSharedFlow<NavigationAction>()
     val navEvents = _navEvents.asSharedFlow()
@@ -45,41 +44,43 @@ class PollQrImportViewModel(
         qrUriPathDatum: String,
     ) {
 //        viewModelScope.launch {
-
         _viewState.update {
-            PollQrImportViewState(
+            ViewState(
                 qrUriPath = qrUriPathDatum,
             )
         }
 
         try {
-            val poll = exchangeUriService.uriPathDatumToPoll(qrUriPathDatum)
-            initializeFromPoll(poll)
+            val ballotsDto = exchangeUriService.uriPathDatumToBallotsDto(qrUriPathDatum)
+            initializeFromBallotsDto(
+                ballotsDto = ballotsDto,
+            )
         } catch (e: DataFormatException) {
             _viewState.update {
                 it.copy(
                     error = e,
-                    errorMessage = context.getString(
-                        R.string.error_while_decompressing_imported_poll,
-                    ),
+                    errorMessage = "There was an issue while decompressing the imported ballots.",
                 )
             }
         } catch (e: SerializationException) {
             _viewState.update {
                 it.copy(
                     error = e,
-                    errorMessage = context.getString(
-                        R.string.error_while_deserializing_imported_poll,
-                    ),
+                    errorMessage = "There was an issue while deserializing the imported ballots.",
                 )
             }
         } catch (e: IllegalArgumentException) {
             _viewState.update {
                 it.copy(
                     error = e,
-                    errorMessage = context.getString(
-                        R.string.error_while_decoding_imported_poll,
-                    ),
+                    errorMessage = "There was an issue while decoding the imported ballots.",
+                )
+            }
+        } catch (e: Exception) {
+            _viewState.update {
+                it.copy(
+                    error = e,
+                    errorMessage = "There was an issue while processing the imported ballots.",
                 )
             }
         }
@@ -87,24 +88,16 @@ class PollQrImportViewModel(
 //        }
     }
 
-    fun initializeFromPoll(
-        pollToImport: Poll,
+    fun initializeFromBallotsDto(
+        ballotsDto: BallotsDto,
     ) {
         viewModelScope.launch {
-            // Rule: don't trust imported data to have set the id to zero
-            // (we would abort the SQL transaction later on if the poll already exists, but still…)
-            val importedPoll = pollToImport.copy(id = 0)
-
-            val existingPoll = if (importedPoll.uuid != null) {
-                pollDataSource.getPollByUuid(importedPoll.uuid)
-            } else {
-                null
-            }
+            val existingPoll = pollDataSource.getPollByUuid(ballotsDto.pollUuid)
 
             _viewState.update {
                 it.copy(
-                    importedPoll = importedPoll,
-                    existingPoll = existingPoll,
+                    poll = existingPoll,
+                    ballotsDto = ballotsDto,
                 )
             }
         }
@@ -118,11 +111,27 @@ class PollQrImportViewModel(
 
     fun onConfirm() {
         viewModelScope.launch {
-            if (viewState.value.importedPoll != null) {
-                pollDataSource.savePoll(viewState.value.importedPoll!!)
-            } else {
-                // TBD: Raise, but only during dev ?
+            if (viewState.value.ballotsDto != null && viewState.value.poll != null) {
+                val poll = viewState.value.poll!!
+                val ballotsImported = viewState.value.ballotsDto!!.ballots.filterNot {
+                    poll.ballots.map { it.uuid }.contains(it.uuid) || !poll.isBallotValid(it)
+                }
+                for (ballot in ballotsImported) {
+                    if (!poll.isBallotValid(ballot)) { // redundant, but safe
+                        continue
+                    }
+
+                    try {
+                        pollDataSource.saveBallot(
+                            ballot = ballot,
+                            pollId = poll.id,
+                        )
+                    } catch (_: SQLException) {
+                        // TBD: what should we do with these errors ?
+                    }
+                }
             }
+
             _navEvents.emit(NavigationAction.Clear)
         }
     }
