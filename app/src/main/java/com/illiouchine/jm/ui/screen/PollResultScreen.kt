@@ -68,7 +68,6 @@ import com.illiouchine.jm.filters.BallotsFilterInterface
 import com.illiouchine.jm.filters.NoBallotsFilter
 import com.illiouchine.jm.filters.NuanceBallotsFilter
 import com.illiouchine.jm.filters.ProposalGradeBallotsFilter
-import com.illiouchine.jm.logic.PollResultViewModel
 import com.illiouchine.jm.model.ProposalTally
 import com.illiouchine.jm.service.AsciiMeritProfile
 import com.illiouchine.jm.ui.composable.AmountPerspective
@@ -92,6 +91,7 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import com.illiouchine.jm.ui.utils.smoothStep
+import com.illiouchine.jm.viewmodel.PollResultViewModel
 import com.ionspin.kotlin.bignum.integer.BigInteger
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch

@@ -8,7 +8,6 @@ import com.illiouchine.jm.model.ParticipantGroupAnalysis
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.ProposalResult
 import com.illiouchine.jm.model.Result
-import fr.mieuxvoter.kmj.tally.PollTallyInterface
 import kotlin.math.max
 
 /**
@@ -21,7 +20,6 @@ import kotlin.math.max
 @Suppress("CanBeParameter")
 class DuelAnalyzer(
     private val poll: Poll,
-    private val tally: PollTallyInterface,
     private val result: Result,
     private val baseIndex: Int, // merit profile that was selected
     private val otherIndex: Int, // dueling profile, usually a neighbor in ranking

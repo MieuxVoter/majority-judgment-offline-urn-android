@@ -1,4 +1,4 @@
-package com.illiouchine.jm.logic
+package com.illiouchine.jm.viewmodel
 
 import android.content.Context
 import android.widget.Toast
@@ -128,7 +128,6 @@ class PollResultViewModel(
             }
             val duelAnalyzer = DuelAnalyzer(
                 poll = filteredPoll,
-                tally = tally,
                 result = result,
                 baseIndex = displayIndex,
                 otherIndex = otherIndex,

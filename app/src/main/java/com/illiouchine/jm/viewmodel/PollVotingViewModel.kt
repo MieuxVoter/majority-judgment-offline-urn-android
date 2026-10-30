@@ -1,4 +1,4 @@
-package com.illiouchine.jm.logic
+package com.illiouchine.jm.viewmodel
 
 import android.content.Context
 import android.media.MediaPlayer

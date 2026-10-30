@@ -2,16 +2,16 @@
 
 This is a standard Android project using Jetpack Compose.
 
-It provides a user interface for the Majority Judgment library in Java.
+We welcome merge requests, but they must respect the goals of this app.
 
-We accept merge requests, but they must respect the goals of this app.
 
-## Goal
+## Goals
 
 - Offline
 - No trackers
 - Fast to use
 - Efficient
+- Lightweight (~2.7 Mio at this time)
 - …
 
 
@@ -33,7 +33,7 @@ We follow the usual _git_ flow.
 5. Submit a Merge Request
 
 
-### How to publish a new version
+### Publish a new version
 
 1. Edit both `versionCode` and `versionName` in `app/build.gradle.kts`.
 2. Add a changelog in `metadata/en-US/changelogs`.

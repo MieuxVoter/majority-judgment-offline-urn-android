@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
 import com.illiouchine.jm.R
-import com.illiouchine.jm.logic.HomeViewModel
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.ui.composable.PollDeletionConfirmationDialog
 import com.illiouchine.jm.ui.composable.PollSummary
@@ -45,6 +44,7 @@ import com.illiouchine.jm.ui.preview.PreviewDataFaker
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
+import com.illiouchine.jm.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
 
 @Composable
