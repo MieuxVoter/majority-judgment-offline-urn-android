@@ -40,7 +40,7 @@ class MajorityUrnApplication : Application() {
 
 val module = module {
     // Database
-    single {
+    single<PollDataBase> {
         Room.databaseBuilder(
             context = androidApplication(),
             klass = PollDataBase::class.java,
