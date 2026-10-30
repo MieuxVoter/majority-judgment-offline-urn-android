@@ -10,6 +10,7 @@ import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.data.SqlitePollDataSource
 import com.illiouchine.jm.data.room.PollDao
 import com.illiouchine.jm.data.room.PollDataBase
+import com.illiouchine.jm.service.ExchangeUriService
 import com.illiouchine.jm.view_model.BallotsQrExportViewModel
 import com.illiouchine.jm.view_model.BallotsQrImportViewModel
 import com.illiouchine.jm.view_model.HomeViewModel
@@ -20,7 +21,6 @@ import com.illiouchine.jm.view_model.PollResultViewModel
 import com.illiouchine.jm.view_model.PollSetupViewModel
 import com.illiouchine.jm.view_model.PollVotingViewModel
 import com.illiouchine.jm.view_model.SettingsViewModel
-import com.illiouchine.jm.service.ExchangeUriService
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin

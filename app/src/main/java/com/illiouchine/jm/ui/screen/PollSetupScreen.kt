@@ -28,7 +28,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.NavKey
 import com.illiouchine.jm.R
-import com.illiouchine.jm.view_model.PollSetupViewModel
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.ui.composable.GradingSelectionRow
 import com.illiouchine.jm.ui.composable.ProposalRow
@@ -44,6 +43,7 @@ import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import com.illiouchine.jm.ui.utils.displayed
+import com.illiouchine.jm.view_model.PollSetupViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 
