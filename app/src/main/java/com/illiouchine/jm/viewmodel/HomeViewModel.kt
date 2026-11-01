@@ -1,4 +1,4 @@
-package com.illiouchine.jm.logic
+package com.illiouchine.jm.viewmodel
 
 import android.app.Application
 import androidx.compose.runtime.Stable

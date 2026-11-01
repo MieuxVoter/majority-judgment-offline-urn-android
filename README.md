@@ -8,7 +8,7 @@
 [![F-Droid Version](https://img.shields.io/f-droid/v/com.illiouchine.jm?style=for-the-badge)](https://f-droid.org/en/packages/com.illiouchine.jm)
 [![Join the Discord chat at https://discord.gg/k9YRuZPSZs](https://img.shields.io/discord/705322981102190593.svg?style=for-the-badge)](https://discord.gg/k9YRuZPSZs)
 
-An application for Android 8.1 and greater that helps groups decide about things when offline, using a single phone.
+An application for Android 8.1 and greater that helps groups decide about things when offline, using a single device.
 
 > If you're looking for an online app, try https://app.mieuxvoter.fr/
 
@@ -16,10 +16,11 @@ An application for Android 8.1 and greater that helps groups decide about things
 ## Features
 
 - *Mobile Urn*: Set up a local, offline poll on your phone.
-- *Vote with Subtlety*: Grade each proposal and so never throw a vote away.
+- *Vote with Subtlety*: Grade each candidate and so never throw a vote away.
 - *Majority Judgment*: One of the most elegant ranking systems out there.
-- *Proportional Representation*: Compute a percentage for each proposal.
-- *Libre Software*: We accept merge requests.
+- *Proportional Representation*: Compute a percentage for each candidate.
+- *Weighted Lottery*: Pick a random winner if you want to.
+- *Libre Software*: We welcome merge requests.
 - *No anti-features*: no tracking, no ads, no permissions required.
 
 <!--suppress CheckImageSize -->

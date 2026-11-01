@@ -172,13 +172,16 @@ private fun AnnotatedString.Builder.appendMarkdownChildren(
 private fun MarkdownTextPreview() {
     JmTheme {
         MarkdownText(
-            text = "Text with *italic*, **bold**, ***italic and bold***, [MV](https://mieuxvoter.fr)." +
+            text = "Text with *italic*, **bold**, ***italic and bold***, " +
+                "[MV](https://mieuxvoter.fr)." +
                 "\n" +
                 "After a newline…" +
                 "\n\n" +
                 "And a _second_ paragraph !" +
                 "\n" +
-                "Lorem ipsum dolor sit amet, sed `in girum imus nocte et consumimur igni`. Dura lex sed lex. _VISITA INTERIORES TERRAE RECTIFICANDO INVENIES OCCULTUM LAPIDEM_",
+                "Lorem ipsum dolor sit amet, sed `in girum imus nocte et consumimur igni`. " +
+                "Dura lex sed lex. " +
+                "_VISITA INTERIORES TERRAE RECTIFICANDO INVENIES OCCULTUM LAPIDEM_",
         )
     }
 }

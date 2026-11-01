@@ -39,7 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.illiouchine.jm.R
-import com.illiouchine.jm.ui.composable.DotsPager
+import com.illiouchine.jm.ui.composable.pagination.DotsPager
 import com.illiouchine.jm.ui.composable.title.ScreenTitle
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme

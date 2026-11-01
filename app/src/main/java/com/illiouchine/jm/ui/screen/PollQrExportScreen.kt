@@ -25,7 +25,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.illiouchine.jm.R
 import com.illiouchine.jm.data.InMemoryPollDataSource
-import com.illiouchine.jm.logic.PollQrExportViewModel
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
@@ -38,6 +37,7 @@ import com.illiouchine.jm.ui.composable.title.ScreenTitle
 import com.illiouchine.jm.ui.theme.JmTheme
 import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
+import com.illiouchine.jm.viewmodel.PollQrExportViewModel
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 

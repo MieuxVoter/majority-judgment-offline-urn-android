@@ -1,5 +1,6 @@
-package com.illiouchine.jm.ui.composable
+package com.illiouchine.jm.ui.composable.pagination
 
+import android.content.res.Configuration
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -58,7 +59,10 @@ fun DotsPager(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
 @Composable
 fun PreviewDotsPager() {
     JmTheme { DotsPager(pageSize = 4, currentPage = 2) }

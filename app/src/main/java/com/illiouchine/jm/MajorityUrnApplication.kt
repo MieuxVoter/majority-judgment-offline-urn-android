@@ -10,17 +10,17 @@ import com.illiouchine.jm.data.SharedPrefsHelper
 import com.illiouchine.jm.data.SqlitePollDataSource
 import com.illiouchine.jm.data.room.PollDao
 import com.illiouchine.jm.data.room.PollDataBase
-import com.illiouchine.jm.logic.BallotsQrExportViewModel
-import com.illiouchine.jm.logic.BallotsQrImportViewModel
-import com.illiouchine.jm.logic.HomeViewModel
-import com.illiouchine.jm.logic.OnboardingViewModel
-import com.illiouchine.jm.logic.PollQrExportViewModel
-import com.illiouchine.jm.logic.PollQrImportViewModel
-import com.illiouchine.jm.logic.PollResultViewModel
-import com.illiouchine.jm.logic.PollSetupViewModel
-import com.illiouchine.jm.logic.PollVotingViewModel
-import com.illiouchine.jm.logic.SettingsViewModel
 import com.illiouchine.jm.service.ExchangeUriService
+import com.illiouchine.jm.viewmodel.BallotsQrExportViewModel
+import com.illiouchine.jm.viewmodel.BallotsQrImportViewModel
+import com.illiouchine.jm.viewmodel.HomeViewModel
+import com.illiouchine.jm.viewmodel.OnboardingViewModel
+import com.illiouchine.jm.viewmodel.PollQrExportViewModel
+import com.illiouchine.jm.viewmodel.PollQrImportViewModel
+import com.illiouchine.jm.viewmodel.PollResultViewModel
+import com.illiouchine.jm.viewmodel.PollSetupViewModel
+import com.illiouchine.jm.viewmodel.PollVotingViewModel
+import com.illiouchine.jm.viewmodel.SettingsViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -40,7 +40,7 @@ class MajorityUrnApplication : Application() {
 
 val module = module {
     // Database
-    single {
+    single<PollDataBase> {
         Room.databaseBuilder(
             context = androidApplication(),
             klass = PollDataBase::class.java,
