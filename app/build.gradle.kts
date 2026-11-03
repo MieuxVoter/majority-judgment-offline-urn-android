@@ -40,8 +40,8 @@ android {
         minSdk = 27
         targetSdk = 37
         // You need to bump both of these versions when making a new release.
-        versionCode = 25
-        versionName = "1.7.0"
+        versionCode = 26
+        versionName = "1.7.1"
 
         // Ideally we'd have both, but support for multiple runners looks experimental
         //testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -128,10 +128,8 @@ dependencies {
     // See https://developer.android.com/jetpack/androidx/releases/compose-material3#1.4.0
     implementation(libs.androidx.material.icons)
 
-    // Majority Judgment
-    // Maven Central suggests using platform() here, but I don't know what's it for, so… TBD
-    //implementation(platform(libs.majority.judgment.library.kotlin))
-    implementation(libs.majority.judgment.kotlin)
+    // Majority Judgment (our very own library)
+    implementation(libs.kotlin.majorityjudgment)
 
     // Koin (Dependency Injection)
     implementation(project.dependencies.platform(libs.koin.bom))
