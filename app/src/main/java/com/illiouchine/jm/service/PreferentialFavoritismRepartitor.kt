@@ -77,11 +77,9 @@ class PreferentialFavoritismRepartitor {
         //         ballot to transfer a fraction of the initial proportion from one proposal to
         //         another, if neither proposal was a favorite in that ballot.
         val finalProportions: MutableList<Double> = initialProportions.toMutableList()
-        val seepingNormalization = amountOfBallots * (amountOfProposals - 1)
         for (proposalIndexA in (0..<amountOfProposals - 1)) {
             for (proposalIndexB in (proposalIndexA + 1..<amountOfProposals)) {
-                var preferenceForA = 0
-                var preferenceForB = 0
+                val preferencesForA: Array<Int> = Array(size = amountOfProposals - 1) { 0 }
 
                 for (ballot in ballots) {
                     val proposalGradeA = ballot.gradeOf(proposalIndexA)
@@ -90,30 +88,37 @@ class PreferentialFavoritismRepartitor {
                     val isBallotFavoritism = proposalGradeA == highestGrade ||
                         proposalGradeB == highestGrade
                     val isBallotRejection = highestGrade < acceptationGradeThreshold
+                    val amountOfFavorites = if (isBallotRejection) {
+                        0
+                    } else {
+                        ballot.countProposalsWithGrade(highestGrade)
+                    }
 
                     if (isBallotFavoritism && !isBallotRejection) {
                         continue
                     }
                     if (proposalGradeA > proposalGradeB) {
-                        preferenceForA++
+                        preferencesForA[amountOfFavorites]++
                     }
                     if (proposalGradeA < proposalGradeB) {
-                        preferenceForB++
+                        preferencesForA[amountOfFavorites]--
                     }
                 }
 
-                val seepingIntent: Double = (preferenceForB - preferenceForA).toDouble() /
-                    seepingNormalization
-                var seepingAmount = 0.0
-                if (seepingIntent > 0) {
-                    seepingAmount = initialProportions[proposalIndexA] * seepingIntent
-                }
-                if (seepingIntent < 0) {
-                    seepingAmount = initialProportions[proposalIndexB] * seepingIntent
-                }
+                preferencesForA.forEachIndexed { amountOfFavorites, preferenceForA ->
+                    val amountOfDuels = amountOfProposals - 1 - amountOfFavorites
+                    val seepingIntent: Double = preferenceForA.toDouble() / (amountOfBallots * amountOfDuels)
+                    var seepingAmount = 0.0
+                    if (seepingIntent > 0) {
+                        seepingAmount = initialProportions[proposalIndexB] * seepingIntent
+                    }
+                    if (seepingIntent < 0) {
+                        seepingAmount = initialProportions[proposalIndexA] * seepingIntent
+                    }
 
-                finalProportions[proposalIndexB] += seepingAmount
-                finalProportions[proposalIndexA] -= seepingAmount
+                    finalProportions[proposalIndexA] += seepingAmount
+                    finalProportions[proposalIndexB] -= seepingAmount
+                }
             }
         }
 
