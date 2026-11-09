@@ -103,6 +103,7 @@ fun PollQrExportScreen(
                     modifier = Modifier
                         .align(alignment = Alignment.CenterHorizontally),
                     bitmap = state.pollQrBitmap,
+                    contentDescription = "QR Code holding the configuration of the poll.",
                 )
 
                 SmallVerticalSpacer()
