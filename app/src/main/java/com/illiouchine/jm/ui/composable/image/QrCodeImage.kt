@@ -120,7 +120,6 @@ fun QrCodeImage(
     )
 }
 
-
 @Preview(
     name = "Phone (Portrait)",
     uiMode = Configuration.UI_MODE_NIGHT_YES,
@@ -128,9 +127,6 @@ fun QrCodeImage(
 )
 @Composable
 fun QrCodeImagePreview() {
-//    val data = "https://mju.mieuxvoter.fr/p/caca+b0b0"
-//    val m = data.matches(Regex("^[0-9A-Z $%*+\\-./:]+$"))
-
     fun qrBitmapFromData(d: String): ImageBitmap {
         val qrPngBytes = renderQrCodePngBytes(d)
         val qrBitmap = imageBitmapFromPngBytes(qrPngBytes)

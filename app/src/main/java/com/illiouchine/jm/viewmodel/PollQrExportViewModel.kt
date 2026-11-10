@@ -30,7 +30,6 @@ class PollQrExportViewModel(
     @Stable
     data class PollQrExportViewState(
         val poll: Poll, // TBD: perhaps we should just use Poll? here
-        // val pollQrBytes: ByteArray,
         val pollQrContent: String,
         val pollQrBitmap: ImageBitmap?,
     ) {
@@ -80,7 +79,9 @@ class PollQrExportViewModel(
     fun initializeFromPoll(
         poll: Poll,
     ) {
-        val qrContent = exchangeUriService.pollToUri(poll)
+        // We uppercase to stay in the Base45 range, so that internal QR Code encoding can use it.
+        // Thus, we can cram more data per QR Code.
+        val qrContent = exchangeUriService.pollToUri(poll).uppercase()
         // Up to 2,953 bytes (so the spec says ; we need to check, seems less)
         val qrPngBytes = renderQrCodePngBytes(qrContent)
         val qrBitmap = imageBitmapFromPngBytes(qrPngBytes)
