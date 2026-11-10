@@ -1,11 +1,14 @@
 package com.illiouchine.jm.ui.composable.image
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.SystemClock
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -20,8 +23,11 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.min
 import androidx.core.content.FileProvider
+import com.illiouchine.jm.ui.utils.imageBitmapFromPngBytes
+import com.illiouchine.jm.ui.utils.renderQrCodePngBytes
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -30,6 +36,7 @@ import java.io.File
 fun QrCodeImage(
     modifier: Modifier = Modifier,
     bitmap: ImageBitmap,
+    contentDescription: String = "QR Code",
 ) {
     val winSize = LocalWindowInfo.current.containerDpSize
     val activity = LocalActivity.current
@@ -109,6 +116,33 @@ fun QrCodeImage(
                 },
             ),
         bitmap = bitmap,
-        contentDescription = "QR Code",
+        contentDescription = contentDescription,
     )
+}
+
+@Preview(
+    name = "Phone (Portrait)",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 1.0f,
+)
+@Composable
+fun QrCodeImagePreview() {
+    fun qrBitmapFromData(d: String): ImageBitmap {
+        val qrPngBytes = renderQrCodePngBytes(d)
+        val qrBitmap = imageBitmapFromPngBytes(qrPngBytes)
+        return qrBitmap
+    }
+
+    Column {
+        Row {
+            QrCodeImage(
+                modifier = Modifier.weight(1f),
+                bitmap = qrBitmapFromData("https://mju.mieuxvoter.fr/p/cacab0b0"),
+            )
+            QrCodeImage(
+                modifier = Modifier.weight(1f),
+                bitmap = qrBitmapFromData("HTTPS://MJU.MIEUXVOTER.FR/P/CACAB0B0"),
+            )
+        }
+    }
 }

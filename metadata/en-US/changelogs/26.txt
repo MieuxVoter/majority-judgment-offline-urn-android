@@ -1,1 +1,2 @@
 * Improve the Preferential Favoritism algorithm
+* Improve the experimental daisy-chaining QR Codes

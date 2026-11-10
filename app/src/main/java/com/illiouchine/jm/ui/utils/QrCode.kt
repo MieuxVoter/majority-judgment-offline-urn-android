@@ -15,7 +15,7 @@ fun renderQrCodePngBytes(qrContent: String): ByteArray {
         .withSize(30)
         .withInnerSpacing(0)
         .withErrorCorrectionLevel(ErrorCorrectionLevel.LOW)
-        .build(qrContent)
+        .build(data = qrContent)
         .renderToBytes()
 }
 
