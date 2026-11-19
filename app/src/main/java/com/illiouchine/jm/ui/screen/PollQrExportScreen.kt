@@ -28,6 +28,7 @@ import com.illiouchine.jm.data.InMemoryPollDataSource
 import com.illiouchine.jm.model.Grading
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.PollConfig
+import com.illiouchine.jm.module
 import com.illiouchine.jm.service.ExchangeUriService
 import com.illiouchine.jm.ui.composable.image.QrCodeImage
 import com.illiouchine.jm.ui.composable.scaffold.MjuScaffold
@@ -39,7 +40,10 @@ import com.illiouchine.jm.ui.theme.Theme
 import com.illiouchine.jm.ui.theme.spacing
 import com.illiouchine.jm.viewmodel.PollQrExportViewModel
 import kotlinx.coroutines.launch
+import org.koin.compose.KoinApplication
 import org.koin.compose.koinInject
+import org.koin.dsl.koinConfiguration
+import java.util.UUID
 
 @Composable
 fun PollQrExportScreen(
@@ -103,6 +107,7 @@ fun PollQrExportScreen(
                     modifier = Modifier
                         .align(alignment = Alignment.CenterHorizontally),
                     bitmap = state.pollQrBitmap,
+                    contentDescription = "QR Code holding the configuration of the poll.",
                 )
 
                 SmallVerticalSpacer()
@@ -111,6 +116,11 @@ fun PollQrExportScreen(
                 )
 
                 SmallVerticalSpacer()
+
+                // Our QR Content URI is uppercase because of Base45 encoding in QR Codes.
+                // For the user-facing excerpt, we want lowercase to not disturb users.
+                // Our exchange URIs are case-insensitive anyway.
+                val lowercaseContentUri = state.pollQrContent.lowercase()
                 Text(
                     modifier = Modifier
                         .padding(horizontal = Theme.spacing.medium)
@@ -123,9 +133,9 @@ fun PollQrExportScreen(
                                             // This works as text, I don't know apps using HTML
                                             ClipData.newHtmlText(
                                                 state.poll.pollConfig.subject,
-                                                state.pollQrContent,
+                                                lowercaseContentUri,
                                                 buildString {
-                                                    append("<a href=\"${state.pollQrContent}\">")
+                                                    append("<a href=\"${lowercaseContentUri}\">")
                                                     append(state.poll.pollConfig.subject)
                                                     append("</a>")
                                                 },
@@ -135,7 +145,7 @@ fun PollQrExportScreen(
                                 }
                             },
                         ),
-                    text = state.pollQrContent,
+                    text = lowercaseContentUri,
                     fontFamily = FontFamily(typeface = MONOSPACE),
                     maxLines = 1,
                     softWrap = false,
@@ -143,7 +153,8 @@ fun PollQrExportScreen(
 
                 SmallVerticalSpacer()
                 Text(
-                    "The fact that it looks like an invocation of Creatures Beyond Time is perfectly normal, as it is compressed."
+//                    "The fact that it looks like an invocation of Creatures Beyond Time is perfectly normal, as it is compressed."
+                    "It looks like an online URL, but it isn't.  This app should open it automatically instead of the browser."
                 )
 
                 SmallVerticalSpacer()
@@ -199,41 +210,49 @@ fun PollQrExportScreen(
 @Composable
 fun PreviewPollQrExportScreen(
     modifier: Modifier = Modifier,
-    exchangeUriService: ExchangeUriService = koinInject(),
+//    exchangeUriService: ExchangeUriService = koinInject(), // broken, now
 ) {
-    val poll = Poll(
-        id = 17,
-        pollConfig = PollConfig(
-            subject = "\uD83D\uDD2E Présidence Française 2027",
-            proposals = listOf(
-                "Jean-Luc Mélenchon",
-                "Gabriel Attal",
-                "Fabien Roussel",
-                "Édouard Philippe",
-                "Chloé Ridel",
-                "Jordan Bardella",
-                "François Ruffin",
-                "François Asselineau",
-                "Bruno Retailleau",
-                "Monsieur Patate",
+    // Experimenting with this ; but it's clunky!
+    KoinApplication(
+        configuration = koinConfiguration { modules(module) }
+    ) {
+        val exchangeUriService: ExchangeUriService = koinInject()
+
+        val poll = Poll(
+            id = 17,
+            uuid = UUID(42,42),
+            pollConfig = PollConfig(
+                subject = "\uD83D\uDD2E Présidence Française 2027",
+                proposals = listOf(
+                    "Jean-Luc Mélenchon",
+                    "Gabriel Attal",
+                    "Fabien Roussel",
+                    "Édouard Philippe",
+                    "Chloé Ridel",
+                    "Jordan Bardella",
+                    "François Ruffin",
+                    "François Asselineau",
+                    "Bruno Retailleau",
+                    "Monsieur Patate",
+                ),
+                grading = Grading.Quality7Grading,
             ),
-            grading = Grading.Quality7Grading,
-        ),
-    )
-
-    val pollQrExportViewModel = viewModel {
-        PollQrExportViewModel(
-            pollDataSource = InMemoryPollDataSource(), // dummy
-            exchangeUriService = exchangeUriService,
         )
-    }
-    pollQrExportViewModel.initializeFromPoll(poll)
-    val state = pollQrExportViewModel.viewState.collectAsState().value
 
-    JmTheme {
-        PollQrExportScreen(
-            modifier = modifier,
-            state = state,
-        )
+        val pollQrExportViewModel = viewModel {
+            PollQrExportViewModel(
+                pollDataSource = InMemoryPollDataSource(), // dummy
+                exchangeUriService = exchangeUriService,
+            )
+        }
+        pollQrExportViewModel.initializeFromPoll(poll)
+        val state = pollQrExportViewModel.viewState.collectAsState().value
+
+        JmTheme {
+            PollQrExportScreen(
+                modifier = modifier,
+                state = state,
+            )
+        }
     }
 }

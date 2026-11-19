@@ -159,6 +159,7 @@ fun BallotsQrExportScreen(
                     modifier = Modifier
                         .align(alignment = Alignment.CenterHorizontally),
                     bitmap = qrExport.qrBitmap,
+                    contentDescription = "QR Code holding ballots for the poll.",
                 )
 
                 SmallVerticalSpacer()

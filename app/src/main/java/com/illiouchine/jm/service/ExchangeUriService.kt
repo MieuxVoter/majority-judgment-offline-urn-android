@@ -4,9 +4,9 @@ import android.net.Uri
 import com.illiouchine.jm.model.Poll
 import com.illiouchine.jm.model.dto.BallotsDto
 import com.illiouchine.jm.ui.utils.compress
-import com.illiouchine.jm.ui.utils.decode
+import com.illiouchine.jm.ui.utils.decodeBase41
 import com.illiouchine.jm.ui.utils.decompress
-import com.illiouchine.jm.ui.utils.encode
+import com.illiouchine.jm.ui.utils.encodeBase41
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.decodeFromByteArray
@@ -43,7 +43,7 @@ class ExchangeUriService(
         )
         val pollBytes = Cbor.encodeToByteArray(value = pollToExport)
         val compressedPollBytes = compress(input = pollBytes)
-        val compressedPollString = encode(bytes = compressedPollBytes)
+        val compressedPollString = encodeBase41(bytes = compressedPollBytes).lowercase()
         return buildString {
             append(scheme)
             append("://")
@@ -62,7 +62,7 @@ class ExchangeUriService(
     ): String {
         val ballotsBytes = Cbor.encodeToByteArray(value = ballotsDto)
         val ballotsCompressedBytes = compress(input = ballotsBytes)
-        val ballotsCompressedString = encode(bytes = ballotsCompressedBytes)
+        val ballotsCompressedString = encodeBase41(bytes = ballotsCompressedBytes).lowercase()
         return buildString {
             append(scheme)
             append("://")
@@ -84,7 +84,7 @@ class ExchangeUriService(
          */
         uriPathDatum: String,
     ): Poll {
-        val compressedString = decode(string = uriPathDatum)
+        val compressedString = decodeBase41(string = uriPathDatum.uppercase())
         val decompressedBytes = decompress(input = compressedString)
         return Cbor.decodeFromByteArray<Poll>(bytes = decompressedBytes)
     }
@@ -97,29 +97,33 @@ class ExchangeUriService(
          */
         uriPathDatum: String,
     ): BallotsDto {
-        val compressedString = decode(string = uriPathDatum)
+        val compressedString = decodeBase41(string = uriPathDatum.uppercase())
         val decompressedBytes = decompress(input = compressedString)
         return Cbor.decodeFromByteArray<BallotsDto>(bytes = decompressedBytes)
     }
 
     fun uriMatchesPoll(uri: Uri): Boolean {
-        return uriMatchesFormat(uri) && uriMatchesRoutePrefix(uri, prefix = pollRoutePathSegment)
+        return uriMatchesFormat(uri)
+            && uriMatchesRoutePrefix(uri, prefix = pollRoutePathSegment)
     }
 
     fun uriMatchesBallots(uri: Uri): Boolean {
-        return uriMatchesFormat(uri) && uriMatchesRoutePrefix(uri, prefix = ballotsRoutePathSegment)
+        return uriMatchesFormat(uri)
+            && uriMatchesRoutePrefix(uri, prefix = ballotsRoutePathSegment)
     }
 
     private fun uriMatchesFormat(uri: Uri): Boolean {
-        return uriMatchesHost(uri) && uri.pathSegments.isNotEmpty()
+        return uriMatchesHost(uri)
+            && uri.pathSegments.isNotEmpty()
     }
 
     private fun uriMatchesHost(uri: Uri): Boolean {
-        return uri.scheme == scheme && (domain.isEmpty() || uri.host == domain)
+        return uri.scheme.equals(other = scheme, ignoreCase = true)
+            && (domain.isEmpty() || uri.host.equals(other = domain, ignoreCase = true))
     }
 
     private fun uriMatchesRoutePrefix(uri: Uri, prefix: String): Boolean {
-        return (uri.pathSegments.first() == prefix) ||
-            (domain.isEmpty() && uri.host == prefix)
+        return (uri.pathSegments.first().equals(other = prefix, ignoreCase = true))
+            || (domain.isEmpty() && uri.host.equals(other = prefix, ignoreCase = true))
     }
 }
